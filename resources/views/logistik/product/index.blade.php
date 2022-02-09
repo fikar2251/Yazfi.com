@@ -23,8 +23,8 @@
                         <th>No</th>
                         <th>Kode Barang</th>
                         <th>Item</th>
-                        <th>Qty</th>
                         <th>Harga</th>
+                        <th>Qty</th>
                     </tr>
                 </thead>
 
@@ -34,13 +34,9 @@
                         <td>{{ $loop->iteration }}</td>
                         <td><a href="{{ route('logistik.product.show', $product->id) }}">{{ $product->kode_barang }}</a></td>
                         <td>{{ $product->nama_barang }}</td>
-                        <td>{{ $product->nama_barang }}</td>
-                        <td>{{ $product->nama_barang }}</td>
-                        <td>
-                            @foreach($product->produkharga as $stok)
-                            {{ $stok->cabang->nama }} ({{ $stok->qty }}) <br>
-                            @endforeach
-                        </td>
+                        <td>{{ $product->harga}}</td>
+                        <td>{{ $product->qty }}</td>
+
                     </tr>
                     @endforeach
                 </tbody>

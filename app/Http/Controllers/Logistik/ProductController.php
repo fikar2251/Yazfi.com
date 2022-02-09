@@ -15,8 +15,8 @@ class ProductController extends Controller
     public function index()
     {
         $products = DB::table('barangs')
-            ->leftJoin('harga_produk_cabangs', 'barangs.id', '=  'harga_produk_cabangs.barang_id')
-            ->select('nama_barang', 'kode_barang', 'id')
+            ->leftJoin('harga_produk_cabangs', 'harga_produk_cabangs.barang_id', '=', 'barangs.id')
+            ->select('barangs.nama_barang', 'barangs.kode_barang', 'barangs.id', 'harga_produk_cabangs.harga', 'harga_produk_cabangs.barang_id', 'harga_produk_cabangs.qty')
             ->get();
         return view('logistik.product.index', compact('products'));
     }

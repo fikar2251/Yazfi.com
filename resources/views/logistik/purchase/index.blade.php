@@ -5,11 +5,10 @@
     <div class="col-md-4">
         <h1 class="page-title">Purchase</h1>
     </div>
-
-    <div class="col-sm-8 text-right m-b-20">
-
-        <a href="{{ route('logistik.purchase.create') }}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Purchase</a>
-
+    <div class="col-sm-6 col-sg-4 m-b-4">
+        <div class="dashboard-logo">
+            <img src="{{url('/img/logo/yazfi.png ')}}" alt="Image" />
+        </div>
     </div>
 </div>
 
