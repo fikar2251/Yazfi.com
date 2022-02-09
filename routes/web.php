@@ -251,7 +251,7 @@ Route::middleware('auth')->group(function () {
             //Route Roles
             Route::get('/where/product', 'PurchaseController@WhereProduct');
             Route::resource('purchase', 'PurchaseController');
-            Route::resource('product', 'BarangController');
+            Route::resource('product', 'ProductController');
         });
 
 

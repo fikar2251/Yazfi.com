@@ -4,9 +4,7 @@
         <a href="/dashboard"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
     </li>
 
-    <li class="{{ request()->is('logistik/product*') ? 'active' : '' }}">
-        <a href="{{ route('logistik.product.index') }}"><i class="fa fa-calculator"></i> <span>Barang</span></a>
-    </li>
+    <li><a class="{{ (request()->is('logistik/product*')) ? 'active' : '' }}" href="{{ route('logistik.product.index') }}">Barang</a></li>
     <li class="{{ request()->is('logistik/purchase*') ? 'active' : '' }}">
         <a href="{{ route('logistik.purchase.index') }}"><i class="fa fa-calculator"></i> <span>Order</span></a>
     </li>
