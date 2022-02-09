@@ -1,0 +1,1 @@
+@include('dashboard._card-info', ['dokter' => $dokter, 'pasien' => $pasien, 'appointments' => $appointments, 'tindakan' => $tindakan])
