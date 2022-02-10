@@ -176,7 +176,7 @@ $stock = DB::table('unit_rumah')->select('type')->distinct()->get();
         </div>
         <div class="form-group">
             <label for="phone_number">No.</label>
-            <select name="no" id="no" class="form-control dinamis" data-dependent="lt">
+            <select name="no" id="no" class="form-control lt" data-dependent="lt" >
                 <option value=""></option>
             </select>
 
@@ -186,7 +186,7 @@ $stock = DB::table('unit_rumah')->select('type')->distinct()->get();
         </div>
         <div class="form-group">
             <label for="phone_number">Luas tanah</label>
-            <select name="lt" id="lt" class="form-control">
+            <select name="lt" id="lt" class="form-control root3">
                 <option value="" >-- Select Lt --</option>
             </select>
             @error('phone_number')
@@ -285,6 +285,35 @@ $(document).ready(function() {
         })
     })
 })
+
+$(document).ready(function() {
+    $('.lt').change(function() {
+
+        var no = $(this).val();
+        var lt = $(this).val();
+        var div = $(this).parent();
+        var op = " ";
+        $.ajax({
+            url: `/marketing/lt`,
+            method: "get",
+            data: {
+                'no': no,
+                'lt': lt
+            },
+            success: function(data) {
+                console.log(data);
+                op += '<option value="0">Select Lt</option>';
+                for (var i = 0; i < data.length; i++) {
+                    op += '<option value="' + data[i].lt + '">' + data[i].lt + '</option>'
+                };
+                $('.root3').html(op);
+            },
+            error: function() {
+
+            }
+        })
+    })
+})
 </script>
 <script>
     $(document).ready(function(){
@@ -313,16 +342,18 @@ $(document).ready(function() {
     });
     
     $('#blok').change(function(){
-    $('#no').val('');
-    $('#lt').val('');
+    // $('#no').val('');
+    // $('#lt').val('');
     });
     
-    $('#no').change(function(){
-    $('#lt').val('');
-    });
+    // $('#no').change(function(){
+    // $('#lt').val('');
+    // });
     
     
     });
+
+    
 </script>
 
 @stop

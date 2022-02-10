@@ -187,7 +187,6 @@ class PurchaseController extends Controller
             $harga->update([
                 'qty' => $harga->qty - $pur->qty
             ]);
-
             $pur->delete();
         }
 

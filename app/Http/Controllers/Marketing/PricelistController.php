@@ -44,6 +44,15 @@ class PricelistController extends Controller
         return $data;
     }
 
+    public function lt(Request $request)
+    {
+        $data = DB::table('unit_rumah')
+        ->select('unit_rumah.no', 'unit_rumah.lt')
+        ->groupBy('unit_rumah.lt')
+        ->where('unit_rumah.no', $request->no)->get();
+        return $data;
+    }
+
     public function fetch(Request $request)
     {
         $select = $request->get('select');

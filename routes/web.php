@@ -178,6 +178,7 @@ Route::middleware('auth')->group(function () {
             Route::resource('/doctor', 'DoctorController');
             Route::resource('/pricelist', 'PricelistController');
             Route::get('/blok', 'PricelistController@blok');
+            Route::get('/lt', 'PricelistController@lt');
             Route::post('/fetch', 'PricelistController@fetch')->name('pricelist.fetch');
             Route::get('/pricelist/findBlokName', 'PricelistController@findBlokName');
             Route::resource('/profile', 'ProfileController');

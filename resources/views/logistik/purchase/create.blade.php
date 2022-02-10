@@ -187,12 +187,10 @@
         document.getElementById('counter').innerHTML = index
         let template = `
                 <tr class="rowComponent">
-                    <td hidden>
-                        <input type="hidden" name="barang_id[${index}]" class="barang_id-${index}">
-                    </td>
                     <td>
-                        <select required name="barang_id[${index}]" id="${index}" class="form-control select-${index}"></select>
+                        <input type="text" name="barang_id[${index}]" class="barang_id-${index}">
                     </td>
+                  
                     <td>
                         <input type="number" name="qty[${index}]"  class="form-control qty-${index}" placeholder="0">
                     </td>

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
+    protected $guarded = ['id_project'];
     public function cabang()
     {
         return $this->belongsTo(Cabang::class);
@@ -13,5 +14,9 @@ class Project extends Model
     public function inout()
     {
         return $this->hasMany(InOut::class);
+    }
+    public function purchase()
+    {
+        return $this->hasMany(Purchase::class);
     }
 }
