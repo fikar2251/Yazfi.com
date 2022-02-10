@@ -5,16 +5,14 @@
     <div class="col-md-4">
         <h1 class="page-title">Purchase</h1>
     </div>
-    <div class="col-sm-6 col-sg-4 m-b-4">
-        <div class="dashboard-logo">
-            <img src="{{url('/img/logo/yazfi.png ')}}" alt="Image" />
-        </div>
+
+    <div class="col-sm-8 text-right m-b-20">
+        <a href="{{ route('logistik.purchase.create') }}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Purchase</a>
     </div>
 </div>
-
 <x-alert></x-alert>
 
-<form action="{{ route('admin.purchase.index') }}" method="get">
+<form action="{{ route('logistik.purchase.index') }}" method="get">
     <div class="row filter-row">
         <div class="col-sm-6 col-md-3">
             <div class="form-group form-focus">
@@ -61,37 +59,26 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>
-                            <a href="{{ route('admin.purchase.show', $purchase->id) }}">{{ $purchase->invoice }}</a>
+                            <a href="{{ route('logistik.purchase.show', $purchase->id) }}">{{ $purchase->invoice }}</a>
                         </td>
-                        <td>{{ $purchase->supplier->nama }}</td>
+                        <td>{{ $purchase->admin->name }}</td>
                         <td>{{ Carbon\Carbon::parse($purchase->created_at)->format("d/m/Y H:i:s") }}</td>
                         <td>@currency(\App\Purchase::where('invoice', $purchase->invoice)->sum('total'))</td>
-
+                        <td>{{ $purchase->status_barang }}</td>
+                        <td>{{ $purchase->status_pembayaran }}</td>
                         <td>
                             <!-- @can('purchase-edit')
                             <a href="{{ route('admin.purchase.edit', $purchase->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
                             @endcan -->
-                            @can('purchase-delete')
-                            <form action="{{ route('admin.purchase.destroy', $purchase->id) }}" method="post" style="display: inline;" class="delete-form">
+                            <form action="{{ route('logistik.purchase.destroy', $purchase->id) }}" method="post" style="display: inline;" class="delete-form">
                                 @method('DELETE')
                                 @csrf
                                 <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
                             </form>
-                            @endcan
                         </td>
                     </tr>
                     @endforeach
                 </tbody>
-
-                <tfoot>
-                    <tr>
-                        <td>Total : </td>
-                        <td colspan="3"></td>
-                        <td>{{ request('from') && request('to') ? \App\Purchase::whereBetween('created_at', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->count() : \App\Purchase::count() }}</td>
-                        <td>@currency( request('from') && request('to') ? \App\Purchase::whereBetween('created_at', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->sum('total') : \App\Purchase::sum('total') )</td>
-                        <td>&nbsp;</td>
-                    </tr>
-                </tfoot>
             </table>
         </div>
     </div>

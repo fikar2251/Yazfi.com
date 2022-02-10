@@ -64,8 +64,13 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <label for="invoice">Lokasi *</label>
-                                        <input type="text" name="lokasi" id="lokasi" class="form-control">
+                                        <label for="cabang">Project *</label>
+                                        <select name="cabang_id" id="nama_project" class="form-control input-lg dynamic" data-dependent="alamat_project" required="">
+                                            <option disabled selected>-- Select Project --</option>
+                                            @foreach($cabang as $project)
+                                            <option value="{{ $project->id_project }}">{{ $project->nama_project }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </li>
                             </ul>
@@ -74,12 +79,9 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <label for="cabang">Project *</label>
-                                        <select name="cabang_id" id="cabang" class="form-control select2">
-                                            <option disabled selected>-- Select Project --</option>
-                                            @foreach($cabang as $project)
-                                            <option value="{{ $project->id_project }}">{{ $project->nama_project }}</option>
-                                            @endforeach
+                                        <label for="invoice">Lokasi *</label>
+                                        <select name="lokasi" id="alamat_project" class="form-control input-lg root2" readonly>
+                                            <option value=""></option>
                                         </select>
                                     </div>
                                 </li>
@@ -150,6 +152,7 @@
     </div>
 </div>
 
+</html>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script>
     var formatter = function(num) {
@@ -175,6 +178,7 @@
         formatted = output.reverse().join("");
         return ("" + formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
     };
+
 
     // document.getElementById('submit').disabled = true
 
@@ -208,7 +212,7 @@
         $(`.select-${index}`).select2({
             placeholder: 'Select Product',
             ajax: {
-                url: `/admin/where/product`,
+                url: `/logistik/where/product`,
                 processResults: function(data) {
                     // console.log(data)
                     return {
@@ -256,6 +260,34 @@
     $(document).ready(function() {
         $('#add').on('click', function() {
             form_dinamic()
+        })
+    })
+    $(document).ready(function() {
+        $('.dynamic').change(function() {
+
+            var id_project = $(this).val();
+            var alamat_project = $(this).val();
+            var div = $(this).parent();
+            var op = " ";
+            $.ajax({
+                url: `/logistik/where/project`,
+                method: "get",
+                data: {
+                    'id_project': id_project,
+                    'alamat_project': alamat_project
+                },
+                success: function(data) {
+                    console.log(data);
+                    op += '<option value="0" selected disabled>Lokasi</option>';
+                    for (var i = 0; i < data.length; i++) {
+                        op += '<option value="' + data[i].alamat_project + '">' + data[i].alamat_project + '</option>'
+                    };
+                    $('.root2').html(op);
+                },
+                error: function() {
+
+                }
+            })
         })
     })
 </script>

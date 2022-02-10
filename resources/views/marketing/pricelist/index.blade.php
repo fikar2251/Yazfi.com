@@ -4,9 +4,10 @@
 
 use App\Marketing;
 
-$stok = Marketing::all('type')->take(20);
-$type = Marketing::where('type', 'Ruko')->orderBy('type', 'desc')->take(1)->get();
+$type  = Marketing::where('type', 'Ruko')->orderBy('type', 'desc')->take(1)->get();
 $stock = DB::table('unit_rumah')->select('type')->distinct()->get();
+
+
 @endphp
 <div class="row">
     <div class=" col text-center">
@@ -152,9 +153,9 @@ $stock = DB::table('unit_rumah')->select('type')->distinct()->get();
     <div class="col-md-6">
         <div class="form-group">
             <label for="name">Type</label>
-            <select name="type" id="type" class="form-control">
-                <option disabled selected>-- Select Type --</option>
-                @foreach ($stock as $item)
+            <select name="type" id="type" class="form-control dynamic" data-dependent="blok">
+                <option value="">-- Select Type --</option>
+                @foreach ($blok as $item)
                 <option value="{{$item->type}}">{{$item->type}}</option>
                 @endforeach
             </select>
@@ -165,10 +166,18 @@ $stock = DB::table('unit_rumah')->select('type')->distinct()->get();
         </div>
         <div class="form-group">
             <label for="phone_number">Blok</label>
-            {{-- <input type="number" name="phone_number" id="phone_number" class="form-control" value=""> --}}
-            <select name="blok" id="blok" class="form-control">
+            <select name="blok" id="blok" class="form-control dinamis root2" data-dependent="no">
+                <option value=""></option>
+            </select>
 
-                <option disabled selected>-- Select Blok --</option>
+            @error('phone_number')
+            <small class="text-danger">{{ $message }}</small>
+            @enderror
+        </div>
+        <div class="form-group">
+            <label for="phone_number">No.</label>
+            <select name="no" id="no" class="form-control dinamis" data-dependent="lt">
+                <option value=""></option>
             </select>
 
             @error('phone_number')
@@ -177,12 +186,14 @@ $stock = DB::table('unit_rumah')->select('type')->distinct()->get();
         </div>
         <div class="form-group">
             <label for="phone_number">Luas tanah</label>
-            <input type="number" name="phone_number" id="phone_number" class="form-control">
-
+            <select name="lt" id="lt" class="form-control">
+                <option value="" >-- Select Lt --</option>
+            </select>
             @error('phone_number')
             <small class="text-danger">{{ $message }}</small>
             @enderror
         </div>
+        {{ csrf_field() }}
         <div class="form-group">
             <label for="phone_number">Harga Jual</label>
             <input type="number" name="phone_number" id="phone_number" class="form-control">
@@ -241,5 +252,77 @@ $stock = DB::table('unit_rumah')->select('type')->distinct()->get();
 <div class="m-t-20 text-center">
     <button type="submit" class="btn btn-primary submit-btn"><i class="fa fa-save"></i> Save</button>
 </div>
+</html>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+{{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js" --}}
+<script>
+$(document).ready(function() {
+    $('.dynamic').change(function() {
+
+        var type = $(this).val();
+        var blok = $(this).val();
+        var div = $(this).parent();
+        var op = " ";
+        $.ajax({
+            url: `/marketing/blok`,
+            method: "get",
+            data: {
+                'type': type,
+                'blok': blok
+            },
+            success: function(data) {
+                console.log(data);
+                op += '<option value="0">--Select Blok--</option>';
+                for (var i = 0; i < data.length; i++) {
+                    op += '<option value="' + data[i].blok + '">' + data[i].blok + '</option>'
+                };
+                $('.root2').html(op);
+            },
+            error: function() {
+
+            }
+        })
+    })
+})
+</script>
+<script>
+    $(document).ready(function(){
+    
+    $('.dinamis').change(function(){
+    if($(this).val() != '')
+    {
+        console.log('test');
+    var select = $(this).attr("id");
+    var value = $(this).val();
+    var dependent = $(this).data('dependent');
+    var _token = $('input[name="_token"]').val();
+    $.ajax({
+        url:"{{ url('/marketing/fetch') }}",
+        // url:`/pricelist/fetch`,
+        method:"POST",
+        data:{select:select, value:value, _token:_token, dependent:dependent},
+        success:function(result)
+        {
+            console.log(result)
+        $('#'+dependent).html(result);
+        }
+    
+    })
+    }
+    });
+    
+    $('#blok').change(function(){
+    $('#no').val('');
+    $('#lt').val('');
+    });
+    
+    $('#no').change(function(){
+    $('#lt').val('');
+    });
+    
+    
+    });
+</script>
 
 @stop

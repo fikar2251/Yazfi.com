@@ -64,18 +64,18 @@ class PurchaseController extends Controller
                 'created_at' => $request->tanggal
             ];
 
-            $hargaBarang = HargaProdukCabang::where('cabang_id', auth()->user()->cabang_id)->where('barang_id', $no)->first();
+            $hargaBarang = HargaProdukCabang::where('project_id', auth()->user()->project_id)->where('barang_id', $no)->first();
 
-            $hargaBarang->update([
-                'qty' => $hargaBarang->qty + $request->qty[$key]
-            ]);
+            // $hargaBarang->update([
+            //     'qty' => $hargaBarang->qty + $request->qty[$key]
+            // ]);
 
             $in[] = [
                 'invoice' => $request->invoice,
                 'supplier_id' => $request->supplier_id,
                 'barang_id' => $no,
                 'in' => $request->qty[$key],
-                'last_stok' => $hargaBarang->qty,
+                // 'last_stok' => $hargaBarang->qty,
                 'user_id' => auth()->user()->id
             ];
         }

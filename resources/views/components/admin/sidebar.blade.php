@@ -45,7 +45,7 @@
     <li class="{{ request()->is('admin/purchase*') ? 'active' : '' }}">
         <a href="{{ route('admin.purchase.index') }}"><i class="fa fa-calculator"></i> <span>Master Purchase</span></a>
     </li>
-    @endcan
+
     @can('purchase-access')
     <li class="{{ request()->is('admin/transfer*') ? 'active' : '' }}">
         <a href="{{ route('admin.transfer.index') }}"><i class="fa fa-calculator"></i> <span>Transfer Stok</span></a>

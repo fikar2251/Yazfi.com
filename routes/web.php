@@ -177,6 +177,9 @@ Route::middleware('auth')->group(function () {
             Route::resource('/patient', 'PatientController');
             Route::resource('/doctor', 'DoctorController');
             Route::resource('/pricelist', 'PricelistController');
+            Route::get('/blok', 'PricelistController@blok');
+            Route::post('/fetch', 'PricelistController@fetch')->name('pricelist.fetch');
+            Route::get('/pricelist/findBlokName', 'PricelistController@findBlokName');
             Route::resource('/profile', 'ProfileController');
             Route::prefix('/service')->name('service.')->group(function () {
                 Route::get('/appointments/filter', 'ServiceController@AppointmentsFilter')->name('appointments.filter');
@@ -250,6 +253,7 @@ Route::middleware('auth')->group(function () {
         Route::prefix('logistik')->namespace('Logistik')->as('logistik.')->group(function () {
             //Route Roles
             Route::get('/where/product', 'PurchaseController@WhereProduct');
+            Route::get('/where/project', 'PurchaseController@whereProject');
             Route::resource('purchase', 'PurchaseController');
             Route::resource('product', 'ProductController');
         });

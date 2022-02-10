@@ -8,6 +8,7 @@ use App\HargaProdukCabang;
 use App\Http\Controllers\Controller;
 use App\Marketing;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PricelistController extends Controller
 {
@@ -21,11 +22,51 @@ class PricelistController extends Controller
         // return view('marketing.pricelist.index', [
         //     'barang' => Barang::with('hargaproduk')->get()
         // ]);
+        // $data  = Marketing::select('blok','id_unit_rumah')->where('type',$request->type)->take(100)->get();
+        // return response()->json($data);
         
         $stok = Marketing::all();
         $type = Marketing::where('Type', $stok);
-        return view('marketing.pricelist.index', compact('stok', 'type'));  
+
+        $blok = DB::table('unit_rumah')
+         ->groupBy('type')
+         ->get();
+        return view('marketing.pricelist.index', compact('blok'));  
     }
+
+    public function blok(Request $request)
+    {
+        $data = DB::table('unit_rumah')
+            ->select('unit_rumah.type', 'unit_rumah.blok')
+            ->groupBy('unit_rumah.blok')
+            ->where('unit_rumah.type', $request->type)->get();
+            
+        return $data;
+    }
+
+    public function fetch(Request $request)
+    {
+        $select = $request->get('select');
+        $value = $request->get('value');
+        $dependent = $request->get('dependent');
+        $data = DB::table('unit_rumah')
+        ->where($select, $value)
+        ->groupBy($dependent)
+        ->get();
+        $output = '<option value="">Select '.ucfirst($dependent).'</option>';
+        foreach($data as $row)
+        {
+        $output .= '<option value="'.$row->$dependent.'">'.$row->$dependent.'</option>';
+        }
+        echo $output;
+    }
+
+    // public function findBlokName(Request $request)
+    // {
+    //     // $data  = Marketing::select('blok')->where('type',$request->type)->take(100)->get();
+    //     $data = Marketing::select('blok', 'type')->where('type', $request->type)->get();
+    //             return response()->json($data);
+    // }
 
     /**
      * Show the form for creating a new resource.
@@ -47,7 +88,7 @@ class PricelistController extends Controller
      */
     public function store(Request $request)
     {
-        //
+       
     }
 
     /**

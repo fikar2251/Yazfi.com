@@ -2,7 +2,7 @@
 @section('content')
 <div class="row">
     <div class="col-sm-5 col-4">
-        <h4 class="page-title">Purchase</h4>
+        <h4 class="page-title">Order</h4>
     </div>
     <div class="col-sm-7 col-8 text-right m-b-30">
         <div class="btn-group btn-group-sm">
@@ -19,7 +19,7 @@
             <div class="card-body">
                 <div class="row custom-invoice">
                     <div class="col-4 col-sm-4 m-b-20">
-                        <img src="{{ asset('/storage/' . \App\Setting::find(1)->logo) }}" class="inv-logo" alt="">
+                        <img src="{{url('/img/logo/yazfi.png')}}" class=" inv-logo" alt="">
                         <table>
                             <tr>
                                 <td width="150px">Invoice</td>

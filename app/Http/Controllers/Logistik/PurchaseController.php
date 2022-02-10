@@ -15,18 +15,18 @@ use Illuminate\Support\Facades\DB;
 
 class PurchaseController extends Controller
 {
-    public function index()
+    public function index(Purchase $purchase)
     {
         if (request('from') && request('to')) {
             $from = Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s');
             $to = Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s');
-
             $purchases = Purchase::groupBy('invoice')->whereBetween('created_at', [$from, $to])->get();
         } else {
             $purchases = Purchase::groupBy('invoice')->get();
         }
 
-        return view('logistik.purchase.index', compact('purchases'));
+
+        return view('logistik.purchase.index', compact('purchases', 'purchase'));
     }
 
     public function create()
@@ -51,12 +51,14 @@ class PurchaseController extends Controller
             'invoice' => 'required',
             'cabang_id' => 'required',
             'lokasi' => 'required',
+            'status_barang' => 'required',
+            'status_pembayaran' => 'required',
         ]);
 
         $barang = $request->input('barang_id', []);
         $attr = [];
         $in = [];
-        // dd($request->all());
+        dd($request->all());
         DB::beginTransaction();
         foreach ($barang as $key => $no) {
             $attr[] = [
@@ -69,10 +71,12 @@ class PurchaseController extends Controller
                 'harga_beli' => $request->harga_beli[$key],
                 'total' => $request->harga_beli[$key] * $request->qty[$key],
                 'user_id' => auth()->user()->id,
+                'status_pembayaran' => $request->status_pembayaran = 'pending',
+                'status_barang' => $request->status_barang = 'pending',
                 'created_at' => $request->tanggal
             ];
 
-            $hargaBarang = HargaProdukCabang::where('cabang_id', auth()->user()->cabang_id)->where('barang_id', $no)->first();
+            $hargaBarang = HargaProdukCabang::where('project_id', auth()->user()->project_id)->where('barang_id', $no)->first();
 
             $hargaBarang->update([
                 'qty' => $hargaBarang->qty + $request->qty[$key]
@@ -82,8 +86,7 @@ class PurchaseController extends Controller
                 'invoice' => $request->invoice,
                 'supplier_id' => $request->supplier_id,
                 'barang_id' => $no,
-                'cabang_id' => $request->cabang_id,
-                'lokasi' => $request->lokasi,
+                'project_id' => $request->project_id,
                 'in' => $request->qty[$key],
                 'last_stok' => $hargaBarang->qty,
                 'user_id' => auth()->user()->id
@@ -179,7 +182,7 @@ class PurchaseController extends Controller
 
         foreach ($purchases as $pur) {
             InOut::where('invoice', $pur->invoice)->delete();
-            $harga = HargaProdukCabang::where('barang_id', $pur->barang_id)->where('cabang_id', auth()->user()->cabang_id)->first();
+            $harga = HargaProdukCabang::where('barang_id', $pur->barang_id)->where('project_id', auth()->user()->project_id)->first();
 
             $harga->update([
                 'qty' => $harga->qty - $pur->qty
@@ -191,10 +194,19 @@ class PurchaseController extends Controller
         return redirect()->route('logistik.purchase.index')->with('success', 'Purchase barang didelete');
     }
 
+    public function whereProject(Request $request)
+    {
+
+        $data = DB::table('project')
+            ->select('project.nama_project', 'project.alamat_project')
+            ->groupBy('project.alamat_project')
+            ->where('project.id_project', $request->alamat_project)->get();
+        return $data;
+    }
     public function WhereProduct(Request $request)
     {
         $data = [];
-        $product =  Barang::where('jenis', 'barang')
+        $product =  Barang::where('jenis', 'barang_id')
             ->where('nama_barang', 'like', '%' . $request->q . '%')
             ->get();
         foreach ($product as $row) {
