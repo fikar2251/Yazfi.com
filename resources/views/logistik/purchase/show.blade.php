@@ -42,6 +42,11 @@
                                 <td>{{ $purchase->project->nama_project }}</td>
                             </tr>
                             <tr>
+                                <td width="150px">Project</td>
+                                <td> : </td>
+                                <td>{{ $purchase->project->alamat_project }}</td>
+                            </tr>
+                            <tr>
                                 <td width="150px">Admin</td>
                                 <td> : </td>
                                 <td>{{ $purchase->admin->name }}</td>
