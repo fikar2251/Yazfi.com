@@ -50,6 +50,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/where/product', 'PurchaseController@WhereProduct');
             Route::resource('purchase', 'PurchaseController');
 
+
             Route::resource('transfer', 'TransferStokController');
             Route::get('/transfer/where/product', 'TransferStokController@WhereProduct');
 
@@ -178,6 +179,7 @@ Route::middleware('auth')->group(function () {
             Route::resource('/doctor', 'DoctorController');
             Route::resource('/pricelist', 'PricelistController');
             Route::get('/blok', 'PricelistController@blok');
+            Route::get('/no', 'PricelistController@no');
             Route::get('/lt', 'PricelistController@lt');
             Route::post('/fetch', 'PricelistController@fetch')->name('pricelist.fetch');
             Route::get('/pricelist/findBlokName', 'PricelistController@findBlokName');
@@ -257,6 +259,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/where/project', 'PurchaseController@whereProject');
             Route::resource('purchase', 'PurchaseController');
             Route::resource('product', 'ProductController');
+            Route::get('/product/cari', 'PegawaiController@cari');
+            Route::resource('supplier', 'SupplierController');
         });
 
 

@@ -33,12 +33,10 @@ class PurchaseController extends Controller
     {
         $purchase = new Purchase();
         $suppliers = Supplier::get();
-        $cabang = DB::table('project')
-            ->select('id_project', 'nama_project')
-            ->get();
+        $project = Project::get();
         $barangs = Barang::where('jenis', 'barang')->get();
 
-        return view('logistik.purchase.create', compact('purchase', 'suppliers', 'barangs', 'cabang'));
+        return view('logistik.purchase.create', compact('purchase', 'suppliers', 'barangs', 'project'));
     }
 
     public function store(Request $request)
@@ -64,13 +62,13 @@ class PurchaseController extends Controller
             $attr[] = [
                 'invoice' => $request->invoice,
                 'supplier_id' => $request->supplier_id,
-                'cabang_id' => $request->cabang_id,
+                'project_id' => $request->_id,
                 'barang_id' => $no,
                 'lokasi' => $request->lokasi,
                 'qty' => $request->qty[$key],
                 'harga_beli' => $request->harga_beli[$key],
                 'total' => $request->harga_beli[$key] * $request->qty[$key],
-                'user_id' => auth()->user()->id,
+                'user_i  d' => auth()->user()->id,
                 'status_pembayaran' => $request->status_pembayaran = 'pending',
                 'status_barang' => $request->status_barang = 'pending',
                 'created_at' => $request->tanggal
@@ -195,11 +193,10 @@ class PurchaseController extends Controller
 
     public function whereProject(Request $request)
     {
-
-        $data = DB::table('project')
-            ->select('project.nama_project', 'project.alamat_project')
-            ->groupBy('project.alamat_project')
-            ->where('project.id_project', $request->alamat_project)->get();
+        $data = DB::table('projects')
+            ->select('projects.alamat_project')
+            ->groupBy('projects.alamat_project')
+            ->where('projects.id', $request->id)->get();
         return $data;
     }
     public function WhereProduct(Request $request)
@@ -212,6 +209,6 @@ class PurchaseController extends Controller
             $data[] = ['id' => $row->id,  'text' => $row->nama_barang];
         }
 
-        return response()->json($data);
+        return redirect()->route('logistik.purchase.index')->with('success', 'Purchase barang didelete');
     }
 }

@@ -17,9 +17,11 @@
             <div class="profile-view">
                 <div class="profile-img-wrap">
                     <div class="profile-img">
-                        <a href="#">
-                            <img class="avatar" src="{{ asset('/storage/'. $profile->image) }}" alt="">
-                        </a>
+                        <div class="col-sm-6 col-sg-4 m-b-4">
+                            <div class="dashboard-logo">
+                                <img src="{{url('/img/logo/yazfi.png ')}}" alt="Image" />
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="profile-basic">

@@ -3,7 +3,7 @@
     <li class="{{ request()->is('dashboard*') ? 'active' : '' }}">
         <a href="/dashboard"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
     </li>
-    <!-- <li class="{{ request()->is('admin/dokter*') ? 'active' : '' }}">
+    <li class="{{ request()->is('admin/dokter*') ? 'active' : '' }}">
         <a href="{{ route('admin.dokter.index') }}"><i class="fa fa-user-md"></i> <span>Dokter</span></a>
     </li>
     @can('patient-access')
@@ -13,22 +13,10 @@
     @endcan
     <li class="{{ request()->is('admin/appointments*') ? 'active' : '' }}">
         <a href="{{ route('admin.appointments.index') }}"><i class="fa fa-calendar"></i> <span>Appointments</span></a>
-    </li> -->
+    </li>
     @can('user-access')
     <li class="{{ request()->is('admin/users*') ? 'active' : '' }}">
-        <a href="{{ route('admin.users.index') }}"><i class="fa fa-user"></i> <span> Master</span> <span class="menu-arrow"></span></a>
-    </li>
-    <li class="{{ request()->is('admin/users*') ? 'active' : '' }} submenu">
-        <a href="{{ route('admin.users.index') }}"><i class="fa fa-user"></i> <span> Master</span> <span class="menu-arrow"></span></a>
-        <ul style="display: none;">
-            <li><a class="{{ (request()->is('admin/product*')) ? 'active' : '' }}" href="{{ route('admin.product.index') }}">Barang</a></li>
-            <li><a class="{{ (request()->is('admin/attendance*')) ? 'active' : '' }}" href="{{ route('admin.attendance.index') }}">Unit</a></li>
-            <li><a class="{{ (request()->is('admin/attendance*')) ? 'active' : '' }}" href="{{ route('admin.attendance.index') }}">Vendor</a></li>
-            <li><a class="{{ (request()->is('admin/attendance*')) ? 'active' : '' }}" href="{{ route('admin.attendance.index') }}">Kategori Barang</a></li>
-            <li><a class="{{ (request()->is('admin/attendance*')) ? 'active' : '' }}" href="{{ route('admin.attendance.index') }}">Warehouse</a></li>
-            <li><a class="{{ (request()->is('admin/transfer*')) ? 'active' : '' }}" href="{{ route('admin.transfer.index') }}">Reinburst</a></li>
-            <li><a class="{{ (request()->is('admin/attendance*')) ? 'active' : '' }}" href="{{ route('admin.attendance.index') }}">Customer</a></li>
-        </ul>
+        <a href="{{ route('admin.users.index') }}"><i class="fa fa-users"></i> <span>Master User</span></a>
     </li>
     @endcan
     @can('cabang-access')
@@ -45,7 +33,7 @@
     <li class="{{ request()->is('admin/purchase*') ? 'active' : '' }}">
         <a href="{{ route('admin.purchase.index') }}"><i class="fa fa-calculator"></i> <span>Master Purchase</span></a>
     </li>
-
+    @endcan
     @can('purchase-access')
     <li class="{{ request()->is('admin/transfer*') ? 'active' : '' }}">
         <a href="{{ route('admin.transfer.index') }}"><i class="fa fa-calculator"></i> <span>Transfer Stok</span></a>

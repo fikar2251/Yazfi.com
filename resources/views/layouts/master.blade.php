@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('/') }}img/favicon.ico">
+    <link href="{{ asset("img/favicon.png")}}" rel="shortcut icon">
     <title>{{ \App\Setting::find(1)->web_name }} - {{ $title }}</title>
     <link rel="stylesheet" type="text/css" href="{{ asset('/') }}css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('/') }}css/font-awesome.min.css">
@@ -43,9 +43,9 @@
     <div class="main-wrapper">
         <div class="header bg-success">
             <div class="header-left">
-                <a href="/dashboard" class="logo">
-                    <img src="{{ asset('/storage/' . \App\Setting::find(1)->logo) }}" height="35" alt=""> <span></span>
-                </a>
+                <div class="logo-navbar">
+                    <img src="{{url('/img/logo/YAZFI-NAV.png ')}}" alt="Image" />
+                </div>
             </div>
             <a id="toggle_btn" href="javascript:void(0);"><i class="fa fa-bars"></i></a>
             <a id="mobile_btn" class="mobile_btn float-left" href="#sidebar"><i class="fa fa-bars"></i></a>

@@ -24,14 +24,14 @@ class PricelistController extends Controller
         // ]);
         // $data  = Marketing::select('blok','id_unit_rumah')->where('type',$request->type)->take(100)->get();
         // return response()->json($data);
-        
+
         $stok = Marketing::all();
         $type = Marketing::where('Type', $stok);
 
         $blok = DB::table('unit_rumah')
-         ->groupBy('type')
-         ->get();
-        return view('marketing.pricelist.index', compact('blok'));  
+            ->groupBy('type')
+            ->get();
+        return view('marketing.pricelist.index', compact('blok'));
     }
 
     public function blok(Request $request)
@@ -40,17 +40,50 @@ class PricelistController extends Controller
             ->select('unit_rumah.type', 'unit_rumah.blok')
             ->groupBy('unit_rumah.blok')
             ->where('unit_rumah.type', $request->type)->get();
-            
+
+        return $data;
+    }
+
+    public function no(Request $request)
+    {
+        $data = DB::table('unit_rumah')
+            ->select('unit_rumah.blok', 'unit_rumah.no', 'unit_rumah.lt')
+            ->groupBy('unit_rumah.no')
+            ->where('unit_rumah.blok', $request->blok)->get();
+
         return $data;
     }
 
     public function lt(Request $request)
     {
-        $data = DB::table('unit_rumah')
-        ->select('unit_rumah.no', 'unit_rumah.lt')
-        ->groupBy('unit_rumah.lt')
-        ->where('unit_rumah.no', $request->no)->get();
-        return $data;
+
+
+        $lutan = [
+            'blok' => $request->blok,
+            'no' => $request->no
+        ];
+
+
+        $lt = Marketing::select('blok', 'no', 'lt')
+            ->groupBy('lt')
+            ->where($lutan)
+            ->get();
+        return $lt;
+        // $lt = DB::table('unit_rumah')
+        //     ->select('unit_rumah.blok', 'unit_rumah.no', 'unit_rumah.lt')
+        //     ->groupBy('unit_rumah.lt')
+        //     ->where('unit_rumah.blok', $request->blok)->get();
+
+        // return $lt;
+
+
+
+        // $data = DB::table('unit_rumah')
+        //     ->select('unit_rumah.blok','unit_rumah.no', 'unit_rumah.lt')
+        //     ->groupBy('unit_rumah.lt', 'unit_rumah.blok')
+        //     ->where($lutan)
+        //     ->get();
+        // return $data;
     }
 
     public function fetch(Request $request)
@@ -59,13 +92,12 @@ class PricelistController extends Controller
         $value = $request->get('value');
         $dependent = $request->get('dependent');
         $data = DB::table('unit_rumah')
-        ->where($select, $value)
-        ->groupBy($dependent)
-        ->get();
-        $output = '<option value="">Select '.ucfirst($dependent).'</option>';
-        foreach($data as $row)
-        {
-        $output .= '<option value="'.$row->$dependent.'">'.$row->$dependent.'</option>';
+            ->where($select, $value)
+            ->groupBy($dependent)
+            ->get();
+        $output = '<option value="">Select ' . ucfirst($dependent) . '</option>';
+        foreach ($data as $row) {
+            $output .= '<option value="' . $row->$dependent . '">' . $row->$dependent . '</option>';
         }
         echo $output;
     }
@@ -97,7 +129,6 @@ class PricelistController extends Controller
      */
     public function store(Request $request)
     {
-       
     }
 
     /**

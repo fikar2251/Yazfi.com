@@ -457,7 +457,7 @@ table.table td h2 span {
 
 .bg-success,
 .badge-success {
-	background-color: #55ce63 !important;
+	background-color: #5559ce !important;
 }
 
 .bg-info,
@@ -1309,9 +1309,19 @@ textarea.form-control {
 	width: auto;
 }
 
-.dashboard-logo {
+.logo-navbar img {
+	max-height: 50px;
+	width: auto;
+}
+
+.logo-navbar {
 	margin-bottom: 40px;
 	margin-left: 10px;
+}
+
+.dashboard-logo {
+	margin-bottom: 40px;
+	margin-left: 20px;
 }
 
 .account-box .account-btn {

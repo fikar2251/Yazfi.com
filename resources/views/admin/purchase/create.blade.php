@@ -188,7 +188,7 @@
             ajax: {
                 url: `/admin/where/product`,
                 processResults: function(data) {
-                    // console.log(data)
+                    console.log(data)
                     return {
                         results: data
                     };

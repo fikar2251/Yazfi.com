@@ -17,6 +17,10 @@ class Barang extends Model
     {
         return $this->hasMany(Tindakan::class);
     }
+    public function project()
+    {
+        return $this->hasMany(InOut::class);
+    }
 
     public function produkharga()
     {

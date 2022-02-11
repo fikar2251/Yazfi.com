@@ -32,9 +32,6 @@
             </div>
         </div>
 
-        <div class="col-sm-6 col-md-3">
-            <button type="submit" class="btn btn-success btn-block">Search</button>
-        </div>
     </div>
 </form>
 <div class="row">
@@ -67,9 +64,9 @@
                         <td>{{ $purchase->status_barang }}</td>
                         <td>{{ $purchase->status_pembayaran }}</td>
                         <td>
-                            <!-- @can('purchase-edit')
+
                             <a href="{{ route('admin.purchase.edit', $purchase->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
-                            @endcan -->
+
                             <form action="{{ route('logistik.purchase.destroy', $purchase->id) }}" method="post" style="display: inline;" class="delete-form">
                                 @method('DELETE')
                                 @csrf

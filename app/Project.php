@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
-    protected $guarded = ['id_project'];
+    protected $guarded = ['id'];
     public function cabang()
     {
         return $this->belongsTo(Cabang::class);
@@ -18,5 +18,9 @@ class Project extends Model
     public function purchase()
     {
         return $this->hasMany(Purchase::class);
+    }
+    public function hargaproduk()
+    {
+        return $this->belongsTo(HargaProdukCabang::class, 'project_id');
     }
 }

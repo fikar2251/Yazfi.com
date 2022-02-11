@@ -42,9 +42,9 @@
                                 <td>{{ $purchase->project->nama_project }}</td>
                             </tr>
                             <tr>
-                                <td width="150px">Project</td>
+                                <td width="150px">Alamat</td>
                                 <td> : </td>
-                                <td>{{ $purchase->project->alamat_project }}</td>
+                                <td>{{ $purchase->lokasi }}</td>
                             </tr>
                             <tr>
                                 <td width="150px">Admin</td>

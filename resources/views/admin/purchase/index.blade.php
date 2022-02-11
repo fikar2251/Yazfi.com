@@ -7,9 +7,9 @@
     </div>
 
     <div class="col-sm-8 text-right m-b-20">
-        @can('purchase-create')
+
         <a href="{{ route('admin.purchase.create') }}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Purchase</a>
-        @endcan
+
     </div>
 </div>
 

@@ -65,10 +65,10 @@
                                 <li>
                                     <div class="form-group">
                                         <label for="cabang">Project *</label>
-                                        <select name="cabang_id" id="nama_project" class="form-control input-lg dynamic" data-dependent="alamat_project" required="">
+                                        <select name="project_id" id="nama_project" class="form-control input-lg dynamic" data-dependent="alamat_project" required="">
                                             <option disabled selected>-- Select Project --</option>
-                                            @foreach($cabang as $project)
-                                            <option value="{{ $project->id_project }}">{{ $project->nama_project }}</option>
+                                            @foreach($project as $projects)
+                                            <option value="{{ $projects->id }}">{{ $projects->nama_project }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -80,9 +80,7 @@
                                 <li>
                                     <div class="form-group">
                                         <label for="invoice">Lokasi *</label>
-                                        <select name="lokasi" id="alamat_project" class="form-control input-lg root2" readonly>
-                                            <option value=""></option>
-                                        </select>
+                                        <input name="lokasi" id="alamat_project" class="form-control input-lg root2" readonly>
                                     </div>
                                 </li>
                             </ul>
@@ -186,11 +184,13 @@
         let index = $('#dynamic_field tr').length + 1
         document.getElementById('counter').innerHTML = index
         let template = `
-                <tr class="rowComponent">
-                    <td>
-                        <input type="text" name="barang_id[${index}]" class="barang_id-${index}">
+        <tr class="rowComponent">
+                    <td hidden>
+                        <input type="hidden" name="barang_id[${index}]" class="barang_id-${index}">
                     </td>
-                  
+                    <td>
+                        <select required name="barang_id[${index}]" id="${index}" class="form-control select-${index}"></select>
+                    </td>
                     <td>
                         <input type="number" name="qty[${index}]"  class="form-control qty-${index}" placeholder="0">
                     </td>
@@ -210,9 +210,9 @@
         $(`.select-${index}`).select2({
             placeholder: 'Select Product',
             ajax: {
-                url: `/logistik/where/product`,
+                url: `/admin/where/product`,
                 processResults: function(data) {
-                    // console.log(data)
+                    console.log(data)
                     return {
                         results: data
                     };
@@ -260,31 +260,31 @@
             form_dinamic()
         })
     })
+
     $(document).ready(function() {
         $('.dynamic').change(function() {
 
-            var id_project = $(this).val();
-            var alamat_project = $(this).val();
+            var id = $(this).val();
             var div = $(this).parent();
-            var op = " ";
+            var input = " ";
             $.ajax({
                 url: `/logistik/where/project`,
                 method: "get",
                 data: {
-                    'id_project': id_project,
-                    'alamat_project': alamat_project
+                    'id': id
+
                 },
                 success: function(data) {
                     console.log(data);
-                    op += '<option value="0" selected disabled>Lokasi</option>';
+                    document.getElementById('data').value
+                    input += '<input value="0" selected disabled>';
                     for (var i = 0; i < data.length; i++) {
-                        op += '<option value="' + data[i].alamat_project + '">' + data[i].alamat_project + '</option>'
+
+                        input += '<input value="' + data[i].alamat_project + '">'
                     };
                     $('.root2').html(op);
                 },
-                error: function() {
-
-                }
+                error: function() {}
             })
         })
     })
