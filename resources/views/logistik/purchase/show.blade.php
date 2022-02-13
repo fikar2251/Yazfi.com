@@ -96,7 +96,7 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $barang->barang_id }}</td>
-                                    <td>{{ $barang->barang_id }}</td>
+                                    <td>{{ $barang->barang->nama_barang }}</td>
                                     <td>{{ $barang->barang_id }}</td>
                                     <td>{{ $barang->qty }}</td>
                                     <td>@currency($barang->harga_beli)</td>
@@ -108,21 +108,36 @@
                                 @endforeach
                             </tbody>
                             <tfoot>
+                                <tr class="text-right">
+                                    <td colspan="5">SUB TOTAL : </td>
+                                    <td colspan="5">@currency($total)</td>
+                
+                                </tr>
+                                <tr class="text-right">
+                                    <td colspan="5">PPN 10%: </td>
+                                    <td colspan="5">@currency($total * 0.1)</td>
+                
+                                </tr>
+                                <tr class="text-right">
+                                    <td colspan="5"><strong>TOTAL</strong> </td>
+                                    <td colspan="5">@currency($total * 0.1 + $total)</td>
+                
+                                </tr>
                                 <tr>
-                                    <td colspan="6">Total Pembelian : </td>
-                                    <td><b>@currency($total)</b></td>
-                                    <td colspan="6">PPN 10% : </td>
-                                    <td><b>@currency($total)</b></td>
+                                    <td colspan="3"><strong>Note</strong> </td>
+                                    <td colspan="3">PURCHASING </td>
+                                    <td colspan="3">MANAGER PROCUREMENT </td>
+                                </tr>
+                                
+                                <tr class="text-right">
+                                        <td colspan="6">DIRECTUR </td>
                                 </tr>
                             </tfoot>
                         </table>
                     </div>
                 </div>
             </div>
-           
-        <div class="card-footer bg-white">
-            <p class="mb-0">BBBootstrap.com, Sounth Block, New delhi, 110034</p>
-        </div>
+    
     </div>
 </div>
 @endsection
