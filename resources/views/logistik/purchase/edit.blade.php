@@ -19,12 +19,9 @@
             <div class="card-body">
                 <div class="row custom-invoice">
                     <div class="col-6 col-sm-6 m-b-20">
-                        <img src="{{ asset('/storage/' . \App\Setting::find(1)->logo) }}" class="inv-logo" alt="">
-                        <ul class="list-unstyled">
-                            <li>{{ \App\Setting::find(1)->web_name }}</li>
-                            <li></li>
-                            <li></li>
-                        </ul>
+                        <div class="dashboard-logo">
+                            <img src="{{url('/img/logo/yazfi.png ')}}" alt="Image" />
+                        </div>
                     </div>
                     <div class="col-6 col-sm-6 m-b-20">
                         <div class="invoice-details">
@@ -33,7 +30,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-6 col-lg-6 m-b-20">
+                    <div class="col-sm-6 col-sg-4 m-b-4">
 
                         <h5>Invoice to:</h5>
                         <ul class="list-unstyled">
@@ -45,11 +42,11 @@
                     </div>
                 </div>
 
-                <form action="{{ route('admin.purchase.update', $purchase->id) }}" method="post">
+                <form action="{{ route('logistik.purchase.update', $purchase->id) }}" method="post">
                     @method('PATCH')
                     @csrf
                     <div class="row">
-                        <div class="col-sm-6 col-lg-4 m-b-20">
+                        <div class="col-sm-6 col-sg-4 m-b-4">
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
@@ -64,7 +61,32 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="col-sm-6 col-lg-4 m-b-20">
+                        <div class="col-sm-6 col-sg-4 m-b-4">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="form-group">
+                                        <label for="cabang">Project *</label>
+                                        <select name="project_id" id="nama_project" class="form-control select2" data-dependent="alamat_project" required="">
+                                            <option disabled selected>-- Select Project --</option>
+                                            @foreach($project as $projects)
+                                            <option {{ $projects->id == $purchase->id_project ? 'selected' : '' }}  value="{{ $projects->id }}">{{ $projects->nama_project }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 col-sg-4 m-b-4">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="form-group">
+                                        <label for="invoice">Lokasi *</label>
+                                        <input type="text" name="lokasi" value="{{ $purchase->lokasi }} "id="lokasi" class="form-control">
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 col-sg-4 m-b-4">
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
@@ -74,12 +96,12 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="col-sm-6 col-lg-4 m-b-20">
+                        <div class="col-sm-6 col-sg-4 m-b-4">
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
                                         <label for="tanggal">Tanggal *</label>
-                                        <input type="datetime-local" name="tanggal" id="tanggal" class="form-control">
+                                        <input type="datetime-local" name="tanggal" id="tanggal"  class="form-control">
                                     </div>
                                 </li>
                             </ul>
@@ -109,10 +131,9 @@
                                                 <input type="hidden" name="barang_id[{{ $loop->iteration }}]" class="barang_id-{{ $loop->iteration }}">
                                             </td>
                                             <td>
-                                                <!-- <select required name="barang_id[{{ $loop->iteration }}]" id="{{ $loop->iteration }}" class="form-control select-{{ $loop->iteration }}">
-                                                </select> -->
-                                                <input type="text" name="barang" id="" value="{{ $pur->barang->nama_barang }}" class="form-control" disabled>
-                                                <input type="hidden" name="barang_id[{{ $loop->iteration }}]" id="" value="{{ $pur->barang_id }}" class="form-control" disabled>
+                                                <select required name="barang_id[{{ $loop->iteration }}]" value="{{ $purchase->barang->nama_barang }}" id="{{ $loop->iteration }}" class="form-control select-{{ $loop->iteration }}">
+                                                </select>
+                                
                                             </td>
                                             <td>
                                                 <input type="number" value="{{ $pur->qty }}" name="qty[{{ $loop->iteration }}]" class="form-control qty-{{ $loop->iteration }}" placeholder="0">
@@ -156,6 +177,12 @@
                                     <div class="form-group">
                                         <label>Total</label>
                                         <input type="text" id="sub_total" readonly class="form-control" value="{{ $purchases->sum('total') }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>PPN 10%</label>
+                                        <input type="text" id="PPN" name="PPN" readonly class="form-control" value="{{ $purchase->PPN }}">
                                     </div>
                                 </div>
                             </div>
@@ -270,6 +297,11 @@
             total += parseInt(ele.value)
         }
         sub_total.value = total
+        let tax = (10/ 100) * sub_total.value;
+        let total_all = parseInt(tax);
+        // rupiah()
+        document.getElementById('PPN').value = total_all;
+        
     }
 
     $(document).ready(function() {

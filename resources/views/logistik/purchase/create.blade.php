@@ -80,7 +80,7 @@
                                 <li>
                                     <div class="form-group">
                                         <label for="invoice">Lokasi *</label>
-                                        <input name="lokasi" id="alamat_project" class="form-control input-lg root2" readonly>
+                                        <input type="text" name="lokasi" id="lokasi" class="form-control">
                                     </div>
                                 </li>
                             </ul>
@@ -137,6 +137,12 @@
                                         <input type="text" id="sub_total" readonly class="form-control">
                                     </div>
                                 </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>PPN 10%</label>
+                                        <input type="text" id="PPN" name="PPN" readonly class="form-control">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="col-sm-1 offset-sm-8">
@@ -157,7 +163,7 @@
         var str = num.toString().replace("", ""),
             parts = false,
             output = [],
-            i = 1,
+            i = 13,
             formatted = null;
         if (str.indexOf(".") > 0) {
             parts = str.split(".");
@@ -244,16 +250,22 @@
     function HowAboutIt(e) {
         let sub_total = document.getElementById('sub_total')
         let total = 0;
+       
         let coll = document.querySelectorAll('.total-form')
         for (let i = 0; i < coll.length; i++) {
             let ele = coll[i]
             total += parseInt(ele.value)
         }
+        
         sub_total.value = total
-        // tax.value = (ppn / 100) * sub_total.value
-        // total_all.value = parseInt(tax.value) + parseInt(sub_total.value)
+        let tax = (10/ 100) * sub_total.value;
+        let total_all = parseInt(tax);
         // rupiah()
+        document.getElementById('PPN').value = total_all;
+        
+      
     }
+
 
     $(document).ready(function() {
         $('#add').on('click', function() {
@@ -266,25 +278,25 @@
 
             var id = $(this).val();
             var div = $(this).parent();
-            var input = " ";
+            var op = " ";
             $.ajax({
                 url: `/logistik/where/project`,
                 method: "get",
                 data: {
                     'id': id
+                    
 
                 },
-                success: function(data) {
+                
+                success: function(data){
                     console.log(data);
-                    document.getElementById('data').value
-                    input += '<input value="0" selected disabled>';
-                    for (var i = 0; i < data.length; i++) {
-
-                        input += '<input value="' + data[i].alamat_project + '">'
-                    };
-                    $('.root2').html(op);
+                    op+='<option value="0" selected disabled> Lokasi</option>';
+                    for(var i=0;i<data.length;i++){ op+='<option value="' +data[i].alamat_project+'">'+data[i].alamat_project+'</option>'};
+                    $('.root3').html(op);
                 },
-                error: function() {}
+                error: function() {
+                    
+                }
             })
         })
     })

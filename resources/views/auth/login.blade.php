@@ -48,7 +48,7 @@
                             <button type="submit" class="btn btn-primary account-btn">Login</button>
                         </div>
                         <div class="text-center register-link">
-                            <!-- Don’t have an account? <a href="register.html">Register Now</a> -->
+                             Don’t have an account?  <a href="{{ route('register') }}">Register Now</a>
                         </div>
                     </form>
                 </div>

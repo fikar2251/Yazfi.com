@@ -65,7 +65,7 @@
                         <td>{{ $purchase->status_pembayaran }}</td>
                         <td>
 
-                            <a href="{{ route('admin.purchase.edit', $purchase->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
+                            <a href="{{ route('logistik.purchase.edit', $purchase->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
 
                             <form action="{{ route('logistik.purchase.destroy', $purchase->id) }}" method="post" style="display: inline;" class="delete-form">
                                 @method('DELETE')

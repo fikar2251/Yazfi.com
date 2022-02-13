@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Purchase extends Model
 {
-    protected $guarded = [];
+    protected $guarded = ['id'];
 
     public function barang()
     {
-        return $this->belongsTo(Barang::class);
+        return $this->belongsTo(Barang::class,'id');
     }
 
     public function supplier()
@@ -19,7 +19,7 @@ class Purchase extends Model
     }
     public function project()
     {
-        return $this->belongsTo(Project::class);
+        return $this->belongsTo(Project::class,'id');
     }
 
     public function admin()

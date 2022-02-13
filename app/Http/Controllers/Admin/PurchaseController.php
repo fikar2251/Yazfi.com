@@ -61,23 +61,26 @@ class PurchaseController extends Controller
                 'harga_beli' => $request->harga_beli[$key],
                 'total' => $request->harga_beli[$key] * $request->qty[$key],
                 'user_id' => auth()->user()->id,
-                'created_at' => $request->tanggal
+                'created_at' => $request->tanggal,
+                'status_pembayaran' => 'pending',
+                'status_barang' => 'pending'
             ];
 
-            $hargaBarang = HargaProdukCabang::where('project_id', auth()->user()->project_id)->where('barang_id', $no)->first();
+            // $hargaBarang = HargaProdukCabang::where('project_id', auth()->user()->project_id)->where('barang_id', $no)->first();
 
             // $hargaBarang->update([
             //     'qty' => $hargaBarang->qty + $request->qty[$key]
             // ]);
 
-            $in[] = [
-                'invoice' => $request->invoice,
-                'supplier_id' => $request->supplier_id,
-                'barang_id' => $no,
-                'in' => $request->qty[$key],
-                // 'last_stok' => $hargaBarang->qty,
-                'user_id' => auth()->user()->id
-            ];
+            // $in[] = [
+            //     'invoice' => $request->invoice,
+            //     'supplier_id' => $request->supplier_id,
+            //     'barang_id' => $no,
+            //     'in' => $request->qty[$key],
+            //     // 'last_stok' => $hargaBarang->qty,
+            
+            //     'user_id' => auth()->user()->id
+            // ];
         }
 
         Purchase::insert($attr);

@@ -19,6 +19,8 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
+
+
 Auth::routes();
 
 Route::middleware('auth')->group(function () {
@@ -259,8 +261,14 @@ Route::middleware('auth')->group(function () {
             Route::get('/where/project', 'PurchaseController@whereProject');
             Route::resource('purchase', 'PurchaseController');
             Route::resource('product', 'ProductController');
-            Route::get('/product/cari', 'PegawaiController@cari');
             Route::resource('supplier', 'SupplierController');
+              Route::resource('permissions', 'PermissionController');
+
+            // Route Roles
+            Route::resource('roles', 'RolesController');
+
+            // Route Master User
+            Route::resource('users', 'UserController');
         });
 
 

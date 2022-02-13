@@ -29,7 +29,7 @@ class Barang extends Model
 
     public function purchase()
     {
-        return $this->hasMany(Purchase::class);
+        return $this->hasMany(Purchase::class,'id');
     }
 
     public function inout()

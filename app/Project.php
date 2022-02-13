@@ -17,7 +17,7 @@ class Project extends Model
     }
     public function purchase()
     {
-        return $this->hasMany(Purchase::class);
+        return $this->hasMany(Purchase::class,'id_project');
     }
     public function hargaproduk()
     {

@@ -26,7 +26,7 @@ class PurchaseController extends Controller
         }
 
 
-        return view('logistik.purchase.index', compact('purchases', 'purchase'));
+        return view('logistik.purchase.index', compact('purchases'));
     }
 
     public function create()
@@ -47,52 +47,47 @@ class PurchaseController extends Controller
             'qty' => 'required',
             'harga_beli' => 'required',
             'invoice' => 'required',
-            'cabang_id' => 'required',
-            'lokasi' => 'required',
-            'status_barang' => 'required',
-            'status_pembayaran' => 'required',
         ]);
 
         $barang = $request->input('barang_id', []);
         $attr = [];
         $in = [];
-        dd($request->all());
+        // dd($request->all());
         DB::beginTransaction();
         foreach ($barang as $key => $no) {
             $attr[] = [
                 'invoice' => $request->invoice,
                 'supplier_id' => $request->supplier_id,
-                'project_id' => $request->_id,
                 'barang_id' => $no,
-                'lokasi' => $request->lokasi,
                 'qty' => $request->qty[$key],
                 'harga_beli' => $request->harga_beli[$key],
+                'PPN' => $request->PPN,
                 'total' => $request->harga_beli[$key] * $request->qty[$key],
-                'user_i  d' => auth()->user()->id,
-                'status_pembayaran' => $request->status_pembayaran = 'pending',
-                'status_barang' => $request->status_barang = 'pending',
-                'created_at' => $request->tanggal
+                'user_id' => auth()->user()->id,
+                'created_at' => $request->tanggal,
+                'status_pembayaran' => 'pending',
+                'status_barang' => 'pending'
             ];
 
-            $hargaBarang = HargaProdukCabang::where('project_id', auth()->user()->project_id)->where('barang_id', $no)->first();
+            // $hargaBarang = HargaProdukCabang::where('project_id', auth()->user()->project_id)->where('barang_id', $no)->first();
 
-            $hargaBarang->update([
-                'qty' => $hargaBarang->qty + $request->qty[$key]
-            ]);
+            // $hargaBarang->update([
+            //     'qty' => $hargaBarang->qty + $request->qty[$key]
+            // ]);
 
-            $in[] = [
-                'invoice' => $request->invoice,
-                'supplier_id' => $request->supplier_id,
-                'barang_id' => $no,
-                'project_id' => $request->project_id,
-                'in' => $request->qty[$key],
-                'last_stok' => $hargaBarang->qty,
-                'user_id' => auth()->user()->id
-            ];
+            // $in[] = [
+            //     'invoice' => $request->invoice,
+            //     'supplier_id' => $request->supplier_id,
+            //     'barang_id' => $no,
+            //     'in' => $request->qty[$key],
+                // 'last_stok' => $hargaBarang->qty,
+            
+            //     'user_id' => auth()->user()->id
+            // ];
         }
 
         Purchase::insert($attr);
-        InOut::insert($in);
+        // InOut::insert($in);
 
         DB::commit();
 
@@ -110,9 +105,10 @@ class PurchaseController extends Controller
     {
         $purchases = Purchase::where('invoice', $purchase->invoice)->get();
         $suppliers = Supplier::get();
+        $project = Project::get();
         $barangs = Barang::where('jenis', 'barang')->get();
 
-        return view('logistik.purchase.edit', compact('purchase', 'suppliers', 'barangs', 'purchases'));
+        return view('logistik.purchase.edit', compact('project','purchase', 'suppliers', 'barangs', 'purchases'));
     }
 
     public function update(Request $request, Purchase $purchase)
@@ -126,7 +122,7 @@ class PurchaseController extends Controller
         ]);
         $barang = $request->input('barang_id', []);
         $attr = [];
-        $in = [];
+        // $in = [];
         $id = [];
         $purchases = Purchase::where('invoice', $purchase->invoice)->pluck('id');
         // dd("ok");
@@ -139,35 +135,38 @@ class PurchaseController extends Controller
                 'barang_id' => $no,
                 'qty' => $request->qty[$key],
                 'harga_beli' => $request->harga_beli[$key],
+                'PPN' => $request->PPN,
                 'total' => $request->harga_beli[$key] * $request->qty[$key],
                 'user_id' => auth()->user()->id,
-                'created_at' => $request->tanggal
+                'created_at' => $request->tanggal,
+                'status_pembayaran' => 'pending',
+                'status_barang' => 'pending'
             ];
 
-            $hargaBarang = HargaProdukCabang::where('cabang_id', auth()->user()->cabang_id)->where('barang_id', $no)->first();
-            dd($hargaBarang);
+            // $hargaBarang = HargaProdukCabang::where('project_id', auth()->user()->cabang_id)->where('project_id', $no)->first();
+            // dd($hargaBarang);
 
-            $hargaBarang->update([
-                'qty' => $hargaBarang->qty + $request->qty[$key]
-            ]);
+            // $hargaBarang->update([
+            //     'qty' => $hargaBarang->qty + $request->qty[$key]
+            // ]);
 
-            $in[] = [
-                'invoice' => $request->invoice,
-                'supplier_id' => $request->supplier_id,
-                'barang_id' => $no,
-                'in' => $request->qty[$key],
-                'user_id' => auth()->user()->id,
-                'last_stok' => $hargaBarang->qty
-            ];
+            // $in[] = [
+            //     'invoice' => $request->invoice,
+            //     'supplier_id' => $request->supplier_id,
+            //     'barang_id' => $no,
+            //     'in' => $request->qty[$key],
+            //     'user_id' => auth()->user()->id,
+            //     'last_stok' => $hargaBarang->qty
+            // ];
 
-            $id[] = $purchases[$key];
+            // $id[] = $purchases[$key];
         }
 
         Purchase::updateOrInsert([
             'id' => $id
         ], $attr);
 
-        InOut::insert($in);
+        // InOut::insert($in);
 
         DB::commit();
 
@@ -182,9 +181,9 @@ class PurchaseController extends Controller
             InOut::where('invoice', $pur->invoice)->delete();
             $harga = HargaProdukCabang::where('barang_id', $pur->barang_id)->where('project_id', auth()->user()->project_id)->first();
 
-            $harga->update([
-                'qty' => $harga->qty - $pur->qty
-            ]);
+            // $harga->update([
+            //     'qty' => $harga->qty - $pur->qty
+            // ]);
             $pur->delete();
         }
 
@@ -198,6 +197,7 @@ class PurchaseController extends Controller
             ->groupBy('projects.alamat_project')
             ->where('projects.id', $request->id)->get();
         return $data;
+        dd($data);
     }
     public function WhereProduct(Request $request)
     {

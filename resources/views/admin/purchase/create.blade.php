@@ -226,10 +226,10 @@
             total += parseInt(ele.value)
         }
         sub_total.value = total
-        // tax.value = (ppn / 100) * sub_total.value
-        // total_all.value = parseInt(tax.value) + parseInt(sub_total.value)
-        // rupiah()
-    }
+    //     // tax.value = (ppn / 100) * sub_total.value
+    //     // total_all.value = parseInt(tax.value) + parseInt(sub_total.value)
+    //     // rupiah()
+    // }
 
     $(document).ready(function() {
         $('#add').on('click', function() {
