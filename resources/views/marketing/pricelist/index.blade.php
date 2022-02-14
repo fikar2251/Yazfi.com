@@ -156,7 +156,7 @@ $stock = DB::table('unit_rumah')->select('type')->distinct()->get();
             <select name="type" id="type" class="form-control dynamic" data-dependent="blok">
                 <option value="">-- Select Type --</option>
                 @foreach ($blok as $item)
-                <option value="{{$item->type}}">{{$item->type}}</option>
+                <option value="{{$item->id_unit_rumah}}">{{$item->type}}</option>
                 @endforeach
             </select>
 
@@ -186,7 +186,7 @@ $stock = DB::table('unit_rumah')->select('type')->distinct()->get();
         </div>
         <div class="form-group">
             <label for="phone_number">Luas tanah</label>
-            <select name="lt" id="lt" class="form-control root3">
+            <select name="lt" id="lt" class="form-control root4">
                 <option value="">-- Select Lt --</option>
             </select>
             @error('phone_number')
@@ -261,7 +261,7 @@ $stock = DB::table('unit_rumah')->select('type')->distinct()->get();
     $(document).ready(function() {
         $('.dynamic').change(function() {
 
-            var type = $(this).val();
+            var id_unit_rumah = $(this).val();
             var blok = $(this).val();
             var no = $(this).val();
             var lt = $(this).val();
@@ -271,7 +271,7 @@ $stock = DB::table('unit_rumah')->select('type')->distinct()->get();
                 url: `/marketing/blok`,
                 method: "get",
                 data: {
-                    'type': type,
+                    'id_unit_rumah': id_unit_rumah,
                     'blok': blok,
                     'no': no,
                     'lt': lt,
@@ -293,7 +293,7 @@ $stock = DB::table('unit_rumah')->select('type')->distinct()->get();
     $(document).ready(function() {
         $('.dinamis').change(function() {
 
-            var blok = $(this).val();
+            var id_unit_rumah = $(this).val();
             var no = $(this).val();
             var lt = $(this).val();
             var div = $(this).parent();
@@ -302,9 +302,9 @@ $stock = DB::table('unit_rumah')->select('type')->distinct()->get();
                 url: `/marketing/no`,
                 method: "get",
                 data: {
-                    'blok': blok,
+                    'id_unit_rumah': id_unit_rumah,
                     'no': no,
-                    'lt' : lt
+                    'lt': lt
                 },
                 success: function(data) {
                     console.log(data);
@@ -316,61 +316,82 @@ $stock = DB::table('unit_rumah')->select('type')->distinct()->get();
                 },
                 error: function() {
 
-                },
-                // success: function(lt) {
-                //     console.log(lt);
-                //     op += '<option value="0">--Select No--</option>';
-                //     for (var i = 0; i < lt.length; i++) {
-                //         op += '<option value="' + lt[i].no + '">' + lt[i].no + '</option>'
-                //     };
-                //     $('.root3').html(op);
-                // }
-            })
-        })
-
-        $('.lt').change(function() {
-            console.log('test');
-            var blok = $(this).val();
-            var no = $(this).val();
-            var lt = $(this).val();
-            var div = $(this).parent();
-            var op = " ";
-            console.log(no);
-            console.log(blok);
-            $.ajax({
-                url: `/marketing/no`,
-                method: "get",
-                data: {
-                    'no': no,
-                    'blok': blok,
-                    'lt' : lt
-                },
-                
-                // success: function(data) {
-                //     console.log(data);
-                //     op += '<option value="0">--Select No--</option>';
-                //     for (var i = 0; i < data.length; i++) {
-                //         op += '<option value="' + data[i].no + '">' + data[i].no + '</option>'
-                //     };
-                //     $('.root1').html(op);
-                // },
-                // error: function() {
-
-                // },
-                success: function(lt) {
-                    console.log(lt);
-                    op += '<option value="0">--Select Lt--</option>';
-                    for (var i = 0; i < lt.length; i++) {
-                        op += '<option value="' + lt[i].lt + '">' + lt[i].lt + '</option>'
-                    };
-                    $('.root3').html(op);
                 }
             })
         })
     })
+    $(document).ready(function() {
+        $('.lt').change(function() {
+
+            var id_unit_rumah = $(this).val();
+            var div = $(this).parent();
+            var op = " ";
+            console.log(blok)
+            $.ajax({
+                url: `/marketing/lt`,
+                method: "get",
+                data: {
+                    'id_unit_rumah': id_unit_rumah,
+
+                },
+                success: function(data) {
+                    console.log(data);
+                    op += '<option value="0">--Select Lt--</option>';
+                    for (var i = 0; i < data.length; i++) {
+                        op += '<option value="' + data[i].lt + '">' + data[i].lt + '</option>'
+                    };
+                    $('.root4').html(op);
+                },
+                error: function() {
+
+                },
+
+            })
+        })
+
+        // $('.lt').change(function() {
+        //     console.log('test');
+        //     var blok = $(this).val();
+        //     var no = $(this).val();
+        //     var lt = $(this).val();
+        //     var div = $(this).parent();
+        //     var op = " ";
+        //     console.log(no);
+        //     console.log(blok);
+        //     $.ajax({
+        //         url: `/marketing/no`,
+        //         method: "get",
+        //         data: {
+        //             'no': no,
+        //             'blok': blok,
+        //             'lt': lt
+        //         },
+
+        //         // success: function(data) {
+        //         //     console.log(data);
+        //         //     op += '<option value="0">--Select No--</option>';
+        //         //     for (var i = 0; i < data.length; i++) {
+        //         //         op += '<option value="' + data[i].no + '">' + data[i].no + '</option>'
+        //         //     };
+        //         //     $('.root1').html(op);
+        //         // },
+        //         // error: function() {
+
+        //         // },
+        //         success: function(lt) {
+        //             console.log(lt);
+        //             op += '<option value="0">--Select Lt--</option>';
+        //             for (var i = 0; i < lt.length; i++) {
+        //                 op += '<option value="' + lt[i].lt + '">' + lt[i].lt + '</option>'
+        //             };
+        //             $('.root3').html(op);
+        //         }
+        //     })
+        // })
+    })
 
     // $(document).ready(function() {
-        
+
 
     //     $('.lt').change(function() {
     //         var no = $(this).val();
@@ -401,45 +422,4 @@ $stock = DB::table('unit_rumah')->select('type')->distinct()->get();
     //     })
     // })
 </script>
-{{-- <script>
-//     $(document).ready(function(){
-    
-//     $('.dinamis').change(function(){
-//     if($(this).val() != '')
-//     {
-//         console.log('test');
-//     var select = $(this).attr("id");
-//     var value = $(this).val();
-//     var dependent = $(this).data('dependent');
-//     var _token = $('input[name="_token"]').val();
-//     $.ajax({
-//         url:"{{ url('/marketing/fetch') }}",
-// // url:`/pricelist/fetch`,
-// method:"POST",
-// data:{select:select, value:value, _token:_token, dependent:dependent},
-// success:function(result)
-// {
-// console.log(result)
-// $('#'+dependent).html(result);
-// }
-
-// })
-// }
-// });
-
-// $('#blok').change(function(){
-// $('#no').val('');
-// $('#lt').val('');
-// });
-
-// $('#no').change(function(){
-// $('#lt').val('');
-// });
-
-
-// });
-
-
-// </script> --}}
-
 @stop

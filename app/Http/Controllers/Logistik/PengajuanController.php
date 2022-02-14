@@ -61,7 +61,7 @@ class PengajuanController extends Controller
         foreach ($barang as $key => $no) {
             $attr[] = [
                 'nomor_pengajuan' => $request->nomor_pengajuan,
-                'user_id' => auth()->user()->id,
+                'id_user' => auth()->user()->id,
                 'id_perusahaan' => $request->id_perusahaan,
                 'tanggal_pengajuan' => $request->tanggal_pengajuan,
                 'approval_time' => $request->tanggal_pengajuan,
@@ -70,7 +70,7 @@ class PengajuanController extends Controller
                 'id_roles' => 9
             ];
             $in[] = [
-                'barang_jasa' => $no,
+                'barang_id' => $no,
                 'PPN' => $request->PPN,
                 'harga_beli' => $request->harga_beli[$key],
                 'qty' => $request->qty[$key],

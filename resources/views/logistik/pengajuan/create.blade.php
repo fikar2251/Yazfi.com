@@ -168,10 +168,10 @@
         let template = `
         <tr class="rowComponent">
                     <td hidden>
-                        <input type="hidden" name="barang_jasa[${index}]" class="barang_jasa-${index}">
+                        <input type="hidden" name="barang_id[${index}]" class="barang_id-${index}">
                     </td>
                     <td>
-                        <select required name="barang_jasa[${index}]" id="${index}" class="form-control select-${index}"></select>
+                        <select required name="barang_id[${index}]" id="${index}" class="form-control select-${index}"></select>
                     </td>
                     <td>
                         <input type="number" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), HowAboutIt(this)">

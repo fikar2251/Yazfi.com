@@ -37,50 +37,50 @@ class PricelistController extends Controller
     public function blok(Request $request)
     {
         $data = DB::table('unit_rumah')
-            ->select('unit_rumah.type', 'unit_rumah.blok')
+            ->select('unit_rumah.type', 'unit_rumah.blok', 'unit_rumah.no', 'unit_rumah.lt')
             ->groupBy('unit_rumah.blok')
-            ->where('unit_rumah.type', $request->type)->get();
+            ->where('unit_rumah.id_unit_rumah', $request->id_unit_rumah)->get();
 
         return $data;
     }
 
     public function no(Request $request)
     {
-        $blok = ['blok' => $request->blok];
+        // $blok = ['blok' => $request->blok];
         $data = DB::table('unit_rumah')
-            ->select('unit_rumah.blok', 'unit_rumah.no', 'unit_rumah.lt')
-            ->groupBy('unit_rumah.no', 'unit_rumah.lt')
-            ->where('unit_rumah.blok', $blok)
-            ->get();
+            ->select('unit_rumah.type', 'unit_rumah.blok', 'unit_rumah.no', 'unit_rumah.lt')
+            ->groupBy('unit_rumah.no')
+            ->where('unit_rumah.id_unit_rumah', $request->id_unit_rumah)->get();
 
         return $data;
 
-        $lutan = [
-            // 'blok' => 'R',
-            'no' => $request->no
-        ];
+        // $lutan = [
+        //     // 'blok' => 'R',
+        //     'no' => $request->no
+        // ];
 
-        $lt = Marketing::select('blok', 'no', 'lt')
-            ->groupBy('lt')
-            ->where('blok', $data)->get();
+        // $lt = Marketing::select('blok', 'no', 'lt')
+        //     ->groupBy('lt')
+        //     ->where('blok', $data)->get();
 
-        return $lt;
+        // return $lt;
     }
 
     public function lt(Request $request)
     {
 
-        $lutan = [
-            'blok' => $request->blok,
-            'no' => $request->no
-        ];
+        // $lutan = [
+        //     'blok' => $request->blok,
+        //     'no' => $request->no
+        // ];
 
 
-        $lt = Marketing::select('blok', 'no', 'lt')
-            ->groupBy('lt')
-            ->where($lutan)
-            ->get();
-        return $lt;
+        $data = DB::table('unit_rumah')
+            ->select('unit_rumah.blok', 'unit_rumah.id_unit_rumah', 'unit_rumah.lt')
+            ->groupBy('unit_rumah.lt')
+            ->where('unit_rumah.id_unit_rumah', $request->id_unit_rumah)->get();
+
+        return $data;
         // $lt = DB::table('unit_rumah')
         //     ->select('unit_rumah.blok', 'unit_rumah.no', 'unit_rumah.lt')
         //     ->groupBy('unit_rumah.lt')
