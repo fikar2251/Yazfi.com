@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\InOut;
 use App\Purchase;
 use App\Supplier;
-use App\{User, Cabang, Pengajuan};
+use App\{User, Cabang, Pengajuan, Perusahaan, RincianPengajuan};
 use App\Project;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -37,16 +37,11 @@ class PengajuanController extends Controller
 
     public function create(Purchase $purchase)
     {
-        // $purchases = Purchase::where('invoice', $purchase->invoice)->get();
+        $pengajuans = Pengajuan::groupBy('nomor_pengajuan')->get();
+        $perusahaans = Perusahaan::get();
         $barangs = Barang::where('jenis', 'barang')->get();
-        $purchases = DB::table('purchases')
-            ->leftjoin('roles', 'roles.id', '=', 'purchases.roles_id')
-            ->leftjoin('users', 'users.id', '=', 'purchases.user_id')
-            ->select('roles.key', 'purchases.created_at', 'purchases.status_barang', 'purchases.invoice', 'purchases.id', 'purchases.user_id', 'users.name')
-            ->groupBy('purchases.invoice')
-            ->get();
 
-        return view('logistik.pengajuan.create', compact('purchases',  'barangs',  'purchase'));
+        return view('logistik.pengajuan.create', compact('barangs', 'perusahaans', 'pengajuans'));
     }
 
     public function store(Request $request)
@@ -55,7 +50,7 @@ class PengajuanController extends Controller
             'barang_id' => 'required',
             'qty' => 'required',
             'harga_beli' => 'required',
-            'invoice' => 'required',
+            'nomor_pengajuan' => 'required',
         ]);
 
         $barang = $request->input('barang_id', []);
@@ -65,41 +60,31 @@ class PengajuanController extends Controller
         DB::beginTransaction();
         foreach ($barang as $key => $no) {
             $attr[] = [
-                'invoice' => $request->invoice,
-                'barang_id' => $no,
-                'qty' => $request->qty[$key],
-                'harga_beli' => $request->harga_beli[$key],
-                'PPN' => $request->PPN,
-                'total' => $request->harga_beli[$key] * $request->qty[$key],
+                'nomor_pengajuan' => $request->nomor_pengajuan,
                 'user_id' => auth()->user()->id,
-                'created_at' => $request->tanggal,
-                'status_pembayaran' => 'pending',
-                'status_barang' => 'pending'
+                'id_perusahaan' => $request->id_perusahaan,
+                'tanggal_pengajuan' => $request->tanggal_pengajuan,
+                'approval_time' => $request->tanggal_pengajuan,
+                'status_approval' => 'pending',
+                'approval_by' => 'pending',
+                'id_roles' => 9
             ];
-
-            // $hargaBarang = HargaProdukCabang::where('project_id', auth()->user()->project_id)->where('barang_id', $no)->first();
-
-            // $hargaBarang->update([
-            //     'qty' => $hargaBarang->qty + $request->qty[$key]
-            // ]);
-
-            // $in[] = [
-            //     'invoice' => $request->invoice,
-            //     'supplier_id' => $request->supplier_id,
-            //     'barang_id' => $no,
-            //     'in' => $request->qty[$key],
-            // 'last_stok' => $hargaBarang->qty,
-
-            //     'user_id' => auth()->user()->id
-            // ];
+            $in[] = [
+                'barang_jasa' => $no,
+                'PPN' => $request->PPN,
+                'harga_beli' => $request->harga_beli[$key],
+                'qty' => $request->qty[$key],
+                'total' => $request->harga_beli[$key] * $request->qty[$key],
+                'nomor_pengajuan' => $request->nomor_pengajuan,
+            ];
         }
 
-        Purchase::insert($attr);
-        // InOut::insert($in);
-
+        Pengajuan::insert($attr);
+        RincianPengajuan::insert($in);
+        print_r($attr);
         DB::commit();
 
-        return redirect()->route('logistik.purchase.index')->with('success', 'Purchase barang berhasil');
+        return redirect()->route('logistik.pengajuan.index')->with('success', 'Pengajuan Dana barang berhasil');
     }
 
     public function show(Purchase $purchase)

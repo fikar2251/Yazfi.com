@@ -2,7 +2,7 @@
 @section('content')
 <div class="row">
     <div class="col-sm-5 col-4">
-        <h4 class="page-title">Purchase</h4>
+        <h4 class="page-title">Pengajuan Dana</h4>
     </div>
     <div class="col-sm-7 col-8 text-right m-b-30">
         <div class="btn-group btn-group-sm">
@@ -42,29 +42,20 @@
                     </div>
                 </div>
 
-                <form action="{{ route('logistik.purchase.store',$purchase->id) }}" method="post">
+                <form action="{{ route('logistik.pengajuan.store') }}" method="post">
                     @csrf
                     <div class="row">
                         <div class="col-sm-6 col-sg-4 m-b-4">
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <label for="nama">Nama <span style="color: red">*</span></label>
-                                        @foreach($purchases as $rol)
-                                        <input type="text" name="name" id="nama" value="{{ $rol->name }} " readonly class="form-control">
-                                        @endforeach
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-6 col-sg-4 m-b-4">
-                            <ul class="list-unstyled">
-                                <li>
-                                    <div class="form-group">
-                                        <label for="divisi">Divisi <span style="color: red">*</span></label>
-                                        @foreach($purchases as $rol)
-                                        <input type="text" name="divisi" id="divisi" value="{{ $rol->key }} " readonly class="form-control">
-                                        @endforeach
+                                        <label for="perusahaan">Perusahaan <span style="color: red">*</span></label>
+                                        <select name="id_perusahaan" id="id_perusahaan" class="form-control select2" required="">
+                                            <option disabled selected>-- Select Perusahaan --</option>
+                                            @foreach($perusahaans as $perusahaan)
+                                            <option value="{{ $perusahaan->id }}">{{ $perusahaan->nama_perusahaan }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </li>
                             </ul>
@@ -74,7 +65,7 @@
                                 <li>
                                     <div class="form-group">
                                         <label for="tanggal">Tanggal <span style="color: red">*</span></label>
-                                        <input type="datetime-local" name="tanggal" id="tanggal" class="form-control">
+                                        <input type="datetime-local" name="tanggal_pengajuan" id="tanggal_pengajuan" class="form-control">
                                     </div>
                                 </li>
                             </ul>
@@ -83,8 +74,8 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <label for="invoice">No Pengajuan <span style="color: red">*</span></label>
-                                        <input type="text" name="no_pengajuan" id="no_pengajuan" class="form-control">
+                                        <label for="nomo_pengajuan">No Pengajuan <span style="color: red">*</span></label>
+                                        <input type="text" name="nomor_pengajuan" id="nomor_pengajuan" class="form-control">
                                     </div>
                                 </li>
                             </ul>
@@ -102,7 +93,7 @@
                                         <th class="text-light">Harga Satuan</th>
                                         <th class="text-light">Qty</th>
                                         <th class="text-light">Total</th>
-                                        <th class="text-light">Keterangan</th>
+                                        <!-- <th class="text-light">Keterangan</th> -->
                                         <th class="text-light">#</th>
                                     </tr>
                                     <tbody id="dynamic_field">
@@ -122,12 +113,12 @@
                                         <input type="text" id="sub_total" readonly class="form-control">
                                     </div>
                                 </div>
-                                {{-- <div class="col-md-12">
+                                <div class="col-md-12">
                                     <div class="form-group">
                                         <label>PPN 10%</label>
                                         <input type="text" id="PPN" name="PPN" readonly class="form-control">
                                     </div>
-                                </div> --}}
+                                </div>
                             </div>
                         </div>
                         <div class="col-sm-1 offset-sm-8">
@@ -177,10 +168,10 @@
         let template = `
         <tr class="rowComponent">
                     <td hidden>
-                        <input type="hidden" name="barang_id[${index}]" class="barang_id-${index}">
+                        <input type="hidden" name="barang_jasa[${index}]" class="barang_jasa-${index}">
                     </td>
                     <td>
-                        <select required name="barang_id[${index}]" id="${index}" class="form-control select-${index}"></select>
+                        <select required name="barang_jasa[${index}]" id="${index}" class="form-control select-${index}"></select>
                     </td>
                     <td>
                         <input type="number" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), HowAboutIt(this)">
@@ -191,10 +182,7 @@
                     <td>
                         <input type="number" name="total[${index}]" disabled class="form-control total-${index} total-form"  placeholder="0">
                     </td>
-                    <td>
-                        <input type="text" id="sub_total" readonly class="form-control" placeholder="0">
-                    </td>
-  
+                 
                     <td>
                         <button type="button" class="btn btn-danger btn-sm" onclick="remove(this)">Delete</button>
                     </td>
@@ -259,36 +247,6 @@
     $(document).ready(function() {
         $('#add').on('click', function() {
             form_dinamic()
-        })
-    })
-
-    $(document).ready(function() {
-        $('.dynamic').change(function() {
-
-            var id = $(this).val();
-            var div = $(this).parent();
-            var op = " ";
-            $.ajax({
-                url: `/logistik/where/project`,
-                method: "get",
-                data: {
-                    'id': id
-
-
-                },
-
-                success: function(data) {
-                    console.log(data);
-                    op += '<option value="0" selected disabled> Lokasi</option>';
-                    for (var i = 0; i < data.length; i++) {
-                        op += '<option value="' + data[i].alamat_project + '">' + data[i].alamat_project + '</option>'
-                    };
-                    $('.root3').html(op);
-                },
-                error: function() {
-
-                }
-            })
         })
     })
 </script>
