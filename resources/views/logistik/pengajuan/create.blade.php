@@ -42,20 +42,15 @@
                     </div>
                 </div>
 
-                <form action="{{ route('logistik.purchase.store') }}" method="post">
+                <form action="{{ route('logistik.purchase.store',$purchase->id) }}" method="post">
                     @csrf
                     <div class="row">
                         <div class="col-sm-6 col-sg-4 m-b-4">
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <label for="supplier">Supplier <span style="color: red">*</span></label>
-                                        <select name="supplier_id" id="supplier" class="form-control select2">
-                                            <option disabled selected>-- Select Supplier --</option>
-                                            @foreach($suppliers as $supplier)
-                                            <option value="{{ $supplier->id }}">{{ $supplier->nama }}</option>
-                                            @endforeach
-                                        </select>
+                                        <label for="nama">Nama <span style="color: red">*</span></label>
+                                            <input type="text" name="name" value="{{ $purchases->admin->name }}" id="nama" readonly class="form-control">
                                     </div>
                                 </li>
                             </ul>
@@ -64,23 +59,13 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <label for="cabang">Project <span style="color: red">*</span></label>
-                                        <select name="project_id" id="nama_project" class="form-control input-lg dynamic" data-dependent="alamat_project" required="">
+                                        <label for="divisi">Divisi <span style="color: red">*</span></label>
+                                        <select name="divisi" id="divisi" class="form-control input-lg dy" readonly required="">
                                             <option disabled selected>-- Select Project --</option>
                                             @foreach($project as $projects)
                                             <option value="{{ $projects->id }}">{{ $projects->nama_project }}</option>
                                             @endforeach
                                         </select>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-6 col-sg-4 m-b-4">
-                            <ul class="list-unstyled">
-                                <li>
-                                    <div class="form-group">
-                                        <label for="invoice">Lokasi <span style="color: red">*</span></label>
-                                        <input type="text" name="lokasi" id="lokasi" class="form-control">
                                     </div>
                                 </li>
                             </ul>
@@ -99,8 +84,8 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <label for="invoice">No Invoice <span style="color: red">*</span></label>
-                                        <input type="text" name="invoice" id="invoice" class="form-control">
+                                        <label for="invoice">No Pengajuan <span style="color: red">*</span></label>
+                                        <input type="text" name="no_pengajuan" id="no_pengajuan" class="form-control">
                                     </div>
                                 </li>
                             </ul>
@@ -114,10 +99,11 @@
                             <div class="table-responsive">
                                 <table class="table table-hover border" id="table-show">
                                     <tr class="bg-success">
-                                        <th class="text-light">ITEM</th>
-                                        <th class="text-light">QTY</th>
-                                        <th class="text-light">HARGA BELI</th>
-                                        <th class="text-light">TOTAL</th>
+                                        <th class="text-light">Deskripsi</th>
+                                        <th class="text-light">Harga Satuan</th>
+                                        <th class="text-light">Qty</th>
+                                        <th class="text-light">Total</th>
+                                        <th class="text-light">Keterangan</th>
                                         <th class="text-light">#</th>
                                     </tr>
                                     <tbody id="dynamic_field">
@@ -137,12 +123,12 @@
                                         <input type="text" id="sub_total" readonly class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-md-12">
+                                {{-- <div class="col-md-12">
                                     <div class="form-group">
                                         <label>PPN 10%</label>
                                         <input type="text" id="PPN" name="PPN" readonly class="form-control">
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                         <div class="col-sm-1 offset-sm-8">
@@ -198,14 +184,18 @@
                         <select required name="barang_id[${index}]" id="${index}" class="form-control select-${index}"></select>
                     </td>
                     <td>
-                        <input type="number" name="qty[${index}]"  class="form-control qty-${index}" placeholder="0">
+                        <input type="number" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), HowAboutIt(this)">
                     </td>
                     <td>
-                        <input type="number" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), HowAboutIt(this)">
+                        <input type="number" name="qty[${index}]"  class="form-control qty-${index}" placeholder="0">
                     </td>
                     <td>
                         <input type="number" name="total[${index}]" disabled class="form-control total-${index} total-form"  placeholder="0">
                     </td>
+                    <td>
+                        <input type="text" id="sub_total" readonly class="form-control" placeholder="0">
+                    </td>
+  
                     <td>
                         <button type="button" class="btn btn-danger btn-sm" onclick="remove(this)">Delete</button>
                     </td>

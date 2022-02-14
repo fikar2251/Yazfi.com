@@ -260,9 +260,10 @@ Route::middleware('auth')->group(function () {
             Route::get('/where/product', 'PurchaseController@WhereProduct');
             Route::get('/where/project', 'PurchaseController@whereProject');
             Route::resource('purchase', 'PurchaseController');
+            Route::resource('pengajuan', 'PengajuanController');
             Route::resource('product', 'ProductController');
             Route::resource('supplier', 'SupplierController');
-              Route::resource('permissions', 'PermissionController');
+            Route::resource('permissions', 'PermissionController');
 
             // Route Roles
             Route::resource('roles', 'RolesController');

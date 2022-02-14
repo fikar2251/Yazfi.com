@@ -3,8 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use JetBrains\PhpStorm\Pure;
 
-class Purchase extends Model
+class Pengajuan extends Model
 {
     protected $guarded = ['id'];
 
@@ -21,16 +22,17 @@ class Purchase extends Model
     {
         return $this->belongsTo(Project::class,'id');
     }
-    public function cabang()
-    {
-        return $this->belongsTo(Cabang::class, 'cabang_id');
-    }
+
     public function admin()
     {
-        return $this->belongsTo(User::class, 'user_id','cabang_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
-      public function roles()
+    public function purchase()
     {
-        return $this->hasMany(User::class, 'users.cabang_id');
+        return $this->belongsTo(Purchase::class);
+    }
+    public function roles()
+    {
+        return $this->belongsTo(Roles::class);
     }
 }

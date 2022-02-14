@@ -1,21 +1,18 @@
-@extends('layouts.master', ['title' => 'Transfer Stok'])
+@extends('layouts.master', ['title' => 'Purchase'])
 
 @section('content')
 <div class="row">
     <div class="col-md-4">
-        <h1 class="page-title">Daftar Reinburst</h1>
+        <h1 class="page-title">Pengajuan Dana</h1>
     </div>
 
     <div class="col-sm-8 text-right m-b-20">
-       
-        <a href="{{ route('admin.transfer.create') }}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Reinburst</a>
-       
+        <a href="{{ route('logistik.purchase.create') }}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Purchase</a>
     </div>
 </div>
-
 <x-alert></x-alert>
 
-<form action="{{ route('admin.transfer.index') }}" method="get">
+<form action="{{ route('logistik.pengajuan.index') }}" method="get">
     <div class="row filter-row">
         <div class="col-sm-6 col-md-3">
             <div class="form-group form-focus">
@@ -35,9 +32,6 @@
             </div>
         </div>
 
-        <div class="col-sm-6 col-md-3">
-            <button type="submit" class="btn btn-success btn-block">Search</button>
-        </div>
     </div>
 </form>
 <div class="row">
@@ -47,35 +41,34 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Tanggal Pengajuan</th>
-                        <th>Status Hrd</th>
-                        <th>Jumlah</th>
-                        <th>Status Pembayaran</th>
+                        <th>Tanggal</th>
+                        <th>Divisi</th>
+                        <th>Nama</th>
+                        <th>Total</th>
+                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    @foreach($transfers as $transfer)
+                    @foreach($purchases as $purchase)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
+                        <td>{{ Carbon\Carbon::parse($purchase->created_at)->format("d/m/Y H:i:s") }}</td>
+                        <td>{{ $purchase->key }}</td>
+                        <td>{{ $purchase->name }}</td>
+                        <td>@currency(\App\Purchase::where('invoice', $purchase->invoice)->sum('total'))</td>
+                        <td>{{ $purchase->status_barang }}</td>
+                
                         <td>
-                            <a href="{{ route('admin.transfer.show', $transfer->id) }}">{{ $transfer->invoice }}</a>
-                        </td>
-                        <td>{{ Carbon\Carbon::parse($transfer->created_at)->format("d/m/Y H:i:s") }}</td>
-                        <td>{{ $transfer->asal->nama }}</td>
-                        <td>{{ $transfer->tujuan->nama }}</td>
-                        <td>
-                            @can('purchase-edit')
-                            <a href="{{ route('admin.transfer.edit', $transfer->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
-                            @endcan
-                            @can('purchase-delete')
-                            <form action="{{ route('admin.transfer.destroy', $transfer->id) }}" method="post" style="display: inline;" class="delete-form">
+
+                            <a href="{{ route('logistik.pengajuan.edit', $purchase->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
+
+                            <form action="{{ route('logistik.pengajuan.destroy', $purchase->id) }}" method="post" style="display: inline;" class="delete-form">
                                 @method('DELETE')
                                 @csrf
                                 <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
                             </form>
-                            @endcan
                         </td>
                     </tr>
                     @endforeach
@@ -100,7 +93,7 @@
             {
                 extend: 'excel',
                 className: 'btn-default',
-                title: 'Laporan Transfer Stok ',
+                title: 'Laporan Pembelian ',
                 messageTop: 'Tanggal  {{ request("from") }} - {{ request("to") }}',
                 footer: true,
                 exportOptions: {
@@ -110,7 +103,7 @@
             {
                 extend: 'pdf',
                 className: 'btn-default',
-                title: 'Laporan Transfer Stok ',
+                title: 'Laporan Pembelian ',
                 messageTop: 'Tanggal {{ request("from") }} - {{ request("to") }}',
                 footer: true,
                 exportOptions: {

@@ -51,4 +51,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(RincianKomisi::class);
     }
+    public function purchase()
+    {
+        return $this->belongsTo(Purchase::class, 'project_id');
+    }
 }

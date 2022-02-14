@@ -16,7 +16,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        abort_unless(Gate::allows('user-access'), 403);
+        // abort_unless(Gate::allows('user-access'), 403);
 
         $users = User::with('cabang')->get();
 
@@ -25,7 +25,7 @@ class UserController extends Controller
 
     public function create()
     {
-        abort_unless(Gate::allows('user-create'), 403);
+        // abort_unless(Gate::allows('user-create'), 403);
 
         $roles = Role::get();
         $warehouses = Cabang::get();
@@ -36,7 +36,7 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $request)
     {
-        abort_unless(Gate::allows('user-create'), 403);
+        // abort_unless(Gate::allows('user-create'), 403);
 
         $attr = $request->all();
         $image = $request->file('image');
