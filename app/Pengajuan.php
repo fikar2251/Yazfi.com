@@ -11,7 +11,11 @@ class Pengajuan extends Model
 
     public function barang()
     {
-        return $this->belongsTo(Barang::class,'id');
+        return $this->belongsTo(Barang::class, 'id');
+    }
+    public function rincianpengajuan()
+    {
+        return $this->belongsTo(RincianPengajuan::class, 'id');
     }
 
     public function supplier()
@@ -20,12 +24,12 @@ class Pengajuan extends Model
     }
     public function project()
     {
-        return $this->belongsTo(Project::class,'id');
+        return $this->belongsTo(Project::class, 'id');
     }
 
     public function admin()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'id_user');
     }
     public function purchase()
     {
@@ -33,6 +37,10 @@ class Pengajuan extends Model
     }
     public function roles()
     {
-        return $this->belongsTo(Roles::class);
+        return $this->belongsTo(Roles::class, 'id_roles');
+    }
+    public function perusahaan()
+    {
+        return $this->belongsTo(Perusahaan::class, 'id_perusahaan');
     }
 }

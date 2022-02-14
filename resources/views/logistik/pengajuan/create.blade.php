@@ -1,4 +1,4 @@
-@extends('layouts.master', ['title' => 'Create Purchase'])
+@extends('layouts.master', ['title' => 'Create Pengajuan'])
 @section('content')
 <div class="row">
     <div class="col-sm-5 col-4">
@@ -50,7 +50,9 @@
                                 <li>
                                     <div class="form-group">
                                         <label for="nama">Nama <span style="color: red">*</span></label>
-                                            <input type="text" name="name" value="{{ $purchases->admin->name }}" id="nama" readonly class="form-control">
+                                        @foreach($purchases as $rol)
+                                        <input type="text" name="name" id="nama" value="{{ $rol->name }} " readonly class="form-control">
+                                        @endforeach
                                     </div>
                                 </li>
                             </ul>
@@ -60,12 +62,9 @@
                                 <li>
                                     <div class="form-group">
                                         <label for="divisi">Divisi <span style="color: red">*</span></label>
-                                        <select name="divisi" id="divisi" class="form-control input-lg dy" readonly required="">
-                                            <option disabled selected>-- Select Project --</option>
-                                            @foreach($project as $projects)
-                                            <option value="{{ $projects->id }}">{{ $projects->nama_project }}</option>
-                                            @endforeach
-                                        </select>
+                                        @foreach($purchases as $rol)
+                                        <input type="text" name="divisi" id="divisi" value="{{ $rol->key }} " readonly class="form-control">
+                                        @endforeach
                                     </div>
                                 </li>
                             </ul>
@@ -240,20 +239,20 @@
     function HowAboutIt(e) {
         let sub_total = document.getElementById('sub_total')
         let total = 0;
-       
+
         let coll = document.querySelectorAll('.total-form')
         for (let i = 0; i < coll.length; i++) {
             let ele = coll[i]
             total += parseInt(ele.value)
         }
-        
+
         sub_total.value = total
-        let tax = (10/ 100) * sub_total.value;
+        let tax = (10 / 100) * sub_total.value;
         let total_all = parseInt(tax);
         // rupiah()
         document.getElementById('PPN').value = total_all;
-        
-      
+
+
     }
 
 
@@ -274,18 +273,20 @@
                 method: "get",
                 data: {
                     'id': id
-                    
+
 
                 },
-                
-                success: function(data){
+
+                success: function(data) {
                     console.log(data);
-                    op+='<option value="0" selected disabled> Lokasi</option>';
-                    for(var i=0;i<data.length;i++){ op+='<option value="' +data[i].alamat_project+'">'+data[i].alamat_project+'</option>'};
+                    op += '<option value="0" selected disabled> Lokasi</option>';
+                    for (var i = 0; i < data.length; i++) {
+                        op += '<option value="' + data[i].alamat_project + '">' + data[i].alamat_project + '</option>'
+                    };
                     $('.root3').html(op);
                 },
                 error: function() {
-                    
+
                 }
             })
         })

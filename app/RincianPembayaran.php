@@ -12,6 +12,10 @@ class RincianPembayaran extends Model
     {
         return $this->belongsTo(Booking::class);
     }
+    public function rincianpengajuan()
+    {
+        return $this->belongsTo(RincianPengajuan::class);
+    }
 
     public function payment()
     {

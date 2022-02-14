@@ -64,6 +64,7 @@ class PurchaseController extends Controller
                 'PPN' => $request->PPN,
                 'total' => $request->harga_beli[$key] * $request->qty[$key],
                 'user_id' => auth()->user()->id,
+                'role_id' => $request,
                 'created_at' => $request->tanggal,
                 'status_pembayaran' => 'pending',
                 'status_barang' => 'pending'
@@ -80,8 +81,8 @@ class PurchaseController extends Controller
             //     'supplier_id' => $request->supplier_id,
             //     'barang_id' => $no,
             //     'in' => $request->qty[$key],
-                // 'last_stok' => $hargaBarang->qty,
-            
+            // 'last_stok' => $hargaBarang->qty,
+
             //     'user_id' => auth()->user()->id
             // ];
         }
@@ -108,7 +109,7 @@ class PurchaseController extends Controller
         $project = Project::get();
         $barangs = Barang::where('jenis', 'barang')->get();
 
-        return view('logistik.purchase.edit', compact('project','purchase', 'suppliers', 'barangs', 'purchases'));
+        return view('logistik.purchase.edit', compact('project', 'purchase', 'suppliers', 'barangs', 'purchases'));
     }
 
     public function update(Request $request, Purchase $purchase)

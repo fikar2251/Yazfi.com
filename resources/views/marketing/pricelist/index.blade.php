@@ -4,7 +4,7 @@
 
 use App\Marketing;
 
-$type = Marketing::where('type', 'Ruko')->orderBy('type', 'desc')->take(1)->get();
+
 $stock = DB::table('unit_rumah')->select('type')->distinct()->get();
 
 
@@ -295,6 +295,7 @@ $stock = DB::table('unit_rumah')->select('type')->distinct()->get();
 
             var blok = $(this).val();
             var no = $(this).val();
+            var lt = $(this).val();
             var div = $(this).parent();
             var op = " ";
             $.ajax({
@@ -302,7 +303,8 @@ $stock = DB::table('unit_rumah')->select('type')->distinct()->get();
                 method: "get",
                 data: {
                     'blok': blok,
-                    'no': no
+                    'no': no,
+                    'lt' : lt
                 },
                 success: function(data) {
                     console.log(data);
@@ -314,42 +316,92 @@ $stock = DB::table('unit_rumah')->select('type')->distinct()->get();
                 },
                 error: function() {
 
-                }
+                },
+                // success: function(lt) {
+                //     console.log(lt);
+                //     op += '<option value="0">--Select No--</option>';
+                //     for (var i = 0; i < lt.length; i++) {
+                //         op += '<option value="' + lt[i].no + '">' + lt[i].no + '</option>'
+                //     };
+                //     $('.root3').html(op);
+                // }
             })
         })
-    })
-
-    $(document).ready(function() {
 
         $('.lt').change(function() {
+            console.log('test');
+            var blok = $(this).val();
             var no = $(this).val();
             var lt = $(this).val();
             var div = $(this).parent();
             var op = " ";
+            console.log(no);
+            console.log(blok);
             $.ajax({
-                url: `/marketing/lt`,
+                url: `/marketing/no`,
                 method: "get",
                 data: {
-                    // 'blok': blok,
                     'no': no,
-                    'lt': lt
+                    'blok': blok,
+                    'lt' : lt
                 },
+                
+                // success: function(data) {
+                //     console.log(data);
+                //     op += '<option value="0">--Select No--</option>';
+                //     for (var i = 0; i < data.length; i++) {
+                //         op += '<option value="' + data[i].no + '">' + data[i].no + '</option>'
+                //     };
+                //     $('.root1').html(op);
+                // },
+                // error: function() {
+
+                // },
                 success: function(lt) {
                     console.log(lt);
-                    op += '<option value="0">Select Lt</option>';
+                    op += '<option value="0">--Select Lt--</option>';
                     for (var i = 0; i < lt.length; i++) {
                         op += '<option value="' + lt[i].lt + '">' + lt[i].lt + '</option>'
                     };
                     $('.root3').html(op);
-                },
-                error: function() {
-
                 }
             })
         })
     })
+
+    // $(document).ready(function() {
+        
+
+    //     $('.lt').change(function() {
+    //         var no = $(this).val();
+    //         var lt = $(this).val();
+    //         var div = $(this).parent();
+    //         var op = " ";
+    //         console.log(no);
+    //         console.log(lt);
+    //         $.ajax({
+    //             url: `/marketing/lt`,
+    //             method: "get",
+    //             data: {
+    //                 'no': no,
+    //                 'lt': lt
+    //             },
+    //             success: function(lt) {
+    //                 console.log(lt);
+    //                 op += '<option value="0">Select Lt</option>';
+    //                 for (var i = 0; i < lt.length; i++) {
+    //                     op += '<option value="' + lt[i].lt + '">' + lt[i].lt + '</option>'
+    //                 };
+    //                 $('.root3').html(op);
+    //             },
+    //             error: function() {
+
+    //             }
+    //         })
+    //     })
+    // })
 </script>
-// {{-- <script>
+{{-- <script>
 //     $(document).ready(function(){
     
 //     $('.dinamis').change(function(){

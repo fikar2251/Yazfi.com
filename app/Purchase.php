@@ -10,7 +10,7 @@ class Purchase extends Model
 
     public function barang()
     {
-        return $this->belongsTo(Barang::class,'id');
+        return $this->belongsTo(Barang::class, 'id');
     }
 
     public function supplier()
@@ -19,7 +19,7 @@ class Purchase extends Model
     }
     public function project()
     {
-        return $this->belongsTo(Project::class,'id');
+        return $this->belongsTo(Project::class, 'id');
     }
     public function cabang()
     {
@@ -27,9 +27,9 @@ class Purchase extends Model
     }
     public function admin()
     {
-        return $this->belongsTo(User::class, 'user_id','cabang_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
-      public function roles()
+    public function roles()
     {
         return $this->hasMany(User::class, 'users.cabang_id');
     }

@@ -50,7 +50,7 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <label for="supplier">Supplier *</label>
+                                        <label for="supplier">Supplier <span style="color: red">*</span></label>
                                         <select name="supplier_id" id="supplier" class="form-control select2">
                                             <option disabled selected>-- Select Supplier --</option>
                                             @foreach($suppliers as $supplier)
@@ -65,11 +65,11 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <label for="cabang">Project *</label>
+                                        <label for="cabang">Project <span style="color: red">*</span></label>
                                         <select name="project_id" id="nama_project" class="form-control select2" data-dependent="alamat_project" required="">
                                             <option disabled selected>-- Select Project --</option>
                                             @foreach($project as $projects)
-                                            <option {{ $projects->id == $purchase->id_project ? 'selected' : '' }}  value="{{ $projects->id }}">{{ $projects->nama_project }}</option>
+                                            <option {{ $projects->id == $purchase->project_id ? 'selected' : '' }} value="{{ $projects->id }}">{{ $projects->nama_project }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -80,8 +80,8 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <label for="invoice">Lokasi *</label>
-                                        <input type="text" name="lokasi" value="{{ $purchase->lokasi }} "id="lokasi" class="form-control">
+                                        <label for="invoice">Lokasi <span style="color: red">*</span></label>
+                                        <input type="text" name="lokasi" value="{{ $purchase->lokasi }} " id="lokasi" class="form-control">
                                     </div>
                                 </li>
                             </ul>
@@ -90,7 +90,7 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <label for="invoice">No Invoice *</label>
+                                        <label for="invoice">No Invoice <span style="color: red">*</span></label>
                                         <input type="text" name="invoice" id="invoice" class="form-control" value="{{ $purchase->invoice }}">
                                     </div>
                                 </li>
@@ -100,8 +100,8 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <label for="tanggal">Tanggal *</label>
-                                        <input type="datetime-local" name="tanggal" id="tanggal"  class="form-control">
+                                        <label for="tanggal">Tanggal <span style="color: red">*</span></label>
+                                        <input type="datetime-local" name="tanggal" id="tanggal" value="{{Carbon\Carbon::parse($purchase->created_at)->format('Y-m-d').'T'.Carbon\Carbon::parse($purchase->created_at)->format('H:i:s')}}" class=" form-control">
                                     </div>
                                 </li>
                             </ul>
@@ -131,9 +131,15 @@
                                                 <input type="hidden" name="barang_id[{{ $loop->iteration }}]" class="barang_id-{{ $loop->iteration }}">
                                             </td>
                                             <td>
-                                                <select required name="barang_id[{{ $loop->iteration }}]" value="{{ $purchase->barang->nama_barang }}" id="{{ $loop->iteration }}" class="form-control select-{{ $loop->iteration }}">
+                                                <select ame="barang_id[{{ $loop->iteration }}]" id="{{ $loop->iteration }}" class="form-control select2" data-dependent="alamat_project" required="">
+                                                    <option disabled selected>-- Select Project --</option>
+                                                    @foreach($barangs as $barang)
+                                                    <option {{ $barang->id == $purchase->barang_id ? 'selected' : '' }} value="{{ $barang->id }}">{{ $barang->nama_barang }}</option>
+                                                    @endforeach
                                                 </select>
-                                
+                                                <!-- <select required name="barang_id[{{ $loop->iteration }}]" value="{{ $pur->barang_id }}" id="{{ $loop->iteration }}" class="form-control select-{{ $loop->iteration }}">
+                                                </select> -->
+
                                             </td>
                                             <td>
                                                 <input type="number" value="{{ $pur->qty }}" name="qty[{{ $loop->iteration }}]" class="form-control qty-{{ $loop->iteration }}" placeholder="0">
@@ -297,11 +303,11 @@
             total += parseInt(ele.value)
         }
         sub_total.value = total
-        let tax = (10/ 100) * sub_total.value;
+        let tax = (10 / 100) * sub_total.value;
         let total_all = parseInt(tax);
         // rupiah()
         document.getElementById('PPN').value = total_all;
-        
+
     }
 
     $(document).ready(function() {

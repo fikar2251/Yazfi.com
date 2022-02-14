@@ -46,17 +46,29 @@ class PricelistController extends Controller
 
     public function no(Request $request)
     {
+        $blok = ['blok' => $request->blok];
         $data = DB::table('unit_rumah')
             ->select('unit_rumah.blok', 'unit_rumah.no', 'unit_rumah.lt')
-            ->groupBy('unit_rumah.no')
-            ->where('unit_rumah.blok', $request->blok)->get();
+            ->groupBy('unit_rumah.no', 'unit_rumah.lt')
+            ->where('unit_rumah.blok', $blok)
+            ->get();
 
         return $data;
+
+        $lutan = [
+            // 'blok' => 'R',
+            'no' => $request->no
+        ];
+
+        $lt = Marketing::select('blok', 'no', 'lt')
+            ->groupBy('lt')
+            ->where('blok', $data)->get();
+
+        return $lt;
     }
 
     public function lt(Request $request)
     {
-
 
         $lutan = [
             'blok' => $request->blok,
