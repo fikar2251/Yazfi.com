@@ -103,13 +103,13 @@ class DokterController extends Controller
     public function resign($id)
     {
         $dokter = User::findOrFail($id);
-        if($dokter->is_active == 2){
+        if ($dokter->is_active == 2) {
             $dokter->update([
-                'is_active' => 1            
+                'is_active' => 1
             ]);
-        }else{
+        } else {
             $dokter->update([
-                'is_active' => 2            
+                'is_active' => 2
             ]);
         }
         return back()->with('success', "Berhasil Mengubah Status");

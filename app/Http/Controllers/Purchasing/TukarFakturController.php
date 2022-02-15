@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Logistik;
+namespace App\Http\Controllers\Purchasing;
 
 use App\Barang;
 use App\HargaProdukCabang;
@@ -13,7 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class PurchaseController extends Controller
+class TukarFakturController extends Controller
 {
     public function index(Purchase $purchase)
     {
@@ -26,7 +26,7 @@ class PurchaseController extends Controller
         }
 
 
-        return view('logistik.purchase.index', compact('purchases'));
+        return view('purchasing.tukarfaktur.index', compact('purchases'));
     }
 
     public function create()
@@ -36,7 +36,7 @@ class PurchaseController extends Controller
         $project = Project::get();
         $barangs = Barang::where('jenis', 'barang')->get();
 
-        return view('logistik.purchase.create', compact('purchase', 'suppliers', 'barangs', 'project'));
+        return view('purchasing.tukarfaktur.create', compact('purchase', 'suppliers', 'barangs', 'project'));
     }
 
     public function store(Request $request)
@@ -91,14 +91,14 @@ class PurchaseController extends Controller
 
         DB::commit();
 
-        return redirect()->route('logistik.purchase.index')->with('success', 'Purchase barang berhasil');
+        return redirect()->route('purchasing.tukarfaktur.index')->with('success', 'Purchase barang berhasil');
     }
 
     public function show(Purchase $purchase)
     {
         $purchase = Purchase::where('invoice', $purchase->invoice)->first();
 
-        return view('logistik.purchase.show', compact('purchase'));
+        return view('purchasing.tukarfaktur.show', compact('purchase'));
     }
 
     public function edit(Purchase $purchase)
@@ -108,7 +108,7 @@ class PurchaseController extends Controller
         $project = Project::get();
         $barangs = Barang::where('jenis', 'barang')->get();
 
-        return view('logistik.purchase.edit', compact('project', 'purchase', 'suppliers', 'barangs', 'purchases'));
+        return view('purchasing.tukarfaktur.edit', compact('project', 'purchase', 'suppliers', 'barangs', 'purchases'));
     }
 
     public function update(Request $request, Purchase $purchase)
@@ -153,7 +153,7 @@ class PurchaseController extends Controller
 
         DB::commit();
 
-        return redirect()->route('logistik.purchase.index')->with('success', 'Purchase barang berhasil');
+        return redirect()->route('purchasing.tukarfaktur.index')->with('success', 'Purchase barang berhasil');
     }
 
     public function destroy(Purchase $purchase)
@@ -170,7 +170,7 @@ class PurchaseController extends Controller
             $pur->delete();
         }
 
-        return redirect()->route('logistik.purchase.index')->with('success', 'Purchase barang didelete');
+        return redirect()->route('purchasing.tukarfaktur.index')->with('success', 'Purchase barang didelete');
     }
 
     public function whereProject(Request $request)
@@ -192,6 +192,6 @@ class PurchaseController extends Controller
             $data[] = ['id' => $row->id,  'text' => $row->nama_barang];
         }
 
-        return redirect()->route('logistik.purchase.index')->with('success', 'Purchase barang didelete');
+        return redirect()->route('purchasing.tukarfaktur.index')->with('success', 'Purchase barang didelete');
     }
 }

@@ -127,14 +127,15 @@ a:focus {
 	font-size: 14px;
 	min-height: 40px;
 }
-.purchase-order{
+
+.purchase-order {
 	font-size: 20px;
 	background-color: #011f38ce;
 	font-weight: 100;
-	color:white;
+	color: white;
 }
 
-.purchase-text td{
+.purchase-text td {
 	font-size: 10px;
 }
 
@@ -1280,6 +1281,11 @@ textarea.form-control {
 	text-align: center;
 }
 
+.account-logo1 {
+	margin-bottom: 20px;
+	text-align: left;
+}
+
 .account-box .form-group {
 	margin-bottom: 20px;
 }
@@ -1309,6 +1315,11 @@ textarea.form-control {
 	color: #323232;
 	font-size: 14px;
 	font-weight: normal;
+}
+
+.account-logo1 img {
+	max-height: 100px;
+	width: auto;
 }
 
 .account-logo img {
@@ -5831,34 +5842,34 @@ blockquote p {
 
 
 .padding {
-    padding: 2rem !important
+	padding: 2rem !important
 }
 
 .card {
-    margin-bottom: 30px;
-    border: none;
-    -webkit-box-shadow: 0px 1px 2px 1px rgba(154, 154, 204, 0.22);
-    -moz-box-shadow: 0px 1px 2px 1px rgba(154, 154, 204, 0.22);
-    box-shadow: 0px 1px 2px 1px rgba(154, 154, 204, 0.22)
+	margin-bottom: 30px;
+	border: none;
+	-webkit-box-shadow: 0px 1px 2px 1px rgba(154, 154, 204, 0.22);
+	-moz-box-shadow: 0px 1px 2px 1px rgba(154, 154, 204, 0.22);
+	box-shadow: 0px 1px 2px 1px rgba(154, 154, 204, 0.22)
 }
 
 .card-header {
-    background-color: #fff;
-    border-bottom: 1px solid #e6e6f2
+	background-color: #fff;
+	border-bottom: 1px solid #e6e6f2
 }
 
 h3 {
-    font-size: 20px
+	font-size: 20px
 }
 
 h5 {
-    font-size: 15px;
-    line-height: 26px;
-    color: #3d405c;
-    margin: 0px 0px 15px 0px;
-    font-family: 'Circular Std Medium'
+	font-size: 15px;
+	line-height: 26px;
+	color: #3d405c;
+	margin: 0px 0px 15px 0px;
+	font-family: 'Circular Std Medium'
 }
 
 .text-dark {
-    color: #3d405c !important
+	color: #3d405c !important
 }

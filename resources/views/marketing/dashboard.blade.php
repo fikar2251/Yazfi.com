@@ -2,9 +2,9 @@
     <div class="col-md-12">
         <div class="dash-widget shadow">
             <div class="dash-widget-info pb-4">
-                <h2>Jadwal Booking Appointment</h2>
+                <h2>Project List</h2>
             </div>
-            <form action="{{ route('marketing.service.appointments.filter') }}" method="get">
+            <!-- <form action="{{ route('marketing.service.appointments.filter') }}" method="get">
                 @csrf
                 <div class="row filter-row">
                     <div class="col-sm-12 col-md-3">
@@ -40,7 +40,7 @@
                         <button type="submit" class="btn btn-success btn-block"> Cari Jadwal </button>
                     </div>
                 </div>
-            </form>
+            </form> -->
         </div>
     </div>
 </div>
@@ -68,93 +68,33 @@
     </div>
 </div>
 @endif
+
 <div class="row">
-    @for($i = 0; $i <= $count;$i++) <div class="col-sm-12 col-md-6">
-        <div class="blog grid-blog shadow">
-            <div class="blog-image">
-                <h3>{{ $startdate->addDay(1)->format('d m Y') }} </h3>
-            </div>
-            <div class="blog-content">
-                <div class="table-responsive">
-                    <table class="table table-bordered border">
-                        <tr>
-                            <th>Detail</th>
-                            <th>Status</th>
-                            <th>Booking</th>
-                        </tr>
-                        @foreach($dokter as $data)
-                        @foreach($data->jadwal as $row)
-                        @if($row->tanggal == $startdate->format('Y-m-d'))
-                        <tr>
-                            <td>
-                                <p>
-                                    <a href="{{ route('marketing.doctor.show',$row->id) }}"><span class="custom-badge status-blue">{{ $row->user->name }}</span></a>
-                                </p>
-                                <p>
-                                    @if( $row->shift->kode == 'L')
-                                    <span class="custom-badge status-red">{{ $row->shift->kode }}</span>
-                                    @else
-                                    <span class="custom-badge status-green">{{ $row->shift->kode }}</span>
-                                    @endif
-                                </p>
-                                <p>
-                                    @if( $row->shift->kode == 'L')
-                                    <span class="custom-badge status-red">Libur</span>
-                                    @else
-                                <h6 class="text-secondary">{{ $row->shift->waktu_mulai}} - {{ $row->shift->waktu_selesai }}</h6>
-                                @endif
-                                </p>
-                            </td>
-                            <td class="text-center">
-                                <ul class="list-group">
-                                    @foreach($booking as $book)
-                                    @if( $row->tanggal == $book->tanggal_status)
-                                    @if($book->jam_status >= $row->shift->waktu_mulai && $book->jam_selesai <= $row->shift->waktu_selesai)
-                                        @if( $row->user->id == $book->dokter->id)
-                                        <li class="list-group-item">
-                                            <a href="{{ route('marketing.appointments.show', $book->id) }}" class="btn btn-sm btn-outline-primary">
-                                                <div class="col-md-12">
-                                                    {{ $book->no_booking }}
-                                                </div>
-                                                <div class="col-md-12">
-                                                    {{ $book->pasien->nama }}
-                                                </div>
-                                                <div class="col-md-12">
-                                                    {{ $book->jam_status }} - {{ $book->jam_selesai }}
-                                                </div>
-                                            </a>
-                                        </li>
-                                        @endif
-                                        @endif
-                                        @endif
-                                        @endforeach
-                                </ul>
-                            </td>
-                            <td>
-                                @if( $row->shift->kode == 'L')
-                                <button disabled class="btn btn-outline-secondary take-btn">Holiday</button>
-                                @else
-                                @if( $row->tanggal == Carbon\Carbon::now()->format('Y-m-d'))
-                                @if(Carbon\Carbon::parse( $row->shift->waktu_selesai)->format('H:i:s') < Carbon\Carbon::now()->format('H:i:s'))
-                                    <button id="{{  $row->id }}" title="{{  $row->user->id }}" disabled class="btn btn-outline-secondary take-btn button-show" data-toggle="modal" data-target=".bd-example-modal-lg">BOOK</button>
-                                    @else
-                                    <button id="{{  $row->id }}" title="{{  $row->user->id }}" message="now" class="btn btn-outline-success take-btn button-show-now" data-toggle="modal" data-target=".bd-example-modal-lg">BOOK NOW</button>
-                                    @endif
-                                    @else
-                                    <button id="{{  $row->id }}" title="{{  $row->user->id }}" class="btn btn-outline-primary take-btn button-show" data-toggle="modal" data-target=".bd-example-modal-lg">BOOK</button>
-                                    @endif
-                                    @endif
-                            </td>
-                        </tr>
-                        @endif
-                        @endforeach
-                        @endforeach
-                    </table>
-                </div>
-            </div>
+    <div class="col-sm-12">
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped custom-table report">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>nama project</th>
+                        <th>alamat</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach($data as $projects)
+                    <tr>
+                        <td>{{ $loop->iteration }}</td{>
+                        <td>{ $projects->nama_project }}</a></td>
+                        <td>{{ $projects->alamat_project}}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
+    </div>
 </div>
-@endfor
+
 </div>
 @include('marketing.modal')
 @section('footer')

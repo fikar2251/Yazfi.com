@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Logistik;
+namespace App\Http\Controllers\Purchasing;
 
 use App\Barang;
 use App\HargaProdukCabang;
@@ -14,7 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class PengajuanController extends Controller
+class ReinburstController extends Controller
 {
     public function index(Pengajuan $pengajuan)
     {
@@ -26,17 +26,18 @@ class PengajuanController extends Controller
             $pengajuans = Pengajuan::groupBy('nomor_pengajuan')->get();
             $users = User::with('cabang')->get();
         }
-        return view('logistik.pengajuan.index', compact('pengajuans', 'users'));
+        return view('purchasing.reinburst.index', compact('pengajuans', 'users'));
     }
 
     public function create()
     {
         $pengajuans = Pengajuan::groupBy('nomor_pengajuan')->get();
         $perusahaans = Perusahaan::get();
-        $barangs = Barang::where('jenis', 'barang')->get();
         $projects = Project::get();
 
-        return view('logistik.pengajuan.create', compact('barangs', 'perusahaans', 'pengajuans', 'Projects'));
+        $barangs = Barang::where('jenis', 'barang')->get();
+
+        return view('purchasing.reinburst.create', compact('barangs', 'perusahaans', 'pengajuans', 'projects'));
     }
 
     public function store(Request $request, Pengajuan $pengajuan)
@@ -80,14 +81,14 @@ class PengajuanController extends Controller
         print_r($attr);
         DB::commit();
 
-        return redirect()->route('logistik.pengajuan.index')->with('success', 'Pengajuan Dana barang berhasil');
+        return redirect()->route('purchasing.reinburst.index')->with('success', 'Pengajuan Dana barang berhasil');
     }
 
     public function show(Pengajuan $pengajuan)
     {
         $pengajuan = Pengajuan::where('nomor_pengajuan', $pengajuan->nomor_pengajuan)->first();
 
-        return view('logistik.pengajuan.show', compact('pengajuan'));
+        return view('purchasing.reinburst.show', compact('pengajuan'));
     }
 
     public function edit(Pengajuan $pengajuan)
@@ -100,7 +101,7 @@ class PengajuanController extends Controller
         $perusahaans = Perusahaan::get();
         $barangs = Barang::where('jenis', 'barang')->get();
 
-        return view('logistik.pengajuan.edit', compact('perusahaans', 'barangs', 'pengajuan', 'pengajuans', 'peng'));
+        return view('purchasing.reinburst.edit', compact('perusahaans', 'barangs', 'pengajuan', 'pengajuans', 'peng'));
     }
 
     public function update(Request $request, Pengajuan $pengajuan)
@@ -160,7 +161,7 @@ class PengajuanController extends Controller
 
         DB::commit();
 
-        return redirect()->route('logistik.pengajuan.index')->with('success', 'Pengajuan barang berhasil');
+        return redirect()->route('purchasing.reinburst.index')->with('success', 'Pengajuan barang berhasil');
     }
 
     public function destroy(Pengajuan $pengajuan)
@@ -172,7 +173,7 @@ class PengajuanController extends Controller
             $pur->delete();
         }
 
-        return redirect()->route('logistik.pengajuan.index')->with('success', 'Pengajuan Dana barang didelete');
+        return redirect()->route('purchasing.reinburst.index')->with('success', 'Purchase barang didelete');
     }
 
     public function whereProject(Request $request)
@@ -194,6 +195,6 @@ class PengajuanController extends Controller
             $data[] = ['id' => $row->id,  'text' => $row->nama_barang];
         }
 
-        return redirect()->route('logistik.pengajuan.index')->with('success', 'Pengajuan barang didelete');
+        return redirect()->route('purchasing.reinburst.index')->with('success', 'Purchase barang didelete');
     }
 }

@@ -1,18 +1,18 @@
-@extends('layouts.master', ['title' => 'Pengajuan Dana'])
+@extends('layouts.master', ['title' => 'Reinburst'])
 
 @section('content')
 <div class="row">
     <div class="col-md-4">
-        <h1 class="page-title">Pengajuan Dana</h1>
+        <h1 class="page-title">Reinburst</h1>
     </div>
 
     <div class="col-sm-8 text-right m-b-20">
-        <a href="{{ route('logistik.pengajuan.create') }}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Purchase</a>
+        <a href="{{ route('purchasing.reinburst.create') }}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Purchase</a>
     </div>
 </div>
 <x-alert></x-alert>
 
-<form action="{{ route('logistik.pengajuan.index') }}" method="get">
+<form action="{{ route('purchasing.reinburst.index') }}" method="get">
     <div class="row filter-row">
         <div class="col-sm-6 col-md-3">
             <div class="form-group form-focus">
@@ -43,13 +43,10 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>No Pengajuan</th>
-                        <th>Perusahaan</th>
-                        <th>Tanggal</th>
-                        <th>Divisi</th>
-                        <th>Nama</th>
-                        <th>Total</th>
-                        <th>Status</th>
+                        <th>Tanggal Pengajuan</th>
+                        <th>Jumlah</th>
+                        <th>Status Hrd</th>
+                        <th>Status Pembayaran</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -59,19 +56,15 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
 
-                        <td><a href="{{ route('logistik.pengajuan.show', $pengajuan->id) }}">{{ $pengajuan->nomor_pengajuan }}</a></td>
-                        <td>{{$pengajuan->perusahaan->nama_perusahaan }}</td>
                         <td>{{ Carbon\Carbon::parse($pengajuan->tanggal_pengajuan)->format("d/m/Y H:i:s") }}</td>
-                        <td>{{ $pengajuan->roles->key }}</td>
-                        <td>{{ $pengajuan->admin->name }}</td>
-                        <td>{{ $pengajuan->rincianpengajuan->total }}</td>
+                        <td>{{$pengajuan->perusahaan->nama_perusahaan }}</td>
                         <td>{{ $pengajuan->status_approval }}</td>
-
+                        <td>{{ $pengajuan->status_approval }}</td>
                         <td>
 
                             <!-- <a href="{{ route('logistik.pengajuan.edit', $pengajuan->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a> -->
 
-                            <form action="{{ route('logistik.pengajuan.destroy', $pengajuan->id) }}" method="post" style="display: inline;" class="delete-form">
+                            <form action="{{ route('purchasing.reinburst.destroy', $pengajuan->id) }}" method="post" style="display: inline;" class="delete-form">
                                 @method('DELETE')
                                 @csrf
                                 <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>

@@ -18,10 +18,6 @@ class Pengajuan extends Model
         return $this->belongsTo(RincianPengajuan::class, 'id');
     }
 
-    public function supplier()
-    {
-        return $this->belongsTo(Supplier::class);
-    }
     public function project()
     {
         return $this->belongsTo(Project::class, 'id');

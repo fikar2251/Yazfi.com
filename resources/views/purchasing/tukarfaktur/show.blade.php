@@ -24,7 +24,7 @@
             </div>
             <div class="col-sm-8 col-7 text-right m-b-15">
                 <h3><span class="purchase-order">Purchase Order</span></h3>
-
+            
             </div>
         </div>
         <div class="card-body">
@@ -111,33 +111,33 @@
                                 <tr class="text-right">
                                     <td colspan="5">SUB TOTAL : </td>
                                     <td colspan="5">@currency($total)</td>
-
+                
                                 </tr>
                                 <tr class="text-right">
                                     <td colspan="5">PPN 10%: </td>
                                     <td colspan="5">@currency($total * 0.1)</td>
-
+                
                                 </tr>
                                 <tr class="text-right">
                                     <td colspan="5"><strong>TOTAL</strong> </td>
                                     <td colspan="5">@currency($total * 0.1 + $total)</td>
-
+                
                                 </tr>
                                 <tr>
                                     <td colspan="3"><strong>Note</strong> </td>
                                     <td colspan="3">PURCHASING </td>
                                     <td colspan="3">MANAGER PROCUREMENT </td>
                                 </tr>
-
+                                
                                 <tr class="text-right">
-                                    <td colspan="6">DIRECTUR </td>
+                                        <td colspan="6">DIRECTUR </td>
                                 </tr>
                             </tfoot>
                         </table>
                     </div>
                 </div>
             </div>
-
-        </div>
+    
     </div>
-    @endsection
+</div>
+@endsection

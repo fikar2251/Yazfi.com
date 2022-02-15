@@ -9,6 +9,6 @@ class RincianPengajuan extends Model
     protected $guarded = ['id'];
     public function pengajuan()
     {
-        return $this->hasMany(Pengajuan::class, 'id');
+        return $this->belongsTo(Pengajuan::class, 'id');
     }
 }

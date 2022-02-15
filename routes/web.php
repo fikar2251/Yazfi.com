@@ -171,15 +171,16 @@ Route::middleware('auth')->group(function () {
         });
 
         Route::prefix('marketing')->name('marketing.')->namespace('Marketing')->group(function () {
-            Route::get('/', function () {
-                return redirect()->route('dashboard');
-            })->name('dashboard');
+            // Route::get('/', function () {
+            //     return redirect()->route('dashboard');
+            // })->name('dashboard');
             Route::get('appointments/ajax', 'AppointmentsController@ajax');
             Route::resource('/appointments', 'AppointmentsController');
             Route::get('pasien/ajax', 'PatientController@ajaxPasien');
             Route::resource('/patient', 'PatientController');
             Route::resource('/doctor', 'DoctorController');
             Route::resource('/pricelist', 'PricelistController');
+            Route::resource('/dashboard', 'DashboardController');
             Route::get('/blok', 'PricelistController@blok');
             Route::get('/no', 'PricelistController@no');
             Route::get('/lt', 'PricelistController@lt');
@@ -256,6 +257,9 @@ Route::middleware('auth')->group(function () {
             Route::post('report/perpindahan/pasien', 'ReportController@perpindahan')->name('report.perpindahan.pasien');
         });
         Route::prefix('logistik')->namespace('Logistik')->as('logistik.')->group(function () {
+            Route::get('/', function () {
+                return redirect()->route('dashboard');
+            })->name('dashboard');
             //Route Roles
             Route::get('/where/product', 'PurchaseController@WhereProduct');
             Route::get('/where/project', 'PurchaseController@whereProject');
@@ -263,6 +267,24 @@ Route::middleware('auth')->group(function () {
             Route::resource('pengajuan', 'PengajuanController');
             Route::resource('product', 'ProductController');
             Route::resource('supplier', 'SupplierController');
+            Route::resource('permissions', 'PermissionController');
+
+            // Route Roles
+            Route::resource('roles', 'RolesController');
+
+            // Route Master User
+            Route::resource('users', 'UserController');
+        });
+        Route::prefix('purchasing')->namespace('Purchasing')->as('purchasing.')->group(function () {
+            Route::get('/', function () {
+                return redirect()->route('dashboard');
+            })->name('dashboard');
+            //Route Roles
+            Route::get('/where/product', 'TukarFakturController@WhereProduct');
+            Route::get('/where/project', 'TukarFakturController@whereProject');
+            Route::resource('tukarfaktur', 'TukarFakturController');
+            Route::resource('reinburst', 'ReinburstController');
+            Route::resource('listpurchase', 'ListPurchsaController');
             Route::resource('permissions', 'PermissionController');
 
             // Route Roles

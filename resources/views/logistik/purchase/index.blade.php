@@ -31,7 +31,9 @@
                 </div>
             </div>
         </div>
-
+        <div class="col-sm-6 col-md-3">
+            <button type="submit" class="btn btn-success btn-block">Search</button>
+        </div>
     </div>
 </form>
 <div class="row">
@@ -65,7 +67,7 @@
                         <td>{{ $purchase->status_pembayaran }}</td>
                         <td>
 
-                            <a href="{{ route('logistik.purchase.edit', $purchase->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
+                            <!-- <a href="{{ route('logistik.purchase.edit', $purchase->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a> -->
 
                             <form action="{{ route('logistik.purchase.destroy', $purchase->id) }}" method="post" style="display: inline;" class="delete-form">
                                 @method('DELETE')

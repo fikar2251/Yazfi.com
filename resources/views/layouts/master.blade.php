@@ -44,7 +44,7 @@
         <div class="header bg-success">
             <div class="header-left">
                 <div class="logo-navbar">
-                    <img src="{{url('/img/logo/YAZFI-NAV.png ')}}" alt="Image" />
+                    <h4 style="color: white;">YAZFI GROUP</h4>
                 </div>
             </div>
             <a id="toggle_btn" href="javascript:void(0);"><i class="fa fa-bars"></i></a>
@@ -107,6 +107,9 @@
                     @endrole
                     @role('logistik')
                     <x-logistik.sidebar></x-logistik.sidebar>
+                    @endrole
+                    @role('purchasing')
+                    <x-purchasing.sidebar></x-purchasing.sidebar>
                     @endrole
                 </div>
             </div>

@@ -49,6 +49,16 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
+                                        <label for="nama">Nama <span style="color: red">*</span></label>
+                                        <input type="text" value="{{auth()->user()->name}}" readonly class="form-control">
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 col-sg-4 m-b-4">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="form-group">
                                         <label for="perusahaan">Perusahaan <span style="color: red">*</span></label>
                                         <select name="id_perusahaan" id="id_perusahaan" class="form-control select2" required="">
                                             <option disabled selected>-- Select Perusahaan --</option>
@@ -59,6 +69,15 @@
                                     </div>
                                 </li>
                             </ul>
+                        </div>
+                        <div class="form-group">
+                            <label for="cabang">Project <span style="color: red">*</span></label>
+                            <select name="project_id" id="nama_project" class="form-control input-lg dynamic" data-dependent="alamat_project" required="">
+                                <option disabled selected>-- Select Project --</option>
+                                @foreach($project as $projects)
+                                <option value="{{ $projects->id }}">{{ $projects->nama_project }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="col-sm-6 col-sg-4 m-b-4">
                             <ul class="list-unstyled">

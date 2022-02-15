@@ -27,6 +27,9 @@
 @role('logistik')
 @include('logistik.dashboard')
 @endrole
+@role('purchasing')
+@include('purchasing.dashboard')
+@endrole
 
 
 @stop
