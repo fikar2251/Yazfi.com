@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use App\Booking;
 use App\Customer;
 use App\Holidays;
@@ -104,11 +105,16 @@ class DashboardController extends Controller
             $holiday = Holidays::pluck('holiday_date')->toArray();
             $from = $startdate;
             $count = $startdate->diffInDays() + $enddate->diffInDays();
+            $data = DB::table('projects')
+                ->groupBy('projects.nama_project')
+                ->get();
+            return view('marketing.dashboard', compact('data'));
             return view('dashboard.index', [
                 'booking' => Booking::get(),
                 'dokter' => $dokter,
                 'holiday' => $holiday,
                 'count' => $count,
+                'data' => $data,
                 'startdate' => $from->subDays(1)
             ]);
         }

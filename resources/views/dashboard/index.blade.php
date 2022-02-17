@@ -15,7 +15,7 @@
 @endrole
 
 @role('marketing')
-@include('marketing.dashboard')
+@include('marketing.dashboard/index')
 @endrole
 
 @role('supervisor')

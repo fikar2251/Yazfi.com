@@ -7,7 +7,7 @@
     </div>
 
     <div class="col-sm-8 text-right m-b-20">
-        <a href="{{ route('logistik.pengajuan.create') }}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Purchase</a>
+        <a href="{{ route('logistik.pengajuan.create') }}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Pengajuan</a>
     </div>
 </div>
 <x-alert></x-alert>
@@ -44,6 +44,7 @@
                     <tr>
                         <th>No</th>
                         <th>No Pengajuan</th>
+                        <th>Deskripsi</th>
                         <th>Perusahaan</th>
                         <th>Tanggal</th>
                         <th>Divisi</th>
@@ -60,6 +61,7 @@
                         <td>{{ $loop->iteration }}</td>
 
                         <td><a href="{{ route('logistik.pengajuan.show', $pengajuan->id) }}">{{ $pengajuan->nomor_pengajuan }}</a></td>
+                        <td>{{$pengajuan->barang->nama_barang }}</td>
                         <td>{{$pengajuan->perusahaan->nama_perusahaan }}</td>
                         <td>{{ Carbon\Carbon::parse($pengajuan->tanggal_pengajuan)->format("d/m/Y H:i:s") }}</td>
                         <td>{{ $pengajuan->roles->key }}</td>
@@ -69,7 +71,7 @@
 
                         <td>
 
-                            <!-- <a href="{{ route('logistik.pengajuan.edit', $pengajuan->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a> -->
+                            <a href="{{ route('logistik.pengajuan.edit', $pengajuan->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
 
                             <form action="{{ route('logistik.pengajuan.destroy', $pengajuan->id) }}" method="post" style="display: inline;" class="delete-form">
                                 @method('DELETE')

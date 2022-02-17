@@ -49,6 +49,26 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
+                                        <label for="invoice">PO Number <span style="color: red">*</span></label>
+                                        <input type="text" name="invoice" value="{{$nourut}}" id="invoice" class="form-control" readonly>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 col-sg-4 m-b-4">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="form-group">
+                                        <label for="nama">Nama <span style="color: red">*</span></label>
+                                        <input type="text" value="{{auth()->user()->name}}" readonly class="form-control">
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 col-sg-4 m-b-4">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="form-group">
                                         <label for="supplier">Supplier <span style="color: red">*</span></label>
                                         <select name="supplier_id" id="supplier" class="form-control select2">
                                             <option disabled selected>-- Select Supplier --</option>
@@ -80,7 +100,7 @@
                                 <li>
                                     <div class="form-group">
                                         <label for="invoice">Lokasi <span style="color: red">*</span></label>
-                                        <input type="text" name="lokasi" value="" id="lokasi" class="form-control">
+                                        <input type="text" name="lokasi" id="lokasi" class="form-control" readonly>
                                     </div>
                                 </li>
                             </ul>
@@ -91,16 +111,6 @@
                                     <div class="form-group">
                                         <label for="tanggal">Tanggal <span style="color: red">*</span></label>
                                         <input type="datetime-local" name="tanggal" id="tanggal" class="form-control">
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-6 col-sg-4 m-b-4">
-                            <ul class="list-unstyled">
-                                <li>
-                                    <div class="form-group">
-                                        <label for="invoice">No Invoice <span style="color: red">*</span></label>
-                                        <input type="text" name="invoice" value="" id="invoice" class="form-control">
                                     </div>
                                 </li>
                             </ul>
@@ -116,6 +126,7 @@
                                     <tr class="bg-success">
                                         <th class="text-light">ITEM</th>
                                         <th class="text-light">QTY</th>
+                                        <th class="text-light">UNIT</th>
                                         <th class="text-light">HARGA BELI</th>
                                         <th class="text-light">TOTAL</th>
                                         <th class="text-light">#</th>
@@ -134,13 +145,25 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Total</label>
-                                        <input type="text" id="sub_total" readonly class="form-control">
+                                        <input type="text" id="sub_total" value="0" readonly class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>PPN 10%</label>
-                                        <input type="text" id="PPN" name="PPN" readonly class="form-control">
+                                        <button type="button" onclick="showhide()">Include PPN</button>
+                                    </div>
+                                    <div class="form-group">
+                                        <div id="newpost">
+                                            <label>PPN 10%</label>
+                                            <input type="text" id="PPN" name="PPN" value="0" readonly class="form-control">
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Grand Total</label>
+                                        <input type="text" id="grandtotal" name="grandtotal" value="0" readonly class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -159,6 +182,17 @@
 </html>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script>
+    function showhide() {
+        var div = document.getElementById("newpost");
+        var ppn2 = document.getElementById("PPN");
+        console.log(ppn2);
+        if (div.style.display !== "none") {
+            div.style.display = "none";
+        } else {
+            div.style.display = "block";
+        }
+    }
+
     var formatter = function(num) {
         var str = num.toString().replace("", ""),
             parts = false,
@@ -199,6 +233,9 @@
                     </td>
                     <td>
                         <input type="number" name="qty[${index}]"  class="form-control qty-${index}" placeholder="0">
+                    </td>
+                    <td>
+                        <input type="text" name="unit[${index}]"  class="form-control unit-${index}" placeholder="Unit">
                     </td>
                     <td>
                         <input type="number" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), HowAboutIt(this)">
@@ -262,7 +299,8 @@
         let total_all = parseInt(tax);
         // rupiah()
         document.getElementById('PPN').value = total_all;
-
+        let grand_total = parseInt(total_all) + parseInt(total);
+        document.getElementById('grandtotal').value = grand_total;
 
     }
 
@@ -279,6 +317,8 @@
             var id = $(this).val();
             var div = $(this).parent();
             var op = " ";
+            var alamat = "";
+            var lokasi = "";
             $.ajax({
                 url: `/logistik/where/project`,
                 method: "get",
@@ -287,14 +327,13 @@
 
 
                 },
-
                 success: function(data) {
                     console.log(data);
-                    op += '<option value="0" selected disabled> Lokasi</option>';
+                    op += '<input value="0" disabled>';
                     for (var i = 0; i < data.length; i++) {
-                        op += '<option value="' + data[i].alamat_project + '">' + data[i].alamat_project + '</option>'
+                        var alamat = data[i].alamat_project;
+                        document.getElementById('lokasi').value = alamat;
                     };
-                    $('.root3').html(op);
                 },
                 error: function() {
 

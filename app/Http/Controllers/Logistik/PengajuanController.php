@@ -35,8 +35,11 @@ class PengajuanController extends Controller
         $perusahaans = Perusahaan::get();
         $barangs = Barang::where('jenis', 'barang')->get();
         $projects = Project::get();
-
-        return view('logistik.pengajuan.create', compact('barangs', 'perusahaans', 'pengajuans', 'Projects'));
+        $AWAL = 'PD';
+        $noUrutAkhir = \App\Pengajuan::max('id');
+        // dd($noUrutAkhir);
+        $nourut = $AWAL . '/' .  sprintf("%02s", abs($noUrutAkhir + 1)) . '/' . sprintf("%05s", abs($noUrutAkhir + 1));
+        return view('logistik.pengajuan.create', compact('barangs', 'perusahaans', 'pengajuans', 'projects', 'nourut'));
     }
 
     public function store(Request $request, Pengajuan $pengajuan)
@@ -69,6 +72,7 @@ class PengajuanController extends Controller
                 'barang_id' => $no,
                 'PPN' => $request->PPN,
                 'harga_beli' => $request->harga_beli[$key],
+                'keterangan' => $request->keterangan[$key],
                 'qty' => $request->qty[$key],
                 'total' => $request->harga_beli[$key] * $request->qty[$key],
                 'nomor_pengajuan' => $request->nomor_pengajuan,

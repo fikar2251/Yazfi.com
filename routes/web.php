@@ -171,19 +171,20 @@ Route::middleware('auth')->group(function () {
         });
 
         Route::prefix('marketing')->name('marketing.')->namespace('Marketing')->group(function () {
-            // Route::get('/', function () {
-            //     return redirect()->route('dashboard');
-            // })->name('dashboard');
+            Route::get('/', function () {
+                return redirect()->route('dashboard');
+            })->name('dashboard');
+            //   Route::resource('/dashboard', 'DashboardController');
             Route::get('appointments/ajax', 'AppointmentsController@ajax');
             Route::resource('/appointments', 'AppointmentsController');
             Route::get('pasien/ajax', 'PatientController@ajaxPasien');
             Route::resource('/patient', 'PatientController');
             Route::resource('/doctor', 'DoctorController');
             Route::resource('/pricelist', 'PricelistController');
-            Route::resource('/dashboard', 'DashboardController');
             Route::get('/blok', 'PricelistController@blok');
             Route::get('/no', 'PricelistController@no');
             Route::get('/lt', 'PricelistController@lt');
+            Route::get('/hj', 'PricelistController@hj');
             Route::post('/fetch', 'PricelistController@fetch')->name('pricelist.fetch');
             Route::get('/pricelist/findBlokName', 'PricelistController@findBlokName');
             Route::resource('/profile', 'ProfileController');

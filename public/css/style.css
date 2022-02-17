@@ -131,7 +131,7 @@ a:focus {
 .purchase-order {
 	font-size: 20px;
 	background-color: #011f38ce;
-	font-weight: 100;
+	font-weight: 50;
 	color: white;
 }
 
@@ -1345,7 +1345,11 @@ textarea.form-control {
 
 .dashboard-logo {
 	margin-bottom: 40px;
-	margin-left: 20px;
+	margin-left: -10px;
+}
+
+.dashboard-formulir {
+	margin-right: 20px;
 }
 
 .account-box .account-btn {

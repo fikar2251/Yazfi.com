@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Marketing;
 
-use App\Barang;
-use App\Cabang;
-use App\HargaProdukCabang;
 use App\Http\Controllers\Controller;
 use App\Marketing;
+use App\Project;
+use App\Spr;
+use App\Perusahaan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -19,15 +19,6 @@ class PricelistController extends Controller
      */
     public function index()
     {
-        // return view('marketing.pricelist.index', [
-        //     'barang' => Barang::with('hargaproduk')->get()
-        // ]);
-        // $data  = Marketing::select('blok','id_unit_rumah')->where('type',$request->type)->take(100)->get();
-        // return response()->json($data);
-
-        $stok = Marketing::all();
-        $type = Marketing::where('Type', $stok);
-
         $blok = DB::table('unit_rumah')
             ->groupBy('type')
             ->get();
@@ -39,87 +30,51 @@ class PricelistController extends Controller
         $data = DB::table('unit_rumah')
             ->select('unit_rumah.type', 'unit_rumah.blok', 'unit_rumah.no', 'unit_rumah.lt')
             ->groupBy('unit_rumah.blok')
-            ->where('unit_rumah.id_unit_rumah', $request->id_unit_rumah)->get();
+            ->where('unit_rumah.type', $request->type)->get();
 
         return $data;
     }
 
     public function no(Request $request)
     {
-        // $blok = ['blok' => $request->blok];
         $data = DB::table('unit_rumah')
             ->select('unit_rumah.type', 'unit_rumah.blok', 'unit_rumah.no', 'unit_rumah.lt')
             ->groupBy('unit_rumah.no')
-            ->where('unit_rumah.id_unit_rumah', $request->id_unit_rumah)->get();
+            ->where('unit_rumah.blok', $request->blok)->get();
 
         return $data;
-
-        // $lutan = [
-        //     // 'blok' => 'R',
-        //     'no' => $request->no
-        // ];
-
-        // $lt = Marketing::select('blok', 'no', 'lt')
-        //     ->groupBy('lt')
-        //     ->where('blok', $data)->get();
-
-        // return $lt;
     }
 
     public function lt(Request $request)
     {
-
-        // $lutan = [
-        //     'blok' => $request->blok,
-        //     'no' => $request->no
-        // ];
-
+        $lutan = [
+            'blok' => $request->blok,
+            'no' => $request->no,
+        ];
 
         $data = DB::table('unit_rumah')
-            ->select('unit_rumah.blok', 'unit_rumah.id_unit_rumah', 'unit_rumah.lt')
-            ->groupBy('unit_rumah.lt')
-            ->where('unit_rumah.id_unit_rumah', $request->id_unit_rumah)->get();
+            ->select('unit_rumah.blok', 'unit_rumah.no', 'unit_rumah.lt', 'unit_rumah.harga_jual', 'unit_rumah.lb')
+            ->groupBy('unit_rumah.lt', 'unit_rumah.no')
+            ->where($lutan)->get();
 
         return $data;
-        // $lt = DB::table('unit_rumah')
-        //     ->select('unit_rumah.blok', 'unit_rumah.no', 'unit_rumah.lt')
-        //     ->groupBy('unit_rumah.lt')
-        //     ->where('unit_rumah.blok', $request->blok)->get();
-
-        // return $lt;
-
-
-
-        // $data = DB::table('unit_rumah')
-        //     ->select('unit_rumah.blok','unit_rumah.no', 'unit_rumah.lt')
-        //     ->groupBy('unit_rumah.lt', 'unit_rumah.blok')
-        //     ->where($lutan)
-        //     ->get();
-        // return $data;
     }
 
-    public function fetch(Request $request)
+    public function hj(Request $request)
     {
-        $select = $request->get('select');
-        $value = $request->get('value');
-        $dependent = $request->get('dependent');
-        $data = DB::table('unit_rumah')
-            ->where($select, $value)
-            ->groupBy($dependent)
-            ->get();
-        $output = '<option value="">Select ' . ucfirst($dependent) . '</option>';
-        foreach ($data as $row) {
-            $output .= '<option value="' . $row->$dependent . '">' . $row->$dependent . '</option>';
-        }
-        echo $output;
-    }
+        $harju = [
+            'blok' => $request->blok,
+            'no' => $request->no,
+            'lt' => $request->lt
+        ];
 
-    // public function findBlokName(Request $request)
-    // {
-    //     // $data  = Marketing::select('blok')->where('type',$request->type)->take(100)->get();
-    //     $data = Marketing::select('blok', 'type')->where('type', $request->type)->get();
-    //             return response()->json($data);
-    // }
+        $data = DB::table('unit_rumah')
+            ->select('unit_rumah.blok', 'unit_rumah.no', 'unit_rumah.lt', 'unit_rumah.harga_jual', 'unit_rumah.lb')
+            ->groupBy('unit_rumah.harga_jual')
+            ->where($harju)->get();
+
+        return $data;
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -139,8 +94,39 @@ class PricelistController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Project $project)
     {
+        
+
+        // $project = Project::find($project->id);
+        $project = Project::where('id', $project->id)->get();
+
+        Spr::create([
+            'no_transaksi' => $request->no_transaksi,
+            'id_sales' => auth()->user()->id,
+            'id_project' => $project->id,
+            'id_unit' => $request->type,
+            'id_perusahaan' => '1',
+            'tanggal_transaksi' => $request->tanggal_transaksi,
+            'skema' => $request->skema,
+            'nama' => $request->nama,
+            'alamat' => $request->alamat,
+            'no_ktp' => $request->no_ktp,
+            'npwp' => $request->npwp,
+            'no_tlp' => $request->no_tlp,
+            'no_hp' => $request->no_hp,
+            'email' => $request->email,
+            'pekerjaan' => $request->pekerjaan,
+            'status_booking' => 'unpaid',
+            'status_approval' => 'pending',
+            'status_dp' => 'unpaid',
+            'harga_jual' => $request->harga_jual,
+            'diskon' => $request->potongan,
+            'harga_net' => $request->harga_net,
+            'total_luas_tanah' => $request->tlt
+        ]);
+
+        return redirect()->route('marketing.dashboard');
     }
 
     /**
@@ -149,9 +135,21 @@ class PricelistController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, Project $project)
     {
-        //
+        $attr = [];
+        $spr = Project::where('id', $project->id)->pluck('id');
+        
+        foreach ($spr as $key => $id) {
+            // $attr[] = 
+            $id[] = $spr[$key]; 
+        }
+        // dd($id);
+        
+        $blok = DB::table('unit_rumah')
+        ->groupBy('type')
+        ->get();
+        return view('marketing.pricelist.index', compact('spr', 'blok', 'id'));
     }
 
     /**

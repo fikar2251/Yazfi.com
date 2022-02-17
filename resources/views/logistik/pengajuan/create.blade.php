@@ -49,6 +49,16 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
+                                        <label for="invoice">PD Number <span style="color: red">*</span></label>
+                                        <input type="text" name="invoice" value="{{$nourut}}" id="invoice" class="form-control" readonly>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 col-sg-4 m-b-4">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="form-group">
                                         <label for="nama">Nama <span style="color: red">*</span></label>
                                         <input type="text" value="{{auth()->user()->name}}" readonly class="form-control">
                                     </div>
@@ -70,14 +80,18 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="form-group">
-                            <label for="cabang">Project <span style="color: red">*</span></label>
-                            <select name="project_id" id="nama_project" class="form-control input-lg dynamic" data-dependent="alamat_project" required="">
-                                <option disabled selected>-- Select Project --</option>
-                                @foreach($project as $projects)
-                                <option value="{{ $projects->id }}">{{ $projects->nama_project }}</option>
-                                @endforeach
-                            </select>
+                        <div class="col-sm-6 col-sg-4 m-b-4">
+                            <ul class="list-unstyled">
+                                <div class="form-group">
+                                    <label for="cabang">Project <span style="color: red">*</span></label>
+                                    <select name="project_id" id="nama_project" class="form-control input-lg dynamic" data-dependent="alamat_project" required="">
+                                        <option disabled selected>-- Select Project --</option>
+                                        @foreach($projects as $project)
+                                        <option value="{{ $project->id }}">{{ $project->nama_project }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </ul>
                         </div>
                         <div class="col-sm-6 col-sg-4 m-b-4">
                             <ul class="list-unstyled">
@@ -112,7 +126,7 @@
                                         <th class="text-light">Harga Satuan</th>
                                         <th class="text-light">Qty</th>
                                         <th class="text-light">Total</th>
-                                        <!-- <th class="text-light">Keterangan</th> -->
+                                        <th class="text-light">Keterangan</th>
                                         <th class="text-light">#</th>
                                     </tr>
                                     <tbody id="dynamic_field">
@@ -134,8 +148,20 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>PPN 10%</label>
-                                        <input type="text" id="PPN" name="PPN" readonly class="form-control">
+                                        <button type="button" onclick="showhide()">Include PPN</button>
+                                    </div>
+                                    <div class="form-group">
+                                        <div id="newpost">
+                                            <label>PPN 10%</label>
+                                            <input type="text" id="PPN" name="PPN" value="0" readonly class="form-control">
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Grand Total</label>
+                                        <input type="text" id="grandtotal" name="grandtotal" readonly class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -154,6 +180,16 @@
 </html>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script>
+    function showhide() {
+        var div = document.getElementById("newpost");
+        var ppn2 = document.getElementById("PPN");
+        console.log(ppn2);
+        if (div.style.display !== "none") {
+            div.style.display = "none";
+        } else {
+            div.style.display = "block";
+        }
+    }
     var formatter = function(num) {
         var str = num.toString().replace("", ""),
             parts = false,
@@ -201,7 +237,9 @@
                     <td>
                         <input type="number" name="total[${index}]" disabled class="form-control total-${index} total-form"  placeholder="0">
                     </td>
-                 
+                    <td>
+                        <input type="text" name="keterangan[${index}]"  class="form-control keterangan-${index}" placeholder="Keterangan">
+                    </td>
                     <td>
                         <button type="button" class="btn btn-danger btn-sm" onclick="remove(this)">Delete</button>
                     </td>
@@ -258,6 +296,8 @@
         let total_all = parseInt(tax);
         // rupiah()
         document.getElementById('PPN').value = total_all;
+        let grandtotal = parseInt(total) + parseInt(total_all);
+        document.getElementById('grandtotal').value = grandtotal;
 
 
     }

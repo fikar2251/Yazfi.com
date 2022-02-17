@@ -35,8 +35,12 @@ class PurchaseController extends Controller
         $suppliers = Supplier::get();
         $project = Project::get();
         $barangs = Barang::where('jenis', 'barang')->get();
-
-        return view('logistik.purchase.create', compact('purchase', 'suppliers', 'barangs', 'project'));
+        $AWAL = 'PO';
+        $noUrutAkhir = \App\Purchase::max('id');
+        // dd($noUrutAkhir);
+        $nourut = $AWAL . '/' .  sprintf("%02s", abs($noUrutAkhir + 1)) . '/' . sprintf("%05s", abs($noUrutAkhir + 1));
+        // dd($nourut);
+        return view('logistik.purchase.create', compact('purchase', 'suppliers', 'barangs', 'project', 'nourut'));
     }
 
     public function store(Request $request)
@@ -61,11 +65,13 @@ class PurchaseController extends Controller
                 'project_id' => $request->project_id,
                 'barang_id' => $no,
                 'qty' => $request->qty[$key],
+                'unit' => $request->unit[$key],
                 'harga_beli' => $request->harga_beli[$key],
                 'PPN' => $request->PPN,
                 'total' => $request->harga_beli[$key] * $request->qty[$key],
                 'user_id' => auth()->user()->id,
                 'created_at' => $request->tanggal,
+                'grand_total' => $request->grand_total,
                 'status_pembayaran' => 'pending',
                 'status_barang' => 'pending'
             ];
@@ -134,11 +140,13 @@ class PurchaseController extends Controller
                 'supplier_id' => $request->supplier_id,
                 'barang_id' => $no,
                 'qty' => $request->qty[$key],
+                'unit' => $request->unit[$key],
                 'harga_beli' => $request->harga_beli[$key],
                 'PPN' => $request->PPN,
                 'total' => $request->harga_beli[$key] * $request->qty[$key],
                 'user_id' => auth()->user()->id,
                 'created_at' => $request->tanggal,
+                'grand_total' => $request->grand_total,
                 'status_pembayaran' => 'pending',
                 'status_barang' => 'pending'
             ];

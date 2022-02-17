@@ -1,7 +1,7 @@
 <ul>
     <li class="menu-title">Main</li>
-    <li class="{{ request()->is('marketing/dashboard*') ? 'active' : '' }}">
-        <a href="{{ route('marketing.dashboard.index') }}"><i class="fa fa-dashboard"></i> <span>Dashboard</span>
+    <li class="{{ request()->is('/dashboard*') ? 'active' : '' }}">
+        <a href="/dashboard"><i class="fa fa-dashboard"></i> <span>Dashboard</span>
         </a>
     </li>
     <li class="{{ (request()->is('marketing/pricelist*')) ? 'active' : '' }}">
