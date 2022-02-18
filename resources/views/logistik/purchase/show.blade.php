@@ -202,9 +202,6 @@
                                         <tr>
                                             <td rowspan="20"></td>
                                             <td colspan="4" rowspan="20">
-
-                                            </td>
-                                            <td colspan="4" rowspan="20">
                                                 <p class="text-left">Note :</p>
                                             </td>
                                             <td>
@@ -308,10 +305,7 @@
         formatted = output.reverse().join("");
         return ("" + formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
     };
-
-
     // document.getElementById('submit').disabled = true
-
     function form_dinamic() {
         let index = $('#dynamic_field tr').length + 1
         document.getElementById('counter').innerHTML = index
@@ -338,7 +332,6 @@
                 </tr>
         `
         $('#dynamic_field').append(template)
-
         $(`.select-${index}`).select2({
             placeholder: 'Select Product',
             ajax: {
@@ -352,8 +345,6 @@
                 cache: true
             }
         });
-
-
     }
 
     function remove(q) {
@@ -368,40 +359,30 @@
         let attr = $(e).attr('data')
         let qty = $(`.qty-${attr}`).val()
         let total = parseInt(harga * qty)
-
         $(`.total-${attr}`).val(total)
-
     }
 
     function HowAboutIt(e) {
         let sub_total = document.getElementById('sub_total')
         let total = 0;
-
         let coll = document.querySelectorAll('.total-form')
         for (let i = 0; i < coll.length; i++) {
             let ele = coll[i]
             total += parseInt(ele.value)
         }
-
         sub_total.value = total
         let tax = (10 / 100) * sub_total.value;
         let total_all = parseInt(tax);
         // rupiah()
         document.getElementById('PPN').value = total_all;
-
-
     }
-
-
     $(document).ready(function() {
         $('#add').on('click', function() {
             form_dinamic()
         })
     })
-
     $(document).ready(function() {
         $('.dynamic').change(function() {
-
             var id = $(this).val();
             var div = $(this).parent();
             var op = " ";
@@ -410,10 +391,7 @@
                 method: "get",
                 data: {
                     'id': id
-
-
                 },
-
                 success: function(data) {
                     console.log(data);
                     op += '<option value="0" selected disabled> Lokasi</option>';
@@ -422,9 +400,7 @@
                     };
                     $('.root3').html(op);
                 },
-                error: function() {
-
-                }
+                error: function() {}
             })
         })
     })

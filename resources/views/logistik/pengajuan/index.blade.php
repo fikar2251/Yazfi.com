@@ -44,7 +44,6 @@
                     <tr>
                         <th>No</th>
                         <th>No Pengajuan</th>
-                        <th>Deskripsi</th>
                         <th>Perusahaan</th>
                         <th>Tanggal</th>
                         <th>Divisi</th>
@@ -56,24 +55,23 @@
                 </thead>
 
                 <tbody>
-                    @foreach($pengajuans as $pengajuan)
+                    @foreach($pengajuans as $peng)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
+                        <td><a href="{{ route('logistik.pengajuan.show', $peng->id) }}">{{ $peng->nomor_pengajuan }}</a></td>
 
-                        <td><a href="{{ route('logistik.pengajuan.show', $pengajuan->id) }}">{{ $pengajuan->nomor_pengajuan }}</a></td>
-                        <td>{{$pengajuan->barang->nama_barang }}</td>
-                        <td>{{$pengajuan->perusahaan->nama_perusahaan }}</td>
-                        <td>{{ Carbon\Carbon::parse($pengajuan->tanggal_pengajuan)->format("d/m/Y H:i:s") }}</td>
-                        <td>{{ $pengajuan->roles->key }}</td>
-                        <td>{{ $pengajuan->admin->name }}</td>
-                        <td>{{ $pengajuan->rincianpengajuan->total }}</td>
-                        <td>{{ $pengajuan->status_approval }}</td>
+                        <td>{{$peng->perusahaan->nama_perusahaan }}</td>
+                        <td>{{ Carbon\Carbon::parse($peng->tanggal_pengajuan)->format("d/m/Y H:i:s") }}</td>
+                        <td>{{ $peng->roles->key }}</td>
+                        <td>{{ $peng->admin->name }}</td>
+                        <td>@currency(\App\RincianPengajuan::where('nomor_pengajuan', $peng->nomor_pengajuan)->sum('grandtotal'))</td>
+                        <td>{{ $peng->status_approval }}</td>
 
                         <td>
 
-                            <a href="{{ route('logistik.pengajuan.edit', $pengajuan->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
+                            <!-- <a href="{{ route('logistik.pengajuan.edit', $peng->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a> -->
 
-                            <form action="{{ route('logistik.pengajuan.destroy', $pengajuan->id) }}" method="post" style="display: inline;" class="delete-form">
+                            <form action="{{ route('logistik.pengajuan.destroy', $peng->id) }}" method="post" style="display: inline;" class="delete-form">
                                 @method('DELETE')
                                 @csrf
                                 <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>

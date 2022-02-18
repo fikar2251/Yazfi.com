@@ -25,7 +25,7 @@
                                 </div>
                             </div>
                             <div class="col-md-8 text-right">
-                                <h6><span style="font-size: 15px; color:white; background-color:blue;">KEU-FR-01</span></h6>
+                                <h6><span style="font-size: 15px; color:white; background-color:blue;">{{$pengajuan->nomor_pengajuan}}</span></h6>
                             </div>
                         </div><br>
                         <div class="row">
@@ -66,7 +66,7 @@
                                             <tr>
                                                 <td width="150px">Jabatan</td>
                                                 <td> : </td>
-                                                <td>{{ $pengajuan->roles->name }}</td>
+                                                <td>{{ $jabatan->nama }}</td>
                                             </tr>
                                         </div>
                                     </li>
@@ -80,7 +80,7 @@
                                             <tr>
                                                 <td width="150px">Lampiran</td>
                                                 <td> : </td>
-                                                <td><b></b></td>
+                                                <td>{{ $pengajuan->Lampiran}}</td>
                                             </tr>
                                         </div>
                                     </li>
@@ -123,7 +123,7 @@
                                             <td>{{ $barang->barang->nama_barang }}</td>
                                             <td>{{ $barang->rincianpengajuan->qty }}</td>
                                             <td>@currency($barang->rincianpengajuan->harga_beli)</td>
-                                            <td>@currency($barang->rincianpengajuan->total)</td>
+                                            <td>@currency($barang->rincianpengajuan->grandtotal)</td>
                                             <td>{{$barang->rincianpengajuan->keterangan}}</td>
                                         </tr>
                                         @php
@@ -135,7 +135,7 @@
                                         <tr>
                                             <td colspan="3"><strong>Total<strong> </td>
                                             <td></td>
-                                            <td><b>@currency($total + $barang->rincianpengajuan->total)</b></td>
+                                            <td><b>@currency($total + $barang->rincianpengajuan->grandtotal)</b></td>
                                             <td></td>
                                         </tr>
                                         <tr>

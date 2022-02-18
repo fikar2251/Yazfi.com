@@ -62,7 +62,7 @@
                         </td>
                         <td>{{ $purchase->admin->name }}</td>
                         <td>{{ Carbon\Carbon::parse($purchase->created_at)->format("d/m/Y H:i:s") }}</td>
-                        <td>@currency(\App\Purchase::where('invoice', $purchase->invoice)->sum('total'))</td>
+                        <td>@currency(\App\Purchase::where('invoice', $purchase->invoice)->sum('grand_total'))</td>
                         <td>{{ $purchase->status_barang }}</td>
                         <td>{{ $purchase->status_pembayaran }}</td>
                         <td>
