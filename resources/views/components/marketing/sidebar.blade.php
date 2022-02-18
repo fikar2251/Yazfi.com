@@ -5,7 +5,7 @@
         </a>
     </li>
     <li class="{{ (request()->is('marketing/pricelist*')) ? 'active' : '' }}">
-        <a href="{{ route('marketing.pricelist.index') }}"><i class="fa fa-money"></i> <span>Order</span></a>
+        <a href="{{ route('marketing.pricelist.index') }}"> <i class="fa-solid fa-list"></i> <span>Daftar SPR</span></a>
     </li>
     <li class="{{ (request()->is('marketing/doctor*')) ? 'active' : '' }}">
         <a href="{{ route('marketing.doctor.index') }}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-archive" viewBox="0 0 16 16">

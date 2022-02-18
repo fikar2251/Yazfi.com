@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Marketing\PricelistController;
 use App\Marketing;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -181,6 +182,7 @@ Route::middleware('auth')->group(function () {
             Route::get('pasien/ajax', 'PatientController@ajaxPasien');
             Route::resource('/patient', 'PatientController');
             Route::resource('/doctor', 'DoctorController');
+            Route::post('/pricelist/{id}', 'PricelistController@storeSpr')->name('storespr');
             Route::resource('/pricelist', 'PricelistController');
             Route::get('/blok', 'PricelistController@blok');
             Route::get('/no', 'PricelistController@no');
