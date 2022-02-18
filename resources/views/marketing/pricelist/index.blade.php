@@ -3,13 +3,14 @@
 @php
 
 use App\Marketing;
+use App\Spr;
 
 
 
 $stock = DB::table('unit_rumah')->select('type')->distinct()->get();
 
 $AWAL = 'SP';
-$noUrutAkhir = '0';
+$noUrutAkhir = Spr::max('id_transaksi');
 $nourut = $AWAL . '/' . sprintf("%02s", abs($noUrutAkhir + 1)) . '/' . sprintf("%05s", abs($noUrutAkhir + 1));
 
 
@@ -22,9 +23,9 @@ $nourut = $AWAL . '/' . sprintf("%02s", abs($noUrutAkhir + 1)) . '/' . sprintf("
         <div class=" col text-center">
             <h4 style="font-size: 30px; font-weight: 500;" class="page-title mb-3">SURAT PEMESANAN RUMAH</h4>
             <div class="text-center">
-               
-                    
-                    <h1>{{$id}}</h1>
+
+
+                <h1>{{$id}}</h1>
                 <div class="form-group row d-flex justify-content-center">
                     <label for="no_transaksi" class="col-sm-1">No <span>:</span></label>
                     <div class="col-sm-2">

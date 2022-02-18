@@ -94,17 +94,23 @@ class PricelistController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Project $project)
+    public function store(Request $request, $id)
     {
-        
+
 
         // $project = Project::find($project->id);
-        $project = Project::where('id', $project->id)->get();
+        //     $projectId = Project::where('id', $id)->pluck('id');
+        //    dd($projectId);
+
+        // foreach ($projectId as $key => $id) {
+        //     // $attr[] = 
+        //     $id[] = $projectId[$key];
+        // }
 
         Spr::create([
             'no_transaksi' => $request->no_transaksi,
             'id_sales' => auth()->user()->id,
-            'id_project' => $project->id,
+            'id_project' => $id->$this->route('id'),
             'id_unit' => $request->type,
             'id_perusahaan' => '1',
             'tanggal_transaksi' => $request->tanggal_transaksi,
@@ -138,17 +144,19 @@ class PricelistController extends Controller
     public function show($id, Project $project)
     {
         $attr = [];
-        $spr = Project::where('id', $project->id)->pluck('id');
-        
-        foreach ($spr as $key => $id) {
-            // $attr[] = 
-            $id[] = $spr[$key]; 
-        }
-        // dd($id);
-        
+
+        $spr = Project::where('id', $id)->pluck('id');
+
+        // foreach ($spr as $key => $no) {
+        //     // $attr[] = 
+        //     $id[] = $spr[$key];
+        // }
+
+        // dd($spr);
+
         $blok = DB::table('unit_rumah')
-        ->groupBy('type')
-        ->get();
+            ->groupBy('type')
+            ->get();
         return view('marketing.pricelist.index', compact('spr', 'blok', 'id'));
     }
 

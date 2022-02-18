@@ -78,7 +78,7 @@ class PurchaseController extends Controller
             //     'barang_id' => $no,
             //     'in' => $request->qty[$key],
             //     // 'last_stok' => $hargaBarang->qty,
-            
+
             //     'user_id' => auth()->user()->id
             // ];
         }
@@ -184,6 +184,18 @@ class PurchaseController extends Controller
         return redirect()->route('admin.purchase.index')->with('success', 'Purchase barang didelete');
     }
 
+    public function WhereService(Request $request)
+    {
+        $data = [];
+        $product =  Barang::where('jenis', 'service')
+            ->where('nama_barang', 'like', '%' . $request->q . '%')
+            ->get();
+        foreach ($product as $row) {
+            $data[] = ['id' => $row->id,  'text' => $row->nama_barang];
+        }
+
+        return response()->json($data);
+    }
     public function WhereProduct(Request $request)
     {
         $data = [];

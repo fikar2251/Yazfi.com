@@ -107,8 +107,9 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <label for="nomo_pengajuan">No Pengajuan <span style="color: red">*</span></label>
-                                        <input type="text" name="nomor_pengajuan" id="nomor_pengajuan" class="form-control">
+                                        <label for="lampiran">Lampiran <span style="color: red">*</span></label>
+                                        <input type="file" name="lampiran" id="lampiran" class="form-control" accept=" application/pdf, application/vnd.ms-excel">
+                                        <label for=" lampiran">only pdf and doc</label>
                                     </div>
                                 </li>
                             </ul>
@@ -250,7 +251,7 @@
         $(`.select-${index}`).select2({
             placeholder: 'Select Product',
             ajax: {
-                url: `/admin/where/product`,
+                url: `/admin/where/service`,
                 processResults: function(data) {
                     console.log(data)
                     return {
