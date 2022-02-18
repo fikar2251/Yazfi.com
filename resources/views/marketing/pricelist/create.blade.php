@@ -1,4 +1,4 @@
-@extends('layouts.master', ['title' => 'Order SPR'])
+@extends('layouts.master', ['title' => 'Order SPR   '])
 @section('content')
 @php
 
@@ -338,6 +338,7 @@ $nourut = $AWAL . '/' . sprintf("%02s", abs($id)) . '/' . sprintf("%05s", abs($n
             var no = $(this).val();
             var lt = $(this).val();
             var div = $(this).parent();
+            var op = " ";
     
             console.log(blok)
             $.ajax({

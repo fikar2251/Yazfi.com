@@ -22,7 +22,9 @@ class PricelistController extends Controller
         $blok = DB::table('unit_rumah')
             ->groupBy('type')
             ->get();
-        return view('marketing.pricelist.index', compact('blok'));
+
+        $spr = Spr::all();
+        return view('marketing.pricelist.index', compact('blok', ''));
     }
 
     public function blok(Request $request)
