@@ -49,8 +49,8 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <label for="invoice">PD Number <span style="color: red">*</span></label>
-                                        <input type="text" name="invoice" value="{{$nourut}}" id="invoice" class="form-control" readonly>
+                                        <label for="nomor_pengajuan">PD Number <span style="color: red">*</span></label>
+                                        <input type="text" name="nomor_pengajuan" value="{{$nourut}}" id="nomor_pengajuan" class="form-control" readonly>
                                     </div>
                                 </li>
                             </ul>
@@ -82,19 +82,6 @@
                         </div>
                         <div class="col-sm-6 col-sg-4 m-b-4">
                             <ul class="list-unstyled">
-                                <div class="form-group">
-                                    <label for="cabang">Project <span style="color: red">*</span></label>
-                                    <select name="project_id" id="nama_project" class="form-control input-lg dynamic" data-dependent="alamat_project" required="">
-                                        <option disabled selected>-- Select Project --</option>
-                                        @foreach($projects as $project)
-                                        <option value="{{ $project->id }}">{{ $project->nama_project }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </ul>
-                        </div>
-                        <div class="col-sm-6 col-sg-4 m-b-4">
-                            <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
                                         <label for="tanggal">Tanggal <span style="color: red">*</span></label>
@@ -108,7 +95,7 @@
                                 <li>
                                     <div class="form-group">
                                         <label for="lampiran">Lampiran <span style="color: red">*</span></label>
-                                        <input type="file" name="lampiran" id="lampiran" class="form-control" accept=" application/pdf, application/vnd.ms-excel">
+                                        <input type="file" name="file" id="file" class="form-control">
                                         <label for=" lampiran">only pdf and doc</label>
                                     </div>
                                 </li>
@@ -214,10 +201,7 @@
         formatted = output.reverse().join("");
         return ("" + formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
     };
-
-
     // document.getElementById('submit').disabled = true
-
     function form_dinamic() {
         let index = $('#dynamic_field tr').length + 1
         document.getElementById('counter').innerHTML = index
@@ -230,7 +214,7 @@
                         <select required name="barang_id[${index}]" id="${index}" class="form-control select-${index}"></select>
                     </td>
                     <td>
-                        <input type="number" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), HowAboutIt(this)">
+                        <input type="text" id="rupiah" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), HowAboutIt(this)">
                     </td>
                     <td>
                         <input type="number" name="qty[${index}]"  class="form-control qty-${index}" placeholder="0">
@@ -247,7 +231,6 @@
                 </tr>
         `
         $('#dynamic_field').append(template)
-
         $(`.select-${index}`).select2({
             placeholder: 'Select Product',
             ajax: {
@@ -261,8 +244,6 @@
                 cache: true
             }
         });
-
-
     }
 
     function remove(q) {
@@ -277,21 +258,17 @@
         let attr = $(e).attr('data')
         let qty = $(`.qty-${attr}`).val()
         let total = parseInt(harga * qty)
-
         $(`.total-${attr}`).val(total)
-
     }
 
     function HowAboutIt(e) {
         let sub_total = document.getElementById('sub_total')
         let total = 0;
-
         let coll = document.querySelectorAll('.total-form')
         for (let i = 0; i < coll.length; i++) {
             let ele = coll[i]
             total += parseInt(ele.value)
         }
-
         sub_total.value = total
         let tax = (10 / 100) * sub_total.value;
         let total_all = parseInt(tax);
@@ -299,15 +276,65 @@
         document.getElementById('PPN').value = total_all;
         let grandtotal = parseInt(total) + parseInt(total_all);
         document.getElementById('grandtotal').value = grandtotal;
-
-
     }
-
-
     $(document).ready(function() {
         $('#add').on('click', function() {
             form_dinamic()
         })
     })
+    $(document).ready(function() {
+        $('.dynamic').change(function() {
+
+            var id = $(this).val();
+            var div = $(this).parent();
+            var op = " ";
+            var alamat = "";
+            var lokasi = "";
+            $.ajax({
+                url: `/logistik/where/project`,
+                method: "get",
+                data: {
+                    'id': id
+
+
+                },
+                success: function(data) {
+                    console.log(data);
+                    op += '<input value="0" disabled>';
+                    for (var i = 0; i < data.length; i++) {
+                        var alamat = data[i].alamat_project;
+                        document.getElementById('lokasi').value = alamat;
+                    };
+                },
+                error: function() {
+
+                }
+            })
+        })
+    })
+    var rupiah = document.getElementById('rupiah');
+    rupiah.addEventListener('keyup', function(e) {
+        // tambahkan 'Rp.' pada saat form di ketik
+        // gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
+        rupiah.value = formatRupiah(this.value, 'Rp. ');
+    });
+
+    /* Fungsi formatRupiah */
+    function formatRupiah(angka, prefix) {
+        var number_string = angka.replace(/[^,\d]/g, '').toString(),
+            split = number_string.split(','),
+            sisa = split[0].length % 3,
+            rupiah = split[0].substr(0, sisa),
+            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+        // tambahkan titik jika yang di input sudah menjadi angka ribuan
+        if (ribuan) {
+            separator = sisa ? '.' : '';
+            rupiah += separator + ribuan.join('.');
+        }
+
+        rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+        return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+    }
 </script>
 @stop

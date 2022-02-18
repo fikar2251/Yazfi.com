@@ -39,4 +39,8 @@ class Pengajuan extends Model
     {
         return $this->belongsTo(Perusahaan::class, 'id_perusahaan');
     }
+    public function jabatan()
+    {
+        return $this->belongsTo(Jabatan::class, 'id_jabatans');
+    }
 }

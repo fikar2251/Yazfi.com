@@ -51,22 +51,15 @@ class PurchaseController extends Controller
             'qty' => 'required',
             'harga_beli' => 'required',
             'invoice' => 'required',
-            'lampiran' => 'nullable|mimes:pdf,doc'
         ]);
 
         $barang = $request->input('barang_id', []);
-        $newsubmission = [];
+        $attr = [];
         $in = [];
-        validator::make($request->all(), ['lampiran' => "required|string|mimes:pdf,doc"])->validate();
-        $extension = $request->file("file")->getClientOriginalExtension();
-        // $stringPaperFormat = str_replace(" ", "", $request->input('title'));
-        // $fileName = $stringPaperFormat . "." . $extension;
-        $FileEnconded =  File::get($request->lampiran);
-        Storage::disk('local')->put('public/paper' .  $FileEnconded);
         // dd($request->all());
         DB::beginTransaction();
         foreach ($barang as $key => $no) {
-            $newsubmission[] = [
+            $attr[] = [
                 'invoice' => $request->invoice,
                 'supplier_id' => $request->supplier_id,
                 'project_id' => $request->project_id,
@@ -78,28 +71,10 @@ class PurchaseController extends Controller
                 'total' => $request->harga_beli[$key] * $request->qty[$key],
                 'user_id' => auth()->user()->id,
                 'created_at' => $request->tanggal,
-                'grand_total' => $request->grand_total,
-                'lampiran' => $FileEnconded,
+                'grand_total' => $request->grandtotal,
                 'status_pembayaran' => 'pending',
-                'status_barang' => 'pending',
+                'status_barang' => 'pending'
             ];
-            // $attr[] = [
-            //     'invoice' => $request->invoice,
-            //     'supplier_id' => $request->supplier_id,
-            //     'project_id' => $request->project_id,
-            //     'barang_id' => $no,
-            //     'qty' => $request->qty[$key],
-            //     'unit' => $request->unit[$key],
-            //     'harga_beli' => $request->harga_beli[$key],
-            //     'PPN' => $request->PPN,
-            //     'total' => $request->harga_beli[$key] * $request->qty[$key],
-            //     'user_id' => auth()->user()->id,
-            //     'created_at' => $request->tanggal,
-            //     'grand_total' => $request->grand_total,
-            //     'lampiran' => $created,
-            //     'status_pembayaran' => 'pending',
-            //     'status_barang' => 'pending'
-            // ];
 
             // $hargaBarang = HargaProdukCabang::where('project_id', auth()->user()->project_id)->where('barang_id', $no)->first();
 
@@ -116,7 +91,8 @@ class PurchaseController extends Controller
                 'user_id' => auth()->user()->id
             ];
         }
-        Purchase::insert($newsubmission);
+
+        Purchase::insert($attr);
         InOut::insert($in);
 
         DB::commit();
@@ -217,12 +193,13 @@ class PurchaseController extends Controller
     public function WhereProduct(Request $request)
     {
         $data = [];
-        $product =  Barang::where('jenis', 'barang')
+        $product =  Barang::where('jenis', 'barang_id')
             ->where('nama_barang', 'like', '%' . $request->q . '%')
             ->get();
         foreach ($product as $row) {
             $data[] = ['id' => $row->id,  'text' => $row->nama_barang];
         }
-        return response()->json($data);
+
+        return redirect()->route('logistik.purchase.index')->with('success', 'Purchase barang didelete');
     }
 }

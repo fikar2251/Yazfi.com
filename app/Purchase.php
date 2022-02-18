@@ -29,6 +29,7 @@ class Purchase extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
     public function roles()
     {
         return $this->hasMany(User::class, 'users.cabang_id');

@@ -24,9 +24,8 @@ class PengajuanController extends Controller
             $pengajuans = Pengajuan::groupBy('nomor_pengajuan')->whereBetween('tanggal_pengajuan', [$from, $to])->get();
         } else {
             $pengajuans = Pengajuan::groupBy('nomor_pengajuan')->get();
-            $users = User::with('cabang')->get();
         }
-        return view('logistik.pengajuan.index', compact('pengajuans', 'users'));
+        return view('logistik.pengajuan.index', compact('pengajuans'));
     }
 
     public function create()
@@ -35,13 +34,12 @@ class PengajuanController extends Controller
         $perusahaans = Perusahaan::get();
         $barangs = Barang::where('jenis', 'barang')->get();
         $projects = Project::get();
-        $AWAL = 'PD';
+        $AWAL = 'KEU';
         $noUrutAkhir = \App\Pengajuan::max('id');
         // dd($noUrutAkhir);
         $nourut = $AWAL . '/' .  sprintf("%02s", abs($noUrutAkhir + 1)) . '/' . sprintf("%05s", abs($noUrutAkhir + 1));
         return view('logistik.pengajuan.create', compact('barangs', 'perusahaans', 'pengajuans', 'projects', 'nourut'));
     }
-
     public function store(Request $request, Pengajuan $pengajuan)
     {
         $request->validate([
@@ -49,6 +47,7 @@ class PengajuanController extends Controller
             'qty' => 'required',
             'harga_beli' => 'required',
             'nomor_pengajuan' => 'required',
+            'filename.*' => 'mimes:doc,docx,PDF,pdf,jpg,jpeg,png|max:2000'
         ]);
 
         $barang = $request->input('barang_id', []);
@@ -56,42 +55,59 @@ class PengajuanController extends Controller
         $in = [];
         // dd($request->all());
         DB::beginTransaction();
-        foreach ($barang as $key => $no) {
-            $attr[] = [
-                'nomor_pengajuan' => $request->nomor_pengajuan,
-                'id_user' => auth()->user()->id,
-                'id_perusahaan' => $request->id_perusahaan,
-                'tanggal_pengajuan' => $request->tanggal_pengajuan,
-                'approval_time' => $request->tanggal_pengajuan,
-                'status_approval' => 'pending',
-                'approval_by' => 'pending',
-                'id_roles' => 9
-            ];
+        if ($request->hasfile('file')) {
+            $attr = [];
+            $in = [];
+            foreach ($request->file('file') as $file) {
+                if ($file->isValid()) {
+                    $filename = round(microtime(true) * 1000) . '-' . str_replace(' ', '-', $file->getClientOriginalName());
+                    $file->move(public_path('images/files'), $filename);
+                    foreach ($barang as $key => $no) {
+                        $attr[] = [
+                            'nomor_pengajuan' => $request->nomor_pengajuan,
+                            'lampiran' => $filename,
+                            'id_user' => auth()->user()->id,
+                            'id_perusahaan' => $request->id_perusahaan,
+                            'tanggal_pengajuan' => $request->tanggal_pengajuan,
+                            'approval_time' => $request->tanggal_pengajuan,
+                            'status_approval' => 'pending',
+                            'approval_by' => 'pending',
+                            'id_roles' => 9
+                        ];
+                        $in[] = [
+                            'barang_id' => $no,
+                            'PPN' => $request->PPN,
+                            'harga_beli' => $request->harga_beli[$key],
+                            'keterangan' => $request->keterangan[$key],
+                            'qty' => $request->qty[$key],
+                            'total' => $request->harga_beli[$key] * $request->qty[$key],
+                            'nomor_pengajuan' => $request->nomor_pengajuan,
+                            'grandtotal' => $request->grandtotal
 
-            $in[] = [
-                'barang_id' => $no,
-                'PPN' => $request->PPN,
-                'harga_beli' => $request->harga_beli[$key],
-                'keterangan' => $request->keterangan[$key],
-                'qty' => $request->qty[$key],
-                'total' => $request->harga_beli[$key] * $request->qty[$key],
-                'nomor_pengajuan' => $request->nomor_pengajuan,
-            ];
+                        ];
+                    }
+                }
+                Pengajuan::insert($attr);
+                RincianPengajuan::insert($in);
+            }
         }
-
         Pengajuan::insert($attr);
         RincianPengajuan::insert($in);
-        print_r($attr);
         DB::commit();
-
         return redirect()->route('logistik.pengajuan.index')->with('success', 'Pengajuan Dana barang berhasil');
     }
 
     public function show(Pengajuan $pengajuan)
     {
         $pengajuan = Pengajuan::where('nomor_pengajuan', $pengajuan->nomor_pengajuan)->first();
+        $jabatan = DB::table('users')
+            ->leftJoin('jabatans', 'users.id_jabatans', '=', 'jabatans.id')
+            ->leftJoin('pengajuans', 'users.id_perusahaan', '=', 'pengajuans.id_perusahaan')
+            ->select('jabatans.nama')
+            ->where('pengajuans.nomor_pengajuan', $pengajuan->nomor_pengajuan)
+            ->first();
 
-        return view('logistik.pengajuan.show', compact('pengajuan'));
+        return view('logistik.pengajuan.show', compact('jabatan', 'pengajuan'));
     }
 
     public function edit(Pengajuan $pengajuan)
