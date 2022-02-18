@@ -47,7 +47,7 @@ class PengajuanController extends Controller
             'qty' => 'required',
             'harga_beli' => 'required',
             'nomor_pengajuan' => 'required',
-            'filename.*' => 'mimes:doc,docx,PDF,pdf,jpg,jpeg,png|max:2000'
+            'file.*' => 'mimes:doc,docx,PDF,pdf,jpg,jpeg,png|max:2000'
         ]);
 
         $barang = $request->input('barang_id', []);
@@ -61,36 +61,44 @@ class PengajuanController extends Controller
             foreach ($request->file('file') as $file) {
                 if ($file->isValid()) {
                     $filename = round(microtime(true) * 1000) . '-' . str_replace(' ', '-', $file->getClientOriginalName());
-                    $file->move(public_path('images/files'), $filename);
-                    foreach ($barang as $key => $no) {
-                        $attr[] = [
-                            'nomor_pengajuan' => $request->nomor_pengajuan,
-                            'lampiran' => $filename,
-                            'id_user' => auth()->user()->id,
-                            'id_perusahaan' => $request->id_perusahaan,
-                            'tanggal_pengajuan' => $request->tanggal_pengajuan,
-                            'approval_time' => $request->tanggal_pengajuan,
-                            'status_approval' => 'pending',
-                            'approval_by' => 'pending',
-                            'id_roles' => 9
-                        ];
-                        $in[] = [
-                            'barang_id' => $no,
-                            'PPN' => $request->PPN,
-                            'harga_beli' => $request->harga_beli[$key],
-                            'keterangan' => $request->keterangan[$key],
-                            'qty' => $request->qty[$key],
-                            'total' => $request->harga_beli[$key] * $request->qty[$key],
-                            'nomor_pengajuan' => $request->nomor_pengajuan,
-                            'grandtotal' => $request->grandtotal
-
-                        ];
-                    }
+                    $file->move(public_path('/images/files'), $filename);
+                    $files[] = [
+                        'file' => $filename,
+                    ];
                 }
-                Pengajuan::insert($attr);
-                RincianPengajuan::insert($in);
             }
+            Pengajuan::insert($files);
+            dd($files);
         }
+        foreach ($barang as $key => $no) {
+            $attr[] = [
+                'nomor_pengajuan' => $request->nomor_pengajuan,
+                // 'file' => $files,
+                'id_user' => auth()->user()->id,
+                'id_perusahaan' => $request->id_perusahaan,
+                'tanggal_pengajuan' => $request->tanggal_pengajuan,
+                'approval_time' => $request->tanggal_pengajuan,
+                'status_approval' => 'pending',
+                'approval_by' => 'pending',
+                'id_roles' => 9
+            ];
+            $in[] = [
+                'barang_id' => $no,
+                'PPN' => $request->PPN,
+                'harga_beli' => $request->harga_beli[$key],
+                'keterangan' => $request->keterangan[$key],
+                'qty' => $request->qty[$key],
+                'total' => $request->harga_beli[$key] * $request->qty[$key],
+                'nomor_pengajuan' => $request->nomor_pengajuan,
+                'grandtotal' => $request->grandtotal
+
+            ];
+
+
+            Pengajuan::insert($attr);
+            RincianPengajuan::insert($in);
+        }
+
         Pengajuan::insert($attr);
         RincianPengajuan::insert($in);
         DB::commit();
@@ -100,6 +108,7 @@ class PengajuanController extends Controller
     public function show(Pengajuan $pengajuan)
     {
         $pengajuan = Pengajuan::where('nomor_pengajuan', $pengajuan->nomor_pengajuan)->first();
+        $rincian = RincianPengajuan::where('nomor_pengajuan', $pengajuan->nomor_pengajuan)->first();
         $jabatan = DB::table('users')
             ->leftJoin('jabatans', 'users.id_jabatans', '=', 'jabatans.id')
             ->leftJoin('pengajuans', 'users.id_perusahaan', '=', 'pengajuans.id_perusahaan')
@@ -107,7 +116,7 @@ class PengajuanController extends Controller
             ->where('pengajuans.nomor_pengajuan', $pengajuan->nomor_pengajuan)
             ->first();
 
-        return view('logistik.pengajuan.show', compact('jabatan', 'pengajuan'));
+        return view('logistik.pengajuan.show', compact('jabatan', 'pengajuan', 'rincian'));
     }
 
     public function edit(Pengajuan $pengajuan)

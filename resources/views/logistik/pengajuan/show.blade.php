@@ -117,7 +117,7 @@
                                         @php
                                         $total = 0
                                         @endphp
-                                        @foreach(App\Pengajuan::where('nomor_pengajuan', $pengajuan->nomor_pengajuan)->get() as $barang)
+                                        @foreach(App\Pengajuan::where('nomor_pengajuan', $pengajuan->nomor_pengajuan)->first() as $barang)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $barang->barang->nama_barang }}</td>
