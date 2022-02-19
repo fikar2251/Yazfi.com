@@ -1,10 +1,10 @@
-<ul>
+    <ul>
     <li class="menu-title">Main</li>
     <li class="{{ request()->is('/dashboard*') ? 'active' : '' }}">
         <a href="/dashboard"><i class="fa fa-dashboard"></i> <span>Dashboard</span>
         </a>
     </li>
-    <li class="{{ (request()->is('marketing/pricelist*')) ? 'active' : '' }}">
+    <li class="{{ (request()->is('marketing/pricelist')) ? 'active' : '' }}">
         <a href="{{ route('marketing.pricelist.index') }}"> <i class="fa-solid fa-list"></i> <span>Daftar SPR</span></a>
     </li>
     <li class="{{ (request()->is('marketing/doctor*')) ? 'active' : '' }}">
