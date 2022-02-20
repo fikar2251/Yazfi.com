@@ -8,6 +8,7 @@ use App\Project;
 use App\Skema;
 use App\Spr;
 use App\Tagihan;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -177,6 +178,11 @@ class PricelistController extends Controller
             $int = (int) $string;
         }
 
+        $date = Carbon::now()->format('d-m-Y');
+        $tempo = date('d-m-Y', strtotime('+30 days', strtotime($date)));
+
+        // $tempo3 = date('d-m-Y', strtotime('+30 days', strtotime($tempo)));
+
         $harga_jual = $request->harga_jual;
 
         $jumlah = $harga_jual / $int;
@@ -186,34 +192,35 @@ class PricelistController extends Controller
                 'jumlah_tagihan' => $request->booking_fee,
                 'status_pembayaran' => 'unpaid',
                 'no_transaksi' => $request->no_transaksi,
+                'jatuh_tempo' => $tempo,
             ],
             ['tipe' => 2,
                 'jumlah_tagihan' => $request->downpayment,
                 'status_pembayaran' => 'unpaid',
                 'no_transaksi' => $request->no_transaksi,
+                'jatuh_tempo' => $tempo,
             ],
-            // ['tipe' => 3,
-            //     'jumlah_tagihan' => $jumlah,
-            //     'status_pembayaran' => 'unpaid',
-            //     'no_transaksi' => $request->no_transaksi,
-            // ],
-
         ];
 
-        $tipe3 = [
-            ['tipe' => 3,
-                'jumlah_tagihan' => $jumlah,
-                'status_pembayaran' => 'unpaid',
-                'no_transaksi' => $request->no_transaksi,
-            ],
+        $int5 = 30 * $int;
 
-        ];
+        $date5 = date('d-m-Y', strtotime('+' . $int5 . 'days', strtotime($date)));
 
         Tagihan::insert($data);
-        
-        for ($i = 0; $i < $int; $i++) {
 
+
+        while (strtotime($tempo) <= strtotime($date5)) {
+            $tipe3 = [
+                ['tipe' => 3,
+                    'jumlah_tagihan' => $jumlah,
+                    'status_pembayaran' => 'unpaid',
+                    'no_transaksi' => $request->no_transaksi,
+                    'jatuh_tempo' => $tempo,
+                ],
+            ];
             Tagihan::insert($tipe3);
+
+            $tempo = date("d-m-Y", strtotime("+30 day", strtotime($tempo)));
         }
 
         return redirect()->route('marketing.dashboard');
@@ -228,15 +235,6 @@ class PricelistController extends Controller
     public function show($id, Project $project)
     {
         $skema = Skema::all();
-        // $jumlahskema = Skema::select('jumlah_skema')
-        //     ->where('id_skema', 1)
-        //     ->get();
-        // foreach ($jumlahskema as $item) {
-        //     $array = array($item->jumlah_skema);
-        //     $string = implode(" ", $array);
-        //     $int = (int) $string;
-        // }
-        // dd($int);
 
         $blok = DB::table('unit_rumah')
             ->groupBy('type')
