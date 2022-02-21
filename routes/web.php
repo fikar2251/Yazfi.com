@@ -1,9 +1,7 @@
 <?php
 
-use App\Http\Controllers\Marketing\PricelistController;
-use App\Marketing;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,13 +12,11 @@ use Illuminate\Support\Facades\Auth;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/
+ */
 
 Route::get('/', function () {
     return view('auth.login');
 });
-
-
 
 Auth::routes();
 
@@ -54,7 +50,6 @@ Route::middleware('auth')->group(function () {
             Route::get('/where/service', 'PurchaseController@WhereService');
             Route::resource('purchase', 'PurchaseController');
 
-
             Route::resource('transfer', 'TransferStokController');
             Route::get('/transfer/where/product', 'TransferStokController@WhereProduct');
 
@@ -85,7 +80,6 @@ Route::middleware('auth')->group(function () {
             Route::post('pasien/{customer:id}/storefisik', 'PatientController@storefisik')->name('pasien.storefisik');
             Route::get('pasien/ajax', 'PatientController@ajaxPasien');
             Route::resource('pasien', 'PatientController');
-
 
             // Route Master Payments
             Route::resource('payments', 'PaymentController');
@@ -235,6 +229,10 @@ Route::middleware('auth')->group(function () {
 
         // Route Supervisor
         Route::prefix('supervisor')->namespace('Supervisor')->as('supervisor.')->group(function () {
+            Route::get('/', function () {
+                return redirect()->route('dashboard');
+            })->name('dashboard');
+
             // Route Appointment
             Route::get('appointments/ajax', 'AppointmentController@ajaxAppointment');
             Route::post('appointments/deleterincian', 'AppointmentController@deleterincian')->name('appointments.deleterincian');
@@ -244,6 +242,8 @@ Route::middleware('auth')->group(function () {
             Route::get('komisi/{komisi:id}/change', 'KomisiController@change')->name('komisi.change');
             Route::patch('komisi/{komisi:id}/updatechange', 'KomisiController@updatechange')->name('komisi.updatechange');
             Route::resource('komisi', 'KomisiController');
+
+            Route::get('payment', 'BayarController@index')->name('payment.index');
         });
 
         // Route HRD
@@ -255,7 +255,6 @@ Route::middleware('auth')->group(function () {
             Route::get('/appointments/resign', 'AppointmentController@resign')->name('appointments.resign');
             Route::get('appointments/download/{id}', 'AppointmentController@download')->name('appointments.download');
             Route::resource('appointments', 'AppointmentController');
-
 
             Route::get('report/perpindahan/pasien', 'ReportController@perpindahan')->name('report.perpindahan.pasien');
             Route::post('report/perpindahan/pasien', 'ReportController@perpindahan')->name('report.perpindahan.pasien');
@@ -297,7 +296,6 @@ Route::middleware('auth')->group(function () {
             // Route Master User
             Route::resource('users', 'UserController');
         });
-
 
         // Route Rekam Medis
         Route::resource('rekam-medis', 'RekamMedisController');

@@ -19,8 +19,9 @@
 @endrole
 
 @role('supervisor')
-
+@include('supervisor.dashboard')
 @endrole
+
 @role('hrd')
 @include('hrd.dashboard')
 @endrole

@@ -1,4 +1,4 @@
-@extends('layouts.master', ['title' => 'Dashboard'])
+@extends('layouts.master', ['title' => 'Dashboard Marketing'])
 
 @section('content')
 <div class="row">
@@ -17,7 +17,7 @@
                 <div class="account-logo1">
                     <img src="{{url('/img/logo/rumah1.jpg')}}" alt="Image" />
                 </div>
-                <a href="{{ route('marketing.pricelist.index') }}" class="btn btn-primary">Booking</a>
+                {{-- <a href="{{ route('marketing.pricelist.index') }}" class="btn btn-primary">Booking</a> --}}
                 <a href="{{route('marketing.pricelist.show', $product->id)}}" class="btn btn-primary">Booking</a>
 
 
