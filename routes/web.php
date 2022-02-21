@@ -244,6 +244,7 @@ Route::middleware('auth')->group(function () {
             Route::resource('komisi', 'KomisiController');
 
             Route::get('payment', 'BayarController@index')->name('payment.index');
+            
         });
 
         // Route HRD
