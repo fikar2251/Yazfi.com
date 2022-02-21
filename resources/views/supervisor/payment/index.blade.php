@@ -134,16 +134,16 @@
                                         <td>{{ Carbon\Carbon::now()->format('d-m-Y') }}</td>
                                         <td>{{ $item->jumlah_tagihan }}</td>
                                         <td>
-                                            {{$loop->first}}
-                                            @if ($item->tipe == 1)
-                                            Booking fee
-                                            @elseif ($item->tipe == 2)
-                                            Downpayment
-                                            @else
-                                                Pembayaran cicilan tahap {{ $loop->iteration }}
 
+
+                                            @if ($item->tipe == 1)
+                                                Booking fee
+                                            @elseif ($item->tipe == 2)
+                                                Downpayment
+                                            @else
+
+                                            Pembayaran cicilan tahap {{($loop->iteration)- 2}}
                                             @endif
-                                            {{$loop->last}}
                                         </td>
                                         <td>
                                             @if ($item->status_pembayaran == 'unpaid')
