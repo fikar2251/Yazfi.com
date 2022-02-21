@@ -3,22 +3,18 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use JetBrains\PhpStorm\Pure;
 
 class TukarFaktur extends Model
 {
-    protected $guarded = ['id'];
-
     protected $guarded = ['id'];
 
     public function barang()
     {
         return $this->belongsTo(Barang::class, 'id');
     }
-
     public function supplier()
     {
-        return $this->belongsTo(Supplier::class);
+        return $this->belongsTo(Supplier::class, 'supplier_id');
     }
     public function project()
     {

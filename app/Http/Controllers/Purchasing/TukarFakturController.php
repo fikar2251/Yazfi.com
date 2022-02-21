@@ -9,6 +9,7 @@ use App\InOut;
 use App\Purchase;
 use App\Supplier;
 use App\Project;
+use App\TukarFaktur;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,9 +21,9 @@ class TukarFakturController extends Controller
         if (request('from') && request('to')) {
             $from = Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s');
             $to = Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s');
-            $purchases = Purchase::groupBy('invoice')->whereBetween('created_at', [$from, $to])->get();
+            $purchases = TukarFaktur::groupBy('no_faktur')->whereBetween('tanggal_tukar_faktur', [$from, $to])->get();
         } else {
-            $purchases = Purchase::groupBy('invoice')->get();
+            $purchases = TukarFaktur::groupBy('no_faktur')->get();
         }
 
 
@@ -31,12 +32,9 @@ class TukarFakturController extends Controller
 
     public function create()
     {
-        $purchase = new Purchase();
-        $suppliers = Supplier::get();
-        $project = Project::get();
-        $barangs = Barang::where('jenis', 'barang')->get();
+        $purchasing = DB::table('dokumen_tukar_faktur')->get();
 
-        return view('purchasing.tukarfaktur.create', compact('purchase', 'suppliers', 'barangs', 'project'));
+        return view('purchasing.tukarfaktur.create', compact('purchasing'));
     }
 
     public function store(Request $request)
@@ -93,12 +91,32 @@ class TukarFakturController extends Controller
 
         return redirect()->route('purchasing.tukarfaktur.index')->with('success', 'Purchase barang berhasil');
     }
-
-    public function show(Purchase $purchase)
+    public function search(Request $request)
     {
-        $purchase = Purchase::where('invoice', $purchase->invoice)->first();
+        $searchResult = [];
+        $tukar = Purchase::select("id", "invoice", "grand_total", "supplier_id")->where('status_barang', 'pending')->where('invoice', 'like', '%' . $request->q . '%')->get();
+        if (count($tukar) == 0) {
+            $searchResult[] = "No Items Found";
+        } else {
+            foreach ($tukar as $value) {
+                $searchResult[] = [
+                    'invoice' => $value->invoice,
+                    'supplier_id' => $value->supplier_id,
+                    'grand_total' => $value->grand_total,
+                ];
+            }
+        }
+        return $searchResult;
+    }
 
-        return view('purchasing.tukarfaktur.show', compact('purchase'));
+    public function show(TukarFaktur $tukar)
+    {
+        $purchasing = DB::table('dokumen_tukar_faktur')->get();
+        $tukar = DB::table('tukar_fakturs')
+            ->leftJoin('suppliers', 'tukar_fakturs.supplier_id', '=', 'suppliers.id')
+            ->select('suppliers.nama', 'tukar_fakturs.no_faktur', 'tukar_fakturs.nilai_invoice', 'tukar_fakturs.tanggal_tukar_faktur')
+            ->first();
+        return view('purchasing.tukarfaktur.show', compact('purchasing', 'tukar'));
     }
 
     public function edit(Purchase $purchase)
@@ -192,6 +210,7 @@ class TukarFakturController extends Controller
             $data[] = ['id' => $row->id,  'text' => $row->nama_barang];
         }
 
-        return redirect()->route('purchasing.tukarfaktur.index')->with('success', 'Purchase barang didelete');
+        return $data;
+        dd($data);
     }
 }

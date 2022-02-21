@@ -35,205 +35,147 @@
                                 <h2><span class="purchase-order">Purchase Order</span></h2>
                             </div>
                         </div> <br />
-                        <div class="row">
-                            <div class="col-sm-6 col-sg-4 m-b-4">
-                                <ul class="list-unstyled">
-                                    <li>
-                                        <div class="form-group">
+                        <div class="payment-details">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <p style="font-size: 12px">Supplier/ Vendor :
+                                        <a style="font-size: 12px">
+                                            {{ $purchase->supplier->nama }}
+                                        </a>
+                                    </p style="font-size: 12px">
+                                    <p style="font-size: 12px">Contact Person:
+                                        <a style="font-size: 12px">
+                                            {{ $purchase->admin->name }}
+                                        </a>
+                                    </p>
+                                    <p style="font-size: 12px">Location :
+                                        <a style="font-size: 12px">
+                                            {{ $purchase->supplier->nama }}
+                                        </a>
+                                    </p>
+                                    <p style="font-size: 12px">Delevery On Site :
+                                        <a style="font-size: 12px">
+                                            {{ $purchase->project->nama_project }}
+                                            <p style="text-indent: 100px; margin-top:-10px;text-size: 12px;">{{ $purchase->lokasi }}</p>
 
-                                            <td width="150px">Supplier/ Vendor</td>
-                                            <td> : </td>
-                                            <td>{{ $purchase->supplier->nama }}</td>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-sm-6 col-sg-4 m-b-4">
-                                <ul class="list-unstyled">
-                                    <li>
-                                        <div class="form-group">
-
-                                            <td width="150px">DATE</td>
-                                            <td> : </td>
-                                            <td>{{ Carbon\Carbon::parse($purchase->created_at)->format('d/m/Y H:i:s') }}</td>
-
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-sm-6 col-sg-4 m-b-4">
-                                <ul class="list-unstyled">
-                                    <li>
-                                        <div class="form-group">
-                                            <tr>
-                                                <td width="150px">Contact Person</td>
-                                                <td> : </td>
-                                                <td>{{ $purchase->admin->name }}</td>
-                                            </tr>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-sm-6 col-sg-4 m-b-4">
-                                <ul class="list-unstyled">
-                                    <li>
-                                        <div class="form-group">
-
-                                            <tr>
-                                                <td width="150px">PO Number</td>
-                                                <td> : </td>
-                                                <td><b>{{ $purchase->invoice }}</b></td>
-                                            </tr>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-sm-6 col-sg-4 m-b-4">
-                                <ul class="list-unstyled">
-                                    <li>
-                                        <div class="form-group">
-                                            <tr>
-                                                <td width="150px">Location</td>
-                                                <td> : </td>
-                                                <td>{{ $purchase->supplier->nama }}</td>
-                                            </tr>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-sm-6 col-sg-4 m-b-4">
-                                <ul class="list-unstyled">
-                                    <li>
-                                        <div class="form-group">
-                                            <tr>
-                                                <td width="150px">Project</td>
-                                                <td> : </td>
-                                                <td>{{ $purchase->project->nama_project }}</td>
-                                            </tr>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-sm-6 col-sg-4 m-b-4">
-                                <ul class="list-unstyled">
-                                    <li>
-                                        <div class="form-group">
-                                            <tr>
-                                                <td width="150px">Delevery On Site</td>
-                                                <td> : </td>
-                                                <td>{{ $purchase->project->nama_project }}</td>
-                                                <br>
-                                                <td>
-                                                    <p style="text-indent: 115px;">{{ $purchase->lokasi }}</p>
-                                                </td>
-                                            </tr>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-sm-6 col-sg-4 m-b-4">
-                                <ul class="list-unstyled">
-                                    <li>
-                                        <div class="form-group">
-                                            <tr>
-                                                <td width="150px">Project Code</td>
-                                                <td> : </td>
-                                                <td>{{ $purchase->project->project_code }}</td>
-                                            </tr>
-                                        </div>
-                                    </li>
-                                </ul>
+                                        </a>
+                                    </p>
+                                </div>
+                                <div class="col-sm-6 tex-right">
+                                    <div class="form-group">
+                                        <p style="font-size: 12px">Date :
+                                            <a style="font-size: 12px">
+                                                {{ Carbon\Carbon::parse($purchase->created_at)->format('d/m/Y H:i:s') }}
+                                            </a>
+                                        </p>
+                                        <p style="font-size: 12px">PO Number :
+                                            <a style="font-size: 12px">
+                                                {{ $purchase->invoice }}
+                                            </a>
+                                        </p>
+                                        <p style="font-size: 12px">Project :
+                                            <a style="font-size: 12px">
+                                                {{ $purchase->project->nama_project }}
+                                            </a>
+                                        </p>
+                                        <p style="font-size: 12px">Project Code :
+                                            <a style="font-size: 12px">
+                                                {{ $purchase->project->project_code }}
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="table-responsive">
-                                <table class="table table-bordered  report">
-                                    <tr class="bg-success">
-                                        <th class="text-light">Acc.</th>
-                                        <th class="text-light">No.</th>
-                                        <th class="text-light">Description</th>
-                                        <th class="text-light">Qty</th>
-                                        <th class="text-light">Unit</th>
-                                        <th class="text-light">Unit price</th>
-                                        <th class="text-light">Total Price</th>
-                                    </tr>
-                                    <tbody>
-                                        @php
-                                        $total = 0
-                                        @endphp
-                                        @foreach(App\Purchase::where('invoice', $purchase->invoice)->get() as $barang)
-                                        <tr>
-                                            <td class="dynamic-hidden-col">
-                                            </td>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $barang->barang->nama_barang }}</td>
-                                            <td>{{ $barang->qty }}</td>
-                                            <td>{{ $barang->unit }}</td>
-                                            <td>@currency($barang->harga_beli)</td>
-                                            <td>@currency($barang->total)</td>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered  report">
+                                        <tr style="font-size:12px;" class="bg-success">
+                                            <th class="text-light">Acc.</th>
+                                            <th class="text-light">No.</th>
+                                            <th class="text-light">Description</th>
+                                            <th class="text-light">Qty</th>
+                                            <th class="text-light">Unit</th>
+                                            <th class="text-light">Unit price</th>
+                                            <th class="text-light">Total Price</th>
+                                        </tr>
+                                        <tbody>
+                                            @php
+                                            $total = 0
+                                            @endphp
+                                            @foreach(App\Purchase::where('invoice', $purchase->invoice)->get() as $barang)
+                                            <tr style="font-size:12px;">
+                                                <td class=" dynamic-hidden-col">
+                                                </td>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $barang->barang->nama_barang }}</td>
+                                                <td>{{ $barang->qty }}</td>
+                                                <td>{{ $barang->unit }}</td>
+                                                <td>@currency($barang->harga_beli)</td>
+                                                <td>@currency($barang->total)</td>
 
-                                        </tr>
-                                        @php
-                                        $total += $barang->total
-                                        @endphp
-                                        @endforeach
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td></td>
-                                            <td colspan="4"></td>
-                                            <td>SUB TOTAL </td>
-                                            <td><b>@currency($total)</b></td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td colspan="4"></td>
-                                            <td>PPN 10% </td>
-                                            <td><b>@currency($purchase->PPN)</b></td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td colspan="4"></td>
-                                            <td><strong>TOTAL<strong> </td>
-                                            <td><b>@currency($total + $purchase->PPN)</b></td>
-                                        </tr>
-                                        <tr>
-                                            <td rowspan="20"></td>
-                                            <td colspan="4" rowspan="20">
-                                                <p class="text-left">Note :</p>
-                                            </td>
-                                            <td>
-                                                <p style="margin-top:20px;" class="text-center">PURCHASING</p>
-                                            </td>
-                                            <td>
-                                                <p class="text-center">MANAGER <br> PROCUREMENT </p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td rowspan="2">
-                                                <p style="margin-top: 40px;" class="text-center m-b-2">(.......................................)</p>
-                                            </td>
-                                            <td rowspan="2">
-                                                <p style="margin-top: 40px;" class="text-center m-b-2">(.......................................)</p>
-                                            </td>
-                                        </tr>
-                                        <tr>
+                                            </tr>
+                                            @php
+                                            $total += $barang->total
+                                            @endphp
+                                            @endforeach
+                                        </tbody>
+                                        <tfoot>
+                                            <tr style="font-size:12px;">
+                                                <td></td>
+                                                <td colspan="4"></td>
+                                                <td>SUB TOTAL </td>
+                                                <td><b>@currency($total)</b></td>
+                                            </tr>
+                                            <tr style="font-size:12px;">
+                                                <td></td>
+                                                <td colspan="4"></td>
+                                                <td>PPN 10% </td>
+                                                <td><b>@currency($purchase->PPN)</b></td>
+                                            </tr>
+                                            <tr style="font-size:12px;">
+                                                <td></td>
+                                                <td colspan="4"></td>
+                                                <td><strong>TOTAL<strong> </td>
+                                                <td><b>@currency($total + $purchase->PPN)</b></td>
+                                            </tr>
+                                            <tr style="font-size:12px;">
+                                                <td rowspan="20"></td>
+                                                <td colspan="4" rowspan="20">
+                                                    <p class="text-left">Note :</p>
+                                                </td>
+                                                <td>
+                                                    <p style="margin-top:20px;" class="text-center">PURCHASING</p>
+                                                </td>
+                                                <td>
+                                                    <p class="text-center">MANAGER <br> PROCUREMENT </p>
+                                                </td>
+                                            </tr>
+                                            <tr style="font-size:12px;">
+                                                <td rowspan="2">
+                                                    <p style="margin-top: 40px;" class="text-center m-b-2">(............................)</p>
+                                                </td>
+                                                <td rowspan="2">
+                                                    <p style="margin-top: 40px;" class="text-center m-b-2">(............................)</p>
+                                                </td>
+                                            </tr>
+                                            <tr style="font-size:12px;">
 
-                                        </tr>
-                                        <tr>
-                                            <td colspan="4">
-                                                <p class="text-center">DIRECTURE</p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="4">
-                                                <p style="margin-top: 40px;" class="text-center m-b-2">(.......................................)</p>
-                                            </td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
+                                            </tr>
+                                            <tr style="font-size:12px;">
+                                                <td colspan="4">
+                                                    <p class="text-center">DIRECTURE</p>
+                                                </td>
+                                            </tr>
+                                            <tr style="font-size:12px;">
+                                                <td colspan="4">
+                                                    <p style="margin-top: 40px;" class="text-center m-b-2">(............................)</p>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -267,6 +267,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/where/project', 'PurchaseController@whereProject');
             Route::resource('purchase', 'PurchaseController');
             Route::resource('pengajuan', 'PengajuanController');
+            Route::get('pengajuan/pdf/{id}', 'PengajuanController@pdf')->name('pengajuan.pdf');
             Route::resource('product', 'ProductController');
             Route::resource('supplier', 'SupplierController');
             Route::resource('permissions', 'PermissionController');
@@ -284,6 +285,7 @@ Route::middleware('auth')->group(function () {
             //Route Roles
             Route::get('/where/product', 'TukarFakturController@WhereProduct');
             Route::get('/where/project', 'TukarFakturController@whereProject');
+            Route::get('/where/search', 'TukarFakturController@search');
             Route::resource('tukarfaktur', 'TukarFakturController');
             Route::resource('reinburst', 'ReinburstController');
             Route::resource('listpurchase', 'ListPurchsaController');

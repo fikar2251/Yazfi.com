@@ -1,15 +1,8 @@
-@extends('layouts.master', ['title' => 'Create Purchase'])
+@extends('layouts.master', ['title' => 'Create Tukar Faktur'])
 @section('content')
 <div class="row">
     <div class="col-sm-5 col-4">
-        <h4 class="page-title">Purchase</h4>
-    </div>
-    <div class="col-sm-7 col-8 text-right m-b-30">
-        <div class="btn-group btn-group-sm">
-            <button class="btn btn-white">CSV</button>
-            <button class="btn btn-white">PDF</button>
-            <button class="btn btn-white"><i class="fa fa-print fa-lg"></i> Print</button>
-        </div>
+        <h4 class="page-title">Tukar Faktur</h4>
     </div>
 </div>
 
@@ -31,7 +24,6 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-6 col-sg-4 m-b-4">
-
                         <h5>Invoice to:</h5>
                         <ul class="list-unstyled">
                             <li>
@@ -42,20 +34,15 @@
                     </div>
                 </div>
 
-                <form action="{{ route('logistik.purchase.store') }}" method="post">
+                <form action="{{ route('purchasing.tukarfaktur.store') }}" method="post">
                     @csrf
                     <div class="row">
                         <div class="col-sm-6 col-sg-4 m-b-4">
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <label for="supplier">Supplier <span style="color: red">*</span></label>
-                                        <select name="supplier_id" id="supplier" class="form-control select2">
-                                            <option disabled selected>-- Select Supplier --</option>
-                                            @foreach($suppliers as $supplier)
-                                            <option value="{{ $supplier->id }}">{{ $supplier->nama }}</option>
-                                            @endforeach
-                                        </select>
+                                        <label for="no_faktur">No PO <span style="color: red">*</span></label>
+                                        <input class="form-control dynamic_function" data-dependent="supplier_id" type="search" maxlength="8" minlength="8" id="no_po">
                                     </div>
                                 </li>
                             </ul>
@@ -64,13 +51,8 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <label for="cabang">Project <span style="color: red">*</span></label>
-                                        <select name="project_id" id="nama_project" class="form-control input-lg dynamic" data-dependent="alamat_project" required="">
-                                            <option disabled selected>-- Select Project --</option>
-                                            @foreach($project as $projects)
-                                            <option value="{{ $projects->id }}">{{ $projects->nama_project }}</option>
-                                            @endforeach
-                                        </select>
+                                        <label for="no_faktur">Tanggal Faktur <span style="color: red">*</span></label>
+                                        <input type="datetime-local" name="tanggal_tukar_faktur" id="tanggal" class="form-control">
                                     </div>
                                 </li>
                             </ul>
@@ -79,35 +61,105 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <label for="invoice">Lokasi <span style="color: red">*</span></label>
-                                        <input type="text" name="lokasi" value="" id="lokasi" class="form-control">
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-6 col-sg-4 m-b-4">
-                            <ul class="list-unstyled">
-                                <li>
-                                    <div class="form-group">
-                                        <label for="tanggal">Tanggal <span style="color: red">*</span></label>
-                                        <input type="datetime-local" name="tanggal" id="tanggal" class="form-control">
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-6 col-sg-4 m-b-4">
-                            <ul class="list-unstyled">
-                                <li>
-                                    <div class="form-group">
-                                        <label for="invoice">No Invoice <span style="color: red">*</span></label>
-                                        <input type="text" name="invoice" value="" id="invoice" class="form-control">
+                                        <label for="no_faktur">No Tukar Faktur <span style="color: red">*</span></label>
+                                        <input type="text" name="no_faktur" value="" id="invoice" class="form-control">
                                     </div>
                                 </li>
                             </ul>
                         </div>
                     </div>
-
-                    <button type="button" id="add" class="btn btn-primary mb-2">Tambah Row Baru</button>
+                    <div class="row">
+                        <div class="col-sm-6 col-sg-4 m-b-4">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="form-group">
+                                        <label for="no_po">Jika No PO Ditemukan Muncul Halaman Dibawah Ini <span style="color: red">*</span></label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="no_faktur">Nama Vendor <span style="color: red">*</span></label>
+                                        <input type="text" name="supplier_id" value="" id="supplier_id" class="form-control">
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 col-sg-4 m-b-4">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="form-group">
+                                        <label for="no_po"> <span style="color: red">*</span></label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="no_faktur">No Faktur <span style="color: red">*</span></label>
+                                        <input type="text" name="no_faktur" value="" id="invoice" class="form-control">
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 col-sg-4 m-b-4">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="form-group">
+                                        <label for="no_faktur">Nilai Invoice <span style="color: red">*</span></label>
+                                        <input type="text" name="nilai_invoice" value="" id="grandtotal" class="form-control">
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 col-sg-4 m-b-4">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="form-group">
+                                        <label for="tanggal">Tanggal Tukar Faktur <span style="color: red">*</span></label>
+                                        <input type="datetime-local" name="tanggal_tukar_faktur" id="tanggal" class="form-control">
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 col-sg-4 m-b-4">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="form-group">
+                                        <label for="invoice">PO Number <span style="color: red">*</span></label>
+                                        <input type="text" name="no_po_vendor" value="" id="invoice" class="form-control">
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <label for="invoice"><strong> Checkbox Pilih Salah Satu</strong> <span style="color: red">*</span></label>
+                                <table class="table table-bordered  report">
+                                    <tr style="font-size:12px;" class="bg-success">
+                                        <th class=" text-light">No.</th>
+                                        <th class="text-light">Kelengkapan Dokumen</th>
+                                        <th class="text-light">Ada</th>
+                                        <th class="text-light">Tidak Ada</th>
+                                        <th class="text-light"> Catatan</th>
+                                    </tr>
+                                    <tbody>
+                                        @foreach($purchasing as $barang)
+                                        <tr style="font-size:12px;">
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $barang->nama_dokumen }}</td>
+                                            <td>
+                                                <input name="pilihan" type="checkbox" id="pilihanYa" value="Y" data-binding-checked="">
+                                            </td>
+                                            <td>
+                                                <input name="pilihan" type="checkbox" id="pilihanTidak" value="T" data-binding-checked="">
+                                            </td>
+                                            <td>
+                                                <input type=" text" name="keterangan" class="form-control" placeholder="Keterangan">
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <button type="button" id="add" class="btn btn-primary mb-2">Tambah Row Baru</button>
 
                     <div class="row">
                         <div class="col-md-12">
@@ -147,13 +199,13 @@
                         </div>
                         <div class="col-sm-1 offset-sm-8">
                             <button type="submit" class="btn btn-primary" id="submit">Submit</button>
-                        </div>
-                    </div>
-                    <br>
-                </form>
+                        </div> -->
             </div>
+            <br>
+            </form>
         </div>
     </div>
+</div>
 </div>
 
 </html>
@@ -272,33 +324,31 @@
             form_dinamic()
         })
     })
-
     $(document).ready(function() {
-        $('.dynamic').change(function() {
-
-            var id = $(this).val();
+        $('.dynamic_function').change(function() {
+            var invoice = $(this).val();
+            var supplier_id = $(this).val();
             var div = $(this).parent();
             var op = " ";
+            console.log(invoice);
             $.ajax({
-                url: `/logistik/where/project`,
+                url: `/purchasing/where/search`,
                 method: "get",
-                data: {
-                    'id': id
-
-
+                searchResult: {
+                    'invoice': invoice,
+                    'supplier_id': supplier_id,
                 },
-
-                success: function(data) {
-                    console.log(data);
-                    op += '<option value="0" selected disabled> Lokasi</option>';
+                success: function(searchResult) {
+                    console.log(searchResult);
+                    op += '<input value="0" disabled>';
                     for (var i = 0; i < data.length; i++) {
-                        op += '<option value="' + data[i].alamat_project + '">' + data[i].alamat_project + '</option>'
-                    };
-                    $('.root3').html(op);
-                },
-                error: function() {
+                        var supplier_id = searchResult[i].supplier_id;
+                        console.log(supplier_id);
+                        document.getElementById('supplier_id').value = supplier_id;
 
-                }
+                    };
+                },
+                error: function() {}
             })
         })
     })

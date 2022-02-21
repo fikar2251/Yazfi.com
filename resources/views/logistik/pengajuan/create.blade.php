@@ -42,7 +42,7 @@
                     </div>
                 </div>
 
-                <form action="{{ route('logistik.pengajuan.store') }}" method="post">
+                <form action="{{ route('logistik.pengajuan.store') }}" method="post" class="needs-validation" novalidate="" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="col-sm-6 col-sg-4 m-b-4">
@@ -50,8 +50,11 @@
                                 <li>
                                     <div class="form-group">
                                         <label for="nomor_pengajuan">PD Number <span style="color: red">*</span></label>
-                                        <input type="text" name="nomor_pengajuan" value="{{$nourut}}" id="nomor_pengajuan" class="form-control" readonly>
+                                        <input required="" type="text" name="nomor_pengajuan" value="{{$nourut}}" id="nomor_pengajuan" class="form-control" readonly>
                                     </div>
+                                    @error('name')
+                                    <small class="text-danger">{{ $message }}</small>
+                                    @enderror
                                 </li>
                             </ul>
                         </div>
@@ -60,7 +63,10 @@
                                 <li>
                                     <div class="form-group">
                                         <label for="nama">Nama <span style="color: red">*</span></label>
-                                        <input type="text" value="{{auth()->user()->name}}" readonly class="form-control">
+                                        <input required="" type="text" value="{{auth()->user()->name}}" readonly class="form-control">
+                                        @error('nama')
+                                        <small class="text-danger">{{ $message }}</small>
+                                        @enderror
                                     </div>
                                 </li>
                             </ul>
@@ -70,11 +76,14 @@
                                 <li>
                                     <div class="form-group">
                                         <label for="perusahaan">Perusahaan <span style="color: red">*</span></label>
-                                        <select name="id_perusahaan" id="id_perusahaan" class="form-control select2" required="">
+                                        <select required name="id_perusahaan" id="id_perusahaan" class="form-control select2" required="">
                                             <option disabled selected>-- Select Perusahaan --</option>
                                             @foreach($perusahaans as $perusahaan)
                                             <option value="{{ $perusahaan->id }}">{{ $perusahaan->nama_perusahaan }}</option>
                                             @endforeach
+                                            @error('perusahaan')
+                                            <small class="text-danger">{{ $message }}</small>
+                                            @enderror
                                         </select>
                                     </div>
                                 </li>
@@ -86,6 +95,9 @@
                                     <div class="form-group">
                                         <label for="tanggal">Tanggal <span style="color: red">*</span></label>
                                         <input type="datetime-local" name="tanggal_pengajuan" id="tanggal_pengajuan" class="form-control">
+                                        @error('tanggal')
+                                        <small class="text-danger">{{ $message }}</small>
+                                        @enderror
                                     </div>
                                 </li>
                             </ul>
@@ -95,12 +107,16 @@
                                 <li>
                                     <div class="form-group">
                                         <label for="lampiran">Lampiran <span style="color: red">*</span></label>
-                                        <input type="file" name="file" id="file" class="form-control">
+                                        <input type="file" name="file[]" multiple="true" class="form-control">
                                         <label for=" lampiran">only pdf and doc</label>
+                                        @error('lampiran')
+                                        <small class="text-danger">{{ $message }}</small>
+                                        @enderror
                                     </div>
                                 </li>
                             </ul>
                         </div>
+
                     </div>
 
                     <button type="button" id="add" class="btn btn-primary mb-2">Tambah Row Baru</button>
@@ -113,6 +129,7 @@
                                         <th class="text-light">Deskripsi</th>
                                         <th class="text-light">Harga Satuan</th>
                                         <th class="text-light">Qty</th>
+                                        <th class="text-light">Unit</th>
                                         <th class="text-light">Total</th>
                                         <th class="text-light">Keterangan</th>
                                         <th class="text-light">#</th>
@@ -131,17 +148,16 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Total</label>
-                                        <input type="text" id="sub_total" readonly class="form-control">
+                                        <input type="text" id="sub_total" name="total" readonly class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <button type="button" onclick="showhide()">Include PPN</button>
+                                        <button type="button" onclick="HowAboutIt()">Include PPN</button>
                                     </div>
                                     <div class="form-group">
                                         <div id="newpost">
-                                            <label>PPN 10%</label>
-                                            <input type="text" id="PPN" name="PPN" value="0" readonly class="form-control">
+                                            <input type="type" readonly id="PPN" name="PPN" readonly class="form-control">
                                         </div>
                                     </div>
 
@@ -168,16 +184,6 @@
 </html>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script>
-    function showhide() {
-        var div = document.getElementById("newpost");
-        var ppn2 = document.getElementById("PPN");
-        console.log(ppn2);
-        if (div.style.display !== "none") {
-            div.style.display = "none";
-        } else {
-            div.style.display = "block";
-        }
-    }
     var formatter = function(num) {
         var str = num.toString().replace("", ""),
             parts = false,
@@ -211,13 +217,16 @@
                         <input type="hidden" name="barang_id[${index}]" class="barang_id-${index}">
                     </td>
                     <td>
-                        <select required name="barang_id[${index}]" id="${index}" class="form-control select-${index}"></select>
+                        <input  type="text" name="barang_id[${index}]" barang_id="${index}" placeholder="Tulis Produk">
                     </td>
                     <td>
-                        <input type="text" id="rupiah" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), HowAboutIt(this)">
+                        <input type="text" id="rupiah" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), TotalAbout(this)">
                     </td>
                     <td>
                         <input type="number" name="qty[${index}]"  class="form-control qty-${index}" placeholder="0">
+                    </td>
+                    <td>
+                        <input type="text" name="unit[${index}]"  class="form-control unit-${index}" placeholder="Unit">
                     </td>
                     <td>
                         <input type="number" name="total[${index}]" disabled class="form-control total-${index} total-form"  placeholder="0">
@@ -259,6 +268,19 @@
         let qty = $(`.qty-${attr}`).val()
         let total = parseInt(harga * qty)
         $(`.total-${attr}`).val(total)
+
+    }
+
+    function TotalAbout(e) {
+        let sub_total = document.getElementById('sub_total')
+        let total = 0;
+        let coll = document.querySelectorAll('.total-form')
+        for (let i = 0; i < coll.length; i++) {
+            let ele = coll[i]
+            total += parseInt(ele.value)
+        }
+        sub_total.value = total
+        document.getElementById('grandtotal').value = total;
     }
 
     function HowAboutIt(e) {
@@ -272,10 +294,22 @@
         sub_total.value = total
         let tax = (10 / 100) * sub_total.value;
         let total_all = parseInt(tax);
-        // rupiah()
-        document.getElementById('PPN').value = total_all;
-        let grandtotal = parseInt(total) + parseInt(total_all);
-        document.getElementById('grandtotal').value = grandtotal;
+        var div = document.getElementById("newpost");
+
+        if (div.style.display !== "none") {
+            div.style.display = "none";
+            document.getElementById('PPN').value = total_all;
+            let PPN = total_all;
+            console.log(PPN);
+            let SUB = total;
+            console.log(SUB);
+            let grand_total = parseInt(SUB) + parseInt(PPN);
+            document.getElementById('grandtotal').value = grand_total;
+            console.log(grand_total);
+
+        } else {
+            div.style.display = "block";
+        }
     }
     $(document).ready(function() {
         $('#add').on('click', function() {
@@ -284,7 +318,6 @@
     })
     $(document).ready(function() {
         $('.dynamic').change(function() {
-
             var id = $(this).val();
             var div = $(this).parent();
             var op = " ";
@@ -295,8 +328,6 @@
                 method: "get",
                 data: {
                     'id': id
-
-
                 },
                 success: function(data) {
                     console.log(data);
@@ -306,35 +337,9 @@
                         document.getElementById('lokasi').value = alamat;
                     };
                 },
-                error: function() {
-
-                }
+                error: function() {}
             })
         })
     })
-    var rupiah = document.getElementById('rupiah');
-    rupiah.addEventListener('keyup', function(e) {
-        // tambahkan 'Rp.' pada saat form di ketik
-        // gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
-        rupiah.value = formatRupiah(this.value, 'Rp. ');
-    });
-
-    /* Fungsi formatRupiah */
-    function formatRupiah(angka, prefix) {
-        var number_string = angka.replace(/[^,\d]/g, '').toString(),
-            split = number_string.split(','),
-            sisa = split[0].length % 3,
-            rupiah = split[0].substr(0, sisa),
-            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
-
-        // tambahkan titik jika yang di input sudah menjadi angka ribuan
-        if (ribuan) {
-            separator = sisa ? '.' : '';
-            rupiah += separator + ribuan.join('.');
-        }
-
-        rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-        return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
-    }
 </script>
 @stop

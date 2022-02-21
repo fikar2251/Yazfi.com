@@ -12,4 +12,8 @@ class Supplier extends Model
     {
         return $this->hasMany(Purchase::class);
     }
+    public function tukarfaktur()
+    {
+        return $this->hasMany(TukarFaktur::class, 'supplier_id');
+    }
 }

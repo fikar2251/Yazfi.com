@@ -7,12 +7,12 @@
     </div>
 
     <div class="col-sm-8 text-right m-b-20">
-        <a href="{{ route('logistik.purchase.create') }}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Purchase</a>
+        <a href="{{ route('purchasing.tukarfaktur.create') }}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Purchase</a>
     </div>
 </div>
 <x-alert></x-alert>
 
-<form action="{{ route('logistik.purchase.index') }}" method="get">
+<form action="{{ route('purchasing.tukarfaktur.index') }}" method="get">
     <div class="row filter-row">
         <div class="col-sm-6 col-md-3">
             <div class="form-group form-focus">
@@ -57,17 +57,17 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>
-                            <a href="{{ route('logistik.purchase.show', $purchase->id) }}">{{ $purchase->invoice }}</a>
+                            <a href="{{ route('purchasing.tukarfaktur.show', $purchase->id) }}">{{$purchase->no_faktur }}</a>
                         </td>
-                        <td>{{ $purchase->admin->name }}</td>
-                        <td>{{ Carbon\Carbon::parse($purchase->created_at)->format("d/m/Y H:i:s") }}</td>
-                        <td>@currency(\App\Purchase::where('invoice', $purchase->invoice)->sum('total'))</td>
-                        <td>{{ $purchase->status_barang }}</td>
+                        <td>{{ Carbon\Carbon::parse($purchase->tanggal_tukar_faktur)->format("d/m/Y H:i:s") }}</td>
+                        <td>{{ $purchase->no_po_vendor }}</td>
+                        <td>{{ $purchase->nilai_invoice }}</td>
+                        <td>{{ $purchase->supplier->nama }}</td>
                         <td>
 
                             <!-- <a href="{{ route('logistik.purchase.edit', $purchase->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a> -->
 
-                            <form action="{{ route('logistik.purchase.destroy', $purchase->id) }}" method="post" style="display: inline;" class="delete-form">
+                            <form action="{{ route('purchasing.tukarfaktur.destroy', $purchase->id) }}" method="post" style="display: inline;" class="delete-form">
                                 @method('DELETE')
                                 @csrf
                                 <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
