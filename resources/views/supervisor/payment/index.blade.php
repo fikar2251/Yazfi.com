@@ -89,9 +89,19 @@
         <td>
             <select name="tujuan" id="tujuan" class="form-control" style="width: 200px">
                 <option selected value="">-- Tujuan --</option>
-                <option value="DP">DP</option>
-                <option value="Booking Fee">Booking Fee</option>
-                <option value="Cicilan">Cicilan</option>
+                @foreach ($tagihan as $item)
+                    <option value="{{$item->tipe}}}">
+                        @if ($item->tipe == 1)
+                            Booking fee
+                        @elseif ($item->tipe == 2)
+                            Downpayment
+                        @else
+                        Cicilan tahap {{($loop->iteration) - 2}}
+                        @endif
+                    </option>
+                @endforeach
+                {{-- <option value="Booking Fee">Booking Fee</option>
+                <option value="Cicilan">Cicilan</option> --}}
             </select>
         </td>
     </tr>
@@ -142,7 +152,7 @@
                                                 Downpayment
                                             @else
 
-                                            Pembayaran cicilan tahap {{($loop->iteration)- 2}}
+                                                Pembayaran cicilan tahap {{ $loop->iteration - 2 }}
                                             @endif
                                         </td>
                                         <td>

@@ -23,6 +23,14 @@
         <div class="row">
             <div class=" col text-center">
                 <h4 style="font-size: 30px; font-weight: 500;" class="page-title mb-3">SURAT PEMESANAN RUMAH</h4>
+                {{-- <div class="form-group">
+                    <input type="number" name="id_spr" id="id_spr" class="form-control" value="{{ $id }}"
+                        readonly hidden>
+
+                    @error('phone_number')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div> --}}
                 <div class="text-center">
                     <div class="form-group row d-flex justify-content-center">
                         <label for="no_transaksi" class="col-sm-1">No <span>:</span></label>
@@ -61,7 +69,8 @@
                 </div>
                 <div class="form-group">
                     <label for="phone_number">No KTP</label>
-                    <input type="number" name="no_ktp" id="no_ktp" class="form-control">
+                    <input type="number" name="no_ktp" id="no_ktp" class="form-control" maxlength="16"
+                        oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
 
                     @error('phone_number')
                         <small class="text-danger">{{ $message }}</small>
@@ -69,7 +78,8 @@
                 </div>
                 <div class="form-group">
                     <label for="phone_number">NPWP</label>
-                    <input type="number" name="npwp" id="npwp" class="form-control">
+                    <input type="number" name="npwp" id="npwp" class="form-control" maxlength="20"
+                        oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
 
                     @error('phone_number')
                         <small class="text-danger">{{ $message }}</small>
@@ -88,7 +98,8 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="phone_number">No. Telp</label>
-                    <input type="number" name="no_tlp" id="no_tlp" class="form-control">
+                    <input type="number" name="no_tlp" id="no_tlp" class="form-control" maxlength="11"
+                        oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
 
                     @error('phone_number')
                         <small class="text-danger">{{ $message }}</small>
@@ -96,7 +107,8 @@
                 </div>
                 <div class="form-group">
                     <label for="phone_number">No. HP</label>
-                    <input type="number" name="no_hp" id="no_hp" class="form-control">
+                    <input type="number" name="no_hp" id="no_hp" class="form-control" maxlength="13"
+                        oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
 
                     @error('phone_number')
                         <small class="text-danger">{{ $message }}</small>
@@ -187,7 +199,8 @@
                 </div>
                 <div class="form-group">
                     <label for="phone_number">Penambahan Luas Tanah</label>
-                    <input type="number" name="plt" id="plt" class="form-control">
+                    <input type="number" name="plt" id="plt" class="form-control" maxlength="3"
+                        oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
 
                     @error('phone_number')
                         <small class="text-danger">{{ $message }}</small>
@@ -212,7 +225,8 @@
                 </div>
                 <div class="form-group">
                     <label for="phone_number">Potongan</label>
-                    <input type="number" name="potongan" id="potongan" class="form-control">
+                    <input type="number" name="potongan" id="potongan" class="form-control" maxlength="9"
+                        oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
 
                     @error('phone_number')
                         <small class="text-danger">{{ $message }}</small>
@@ -231,7 +245,8 @@
                 </div>
                 <div class="form-group">
                     <label for="name">Booking Fee</label>
-                    <input type="number" name="booking_fee" id="booking_fee" class="form-control">
+                    <input type="number" name="booking_fee" id="booking_fee" class="form-control" maxlength="7"
+                        oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
 
                     @error('name')
                         <small class="text-danger">{{ $message }}</small>
@@ -239,7 +254,8 @@
                 </div>
                 <div class="form-group">
                     <label for="name">Downpayment</label>
-                    <input type="number" name="downpayment" id="downpayment" class="form-control">
+                    <input type="number" name="downpayment" id="downpayment" class="form-control" maxlength="7"
+                        oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
 
                     @error('name')
                         <small class="text-danger">{{ $message }}</small>

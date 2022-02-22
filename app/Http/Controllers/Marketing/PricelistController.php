@@ -26,25 +26,65 @@ class PricelistController extends Controller
             ->get();
 
         $spr = Spr::all();
-        return view('marketing.pricelist.index', compact('blok'));
+
+        // foreach ($spr as $sp) {
+        //     $sp->no_transaksi;
+        // }
+
+        // $tipe1 = [
+        //     'tipe' => 1,
+        //     'no_transaksi' => $sp->no_transaksi,
+
+        // ];
+        // $bf = Tagihan::select('tipe', 'no_transaksi', 'status_pembayaran')
+        //     ->where($tipe1)
+        //     ->get();
+
+        // $tipe2 = [
+        //     'tipe' => 2,
+        //     'no_transaksi' => $sp->no_transaksi,
+
+        // ];
+        // $dp = Tagihan::select('tipe', 'no_transaksi', 'status_pembayaran')
+        //     ->where($tipe2)
+        //     ->get();
+
+        // foreach ($spr as $sp) {
+        //     $sp->tagihan->no_transaksi;
+        // }
+
+        // dd($dp);
+
+        // $tagihan = Tagihan::with('spr')->paginate(100);
+        return view('marketing.pricelist.index', compact('blok', 'spr'));
     }
 
     public function blok(Request $request)
     {
+        $blok = [
+            'type' => $request->type,
+            'status_penjualan' => 'Available',
+        ];
+
         $data = DB::table('unit_rumah')
-            ->select('unit_rumah.type', 'unit_rumah.blok', 'unit_rumah.no', 'unit_rumah.lt')
+            ->select('unit_rumah.type', 'unit_rumah.blok', 'unit_rumah.no', 'unit_rumah.lt', 'unit_rumah.status_penjualan')
             ->groupBy('unit_rumah.blok')
-            ->where('unit_rumah.type', $request->type)->get();
+            ->where($blok)->get();
 
         return $data;
     }
 
     public function no(Request $request)
     {
+        $no = [
+            'blok' => $request->blok,
+            'status_penjualan' => 'Available',
+        ];
+
         $data = DB::table('unit_rumah')
-            ->select('unit_rumah.id_unit_rumah', 'unit_rumah.type', 'unit_rumah.blok', 'unit_rumah.no', 'unit_rumah.lt')
+            ->select('unit_rumah.id_unit_rumah', 'unit_rumah.type', 'unit_rumah.blok', 'unit_rumah.no', 'unit_rumah.lt', 'unit_rumah.status_penjualan')
             ->groupBy('unit_rumah.no')
-            ->where('unit_rumah.blok', $request->blok)->get();
+            ->where($no)->get();
 
         return $data;
     }
@@ -101,49 +141,12 @@ class PricelistController extends Controller
     public function store(Request $request)
     {
 
-        // $project = Project::find($project->id);
-        //     $projectId = Project::where('id', $id)->pluck('id');
-        //    dd($projectId);
-
-        // foreach ($projectId as $key => $id) {
-        //     // $attr[] =
-        //     $id[] = $projectId[$key];
-        // }
-
-        // Spr::create([
-        //     'no_transaksi' => $request->no_transaksi,
-        //     'id_sales' => auth()->user()->id,
-        //     'id_project' => '1',
-        //     'id_unit' => $request->type,
-        //     'id_perusahaan' => '1',
-        //     'tanggal_transaksi' => $request->tanggal_transaksi,
-        //     'skema' => $request->skema,
-        //     'nama' => $request->nama,
-        //     'alamat' => $request->alamat,
-        //     'no_ktp' => $request->no_ktp,
-        //     'npwp' => $request->npwp,
-        //     'no_tlp' => $request->no_tlp,
-        //     'no_hp' => $request->no_hp,
-        //     'email' => $request->email,
-        //     'pekerjaan' => $request->pekerjaan,
-        //     'status_booking' => 'unpaid',
-        //     'status_approval' => 'pending',
-        //     'status_dp' => 'unpaid',
-        //     'harga_jual' => $request->harga_jual,
-        //     'diskon' => $request->potongan,
-        //     'harga_net' => $request->harga_net,
-        //     'total_luas_tanah' => $request->tlt
-        // ]);
-
-        // return redirect()->route('marketing.dashboard');
     }
 
     public function storeSpr(Request $request, $id)
     {
 
-        // $spr = Project::where('id', $id)->pluck('id');
-
-        Spr::create([
+        $spr = Spr::create([
             'no_transaksi' => $request->no_transaksi,
             'id_sales' => auth()->user()->id,
             'id_project' => $id,
@@ -186,18 +189,21 @@ class PricelistController extends Controller
         $harga_jual = $request->harga_jual;
 
         $jumlah = $harga_jual / $int;
+        $idspr = request()->get('id_transaksi');
 
         $data = [
             ['tipe' => 1,
                 'jumlah_tagihan' => $request->booking_fee,
                 'status_pembayaran' => 'unpaid',
                 'no_transaksi' => $request->no_transaksi,
+                'id_spr' => $spr->id_transaksi,
                 'jatuh_tempo' => $tempo,
             ],
             ['tipe' => 2,
                 'jumlah_tagihan' => $request->downpayment,
                 'status_pembayaran' => 'unpaid',
                 'no_transaksi' => $request->no_transaksi,
+                'id_spr' => $spr->id_transaksi,
                 'jatuh_tempo' => $tempo,
             ],
         ];
@@ -208,13 +214,13 @@ class PricelistController extends Controller
 
         Tagihan::insert($data);
 
-
         while (strtotime($tempo) <= strtotime($date5)) {
             $tipe3 = [
                 ['tipe' => 3,
                     'jumlah_tagihan' => $jumlah,
                     'status_pembayaran' => 'unpaid',
                     'no_transaksi' => $request->no_transaksi,
+                    'id_spr' => $spr->id_transaksi,
                     'jatuh_tempo' => $tempo,
                 ],
             ];
@@ -223,7 +229,7 @@ class PricelistController extends Controller
             $tempo = date("d-m-Y", strtotime("+30 day", strtotime($tempo)));
         }
 
-        return redirect()->route('marketing.dashboard');
+        return redirect()->route('marketing.pricelist.index');
     }
 
     /**

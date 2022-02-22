@@ -1,4 +1,4 @@
-@extends('layouts.master', ['title'=>'doctor'])
+@extends('layouts.master', ['title'=>'Daftar Unit Ashoka Park'])
 
 @section('content')
 <div class="row">

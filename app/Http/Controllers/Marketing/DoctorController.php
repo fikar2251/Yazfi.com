@@ -26,7 +26,7 @@ class DoctorController extends Controller
         //     })->where('is_active', 1)->where('cabang_id',auth()->user()->cabang_id)->get()
         // ]);
 
-        $stok = Marketing::all();
+        $stok = Marketing::where('status_penjualan', 'Available')->get();
         return view('marketing.doctor.index', compact('stok'));
     }
 
