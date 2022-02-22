@@ -49,130 +49,135 @@
     </form>
 
     @if (request()->get('no_transaksi'))
-        <div class="row">
-            <div class="col-md-8 container">
-                <div class="card shadow">
-                    <div class="card-body">
+        <form action="{{ route('supervisor.payment.store') }}" method="POST">
+            @csrf
+            <div class="row">
+                <div class="col-md-8 container">
+                    <div class="card shadow">
+                        <div class="card-body">
 
-                        <div class="table-responsive">
-                            <table class="table table-bordered custom-table table-striped">
-                                <thead>
-                                    @foreach ($getSpr as $item)
+                            <div class="table-responsive">
+                                <table class="table table-bordered custom-table table-striped">
+                                    <thead>
+                                        @foreach ($getSpr as $item)
+                                            <tr>
+                                                <th style="width: 200px">NO SPR</th>
+                                                <th style="width: 20px">:</th>
+                                                <th> <input type="hidden" name="no_transaksi" value="{{ $item->no_transaksi }}">{{ $item->no_transaksi }}</th>
+                                            </tr>
+                                        @endforeach
+                                    </thead>
+                                    <tbody>
                                         <tr>
-                                            <th style="width: 200px">NO SPR</th>
-                                            <th style="width: 20px">:</th>
-                                            <th>{{ $item->no_transaksi }}</th>
+                                            <td style="width: 200px">Konsumen</td>
+                                            <td style="width: 20px">:</td>
+                                            <td>{{ $item->nama }}</td>
                                         </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td style="width: 200px">Konsumen</td>
-                                        <td style="width: 20px">:</td>
-                                        <td>{{ $item->nama }}</td>
-                                    </tr>
-    @endforeach
-    <tr>
-        <td style="width: 200px">Tanggal Pembayaran</td>
-        <td style="width: 20px">:</td>
-        <td>{{ Carbon\Carbon::now()->format('d-m-Y') }}</td>
-    </tr>
-    <tr>
-        <td style="width: 200px">Nominal</td>
-        <td style="width: 20px">:</td>
-        <td>
-            <input type="number" name="nominal" id="nominal" class="form-control" style="width: 200px">
-        </td>
-    </tr>
-    <tr>
-        <td style="width: 200px">Tujuan</td>
-        <td style="width: 20px">:</td>
-        <td>
-            <select name="tujuan" id="tujuan" class="form-control" style="width: 200px">
-                <option selected value="">-- Tujuan --</option>
-                @foreach ($tagihan as $item)
-                    <option value="{{$item->tipe}}}">
-                        @if ($item->tipe == 1)
-                            Booking fee
-                        @elseif ($item->tipe == 2)
-                            Downpayment
-                        @else
-                        Cicilan tahap {{($loop->iteration) - 2}}
-                        @endif
-                    </option>
-                @endforeach
-                {{-- <option value="Booking Fee">Booking Fee</option>
-                <option value="Cicilan">Cicilan</option> --}}
-            </select>
-        </td>
-    </tr>
-    </tbody>
-    </table>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
-
-    <div class="row mt-5">
-        <div class="col-sm-4">
-            <h4 class="page-title">Riwayat Pembayaran</h4>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-10">
-            <div class="card shadow">
-                <div class="card-body">
-
-                    <div class="table-responsive">
-                        <table class="table table-bordered custom-table table-striped">
-                            <thead>
-                                <tr>
-
-                                    <th>NO</th>
-                                    <th>Tanggal Pembayaran</th>
-                                    <th>Nominal</th>
-                                    <th>Tipe</th>
-                                    <th>Status</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                @foreach ($tagihan as $item)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ Carbon\Carbon::now()->format('d-m-Y') }}</td>
-                                        <td>{{ $item->jumlah_tagihan }}</td>
-                                        <td>
-
-
-                                            @if ($item->tipe == 1)
-                                                Booking fee
-                                            @elseif ($item->tipe == 2)
-                                                Downpayment
-                                            @else
-
-                                                Pembayaran cicilan tahap {{ $loop->iteration - 2 }}
-                                            @endif
-                                        </td>
-                                        <td>
-                                            @if ($item->status_pembayaran == 'unpaid')
-                                                Pending
-                                            @else
-                                                Approval
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
-
-                            </tbody>
-                        </table>
+                                        <tr>
+                                            <td style="width: 200px">Tanggal Pembayaran</td>
+                                            <td style="width: 20px">:</td>
+                                            <td>{{ Carbon\Carbon::now()->format('d-m-Y') }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 200px">Nominal</td>
+                                            <td style="width: 20px">:</td>
+                                            <td>
+                                                <input type="number" name="nominal" id="nominal" class="form-control"
+                                                    style="width: 200px">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 200px">Tujuan</td>
+                                            <td style="width: 20px">:</td>
+                                            <td>
+                                                <select name="tujuan" id="tujuan" class="form-control"
+                                                    style="width: 200px">
+                                                    <option selected value="">-- Tujuan --</option>
+                                                    @foreach ($tagihan as $item)
+                                                        <option value="{{ $item->tipe }}">
+                                                            @if ($item->tipe == 1)
+                                                                Booking fee
+                                                            @elseif ($item->tipe == 2)
+                                                                Downpayment
+                                                            @else
+                                                                Cicilan tahap {{ $loop->iteration - 2 }}
+                                                            @endif
+                                                        </option>
+                                                    @endforeach
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-@else
+
+            <div class="row mt-5">
+                <div class="col-sm-12" style="text-align: center">
+                    <h4 class="page-title">Riwayat Pembayaran</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-10">
+                    <div class="card shadow" style="margin-left: 180px">
+                        <div class="card-body">
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered custom-table table-striped">
+                                    <thead>
+                                        <tr>
+
+                                            <th>NO</th>
+                                            <th>Tanggal Pembayaran</th>
+                                            <th>Nominal</th>
+                                            <th>Tipe</th>
+                                            <th>Status</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach ($tagihan as $item)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ Carbon\Carbon::now()->format('d-m-Y') }}</td>
+                                                <td>{{ $item->jumlah_tagihan }}</td>
+                                                <td>
+
+
+                                                    @if ($item->tipe == 1)
+                                                        Booking fee
+                                                    @elseif ($item->tipe == 2)
+                                                        Downpayment
+                                                    @else
+
+                                                        Pembayaran cicilan tahap {{ $loop->iteration - 2 }}
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($item->status_pembayaran == 'unpaid')
+                                                        Pending
+                                                    @else
+                                                        Approval
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="m-t-20 text-center">
+                <button type="submit" class="btn btn-primary submit-btn"><i class="fa fa-save"></i> Save</button>
+            </div>
+        </form>
+    @else
 
     @endif
 
