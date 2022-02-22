@@ -6,14 +6,10 @@
         <h4 class="page-title">Master User</h4>
     </div>
     <div class="col-sm-8 col-9 text-right m-b-20">
-        @can('user-create')
-        <a href="{{ route('admin.users.create') }}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add User</a>
-        @endcan
+        <a href="{{ route('hrd.users.create') }}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add User</a>
+
     </div>
 </div>
-
-<x-alert></x-alert>
-
 <div class="row">
     <div class="col-sm-12">
         <div class="table-responsive">
@@ -24,7 +20,8 @@
                         <th>Nama</th>
                         <th>Email</th>
                         <th>Role</th>
-                        <th>Cabang</th>
+                        <th>Jabatan</th>
+                        <th>Perusahaan</th>
                         <th>Mac Address</th>
                         <th>Action</th>
                     </tr>
@@ -41,19 +38,15 @@
                             <span class="custom-badge status-blue">{{ $role->name }}</span>
                             @endforeach
                         </td>
-                        <td>{{ $user->cabang->nama }}</td>
+                        <td>{{ $user->jabatan->nama }}</td>
+                        <td>{{ $user->perusahaan->nama_perusahaan }}</td>
                         <td>{{ $user->mac_address }}</td>
                         <td>
-                            @can('user-edit')
-                            <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
-                            @endcan
-                            @can('user-delete')
-                            <form action="{{ route('admin.users.destroy', $user->id) }}" method="post" style="display: inline;" class="delete-form">
-                                @method('DELETE')
+                            <a href="{{ route('hrd.users.edit', $user->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
+                            <form action="{{ route('hrd.users.destroy', $user->id) }}" method="post" style="display: inline;" class="delete-form">
                                 @csrf
                                 <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
                             </form>
-                            @endcan
                         </td>
                     </tr>
                     @endforeach

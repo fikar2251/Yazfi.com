@@ -7,9 +7,9 @@
     </div>
 </div>
 
-<form action="{{ route('admin.users.update', $user->id) }}" method="post" enctype="multipart/form-data">
+<form action="{{ route('hrd.users.update', $user->id) }}" method="post" enctype="multipart/form-data">
     @method('PATCH')
     @csrf
-    @include('admin.users.form')
+    @include('hrd.users.form')
 </form>
 @stop

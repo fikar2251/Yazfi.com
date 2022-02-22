@@ -9,10 +9,10 @@
 
 <div class="row justify-content-center">
     <div class="col-md-6">
-        <form action="{{ route('admin.roles.update', $role->id) }}" method="post">
+        <form action="{{ route('hrd.roles.update', $role->id) }}" method="post">
             @method('PATCH')
             @csrf
-            @include('admin.roles.form')
+            @include('hrd.roles.form')
         </form>
     </div>
 </div>

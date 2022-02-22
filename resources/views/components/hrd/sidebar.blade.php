@@ -3,8 +3,8 @@
     <li class="{{ request()->is('dashboard*') ? 'active' : '' }}">
         <a href="/dashboard"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
     </li>
-    <li class="{{ request()->is('admin/users*') ? 'active' : '' }}">
-        <a href="{{ route('admin.users.index') }}"><i class="fa fa-users"></i> <span>Master User</span></a>
+    <li class="{{ request()->is('hrd/users*') ? 'active' : '' }}">
+        <a href="{{ route('hrd.users.index') }}"><i class="fa fa-users"></i> <span>Master User</span></a>
     </li>
     <li class="{{ request()->is('hrd/roles*') ? 'active' : '' }}"> <a href="{{ route('hrd.roles.index') }}"><i class="fa fa-user"></i><span>Master Roles</span></a></li>
     <li class="submenu">

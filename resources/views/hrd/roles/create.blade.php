@@ -8,9 +8,9 @@
 </div>
 <div class="row justify-content-center">
     <div class="col-md-6">
-        <form action="{{ route('admin.roles.store') }}" method="post">
+        <form action="{{ route('hrd.roles.store') }}" method="post">
             @csrf
-            @include('admin.roles.form')
+            @include('hrd.roles.form')
         </form>
     </div>
 </div>
