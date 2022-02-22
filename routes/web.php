@@ -248,15 +248,48 @@ Route::middleware('auth')->group(function () {
         Route::prefix('hrd')->namespace('hrd')->as('hrd.')->group(function () {
             //Route Roles
             Route::resource('roles', 'RolesController');
-            Route::get('roles', 'RolesController@index');
-            // Route Appointment
-            Route::get('/appointments/resign', 'AppointmentController@resign')->name('appointments.resign');
-            Route::get('appointments/download/{id}', 'AppointmentController@download')->name('appointments.download');
-            Route::resource('appointments', 'AppointmentController');
 
+            // Route Master User
+            Route::resource('users', 'UserController');
 
+            // Route Master Cabang
+            Route::get('cabang/{cabang:id}/ruangan', 'CabangController@ruangan');
+            Route::resource('cabang', 'CabangController');
+
+            Route::resource('supplier', 'SupplierController');
+            Route::get('/where/product', 'PurchaseController@WhereProduct');
+            Route::get('/where/service', 'PurchaseController@WhereService');
+            Route::resource('purchase', 'PurchaseController');
+
+            // Route Master Barang
+            Route::resource('product', 'BarangController');
+            // Route Harga Barang Cabang
+            Route::get('price-service/{cabang:id}/create', 'HargaBarangController@create');
+            Route::get('price-service/{hargaProdukCabang:id}/edit', 'HargaBarangController@edit');
+            Route::get('price-product/{cabang:id}/create', 'HargaBarangController@create');
+            Route::get('price-product/{hargaProdukCabang:id}/edit', 'HargaBarangController@edit');
+
+            Route::post('price/store', 'HargaBarangController@store');
+            Route::patch('price/{hargaProdukCabang:id}/update', 'HargaBarangController@update');
+            Route::delete('price/{hargaProdukCabang:id}/destroy', 'HargaBarangController@destroy');
+            // Route Report
+            Route::get('report/pasien', 'ReportController@pasien')->name('report.pasien');
+            Route::post('report/pasien', 'ReportController@pasien')->name('report.pasien');
+            // Route::get('report/pasien/export/{cabang:id}', 'ReportController@pasienexport')->name('pasien.export');
+            Route::get('report/appoinment', 'ReportController@appoinment')->name('report.appoinment');
+            Route::post('report/appointment', 'ReportController@appoinment')->name('report.appointment');
+            // Route::get('report/appoinment/export/{cabang:id}', 'ReportController@appoinmentreport')->name('appoinment.export');
+            Route::get('report/payment', 'ReportController@payment')->name('report.payment');
+            Route::post('report/payment', 'ReportController@payment')->name('report.payment');
+            // Route::get('report/payment/export/{payment:id}', 'ReportController@paymentreport')->name('payment.export');
+            Route::get('report/komisi', 'ReportController@komisi')->name('report.komisi');
+            Route::post('report/komisi', 'ReportController@komisi')->name('report.komisi');
+            // Route::get('report/komisi/export/{role:id}', 'ReportController@komisireport')->name('komisi.export');
             Route::get('report/perpindahan/pasien', 'ReportController@perpindahan')->name('report.perpindahan.pasien');
             Route::post('report/perpindahan/pasien', 'ReportController@perpindahan')->name('report.perpindahan.pasien');
+
+            Route::get('report/barang', 'ReportController@barang')->name('report.barang');
+            Route::post('report/barang', 'ReportController@barang')->name('report.barang');
         });
         Route::prefix('logistik')->namespace('Logistik')->as('logistik.')->group(function () {
             Route::get('/', function () {

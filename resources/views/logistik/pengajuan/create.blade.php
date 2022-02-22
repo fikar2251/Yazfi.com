@@ -153,14 +153,9 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <button type="button" onclick="HowAboutIt()">Include PPN</button>
+                                        <label>Include PPN</label>
+                                        <input type="type" id="PPN" name="PPN" onchange="HowAboutIt()" class="form-control">
                                     </div>
-                                    <div class="form-group">
-                                        <div id="newpost">
-                                            <input type="type" readonly id="PPN" name="PPN" readonly class="form-control">
-                                        </div>
-                                    </div>
-
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -217,10 +212,10 @@
                         <input type="hidden" name="barang_id[${index}]" class="barang_id-${index}">
                     </td>
                     <td>
-                        <input  type="text" name="barang_id[${index}]" barang_id="${index}" placeholder="Tulis Produk">
+                        <input  type="text" name="barang_id[${index}]"  class="form-control barang_id-${index}" placeholder="Tulis Produk">
                     </td>
                     <td>
-                        <input type="text" id="rupiah" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), TotalAbout(this)">
+                        <input type="number" id="rupiah" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), TotalAbout(this)">
                     </td>
                     <td>
                         <input type="number" name="qty[${index}]"  class="form-control qty-${index}" placeholder="0">
@@ -292,24 +287,15 @@
             total += parseInt(ele.value)
         }
         sub_total.value = total
-        let tax = (10 / 100) * sub_total.value;
-        let total_all = parseInt(tax);
-        var div = document.getElementById("newpost");
-
-        if (div.style.display !== "none") {
-            div.style.display = "none";
-            document.getElementById('PPN').value = total_all;
-            let PPN = total_all;
-            console.log(PPN);
-            let SUB = total;
-            console.log(SUB);
-            let grand_total = parseInt(SUB) + parseInt(PPN);
-            document.getElementById('grandtotal').value = grand_total;
-            console.log(grand_total);
-
-        } else {
-            div.style.display = "block";
-        }
+        let SUB = document.getElementById('sub_total').value;
+        let PPN = document.getElementById('PPN').value;
+        console.log(PPN);
+        let tax = PPN / 100 * sub_total.value;
+        console.log(tax);
+        console.log(SUB);
+        let grand_total = parseInt(SUB) + parseInt(tax);
+        document.getElementById('grandtotal').value = grand_total;
+        console.log(grand_total);
     }
     $(document).ready(function() {
         $('#add').on('click', function() {

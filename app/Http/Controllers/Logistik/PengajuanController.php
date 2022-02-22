@@ -35,7 +35,7 @@ class PengajuanController extends Controller
         $perusahaans = Perusahaan::get();
         $barangs = Barang::where('jenis', 'barang')->get();
         $projects = Project::get();
-        $AWAL = 'KEU';
+        $AWAL = 'PD';
         $noUrutAkhir = \App\Pengajuan::max('id');
         // dd($noUrutAkhir);
         $nourut = $AWAL . '/' .  sprintf("%02s", abs($noUrutAkhir + 1)) . '/' . sprintf("%05s", abs($noUrutAkhir + 1));
@@ -44,42 +44,40 @@ class PengajuanController extends Controller
     public function store(Request $request, Pengajuan $pengajuan)
     {
         $request->validate([
-            'barang_id' => 'required',
-            'qty' => 'required',
-            'harga_beli' => 'required',
             'nomor_pengajuan' => 'required',
             'file.*' => 'mimes:doc,docx,PDF,pdf,jpg,jpeg,png|max:2000'
         ]);
 
-        $barang = $request->input('nama_barang', []);
+        $barang = $request->input('barang_id', []);
         $attr = [];
         $in = [];
         // dd($request->all());
         DB::beginTransaction();
 
         if ($request->hasFile('file')) {
-            foreach ($barang as $key => $no) {
-                $files = $request->file('file');
-                foreach ($files as $file) {
-                    $AWAL = 'KEU';
-                    $noUrutAkhir = \App\Pengajuan::max('id');
-                    $nourut = $AWAL . '/' .  sprintf("%02s", abs($noUrutAkhir + 1)) . '/' . sprintf("%05s", abs($noUrutAkhir + 1));
-                    $name = $nourut . '.' . $file->getClientOriginalName();
-                    $file->move(public_path() . '/uploads/file', $name);
+            $files = $request->file('file');
 
-                    $attr[] = [
-                        'nomor_pengajuan' => $request->nomor_pengajuan,
-                        'file' => $file,
-                        'id_user' => auth()->user()->id,
-                        'id_perusahaan' => $request->id_perusahaan,
-                        'tanggal_pengajuan' => $request->tanggal_pengajuan,
-                        'approval_time' => $request->tanggal_pengajuan,
-                        'status_approval' => 'pending',
-                        'approval_by' => 'pending',
-                        'id_roles' => 9
-                    ];
+            foreach ($files as $file) {
+                $AWAL = 'PD';
+                $noUrutAkhir = \App\Pengajuan::max('id');
+                $nourut = $AWAL . '/' .  sprintf("%02s", abs($noUrutAkhir + 1)) . '/' . sprintf("%05s", abs($noUrutAkhir + 1));
+                $name = $nourut . '/' . $file->getClientOriginalName();
+                $file->move(public_path() . '/uploads/file/pengajuan', $name);
+
+                $attr[] = [
+                    'nomor_pengajuan' => $request->nomor_pengajuan,
+                    'file' => $name,
+                    'id_user' => auth()->user()->id,
+                    'id_perusahaan' =>  $request->id_perusahaan,
+                    'tanggal_pengajuan' => $request->tanggal_pengajuan,
+                    'approval_time' => $request->tanggal_pengajuan,
+                    'status_approval' => 'pending',
+                    'approval_by' => 'pending',
+                    'id_roles' => auth()->user()->id_roles
+                ];
+                foreach ($barang as $key => $no) {
                     $in[] = [
-                        'barang_id' => $no,
+                        'barang_id' => $request->barang_id[$key],
                         'PPN' => $request->PPN,
                         'harga_beli' => $request->harga_beli[$key],
                         'keterangan' => $request->keterangan[$key],
@@ -87,19 +85,13 @@ class PengajuanController extends Controller
                         'total' => $request->harga_beli[$key] * $request->qty[$key],
                         'nomor_pengajuan' => $request->nomor_pengajuan,
                         'grandtotal' => $request->grandtotal,
-                        'unit' => $request->unit
-
+                        'unit' => $request->unit[$key]
                     ];
-                    Pengajuan::insert($attr);
-                    RincianPengajuan::insert($in);
                 }
+                RincianPengajuan::insert($in);
+                Pengajuan::insert($attr);
             }
         }
-
-
-        Pengajuan::insert($attr);
-        RincianPengajuan::insert($in);
-
         DB::commit();
         return redirect()->route('logistik.pengajuan.index')->with('success', 'Pengajuan Dana barang berhasil');
     }
@@ -121,21 +113,21 @@ class PengajuanController extends Controller
     }
     public function show(Pengajuan $pengajuan)
     {
-        $pengajuan = DB::table('pengajuans')
-            ->leftJoin('rincian_pengajuans', 'pengajuans.nomor_pengajuan', '=', 'rincian_pengajuans.nomor_pengajuan')
-            ->leftJoin('barangs', 'barangs.id', '=', 'rincian_pengajuans.barang_id')
-            ->select('barangs.nama_barang', 'pengajuans.id', 'rincian_pengajuans.id', 'pengajuans.file', 'pengajuans.tanggal_pengajuan', 'pengajuans.nomor_pengajuan', 'rincian_pengajuans.harga_beli', 'rincian_pengajuans.grandtotal', 'rincian_pengajuans.keterangan')
-            ->where('pengajuans.nomor_pengajuan', $pengajuan->nomor_pengajuan)->first();
-
+        // $pengajuan = DB::table('pengajuans')
+        //     ->leftJoin('rincian_pengajuans', 'pengajuans.nomor_pengajuan', '=', 'rincian_pengajuans.nomor_pengajuan')
+        //     ->leftJoin('barangs', 'barangs.id', '=', 'rincian_pengajuans.barang_id')
+        //     ->select('barangs.nama_barang', 'pengajuans.id', 'rincian_pengajuans.barang_id', 'rincian_pengajuans.barang_id', 'pengajuans.file', 'pengajuans.tanggal_pengajuan', 'pengajuans.nomor_pengajuan', 'rincian_pengajuans.harga_beli', 'rincian_pengajuans.grandtotal', 'rincian_pengajuans.keterangan')
+        //     ->where('rincian_pengajuans.nomor_pengajuan', $pengajuan->nomor_pengajuan)->first();
+        $pengajuans = Pengajuan::where('nomor_pengajuan', $pengajuan->nomor_pengajuan)->get();
         $jabatan = DB::table('users')
             ->leftJoin('jabatans', 'users.id_jabatans', '=', 'jabatans.id')
             ->leftJoin('roles', 'users.id_roles', '=', 'roles.id')
             ->leftJoin('pengajuans', 'users.id_perusahaan', '=', 'pengajuans.id_perusahaan')
-            ->select('jabatans.nama', 'users.name', 'roles.name_roles')
+            ->select('jabatans.nama', 'users.name', 'roles.name')
             ->where('pengajuans.nomor_pengajuan', $pengajuan->nomor_pengajuan)
             ->first();
 
-        return view('logistik.pengajuan.show', compact('jabatan', 'pengajuan'));
+        return view('logistik.pengajuan.show', compact('pengajuan', 'pengajuans', 'jabatan'));
     }
 
     public function edit(Pengajuan $pengajuan)

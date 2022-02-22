@@ -38,7 +38,7 @@
                                 <div class="col-sm-6">
                                     <p style="font-size: 12px">Nama :
                                         <a>
-                                            {{ $jabatan->name }}
+                                            {{ $pengajuan->admin->name }}
                                         </a>
                                     </p style="font-size: 12px">
                                     <p style="font-size: 12px">Jabatan :
@@ -48,7 +48,7 @@
                                     </p>
                                     <p style="font-size: 12px">Divisi :
                                         <a style="font-size: 12px">
-                                            {{ $jabatan->name_roles }}
+                                            {{ $pengajuan->roles->name }}
                                         </a>
                                     </p>
                                 </div>
@@ -58,7 +58,7 @@
                                             </a></p>
                                     </div>
                                     <div class="form-group">
-                                        <p style="font-size: 12px">Lampiran : <a style="font-size: 12px">{{$pengajuan->nomor_pengajuan}}/{{ $pengajuan->file }}</a>
+                                        <p style="font-size: 12px">Lampiran : <a style="font-size: 12px">{{ $pengajuan->file }}</a>
                                         </p>
                                     </div>
                                 </div>
@@ -81,19 +81,19 @@
                                             @php
                                             $total = 0
                                             @endphp
-
+                                            @foreach(App\RincianPengajuan::where('nomor_pengajuan', $pengajuan->nomor_pengajuan)->get() as $barang)
                                             <tr>
-                                                <td class="dynamic-hidden-col">
-                                                </td>
-                                                <td>{{ $pengajuan->barang_id }}</td>
-                                                <td>@currency($pengajuan->harga_beli)</td>
-                                                <td>{{ $pengajuan->grandtotal }}</td>
-                                                <td>{{ $pengajuan->grandtotal }}</td>
-                                                <td>{{ $pengajuan->keterangan }}</td>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $barang->barang_id }}</td>
+                                                <td>@currency($barang->harga_beli)</td>
+                                                <td>{{ $barang->grandtotal }}</td>
+                                                <td>{{ $barang->grandtotal }}</td>
+                                                <td>{{ $barang->keterangan }}</td>
                                             </tr>
                                             @php
-                                            $total += $pengajuan->grandtotal
+                                            $total += $barang->grandtotal
                                             @endphp
+                                            @endforeach
 
                                         </tbody>
                                         <tfoot>
@@ -101,6 +101,7 @@
                                                 <td colspan="3"><strong>Total<strong> </td>
                                                 <td><b>@currency($total)</b></td>
 
+                                                <td></td>
                                                 <td></td>
                                             </tr>
                                             <tr>

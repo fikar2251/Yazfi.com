@@ -93,20 +93,20 @@ class TukarFakturController extends Controller
     }
     public function search(Request $request)
     {
-        $searchResult = [];
-        $tukar = Purchase::select("id", "invoice", "grand_total", "supplier_id")->where('status_barang', 'pending')->where('invoice', 'like', '%' . $request->q . '%')->get();
+        $data = [];
+        $tukar = Purchase::select("id", "invoice", "grand_total", "supplier_id")->where('status_barang', 'pending')->where('invoice', $request->invoice)->get();
         if (count($tukar) == 0) {
-            $searchResult[] = "No Items Found";
+            $data[] = "No Items Found";
         } else {
             foreach ($tukar as $value) {
-                $searchResult[] = [
+                $data[] = [
                     'invoice' => $value->invoice,
                     'supplier_id' => $value->supplier_id,
                     'grand_total' => $value->grand_total,
                 ];
             }
         }
-        return $searchResult;
+        return $data;
     }
 
     public function show(TukarFaktur $tukar)

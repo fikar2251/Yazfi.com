@@ -145,25 +145,19 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Total</label>
-                                        <input type="text" id="sub_total" value="0" readonly class="form-control">
+                                        <input type="text" id="sub_total" readonly class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <button type="button" onclick="showhide()">Include PPN</button>
+                                        <label>Include PPN</label>
+                                        <input type="type" id="PPN" name="PPN" onchange="HowAboutIt()" class="form-control">
                                     </div>
-                                    <div class="form-group">
-                                        <div id="newpost">
-                                            <label>PPN 10%</label>
-                                            <input type="text" id="PPN" name="PPN" value="0" readonly class="form-control">
-                                        </div>
-                                    </div>
-
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Grand Total</label>
-                                        <input type="text" id="grandtotal" name="grandtotal" value="0" readonly class="form-control">
+                                        <input type="text" id="grandtotal" name="grandtotal" readonly class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -284,24 +278,36 @@
 
     }
 
-    function HowAboutIt(e) {
+    function TotalAbout(e) {
         let sub_total = document.getElementById('sub_total')
         let total = 0;
-
         let coll = document.querySelectorAll('.total-form')
         for (let i = 0; i < coll.length; i++) {
             let ele = coll[i]
             total += parseInt(ele.value)
         }
-
         sub_total.value = total
-        let tax = (10 / 100) * sub_total.value;
-        let total_all = parseInt(tax);
-        // rupiah()
-        document.getElementById('PPN').value = total_all;
-        let grand_total = parseInt(total_all) + parseInt(total);
-        document.getElementById('grandtotal').value = grand_total;
+        document.getElementById('grandtotal').value = total;
+    }
 
+    function HowAboutIt(e) {
+        let sub_total = document.getElementById('sub_total')
+        let total = 0;
+        let coll = document.querySelectorAll('.total-form')
+        for (let i = 0; i < coll.length; i++) {
+            let ele = coll[i]
+            total += parseInt(ele.value)
+        }
+        sub_total.value = total
+        let SUB = document.getElementById('sub_total').value;
+        let PPN = document.getElementById('PPN').value;
+        console.log(PPN);
+        let tax = PPN / 100 * sub_total.value;
+        console.log(tax);
+        console.log(SUB);
+        let grand_total = parseInt(SUB) + parseInt(tax);
+        document.getElementById('grandtotal').value = grand_total;
+        console.log(grand_total);
     }
 
 

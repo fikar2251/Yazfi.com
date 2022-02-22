@@ -334,15 +334,14 @@
             $.ajax({
                 url: `/purchasing/where/search`,
                 method: "get",
-                searchResult: {
+                data: {
                     'invoice': invoice,
-                    'supplier_id': supplier_id,
                 },
-                success: function(searchResult) {
-                    console.log(searchResult);
+                success: function(data) {
+                    console.log(data);
                     op += '<input value="0" disabled>';
                     for (var i = 0; i < data.length; i++) {
-                        var supplier_id = searchResult[i].supplier_id;
+                        var supplier_id = data[i].supplier_id;
                         console.log(supplier_id);
                         document.getElementById('supplier_id').value = supplier_id;
 

@@ -7,7 +7,7 @@
     </div>
 
     <div class="col-sm-8 text-right m-b-20">
-        <a href="{{ route('purchasing.tukarfaktur.create') }}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Purchase</a>
+        <a href="{{ route('purchasing.tukarfaktur.create') }}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add List Tukar Faktur</a>
     </div>
 </div>
 <x-alert></x-alert>

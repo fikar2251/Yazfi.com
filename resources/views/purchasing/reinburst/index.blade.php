@@ -7,7 +7,7 @@
     </div>
 
     <div class="col-sm-8 text-right m-b-20">
-        <a href="{{ route('purchasing.reinburst.create') }}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Purchase</a>
+        <a href="{{ route('purchasing.reinburst.create') }}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Reinburst</a>
     </div>
 </div>
 <x-alert></x-alert>
@@ -43,7 +43,8 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Tanggal Pengajuan</th>
+                        <th>Nomor Reinburst</th>
+                        <th>Tanggal Reinburst</th>
                         <th>Jumlah</th>
                         <th>Status Hrd</th>
                         <th>Status Pembayaran</th>
@@ -52,19 +53,19 @@
                 </thead>
 
                 <tbody>
-                    @foreach($pengajuans as $pengajuan)
+                    @foreach($reinbursts as $reinburst)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-
-                        <td>{{ Carbon\Carbon::parse($pengajuan->tanggal_pengajuan)->format("d/m/Y H:i:s") }}</td>
-                        <td>{{$pengajuan->perusahaan->nama_perusahaan }}</td>
-                        <td>{{ $pengajuan->status_approval }}</td>
-                        <td>{{ $pengajuan->status_approval }}</td>
+                        <td><a href="{{ route('purchasing.reinburst.show', $reinburst->id) }}">{{ $reinburst->nomor_reinburst }}</a></td>
+                        <td>{{ Carbon\Carbon::parse($reinburst->tanggal_reiburst)->format("d/m/Y H:i:s") }}</td>
+                        <td>@currency($reinburst->grandtotal)</td>
+                        <td>{{ $reinburst->reinburst->status_hrd }}</td>
+                        <td>{{ $reinburst->reinburst->status_pembayaran }}</td>
                         <td>
 
-                            <!-- <a href="{{ route('logistik.pengajuan.edit', $pengajuan->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a> -->
+                            <!-- <a href="{{ route('purchasing.reinburst.edit', $reinburst->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a> -->
 
-                            <form action="{{ route('purchasing.reinburst.destroy', $pengajuan->id) }}" method="post" style="display: inline;" class="delete-form">
+                            <form action="{{ route('purchasing.reinburst.destroy', $reinburst->id) }}" method="post" style="display: inline;" class="delete-form">
                                 @method('DELETE')
                                 @csrf
                                 <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>

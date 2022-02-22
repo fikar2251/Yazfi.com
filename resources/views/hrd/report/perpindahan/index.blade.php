@@ -7,7 +7,7 @@
     </div>
 </div>
 
-<form action="{{ route('hrd.report.perpindahan.pasien') }}" method="post">
+<form action="{{ route('admin.report.perpindahan.pasien') }}" method="post">
     @csrf
     <div class="row filter-row">
         <div class="col-sm-6 col-md-3">
@@ -44,13 +44,13 @@
         <div class="col-sm-6 col-md-3">
             <button type="submit" class="btn btn-success btn-block">Search</button>
             <!-- @if(request('metode'))
-            <a href="{{ route('hrd.payment.export', request('metode')) }}" type="submit" class="btn btn-danger"><i class="fa fa-file-excel-o"></i> Export</a>
+            <a href="{{ route('admin.payment.export', request('metode')) }}" type="submit" class="btn btn-danger"><i class="fa fa-file-excel-o"></i> Export</a>
             @endif -->
         </div>
     </div>
 </form>
 
-@include('hrd.report.perpindahan.table')
+@include('admin.report.perpindahan.table')
 
 @stop
 

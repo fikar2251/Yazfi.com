@@ -41,6 +41,6 @@ class Pengajuan extends Model
     }
     public function jabatan()
     {
-        return $this->belongsTo(Jabatan::class, 'id_jabatans');
+        return $this->belongsTo(User::class, 'id_jabatans');
     }
 }

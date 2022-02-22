@@ -42,15 +42,15 @@
                     </div>
                 </div>
 
-                <form action="{{ route('purchasing.reinburst.store') }}" method="post">
+                <form action="{{ route('purchasing.reinburst.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="col-sm-6 col-sg-4 m-b-4">
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <label for="nama">Nama <span style="color: red">*</span></label>
-                                        <input type="text" name="nama" id="nama" value="{{ auth()->user()->name }}" class="form-control" readonly>
+                                        <label for="nomor_reinburst">RN Number <span style="color: red">*</span></label>
+                                        <input required="" type="text" name="nomor_reinburst" value="{{$nourut}}" id="nomor_reinburst" class="form-control" readonly>
                                     </div>
                                 </li>
                             </ul>
@@ -59,8 +59,18 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <label for="tanggal">Tanggal Pengajuan <span style="color: red">*</span></label>
-                                        <input type="datetime-local" name="tanggal_pengajuan" id="tanggal_pengajuan" class="form-control">
+                                        <label for="nama">Nama <span style="color: red">*</span></label>
+                                        <input type="text" value="{{ auth()->user()->name }}" class="form-control" readonly>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 col-sg-4 m-b-4">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="form-group">
+                                        <label for="tanggal">Tanggal Reinburst <span style="color: red">*</span></label>
+                                        <input type="datetime-local" name="tanggal_reinburst" id="tanggal_reinburst" class="form-control">
                                     </div>
                                 </li>
                             </ul>
@@ -70,12 +80,23 @@
                                 <li>
                                     <div class="form-group">
                                         <label for="cabang">Project <span style="color: red">*</span></label>
-                                        <select name="project_id" id="nama_project" class="form-control input-lg dynamic" data-dependent="alamat_project" required="">
+                                        <select name="id_project" id="id_project" class="form-control required="">
                                             <option disabled selected>-- Select Project --</option>
                                             @foreach($projects as $project)
-                                            <option value="{{ $project->id }}">{{ $project->nama_project }}</option>
+                                            <option value=" {{ $project->id }}">{{ $project->nama_project }}</option>
                                             @endforeach
                                         </select>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 col-sg-4 m-b-4">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="form-group">
+                                        <label for="file">Lampiran <span style="color: red">*</span></label>
+                                        <input type="file" name="file[]" multiple="true" class="form-control">
+                                        <label for=" lampiran">only pdf and doc</label>
                                     </div>
                                 </li>
                             </ul>
@@ -92,6 +113,7 @@
                                         <th class="text-light">Nota/Bon/Kwitansi</th>
                                         <th class="text-light">Jumlah</th>
                                         <th class="text-light">Catatan</th>
+                                        <th class="text-light">Total</th>
                                         <th class="text-light">#</th>
                                     </tr>
                                     <tbody id="dynamic_field">
@@ -108,13 +130,19 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Total</label>
-                                        <input type="text" id="sub_total" readonly class="form-control">
+                                        <input type="text" id="sub_total" name="total" readonly class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>PPN 10%</label>
-                                        <input type="text" id="PPN" name="PPN" readonly class="form-control">
+                                        <label>Include PPN</label>
+                                        <input type="type" id="PPN" onchange="HowAboutIt()" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Grand Total</label>
+                                        <input type="text" id="grandtotal" name="grandtotal" readonly class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -169,13 +197,13 @@
                         <input type="hidden" name="barang_id[${index}]" class="barang_id-${index}">
                     </td>
                     <td>
-                        <select required name="barang_id[${index}]" id="${index}" class="form-control select-${index}"></select>
+                        <input  type="text" name="no_kwitansi[${index}]"  class="form-control no_kwitansi-${index}" placeholder="Tulis Kwitansi">
                     </td>
                     <td>
-                        <input type="number" name="qty[${index}]"  class="form-control qty-${index}" placeholder="0">
+                         <input type="number" id="rupiah" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), TotalAbout(this)">
                     </td>
                     <td>
-                        <input type="number" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), HowAboutIt(this)">
+                    <input  type="text" name="catatan[${index}]"  class="form-control catatan-${index}" placeholder="Catatan">
                     </td>
                     <td>
                         <input type="number" name="total[${index}]" disabled class="form-control total-${index} total-form"  placeholder="0">
@@ -214,30 +242,46 @@
     function hitung(e) {
         let harga = e.value
         let attr = $(e).attr('data')
-        let harga_beli = $(`.qty-${attr}`).val()
-        let total = parseInt(harga * qty)
+        let beli = $(`.harga_beli-${attr}`).val()
+        console.log(beli);
+        let total = parseInt(beli);
+        console.log(total);
+        $(`.total-${attr}`).val(total)
 
-        $(`.sub_total-${attr}`).val(total)
 
     }
 
-    function HowAboutIt(e) {
+    function TotalAbout(e) {
         let sub_total = document.getElementById('sub_total')
         let total = 0;
-
         let coll = document.querySelectorAll('.total-form')
         for (let i = 0; i < coll.length; i++) {
             let ele = coll[i]
             total += parseInt(ele.value)
         }
-
         sub_total.value = total
-        let tax = (10 / 100) * sub_total.value;
-        let total_all = parseInt(tax);
-        // rupiah()
-        document.getElementById('PPN').value = total_all;
+        document.getElementById('grandtotal').value = total;
     }
 
+    function HowAboutIt(e) {
+        let sub_total = document.getElementById('sub_total')
+        let total = 0;
+        let coll = document.querySelectorAll('.total-form')
+        for (let i = 0; i < coll.length; i++) {
+            let ele = coll[i]
+            total += parseInt(ele.value)
+        }
+        sub_total.value = total
+        let SUB = document.getElementById('sub_total').value;
+        let PPN = document.getElementById('PPN').value;
+        console.log(PPN);
+        let tax = PPN / 100 * sub_total.value;
+        console.log(tax);
+        console.log(SUB);
+        let grand_total = parseInt(SUB) + parseInt(tax);
+        document.getElementById('grandtotal').value = grand_total;
+        console.log(grand_total);
+    }
     $(document).ready(function() {
         $('#add').on('click', function() {
             form_dinamic()
