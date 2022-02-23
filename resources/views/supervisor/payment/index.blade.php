@@ -63,7 +63,8 @@
                                             <tr>
                                                 <th style="width: 200px">NO SPR</th>
                                                 <th style="width: 20px">:</th>
-                                                <th> <input type="hidden" name="no_transaksi" value="{{ $item->no_transaksi }}">{{ $item->no_transaksi }}</th>
+                                                <th> <input type="hidden" name="no_transaksi"
+                                                        value="{{ $item->no_transaksi }}">{{ $item->no_transaksi }}</th>
                                             </tr>
                                         @endforeach
                                     </thead>
@@ -90,11 +91,11 @@
                                             <td style="width: 200px">Tujuan</td>
                                             <td style="width: 20px">:</td>
                                             <td>
-                                                <select name="tujuan" id="tujuan" class="form-control"
+                                                <select name="rincian_id" id="rincian_id" class="form-control"
                                                     style="width: 200px">
                                                     <option selected value="">-- Tujuan --</option>
                                                     @foreach ($tagihan as $item)
-                                                        <option value="{{ $item->tipe }}">
+                                                        <option value="{{ $item->id_rincian }}">
                                                             @if ($item->tipe == 1)
                                                                 Booking fee
                                                             @elseif ($item->tipe == 2)
@@ -113,7 +114,9 @@
                     </div>
                 </div>
             </div>
-
+            <div class="m-t-20 text-center">
+                <button type="submit" class="btn btn-primary submit-btn"><i class="fa fa-save"></i> Save</button>
+            </div>
             <div class="row mt-5">
                 <div class="col-sm-12" style="text-align: center">
                     <h4 class="page-title">Riwayat Pembayaran</h4>
@@ -145,14 +148,11 @@
                                                 <td>{{ Carbon\Carbon::now()->format('d-m-Y') }}</td>
                                                 <td>{{ $item->jumlah_tagihan }}</td>
                                                 <td>
-
-
                                                     @if ($item->tipe == 1)
                                                         Booking fee
                                                     @elseif ($item->tipe == 2)
                                                         Downpayment
                                                     @else
-
                                                         Pembayaran cicilan tahap {{ $loop->iteration - 2 }}
                                                     @endif
                                                 </td>
@@ -173,10 +173,77 @@
                     </div>
                 </div>
             </div>
-            <div class="m-t-20 text-center">
-                <button type="submit" class="btn btn-primary submit-btn"><i class="fa fa-save"></i> Save</button>
-            </div>
+
         </form>
+
+
+        @foreach ($bayar as $item)
+            @if ($item->id)
+                <div class="row mt-5">
+                    <div class="col-sm-12" style="text-align: center">
+                        <h4 class="page-title">Konfirmasi Pembayaran</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="card shadow" style="margin-left: 180px">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered custom-table table-striped">
+                                        <thead>
+                                            <tr>
+
+                                                <th>NO</th>
+                                                <th>No Transaksi</th>
+                                                <th>Tanggal transaksi</th>
+                                                <th>Tipe</th>
+                                                <th>Nominal</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($bayar as $item)
+                                                <tr>
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ $item->no_detail_transaksi }}</td>
+                                                    <td>{{ Carbon\Carbon::now()->format('d-m-Y') }}</td>
+                                                    <td>
+                                                        @if ($item->rincian->tipe == 1)
+                                                            Booking fee
+                                                        @elseif ($item->rincian->tipe == 2)
+                                                            Downpayment
+                                                        @else
+                                                            Cicilan tahap {{ $loop->iteration - 2 }}
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        {{ $item->nominal }}
+                                                    </td>
+                                                    <td> {{ $item->status_approval }} </td>
+                                                    <td>
+                                                        <div class="text-center">
+                                                            <a
+                                                                href="{{ route('supervisor.payment.delete', $item->id) }}">
+                                                                <button type="submit" class="btn btn-danger"><i
+                                                                        class="fa fa-trash"></i></button>
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @else
+
+            @endif
+        @endforeach
     @else
 
     @endif

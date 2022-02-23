@@ -47,7 +47,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                url: '/supervisor/appointments/ajax',
+            url: '/supervisor/appointments/ajax',
                 get: 'get'
             },
             columns: [{

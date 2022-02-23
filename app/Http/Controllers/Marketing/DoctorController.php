@@ -10,6 +10,7 @@ use App\Shift;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class DoctorController extends Controller
 {
@@ -20,16 +21,16 @@ class DoctorController extends Controller
      */
     public function index()
     {
-        // return view('marketing.doctor.index', [
-        //     'doctors' => User::whereHas('roles', function ($qr) {
-        //         return $qr->where('name', 'dokter');
-        //     })->where('is_active', 1)->where('cabang_id',auth()->user()->cabang_id)->get()
-        // ]);
 
-        $stok = Marketing::where('status_penjualan', 'Available')->get();
-        return view('marketing.doctor.index', compact('stok'));
+        return view('marketing.doctor.index');
     }
 
+    public function json()
+    {
+        $stok = Marketing::where('status_penjualan', 'Available')->get();
+
+        return DataTables::of($stok)->make(true);
+    }
     /**
      * Show the form for creating a new resource.
      *

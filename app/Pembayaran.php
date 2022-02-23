@@ -10,4 +10,9 @@ class Pembayaran extends Model
     protected $guarded = ['id'];
     protected $primaryKey = 'id';
     public $timestamps = false;
+
+    public function rincian()
+    {
+        return $this->belongsTo(Tagihan::class, 'rincian_id');
+    }
 }

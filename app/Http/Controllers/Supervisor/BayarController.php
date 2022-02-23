@@ -8,6 +8,7 @@ use App\Spr;
 use App\Tagihan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BayarController extends Controller
 {
@@ -17,32 +18,32 @@ class BayarController extends Controller
         $spr = Spr::select('no_transaksi')->distinct()->get();
         $getSpr = Spr::where('no_transaksi', $no)->get();
         $tagihan = Tagihan::where('no_transaksi', $no)->get();
+        $bayar = Pembayaran::where('no_detail_transaksi', $no)->get();
 
-        foreach ($getSpr as $key) {
-            $no = $key->no_transaksi;
-        }
 
-        // dd($no);
-
-        return view('supervisor.payment.index', compact('spr', 'getSpr', 'tagihan'));
+        return view('supervisor.payment.index', compact('spr', 'getSpr', 'tagihan', 'bayar'));
     }
 
     public function storeBayar(Request $request)
     {
-        $no = request()->get('no_transaksi');
-
         $tgl = Carbon::now()->format('d-m-Y');
         Pembayaran::create([
             'id_admin' => auth()->user()->id,
             'no_detail_transaksi' => $request->no_transaksi,
             'tanggal_transaksi' => $tgl,
+            'rincian_id' => $request->rincian_id,
             'nominal' => $request->nominal,
             'id_perusahaan' => '1',
             'status_approval' => 'pending',
-            'tujuan' => $request->tujuan,
         ]);
 
-        return redirect()->route('supervisor.payment.index');
+        return redirect()->back();
 
+    }
+
+    public function hapuskonfirmasi($id)
+    {
+        DB::table('pembayaran_unit')->where('id', $id)->delete();
+        return redirect()->back();
     }
 }

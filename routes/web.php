@@ -175,6 +175,7 @@ Route::middleware('auth')->group(function () {
             Route::resource('/appointments', 'AppointmentsController');
             Route::get('pasien/ajax', 'PatientController@ajaxPasien');
             Route::resource('/patient', 'PatientController');
+            Route::get('doctor/json', 'DoctorController@json');
             Route::resource('/doctor', 'DoctorController');
             Route::post('/pricelist/{id}', 'PricelistController@storeSpr')->name('storespr');
             Route::resource('/pricelist', 'PricelistController');
@@ -245,6 +246,7 @@ Route::middleware('auth')->group(function () {
 
             Route::get('payment', 'BayarController@index')->name('payment.index');
             Route::post('payment/store', 'BayarController@storeBayar')->name('payment.store');
+            Route::get('payment/delete/{id}', 'BayarController@hapuskonfirmasi')->name('payment.delete');
 
         });
 
