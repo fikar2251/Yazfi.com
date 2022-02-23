@@ -1,13 +1,13 @@
-@extends('layouts.master', ['title' => 'Cabang'])
+@extends('layouts.master', ['title' => 'Divisi'])
 
 @section('content')
 <div class="row">
     <div class="col-sm-4 col-3">
-        <h4 class="page-title">Master Cabang</h4>
+        <h4 class="page-title">Master Divisi</h4>
     </div>
     <div class="col-sm-8 text-right m-b-20">
-        @can('cabang-create')
-        <a href="{{ route('admin.cabang.create') }}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Cabang</a>
+        @can('divisi-create')
+        <a href="{{ route('hrd.divisi.create') }}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Divisi</a>
         @endcan
     </div>
 </div>

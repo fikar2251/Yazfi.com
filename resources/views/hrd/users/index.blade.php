@@ -10,6 +10,7 @@
 
     </div>
 </div>
+<x-alert></x-alert>
 <div class="row">
     <div class="col-sm-12">
         <div class="table-responsive">
@@ -22,7 +23,7 @@
                         <th>Role</th>
                         <th>Jabatan</th>
                         <th>Perusahaan</th>
-                        <th>Mac Address</th>
+                        <th>Project</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -40,10 +41,11 @@
                         </td>
                         <td>{{ $user->jabatan->nama }}</td>
                         <td>{{ $user->perusahaan->nama_perusahaan }}</td>
-                        <td>{{ $user->mac_address }}</td>
+                        <td>{{ $user->project->nama_project }}</td>
                         <td>
                             <a href="{{ route('hrd.users.edit', $user->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
                             <form action="{{ route('hrd.users.destroy', $user->id) }}" method="post" style="display: inline;" class="delete-form">
+                                @method('DELETE')
                                 @csrf
                                 <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
                             </form>

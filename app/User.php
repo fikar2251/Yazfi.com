@@ -63,4 +63,8 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Jabatan::class, 'id_jabatans');
     }
+    public function project()
+    {
+        return $this->belongsTo(Project::class, 'cabang_id');
+    }
 }

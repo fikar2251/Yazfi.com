@@ -1,21 +1,21 @@
-@extends('layouts.master', ['title' => 'Purchase'])
+@extends('layouts.master', ['title' => 'Master Jabatan'])
 
 @section('content')
 <div class="row">
     <div class="col-md-4">
-        <h1 class="page-title">Purchase</h1>
+        <h1 class="page-title">Master Jabatan</h1>
     </div>
 
     <div class="col-sm-8 text-right m-b-20">
 
-        <a href="{{ route('admin.purchase.create') }}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Purchase</a>
+        <a href="{{ route('hrd.jabatan.create') }}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Jabatan</a>
 
     </div>
 </div>
 
 <x-alert></x-alert>
 
-<form action="{{ route('admin.purchase.index') }}" method="get">
+<form action="{{ route('hrd.jabatan.index') }}" method="get">
     <div class="row filter-row">
         <div class="col-sm-6 col-md-3">
             <div class="form-group form-focus">
@@ -47,51 +47,33 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Invoice</th>
-                        <th>Supplier</th>
-                        <th>Tanggal</th>
-                        <th>Total Item</th>
-                        <th>Total Pembelian</th>
+                        <th>Nama</th>
+                        <th>Perusahaan</th>
+                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    @foreach($purchases as $purchase)
+                    @foreach($jabatan as $jabatans)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
+                        <td>{{$jabatans->nama}}</td>
+                        <td>{{$jabatans->perusahaan->nama_perusahaan}}</td>
+                        <td>{{$jabatans->status}}</td>
                         <td>
-                            <a href="{{ route('admin.purchase.show', $purchase->id) }}">{{ $purchase->invoice }}</a>
-                        </td>
-                        <td>{{ $purchase->supplier->nama }}</td>
-                        <td>{{ Carbon\Carbon::parse($purchase->created_at)->format("d/m/Y H:i:s") }}</td>
-                        <td>{{ \App\Purchase::where('invoice', $purchase->invoice)->count() }}</td>
-                        <td>@currency(\App\Purchase::where('invoice', $purchase->invoice)->sum('total'))</td>
-                        <td>
-                            <!-- @can('purchase-edit')
-                            <a href="{{ route('admin.purchase.edit', $purchase->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
-                            @endcan -->
-                            @can('purchase-delete')
-                            <form action="{{ route('admin.purchase.destroy', $purchase->id) }}" method="post" style="display: inline;" class="delete-form">
+
+                            <a href="{{ route('hrd.jabatan.edit', $jabatans->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
+                            <form action="{{ route('hrd.jabatan.destroy', $jabatans->id) }}" method="post" style="display: inline;" class="delete-form">
                                 @method('DELETE')
                                 @csrf
                                 <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
                             </form>
-                            @endcan
+
                         </td>
                     </tr>
                     @endforeach
                 </tbody>
-
-                <tfoot>
-                    <tr>
-                        <td>Total : </td>
-                        <td colspan="3"></td>
-                        <td>{{ request('from') && request('to') ? \App\Purchase::whereBetween('created_at', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->count() : \App\Purchase::count() }}</td>
-                        <td>@currency( request('from') && request('to') ? \App\Purchase::whereBetween('created_at', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->sum('total') : \App\Purchase::sum('total') )</td>
-                        <td>&nbsp;</td>
-                    </tr>
-                </tfoot>
             </table>
         </div>
     </div>

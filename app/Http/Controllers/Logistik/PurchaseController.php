@@ -22,7 +22,7 @@ class PurchaseController extends Controller
             $to = Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s');
             $purchases = Purchase::groupBy('invoice')->whereBetween('created_at', [$from, $to])->get();
         } else {
-            $purchases = Purchase::groupBy('invoice')->get();
+            $purchases = Purchase::where('user_id', Auth()->user()->id)->get();
         }
 
 

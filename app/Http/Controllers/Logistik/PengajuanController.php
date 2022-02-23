@@ -14,17 +14,20 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
 
 class PengajuanController extends Controller
 {
-    public function index(Pengajuan $pengajuan)
+    public function index(Pengajuan $pengajuan, Request $request)
     {
         if (request('from') && request('to')) {
             $from = Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s');
             $to = Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s');
             $pengajuans = Pengajuan::groupBy('nomor_pengajuan')->whereBetween('tanggal_pengajuan', [$from, $to])->get();
         } else {
-            $pengajuans = Pengajuan::groupBy('nomor_pengajuan')->get();
+            $pengajuans = Pengajuan::where('id_user', Auth::user()->id)
+                ->get();
+            // $pengajuan = Pengajuan::where('id', $id)->where('nomor_pengajuan', $pengajuan->nomor_pengajuan)->first();
         }
         return view('logistik.pengajuan.index', compact('pengajuans'));
     }
@@ -73,7 +76,7 @@ class PengajuanController extends Controller
                     'approval_time' => $request->tanggal_pengajuan,
                     'status_approval' => 'pending',
                     'approval_by' => 'pending',
-                    'id_roles' => auth()->user()->id_roles
+                    'id_roles' => 9
                 ];
                 foreach ($barang as $key => $no) {
                     $in[] = [

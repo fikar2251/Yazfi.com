@@ -62,7 +62,7 @@
 
                         <td>{{$peng->perusahaan->nama_perusahaan }}</td>
                         <td>{{ Carbon\Carbon::parse($peng->tanggal_pengajuan)->format("d/m/Y H:i:s") }}</td>
-                        <td>{{ $peng->roles->key }}</td>
+                        <td>{{ $peng->roles->name }}</td>
                         <td>{{ $peng->admin->name }}</td>
                         <td>@currency(\App\RincianPengajuan::where('nomor_pengajuan', $peng->nomor_pengajuan)->sum('grandtotal'))</td>
                         <td>{{ $peng->status_approval }}</td>

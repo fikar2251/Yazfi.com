@@ -257,9 +257,8 @@ Route::middleware('auth')->group(function () {
             Route::resource('cabang', 'CabangController');
 
             Route::resource('supplier', 'SupplierController');
-            Route::get('/where/product', 'PurchaseController@WhereProduct');
-            Route::get('/where/service', 'PurchaseController@WhereService');
-            Route::resource('purchase', 'PurchaseController');
+            Route::get('/where/project', 'UserController@whereProject');
+            Route::resource('jabatan', 'JabatanController');
 
             // Route Master Barang
             Route::resource('product', 'BarangController');

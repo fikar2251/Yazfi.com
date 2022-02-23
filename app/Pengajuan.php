@@ -4,9 +4,13 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use JetBrains\PhpStorm\Pure;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Traits\HasRoles;
 
 class Pengajuan extends Model
 {
+
+    use HasRoles;
     protected $guarded = ['id'];
 
     public function barang()
@@ -33,7 +37,7 @@ class Pengajuan extends Model
     }
     public function roles()
     {
-        return $this->belongsTo(Roles::class, 'id_roles');
+        return $this->belongsTo(Role::class, 'id_roles');
     }
     public function perusahaan()
     {

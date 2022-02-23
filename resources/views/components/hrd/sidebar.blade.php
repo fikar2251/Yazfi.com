@@ -21,8 +21,8 @@
     <li class="{{ request()->is('admin/cabang*') ? 'active' : '' }}">
         <a href="{{ route('admin.cabang.index') }}"><i class="fa fa-building"></i> <span>Master Divisi</span></a>
     </li>
-    <li class="{{ request()->is('admin/purchase*') ? 'active' : '' }}">
-        <a href="{{ route('admin.purchase.index') }}"><i class="fa fa-calculator"></i> <span>Master Jabatan</span></a>
+    <li class="{{ request()->is('hrd/jabatan*') ? 'active' : '' }}">
+        <a href="{{ route('hrd.jabatan.index') }}"><i class="fa fa-calculator"></i> <span>Master Jabatan</span></a>
     </li>
 
     <li class="submenu">
