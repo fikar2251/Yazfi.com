@@ -24,7 +24,7 @@ class Barang extends Model
 
     public function produkharga()
     {
-        return $this->hasMany(HargaProdukCabang::class);
+        return $this->hasMany(HargaProdukCabang::class,'barang_id   ');
     }
 
     public function purchase()

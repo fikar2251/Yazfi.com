@@ -167,6 +167,6 @@ class ReportController extends Controller
             $barangs = InOut::get();
         }
 
-        return view('admin.report.barang.index', compact('barangs', 'from', 'to',));
+        return view('admin.report.barang.index', compact('barangs', 'from', 'to'));
     }
 }

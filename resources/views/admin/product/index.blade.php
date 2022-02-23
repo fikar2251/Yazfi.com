@@ -21,11 +21,13 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Suplier</th>
-                        <th>Lokasi</th>
-                        <th>Project</th>
-                        <th>Tanggal</th>
-                        <th>No Po</th>
+                        <th>No PO</th>
+                        <th>Item</th>
+                        <th>Qty</th>
+                        <th>Unit</th>
+                        <th>Harga</th>
+                        <th>Total</th>
+                        <th>Admin</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -34,15 +36,12 @@
                     @foreach($products as $product)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td><a href="{{ route('admin.product.show', $product->id) }}">{{ $product->kode_barang }}</a></td>
+                       
                         <td>{{ $product->nama_barang }}</td>
-                        <td>{{ $product->description }}</td>
-                        <td>{{ $product->description }}</td>
-                        <td>
-                            @foreach($product->produkharga as $stok)
-                            {{ $stok->cabang->nama }} ({{ $stok->qty }}) <br>
-                            @endforeach
-                        </td>
+                        <td>{{ $product->hargaproduk->qty }}</td>
+                        <td>{{ $product->purchase->unit }}</td>
+                        <td>{{ $product->purchase->harga_beli }}</td>
+                        <td>{{ $product->hargaproduk->id_user }}</td>
                         <td>
                             @can('product-edit')
                             <a href="{{ route('admin.product.edit', $product->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>

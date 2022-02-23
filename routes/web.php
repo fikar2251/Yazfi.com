@@ -18,7 +18,11 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/', function () {
     return view('auth.login');
 });
-
+Route::get('/mac',function()
+{
+ $macAddr = substr(exec('getmac'), 0, 17);
+ dd($macAddr);
+});
 
 
 Auth::routes();
@@ -45,8 +49,8 @@ Route::middleware('auth')->group(function () {
             Route::resource('users', 'UserController');
 
             // Route Master Cabang
-            Route::get('cabang/{cabang:id}/ruangan', 'CabangController@ruangan');
-            Route::resource('cabang', 'CabangController');
+
+            Route::resource('unit', 'UnitController');
 
             Route::resource('supplier', 'SupplierController');
             Route::get('/where/product', 'PurchaseController@WhereProduct');
@@ -59,6 +63,8 @@ Route::middleware('auth')->group(function () {
 
             // Route Master Barang
             Route::resource('product', 'BarangController');
+
+            Route::resource('kategori-barang', 'KategoriBarangController');
 
             // Route Master Service
             Route::resource('service', 'ServiceController');

@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
+
 
 class UpdateWarehouseRequest extends FormRequest
 {
@@ -25,13 +25,8 @@ class UpdateWarehouseRequest extends FormRequest
     public function rules()
     {
         return [
-            'kode_cabang' => 'required',
-            'kode_barang' => Rule::unique('cabangs')->ignore($this->cabang),
             'nama' => 'required',
-            'email' => 'required',
-            'telpon' => 'required',
-            'wa' => 'required',
-            'alamat' => 'required',
+            'id_perusahaan' => 'required',
         ];
     }
 
@@ -39,10 +34,8 @@ class UpdateWarehouseRequest extends FormRequest
     {
         return [
             'nama.required' => 'The nama field is required.',
-            'email.required' => 'The email field is required.',
-            'telpon.required' => 'The telp field is required.',
-            'wa.required' => 'The whatsapp field is required.',
-            'alamat.required' => 'The alamat field is required.',
+            'id_perusahaan.required' => 'The nama perusahaan field is required.',
+            
         ];
     }
 }

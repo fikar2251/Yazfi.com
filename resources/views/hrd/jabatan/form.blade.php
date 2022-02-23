@@ -4,7 +4,7 @@
             <li>
                 <div class="form-group">
                     <label for="supplier">Nama Jabatan *</label>
-                    <input type="text" name="nama" value="$jabatan ? $jabatan->nama : ''" class="form-control">
+                    <input type="text" name="nama" value="{{$jabatan ? $jabatan->nama : ''}}" class="form-control">
                 </div>
             </li>
         </ul>

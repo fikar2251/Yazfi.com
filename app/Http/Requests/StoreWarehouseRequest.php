@@ -24,12 +24,8 @@ class StoreWarehouseRequest extends FormRequest
     public function rules()
     {
         return [
-            'kode_cabang' => 'required|unique:cabangs',
             'nama' => 'required',
-            'email' => 'required',
-            'telpon' => 'required',
-            'wa' => 'required',
-            'alamat' => 'required',
+            'id_perusahaan' => 'required',
         ];
     }
 
@@ -37,10 +33,7 @@ class StoreWarehouseRequest extends FormRequest
     {
         return [
             'nama.required' => 'The nama field is required.',
-            'email.required' => 'The email field is required.',
-            'telpon.required' => 'The telp field is required.',
-            'wa.required' => 'The whatsapp field is required.',
-            'alamat.required' => 'The alamat field is required.',
+            'id_perusahaan.required' => 'The nama perusahaan field is required.',
         ];
     }
 }
