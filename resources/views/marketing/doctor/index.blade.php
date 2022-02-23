@@ -92,8 +92,9 @@
                 serverSide: true,
                 ajax: "/marketing/doctor/json",
                 columns: [{
-                        data: 'id_unit_rumah',
-                        name: 'id_unit_rumah'
+                        render: function(data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        },
                     },
                     {
                         data: 'type',
@@ -125,7 +126,8 @@
                     },
                     {
                         data: 'harga_jual',
-                        name: 'harga_jual'
+                        name: 'harga_jual',
+                        render: $.fn.dataTable.render.number('.', '.', 0, 'Rp. ')
                     },
                     {
                         data: 'status_penjualan',

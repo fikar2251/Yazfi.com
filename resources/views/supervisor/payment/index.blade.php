@@ -146,7 +146,7 @@
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ Carbon\Carbon::now()->format('d-m-Y') }}</td>
-                                                <td>{{ $item->jumlah_tagihan }}</td>
+                                                <td>@currency($item->jumlah_tagihan)</td>
                                                 <td>
                                                     @if ($item->tipe == 1)
                                                         Booking fee
@@ -218,7 +218,7 @@
                                                         @endif
                                                     </td>
                                                     <td>
-                                                        {{ $item->nominal }}
+                                                        @currency($item->nominal)
                                                     </td>
                                                     <td> {{ $item->status_approval }} </td>
                                                     <td>

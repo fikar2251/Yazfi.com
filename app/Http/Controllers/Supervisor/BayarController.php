@@ -21,6 +21,8 @@ class BayarController extends Controller
         $bayar = Pembayaran::where('no_detail_transaksi', $no)->get();
 
 
+
+
         return view('supervisor.payment.index', compact('spr', 'getSpr', 'tagihan', 'bayar'));
     }
 

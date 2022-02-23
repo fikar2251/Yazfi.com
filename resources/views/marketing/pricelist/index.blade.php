@@ -35,7 +35,7 @@
                                         <td>{{ $item->no_transaksi }}</td>
                                         <td>{{ $item->nama }}</td>
                                         <td>{{ $item->no_ktp }}</td>
-                                        <td>{{ $item->harga_jual }}</td>
+                                        <td>@currency($item->harga_jual)</td>
                                         <td>{{ $item->unit->type }}</td>
                                         <td>{{ $item->unit->total }}/{{ $item->unit->lb }}/{{ $item->unit->lt }}</td>
                                         {{-- @foreach ($bf as $bfs) --}}
@@ -46,7 +46,7 @@
                                             <td>{{ $item->status_dp }}</td>
                                         {{-- @endforeach --}}
                                         <td>{{ $item->skema_pembayaran->nama_skema }}</td>
-                                        <td> {{ $item->harga_jual }}</td>
+                                        <td> @currency($item->harga_jual)</td>
                                     </tr>
                                 @endforeach
                             </tbody>

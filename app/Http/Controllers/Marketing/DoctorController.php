@@ -29,7 +29,14 @@ class DoctorController extends Controller
     {
         $stok = Marketing::where('status_penjualan', 'Available')->get();
 
-        return DataTables::of($stok)->make(true);
+        return DataTables::of($stok)
+                ->editColumn('harga_jual', function($stok){
+                    $raw = $stok->harga_jual;
+                    $cnv = (int)$raw;
+                    $hj = $cnv * 1000000;
+                    return $hj;
+                })
+                ->make(true);
     }
     /**
      * Show the form for creating a new resource.
