@@ -29,15 +29,17 @@
             <label for="name" class="col-sm-2">Masukkan nomor SPR :</label>
             <div class="col-sm-2">
                 <select name="no_transaksi" id="spr" class="form-control">
-                    <option selected value=""></option>
+                    @if (!request()->get('no_transaksi'))
+                        <option selected value=""></option>
+                    @endif
                     @foreach ($spr as $item)
-                        <option value="{{ $item->no_transaksi }}">{{ $item->no_transaksi }}</option>
+                        @if (request()->get('no_transaksi') == $item->no_transaksi)
+                            <option value="{{ $item->no_transaksi }}" selected>{{ $item->no_transaksi }}</option>
+                        @else
+                            <option value="{{ $item->no_transaksi }}">{{ $item->no_transaksi }}</option>
+                        @endif
                     @endforeach
                 </select>
-
-                {{-- {{ request()->get('no_transaksi') }} --}}
-
-                {{-- <input type="text" name="spr" id="spr" class="form-control"> --}}
             </div>
             <div class="col-sm-2">
                 <button type="submit" name="submit" class="btn btn-primary">Cari</button>
@@ -91,7 +93,7 @@
                                             <td style="width: 200px">Tujuan</td>
                                             <td style="width: 20px">:</td>
                                             <td>
-                                                <select name="rincian_id" id="rincian_id" class="form-control"
+                                                <select name="rincian_id" id="rincian_id" class="form-control rincian"
                                                     style="width: 200px">
                                                     <option selected value="">-- Tujuan --</option>
                                                     @foreach ($tagihan as $item)
@@ -107,6 +109,18 @@
                                                     @endforeach
                                             </td>
                                         </tr>
+                                        <tr>
+                                            <td style="width: 200px">Bank tujuan</td>
+                                            <td style="width: 20px">:</td>
+                                            <td>
+                                                <select name="bank_tujuan" id="bank_tujuan" class="form-control rincian"
+                                                    style="width: 200px">
+                                                    <option selected value="">-- Bank tujuan --</option>
+                                                    <option value="Bri">BRI</option>
+                                                    <option value="Bca">BCA</option>
+                                                    <option value="Mandiri">Mandiri</option>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -115,7 +129,8 @@
                 </div>
             </div>
             <div class="m-t-20 text-center">
-                <button type="submit" class="btn btn-primary submit-btn"><i class="fa fa-save"></i> Save</button>
+                <button type="submit" name="submit" class="btn btn-primary submit-btn"><i class="fa fa-save"></i>
+                    Save</button>
             </div>
             <div class="row mt-5">
                 <div class="col-sm-12" style="text-align: center">
@@ -178,77 +193,114 @@
 
 
         @foreach ($bayar as $item)
-            @if ($item->id)
-                <div class="row mt-5">
-                    <div class="col-sm-12" style="text-align: center">
-                        <h4 class="page-title">Konfirmasi Pembayaran</h4>
-                    </div>
+            {{-- {{$item->id}} --}}
+        @endforeach
+        @if ($item->id)
+            <div class="row mt-5">
+                <div class="col-sm-12" style="text-align: center">
+                    <h4 class="page-title">Konfirmasi Pembayaran</h4>
                 </div>
-                <div class="row">
-                    <div class="col-md-10">
-                        <div class="card shadow" style="margin-left: 180px">
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered custom-table table-striped">
-                                        <thead>
+            </div>
+            <div class="row">
+                <div class="col-sm-11">
+                    <div class="card shadow" style="margin-left: 180px">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered custom-table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>No Transaksi</th>
+                                            <th>Tanggal transaksi</th>
+                                            <th>Tipe</th>
+                                            <th>Nominal</th>
+                                            <th>Status</th>
+                                            <th>Bank tujuan</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($bayar as $item)
                                             <tr>
-
-                                                <th>NO</th>
-                                                <th>No Transaksi</th>
-                                                <th>Tanggal transaksi</th>
-                                                <th>Tipe</th>
-                                                <th>Nominal</th>
-                                                <th>Status</th>
-                                                <th>Action</th>
+                                                <td>{{ $item->no_detail_transaksi }}</td>
+                                                <td>{{ Carbon\Carbon::now()->format('d-m-Y') }}</td>
+                                                <td>
+                                                    @if ($item->rincian->tipe == 1)
+                                                        Booking fee
+                                                    @elseif ($item->rincian->tipe == 2)
+                                                        Downpayment
+                                                    @else
+                                                        Cicilan tahap {{ $loop->iteration - 2 }}
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @currency($item->nominal)
+                                                </td>
+                                                <td> {{ $item->status_approval }} </td>
+                                                <td>
+                                                    @if ($item->bank_tujuan == 'Bri')
+                                                        BRI
+                                                    @elseif ($item->bank_tujuan == 'Bca')
+                                                        BCA
+                                                    @else
+                                                        Mandiri
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <div class="text-center">
+                                                        <a href="{{ route('supervisor.payment.delete', $item->id) }}">
+                                                            <button type="submit" class="btn btn-danger"><i
+                                                                    class="fa fa-trash"></i></button>
+                                                        </a>
+                                                    </div>
+                                                </td>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($bayar as $item)
-                                                <tr>
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $item->no_detail_transaksi }}</td>
-                                                    <td>{{ Carbon\Carbon::now()->format('d-m-Y') }}</td>
-                                                    <td>
-                                                        @if ($item->rincian->tipe == 1)
-                                                            Booking fee
-                                                        @elseif ($item->rincian->tipe == 2)
-                                                            Downpayment
-                                                        @else
-                                                            Cicilan tahap {{ $loop->iteration - 2 }}
-                                                        @endif
-                                                    </td>
-                                                    <td>
-                                                        @currency($item->nominal)
-                                                    </td>
-                                                    <td> {{ $item->status_approval }} </td>
-                                                    <td>
-                                                        <div class="text-center">
-                                                            <a
-                                                                href="{{ route('supervisor.payment.delete', $item->id) }}">
-                                                                <button type="submit" class="btn btn-danger"><i
-                                                                        class="fa fa-trash"></i></button>
-                                                            </a>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
+                                        @endforeach
 
-                                        </tbody>
-                                    </table>
-                                </div>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
-            @else
-
-            @endif
-        @endforeach
+            </div>
+        @else
+        @endif
     @else
 
     @endif
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.rincian').change(function() {
+                var rincian_id = $(this).val();
+                var nominal = $(this).val();
+                var div = $(this).parent();
+                var op = " ";
 
+                console.log(rincian_id);
+                $.ajax({
+                    url: `/supervisor/nominal`,
+                    method: "get",
+                    data: {
+                        'rincian_id': rincian_id,
+                        'nominal': nominal,
+                    },
+                    success: function(data) {
+                        console.log(data);
 
+                        for (var i = 0; i < data.length; i++) {
 
+                            var nominal = data[i].jumlah_tagihan;
+                            document.getElementById('nominal').value = nominal;
+                        };
+                    },
+                    error: function() {
 
+                    },
+
+                })
+            })
+        })
+    </script>
 @stop

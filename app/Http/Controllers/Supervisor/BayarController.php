@@ -20,10 +20,23 @@ class BayarController extends Controller
         $tagihan = Tagihan::where('no_transaksi', $no)->get();
         $bayar = Pembayaran::where('no_detail_transaksi', $no)->get();
 
-
-
-
         return view('supervisor.payment.index', compact('spr', 'getSpr', 'tagihan', 'bayar'));
+    }
+
+    public function nominal(Request $request)
+    {
+        $no = request()->get('no_transaksi');
+
+        $where = [
+            'id_rincian' => $request->rincian_id,
+        ];
+
+        $data = DB::table('rincian_tagihan_spr')
+            ->select('rincian_tagihan_spr.id_rincian', 'rincian_tagihan_spr.jumlah_tagihan')
+            ->groupBy('rincian_tagihan_spr.jumlah_tagihan', 'rincian_tagihan_spr.id_rincian')
+            ->where($where)->get();
+
+        return $data;
     }
 
     public function storeBayar(Request $request)
@@ -35,6 +48,7 @@ class BayarController extends Controller
             'tanggal_transaksi' => $tgl,
             'rincian_id' => $request->rincian_id,
             'nominal' => $request->nominal,
+            'bank_tujuan' => $request->bank_tujuan,
             'id_perusahaan' => '1',
             'status_approval' => 'pending',
         ]);
