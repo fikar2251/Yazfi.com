@@ -34,7 +34,7 @@
                     </div>
                 </div>
 
-                <form action="{{ route('purchasing.penerimaan-barang.store',$purchase->id) }}" method="post">
+                <form action="{{ route('purchasing.penerimaan-barang.store') }}" method="post">
                     @csrf
                     <div class="row">
                         <div class="col-sm-6 col-sg-4 m-b-4">
@@ -82,7 +82,7 @@
                                 <li>
                                     <div class="form-group">
                                         <label for="tanggal">Tanggal <span style="color: red">*</span></label>
-                                        <input type="datetime-local" name="tanggal" id="created_at" readonly class=" form-control">
+                                        <input type="text" id="created_at" class="form-control" readonly>
                                     </div>
                                 </li>
                             </ul>
@@ -100,46 +100,79 @@
                                             <th class="text-light"> Total</th>
                                             <th class="text-light"> Status Barang</th>
                                         </tr>
-                                        <tbody id="dynamic_field">
-                                            <script src="{{ asset('/') }}js/jquery-3.2.1.min.js"></script>
-                                            <script src="{{ asset('/') }}js/select2.min.js"></script>
-
-                                            @foreach($purchase as $pur)
-                                            <tr class="rowComponent">
-                                                <td hidden>
-                                                    <input type="hidden" name="barang_id[{{ $loop->iteration }}]" class="barang_id-{{ $loop->iteration }}">
+                                        <tbody>
+                                            <tr style="font-size:12px;">
+                                                <td></td>
+                                                <td> <input type="text" id="barang_id" class="form-control"></td>
+                                                <td>
+                                                    <input type="text" id="qty_received" name="qty_received" class="form-control">
                                                 </td>
                                                 <td>
-                                                    <input value="{{ $pur->barang_id }}" name=" barang_id[{{ $loop->iteration }}]" id="barang_id{{ $loop->iteration }}" class="form-control" required="">
-
+                                                    <input type="text" id="qty" class="form-control">
                                                 </td>
                                                 <td>
-                                                    <input type="number" value="{{ $pur->qty }}" name="qty[{{ $loop->iteration }}]" class="form-control qty-{{ $loop->iteration }}" placeholder="0">
+                                                    <input type="text" id="harga_beli" class="form-control">
                                                 </td>
                                                 <td>
-                                                    <input type="number" value="{{ $pur->harga_beli }}" name="harga_beli[{{ $loop->iteration }}]" class="form-control harga_beli-{{ $loop->iteration }}" data="{{ $loop->iteration }}" onkeyup="hitung(this), HowAboutIt(this)" placeholder="0">
+                                                    <input type="text" id="total" class="form-control">
                                                 </td>
                                                 <td>
-                                                    <input type="number" disabled value="{{ $pur->total }}" name="total[{{ $loop->iteration }}]" class="form-control total-{{ $loop->iteration }} total-form" placeholder="0">
-                                                </td>
-                                                <td>
-                                                    <button type="button" class="btn btn-danger btn-sm" onclick="remove(this)">Delete</button>
+                                                    <input type="text" id="status_barang" class="form-control">
                                                 </td>
                                             </tr>
-                                            @endforeach
+
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
+                        <form action="{{ route('purchasing.penerimaan-barang.create', $purchase->id) }}" method="get" style="display: inline;" class="delete-form">
+                            @method('PUT')
+                            @csrf
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-striped custom-table report">
+                                            <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Nama Barang</th>
+                                                    <th>Qty</th>
+                                                    <th>Harga</th>
+                                                    <th>Harga</th>
+                                                    <th>Total</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                @foreach($purchases as $purchase)
+                                                <tr>
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>
+                                                        <a href="{{ route('logistik.purchase.show', $purchase->id) }}">{{ $purchase->invoice }}</a>
+                                                    </td>
+                                                    <td>{{ $purchase->admin->name }}</td>
+                                                    <td>{{ Carbon\Carbon::parse($purchase->created_at)->format("d/m/Y H:i:s") }}</td>
+                                                    <td>@currency(\App\Purchase::where('invoice', $purchase->invoice)->sum('grand_total'))</td>
+                                                    <td>{{ $purchase->status_barang }}</td>
+                                                    <td>{{ $purchase->status_pembayaran }}</td>
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                     </div>
+                    <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
+                </form>
             </div>
             <br>
             </form>
         </div>
     </div>
 </div>
-</div>
+
 
 </html>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

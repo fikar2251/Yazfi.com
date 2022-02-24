@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 22, 2022 at 09:42 AM
+-- Generation Time: Feb 24, 2022 at 10:52 AM
 -- Server version: 10.4.20-MariaDB
 -- PHP Version: 7.4.22
 
@@ -56,6 +56,32 @@ INSERT INTO `absensis` (`id`, `tanggal`, `masuk`, `keluar`, `pegawai_id`, `tipe`
 (7, '2021-12-06', '09:13:55', NULL, 4, 'tidak telat', NULL, NULL, NULL, NULL, '2021-12-06 02:13:56', '2021-12-06 02:13:56'),
 (8, '2021-12-06', '09:15:10', NULL, 5, 'telat', NULL, NULL, NULL, NULL, '2021-12-06 02:15:12', '2021-12-06 02:15:12'),
 (11, '2022-01-12', '12:36:02', NULL, 1, 'telat', NULL, NULL, NULL, NULL, '2022-01-12 05:36:03', '2022-01-12 05:36:03');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `agamas`
+--
+
+CREATE TABLE `agamas` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `nama` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `agamas`
+--
+
+INSERT INTO `agamas` (`id`, `nama`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Islam', 1, '2021-11-16 04:01:25', '2021-11-16 04:01:25'),
+(2, 'Katolik', 1, '2021-11-16 04:01:34', '2021-11-16 04:01:34'),
+(3, 'Protestan', 1, '2021-11-16 04:01:45', '2021-11-16 04:01:45'),
+(4, 'Hindu', 1, '2021-11-16 04:01:55', '2021-11-16 04:01:55'),
+(5, 'Buddha', 1, '2021-11-16 04:02:09', '2021-11-16 04:02:09'),
+(6, 'Konghucu', 1, '2021-11-16 04:02:21', '2021-11-16 04:02:21');
 
 -- --------------------------------------------------------
 
@@ -877,7 +903,10 @@ INSERT INTO `in_outs` (`id`, `invoice`, `barang_id`, `supplier_id`, `project_id`
 (8, 'INV12333', 1, 1, 1, 13, 1, 0, 0, '2022-02-15 09:43:25', NULL),
 (9, 'INV12333', 2, 1, 1, 13, 10, 0, 0, '2022-02-15 09:43:25', NULL),
 (10, 'PO/08/00008', 1, 2, 1, 13, 1, 0, 0, '2022-02-17 04:49:45', NULL),
-(11, 'PO/09/00009', 1, 1, 2, 13, 1, 0, 0, '2022-02-18 03:50:37', NULL);
+(11, 'PO/09/00009', 1, 1, 2, 13, 1, 0, 0, '2022-02-18 03:50:37', NULL),
+(12, 'PO/10/00010', 1, 1, 1, 13, 1, 0, 0, '2022-02-24 03:02:19', NULL),
+(15, 'PO/11/00011', 1, 1, 1, 13, 2, 0, 0, '2022-02-24 03:26:49', NULL),
+(16, 'PO/14/00014', 1, 1, 1, 13, 1, 0, 0, '2022-02-24 06:35:16', NULL);
 
 -- --------------------------------------------------------
 
@@ -890,7 +919,7 @@ CREATE TABLE `jabatans` (
   `nama` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` int(11) NOT NULL,
   `id_perusahaan` int(11) NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -1201,19 +1230,13 @@ INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 (1, 'App\\Models\\User', 1),
 (1, 'App\\User', 1),
 (2, 'App\\Models\\User', 2),
-(2, 'App\\User', 3),
 (2, 'App\\Models\\User', 4),
 (2, 'App\\Models\\User', 5),
 (2, 'App\\Models\\User', 6),
 (2, 'App\\Models\\User', 7),
 (2, 'App\\Models\\User', 8),
-(2, 'App\\User', 9),
 (2, 'App\\User', 11),
-(3, 'App\\User', 2),
-(4, 'App\\User', 4),
-(5, 'App\\User', 6),
-(6, 'App\\User', 5),
-(7, 'App\\User', 8),
+(2, 'App\\User', 23),
 (8, 'App\\User', 10),
 (9, 'App\\User', 12),
 (9, 'App\\User', 13),
@@ -1622,6 +1645,103 @@ INSERT INTO `payments` (`id`, `cabang_id`, `nama_metode`, `potongan`, `rekening`
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `pegawais`
+--
+
+CREATE TABLE `pegawais` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `nip` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nama` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nik` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tanggal_lahir` date NOT NULL,
+  `tempat_lahir` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `alamat` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `jenis_kelamin` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `no_hp` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `foto` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `facebook` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `instagram` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tmt` date NOT NULL,
+  `tanggal_kenaikan_berkala_terakhir` date NOT NULL,
+  `tanggal_kenaikan_pangkat_terakhir` date NOT NULL,
+  `status_pegawai` int(11) NOT NULL,
+  `status_user` int(11) NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `status_perkawinan_id` bigint(20) UNSIGNED NOT NULL,
+  `agama_id` bigint(20) UNSIGNED NOT NULL,
+  `jabatan_id` bigint(20) UNSIGNED NOT NULL,
+  `pendidikan_id` bigint(20) UNSIGNED NOT NULL,
+  `perusahaan_id` int(250) NOT NULL,
+  `role_id` int(250) NOT NULL,
+  `unit_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `pegawais`
+--
+
+INSERT INTO `pegawais` (`id`, `nip`, `nama`, `nik`, `tanggal_lahir`, `tempat_lahir`, `alamat`, `jenis_kelamin`, `no_hp`, `foto`, `facebook`, `instagram`, `tmt`, `tanggal_kenaikan_berkala_terakhir`, `tanggal_kenaikan_pangkat_terakhir`, `status_pegawai`, `status_user`, `user_id`, `status_perkawinan_id`, `agama_id`, `jabatan_id`, `pendidikan_id`, `perusahaan_id`, `role_id`, `unit_id`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, '11806634', 'Ichsan Arrizqi', '6634', '2000-11-02', 'Bogor', 'Bojonggede', 'Laki Laki', '081296031743', 'pegawai/foto/20211116112147_orang.jpg', 'https://facebook.com/', 'https://instagram.com/', '2017-11-26', '2021-11-16', '2021-11-16', 1, 1, 4, 4, 6, 5, 3, 0, 0, 3, '2021-11-16 04:21:47', '2021-12-01 07:32:17', NULL),
+(2, '839201', 'budi', '12321', '2021-11-17', 'Jakarta', 'dsa', 'Laki Laki', '123', 'pegawai/foto/06102021162408-AIG.png', 'https://facebook.com/', 'https://instagram.com/', '2017-11-26', '2021-11-16', '2021-11-16', 1, 1, 5, 4, 6, 5, 10, 0, 0, 3, '2021-11-16 04:41:45', '2022-01-28 07:57:21', NULL),
+(3, '123123', 'James', '132312', '1999-11-16', 'Depok', 'Depok', 'Laki Laki', '1232131', 'pegawai/foto/20211116131206_1924756943_20211111_michele-caliani-iLAAT1E-H_8-unsplash.jpg', 'https://facebook.com/', 'https://instagram.com/', '2017-11-26', '2021-11-16', '2021-11-16', 1, 1, 6, 1, 3, 2, 6, 0, 0, 1, '2021-11-16 06:12:06', '2021-11-16 06:12:06', NULL),
+(4, '123908', 'Alyssa', '1298309', '1999-06-17', 'Tanggerang', 'Tanggerang', 'Prempuan', '213098709123', 'pegawai/foto/20211116131343_menangis.jpg', 'https://facebook.com/', 'https://instagram.com/', '2019-11-26', '2021-11-16', '2021-11-16', 1, 1, 7, 1, 2, 4, 7, 0, 0, 1, '2021-11-16 06:13:43', '2021-11-16 06:13:43', NULL),
+(5, '123989', 'iqbal', '1290830', '2007-03-22', 'Jakarta', 'Jakarta', 'Laki Laki', '1239213', 'pegawai/foto/20211122093458_06102021162408-381-3812277_ville-de-saint-etienne-png-download-gambar-icon.png', 'https://facebook.com/', 'https://instagram.com/', '2019-11-29', '2021-11-22', '2021-11-22', 1, 1, 8, 1, 1, 1, 3, 0, 0, 3, '2021-11-22 02:34:59', '2021-11-22 02:34:59', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pendidikans`
+--
+
+CREATE TABLE `pendidikans` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `nama` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `pendidikans`
+--
+
+INSERT INTO `pendidikans` (`id`, `nama`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'SD / MI', 1, '2021-11-16 04:04:57', '2021-11-16 04:04:57'),
+(2, 'SMP / MTS', 1, '2021-11-16 04:05:03', '2021-11-16 04:05:03'),
+(3, 'SMA / MA / SMK', 1, '2021-11-16 04:05:10', '2021-11-16 04:05:10'),
+(4, 'D1', 1, '2021-11-16 04:05:17', '2021-11-16 04:05:17'),
+(5, 'D2', 1, '2021-11-16 04:05:24', '2021-11-16 04:05:24'),
+(6, 'D4', 1, '2021-11-16 04:05:31', '2021-11-16 04:05:31'),
+(7, 'S1', 1, '2021-11-16 04:05:37', '2021-11-16 04:05:37'),
+(8, 'S2', 1, '2021-11-16 04:05:44', '2021-11-16 04:05:44'),
+(9, 'S3', 1, '2021-11-16 04:05:51', '2021-11-16 04:05:51'),
+(10, 'D3', 1, '2021-11-16 04:05:58', '2021-11-16 04:05:58');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `penerimaan_barangs`
+--
+
+CREATE TABLE `penerimaan_barangs` (
+  `id` int(10) NOT NULL,
+  `id_purchase` int(250) NOT NULL,
+  `id_user` int(250) NOT NULL,
+  `no_penerimaan_barang` int(250) NOT NULL,
+  `qty_received` int(250) NOT NULL,
+  `tanggal_penerimaan` datetime NOT NULL DEFAULT current_timestamp(),
+  `harga_satuan` varchar(250) NOT NULL,
+  `ppn` varchar(250) DEFAULT NULL,
+  `total` varchar(250) NOT NULL,
+  `grand_total` varchar(250) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `pengajuans`
 --
 
@@ -1646,7 +1766,13 @@ INSERT INTO `pengajuans` (`id`, `id_user`, `id_perusahaan`, `id_roles`, `nomor_p
 (1, 13, 1, 9, 'KEU/01/00001', '2022-02-22 09:03:00', 'KEU/01/00001.Revisi Axis 29 Oktober 2021.docx', 'pending', 'pending', '2022-02-22 09:03:00'),
 (2, 13, 1, 9, 'KEU/02/00002', '2022-02-22 09:04:00', 'KEU/02/00002.02092021.docx', 'pending', 'pending', '2022-02-22 09:04:00'),
 (3, 13, 1, 9, 'KEU/03/00003', '2022-02-22 09:05:00', 'KEU/03/00003.02092021.docx', 'pending', 'pending', '2022-02-22 09:05:00'),
-(4, 13, 1, 9, 'KEU/04/00004', '2022-02-22 10:56:00', 'KEU/04/00004/02092021.docx', 'pending', 'pending', '2022-02-22 10:56:00');
+(4, 13, 1, 9, 'KEU/04/00004', '2022-02-22 10:56:00', 'KEU/04/00004/02092021.docx', 'pending', 'pending', '2022-02-22 10:56:00'),
+(5, 20, 1, 9, 'PD/05/00005', '2022-02-23 10:13:00', 'PD/05/00005/02092021.docx', 'pending', 'pending', '2022-02-23 10:13:00'),
+(8, 13, 1, 9, 'PD/06/00006', '2022-02-23 14:11:00', 'PD/06/00006/02092021.docx', 'pending', 'pending', '2022-02-23 14:11:00'),
+(9, 13, 1, 9, 'PD/09/00009', '2022-02-24 10:04:00', 'PD/09/00009/SK_09122021.docx', 'pending', 'pending', '2022-02-24 10:04:00'),
+(10, 13, 1, 9, 'PD/10/00010', '2022-02-24 10:20:00', 'PD/10/00010/SK_09122021.docx', 'pending', 'pending', '2022-02-24 10:20:00'),
+(11, 13, 1, 9, 'PD/11/00011', '2022-02-24 10:30:00', 'PD/11/00011/SB22022022.docx', 'pending', 'pending', '2022-02-24 10:30:00'),
+(12, 13, 1, 9, 'PD/12/00012', '2022-02-24 14:05:00', 'PD/12/00012/SB08022022-Part 2 (1).docx', 'pending', 'pending', '2022-02-24 14:05:00');
 
 -- --------------------------------------------------------
 
@@ -1823,7 +1949,7 @@ CREATE TABLE `purchases` (
   `qty` int(11) NOT NULL,
   `harga_beli` double NOT NULL,
   `total` double NOT NULL,
-  `PPN` int(250) NOT NULL,
+  `PPN` int(250) DEFAULT NULL,
   `grand_total` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
   `status_barang` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `status_pembayaran` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1840,7 +1966,10 @@ INSERT INTO `purchases` (`id`, `barang_id`, `supplier_id`, `user_id`, `lokasi`, 
 (6, 1, 2, 13, '', 1, 'INV12333', '', 1, 10000, 10000, 101000, '', 'pending', 'pending', '2022-02-15 09:40:00', NULL),
 (7, 2, 2, 13, '', 1, 'INV12333', '', 10, 100000, 1000000, 101000, '', 'pending', 'pending', '2022-02-15 09:40:00', NULL),
 (8, 1, 2, 13, '', 1, 'PO/08/00008', 'pcs', 1, 100000, 100000, 10000, '', 'pending', 'pending', '2022-02-17 04:49:00', NULL),
-(9, 1, 1, 13, '', 2, 'PO/09/00009', 'pcs', 1, 100000, 100000, 10000, '110000', 'pending', 'pending', '2022-02-18 03:49:00', NULL);
+(9, 1, 1, 13, '', 2, 'PO/09/00009', 'pcs', 1, 100000, 100000, 10000, '110000', 'pending', 'pending', '2022-02-18 03:49:00', NULL),
+(10, 1, 1, 13, '', 1, 'PO/10/00010', 'sak', 1, 1000000, 1000000, 10, '1100000', 'pending', 'pending', '2022-02-24 03:01:00', NULL),
+(13, 1, 1, 13, '', 1, 'PO/11/00011', 'Sak', 2, 100000, 200000, 10, '220000', 'pending', 'pending', '2022-02-24 03:24:00', NULL),
+(14, 1, 1, 13, 'Gunung Sindar', 1, 'PO/14/00014', 'pcs', 1, 100000, 100000, 10000, '110000', 'pending', 'pending', '2022-02-24 06:35:00', NULL);
 
 -- --------------------------------------------------------
 
@@ -1867,7 +1996,8 @@ CREATE TABLE `reinbursts` (
 --
 
 INSERT INTO `reinbursts` (`id`, `nomor_reinburst`, `id_user`, `id_jabatans`, `id_project`, `id_roles`, `id_perusahaan`, `file`, `status_hrd`, `status_pembayaran`, `tanggal_reinburst`) VALUES
-(1, 'RN/01/00001', 14, 2, 1, 10, 1, 'RN/01/00001/SB08022022-Part 2.docx', 'pending', 'pending', '2022-02-22 14:09:00');
+(1, 'RN/01/00001', 14, 2, 1, 10, 1, 'RN/01/00001/SB08022022-Part 2.docx', 'pending', 'pending', '2022-02-22 14:09:00'),
+(2, 'RN/02/00002', 14, 0, 1, 0, 1, 'RN/02/00002/SK_09122021.docx', 'pending', 'pending', '2022-02-24 10:37:00');
 
 -- --------------------------------------------------------
 
@@ -1955,11 +2085,12 @@ INSERT INTO `rincian_pembayarans` (`id`, `booking_id`, `kasir_id`, `payment_id`,
 CREATE TABLE `rincian_pengajuans` (
   `id` int(250) NOT NULL,
   `nomor_pengajuan` varchar(250) NOT NULL,
+  `no_kwitansi` varchar(250) NOT NULL,
   `barang_id` varchar(250) DEFAULT NULL,
   `total` varchar(250) NOT NULL,
   `harga_beli` varchar(250) NOT NULL,
-  `PPN` int(250) NOT NULL,
-  `qty` int(250) NOT NULL,
+  `PPN` int(250) DEFAULT NULL,
+  `qty` int(250) DEFAULT NULL,
   `grandtotal` varchar(250) NOT NULL,
   `unit` varchar(250) NOT NULL,
   `keterangan` varchar(250) NOT NULL
@@ -1969,10 +2100,18 @@ CREATE TABLE `rincian_pengajuans` (
 -- Dumping data for table `rincian_pengajuans`
 --
 
-INSERT INTO `rincian_pengajuans` (`id`, `nomor_pengajuan`, `barang_id`, `total`, `harga_beli`, `PPN`, `qty`, `grandtotal`, `unit`, `keterangan`) VALUES
-(1, 'KEU/03/00003', 'listrik', '0', '1000000', 200000, 1, '2200000', 'pcs', 'sdsd'),
-(2, 'KEU/03/00003', 'BPJS', '0', '1000000', 200000, 1, '2200000', 'pcs', 'sadsa'),
-(3, 'KEU/04/00004', 'sabun', '0', '100000', 10, 1, '100000', 'pcs', 'sdsd');
+INSERT INTO `rincian_pengajuans` (`id`, `nomor_pengajuan`, `no_kwitansi`, `barang_id`, `total`, `harga_beli`, `PPN`, `qty`, `grandtotal`, `unit`, `keterangan`) VALUES
+(1, 'KEU/03/00003', '', 'listrik', '0', '1000000', 200000, 1, '2200000', 'pcs', 'sdsd'),
+(2, 'KEU/03/00003', '', 'BPJS', '0', '1000000', 200000, 1, '2200000', 'pcs', 'sadsa'),
+(3, 'KEU/04/00004', '', 'sabun', '0', '100000', 10, 1, '100000', 'pcs', 'sdsd'),
+(4, 'PD/05/00005', '', 'sabun', '100000', '100000', 12, 1, '112000', 'pcs', 'ad'),
+(8, 'PD/06/00006', '', 'sabun', '1000000', '1000000', 10, 1, '1100000', 'pcs', 'adsa'),
+(9, 'PD/09/00009', '', 'listrik', '100000', '100000', 0, 1, '200000', 'Buah', 'Gawat'),
+(10, 'PD/09/00009', '', 'BPJS', '100000', '100000', 0, 1, '200000', 'Buah', 'Sakit'),
+(11, 'PD/10/00010', '', 'sabun', '10000', '10000', 10, 1, '11000', 'pcs', 'asdsad'),
+(12, 'PD/11/00011', '', 'Bayar Listrik', '100000', '100000', 11, 1, '222000', 'buah', 'Bayar'),
+(13, 'PD/11/00011', '', 'Bayar BPJS', '100000', '100000', 11, 1, '222000', 'buah', 'Bayar'),
+(14, 'PD/12/00012', '23232323', 'sabun', '1000000', '1000000', NULL, 1, '1000000', 'pcs', 'sdsd');
 
 -- --------------------------------------------------------
 
@@ -1996,7 +2135,8 @@ CREATE TABLE `rincian_reinbursts` (
 
 INSERT INTO `rincian_reinbursts` (`id`, `no_kwitansi`, `nomor_reinburst`, `catatan`, `harga_beli`, `total`, `grandtotal`) VALUES
 (1, '121212', 'RN/01/00001', 'sasas', 10000, 10000, 110000),
-(2, '121212', 'RN/01/00001', 'qwqw', 100000, 100000, 110000);
+(2, '121212', 'RN/01/00001', 'qwqw', 100000, 100000, 110000),
+(3, '1021213', 'RN/02/00002', 'Reinburst Bensin', 100000, 100000, 100000);
 
 -- --------------------------------------------------------
 
@@ -2024,8 +2164,8 @@ CREATE TABLE `roles` (
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `guard_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -2065,13 +2205,21 @@ INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
 (8, 1),
 (9, 1),
 (11, 1),
+(11, 8),
 (12, 1),
+(12, 8),
 (13, 1),
+(13, 8),
 (14, 1),
+(14, 8),
 (15, 1),
+(15, 8),
 (16, 1),
+(16, 8),
 (17, 1),
+(17, 8),
 (18, 1),
+(18, 8),
 (19, 1),
 (20, 1),
 (21, 1),
@@ -2093,7 +2241,6 @@ INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
 (32, 4),
 (33, 1),
 (33, 4),
-(33, 8),
 (34, 4),
 (35, 1),
 (36, 1),
@@ -2356,6 +2503,30 @@ INSERT INTO `status_pasiens` (`id`, `status`, `warna`, `is_active`, `created_at`
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `status_pernikahans`
+--
+
+CREATE TABLE `status_pernikahans` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `nama` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `aktifya` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `status_pernikahans`
+--
+
+INSERT INTO `status_pernikahans` (`id`, `nama`, `aktifya`, `created_at`, `updated_at`) VALUES
+(1, 'Belum Kawin', 1, '2021-11-16 04:04:12', '2021-11-16 04:04:12'),
+(2, 'Cerai Hidup', 1, '2021-11-16 04:04:26', '2021-11-16 04:04:26'),
+(3, 'Cerai Mati', 1, '2021-11-16 04:04:32', '2021-11-16 04:04:32'),
+(4, 'Kawin', 1, '2021-11-16 04:04:40', '2021-11-16 04:04:40');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `suppliers`
 --
 
@@ -2526,9 +2697,9 @@ CREATE TABLE `units` (
 --
 
 INSERT INTO `units` (`id`, `nama`, `id_perusahaan`, `created_at`, `updated_at`) VALUES
-(1, 'Keuangan', 0, '2021-11-16 04:07:39', '2021-11-16 04:07:39'),
-(2, 'Administrator', 0, '2021-11-16 04:08:29', '2021-11-16 04:08:29'),
-(3, 'Gedung', 0, '2021-11-16 04:08:41', '2021-11-16 04:08:41');
+(1, 'Keuangan', 1, '2021-11-16 04:07:39', '2021-11-16 04:07:39'),
+(2, 'Administrator', 1, '2021-11-16 04:08:29', '2021-11-16 04:08:29'),
+(3, 'Gedung', 1, '2021-11-16 04:08:41', '2021-11-16 04:08:41');
 
 -- --------------------------------------------------------
 
@@ -3484,18 +3655,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `id_perusahaan`, `id_jabatans`, `id_roles`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `phone_number`, `is_active`, `cabang_id`, `mac_address`, `is_verified`, `updated_by`, `address`, `image`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 1, 2, 1, 'Developer', 'admin@localhost.com', NULL, '$2a$12$fyytii4AV3J8yzB5V4hWHOodVA0lGdkXr4z9wYUun7PwfzjgLIRra', NULL, '82114823280', 1, 1, 'DC-53-60-02-84-01', 'verified', NULL, 'Palmerah, Jakarta Barat', 'images/users/awxrQY0xvKFsLUk.jpg', NULL, '2021-07-16 19:36:06', '2021-09-28 08:48:50'),
-(2, 1, 2, 0, 'Muhammad Iqbal', 'iqbal@gmail.com', NULL, '$2y$10$kJ0I./rSCQXuddZvhxYJFuTF3j.H5UnecI9QVYSIfAsMqXf/pPOWi', NULL, '82114823280', 1, 1, 'DC-53-60-02-84-01', 'verified', NULL, 'Tasikmalaya', 'images/users/p6Sbi8S5ABZ0t94.jpg', NULL, '2021-07-21 18:27:00', '2021-09-27 09:23:24'),
-(3, 1, 2, 0, 'Dr. Yanti Jatnika', 'yanti@gmail.com', NULL, '$2y$10$kznzyIRz94mumyfpUNZcquTQ/F.xP7TTBaKMKwvGiHJoQSkXB0phS', NULL, '081236891733', 1, 1, 'DC-53-60-02-84-01', 'verified', NULL, 'Tasikmalaya', 'images/users/qY6Kng9i8pLYE8O.jpg', NULL, '2021-07-28 07:03:44', '2021-10-11 08:31:03'),
-(4, 1, 2, 0, 'Marketing', 'mrk.tebet@gmail.com', NULL, '$2a$12$IY.WSOTvEItTjHxbN/32guR6cJk2P1vS.J9yCzGSANi05D8/la0FO', NULL, '82114823280', 1, 1, 'DC-53-60-02-84-01', 'verified', NULL, 'Jakarta', 'images/users/xabFCPG0OgGUoM2.jpg', NULL, '2021-08-14 01:57:36', '2021-09-28 08:56:16'),
-(5, 1, 2, 0, 'Noneng', 'prwt.tebet@gmail.com', NULL, '$2y$10$g4KUgBYYideSRTEh9Nr/h.1Pj79YSTfIX.5mApN/U97Po7A6eiE.e', NULL, '82114823890', 1, 1, NULL, 'pending', NULL, 'Bali', 'images/users/FiSC4dmXyOvoxEd.png', NULL, '2021-08-14 01:58:25', '2021-08-14 01:58:25'),
-(6, 1, 2, 0, 'Joko', 'ob.tebet@gmail.com', NULL, '$2y$10$qoJ5SjBrvZqlZnEzLCiDbezxT9D0DC1EswXbZ0iQtQXLwMCcHKJbK', NULL, '6134618936291648', 1, 1, NULL, 'pending', NULL, 'Bandung', 'images/users/NZ4VhKz7p5jDOgw.jpg', NULL, '2021-08-14 01:59:03', '2021-08-14 01:59:03'),
-(8, 1, 2, 0, 'Ridwanul Hakim', 'ridwan@gmail.com', NULL, '$2y$10$n0vq2jzfvMAeszIyDz9jGeOT2vdGl02STbCeWyXVYUxbBidUXyqLW', NULL, '0883475683645', 1, 1, 'DC-53-60-02-84-01', 'verified', NULL, 'Bandung', 'images/users/rTi7kOjdu33u9jp.jpg', NULL, '2021-08-25 07:08:23', '2021-09-28 09:45:45'),
-(9, 1, 2, 0, 'Dr. Handoko Mulyono', 'handoko@gmail.com', NULL, '$2y$10$x55BeqrrmSpRlRsVQYzAROxEz7.P7gYI0gZmBKbUZCMfctmwS3Qdq', NULL, '08976273264', 1, 1, 'DC-53-60-02-84-01', 'verified', NULL, 'Jakarta Barat', 'images/users/jfeLt5WQ2EoD0wL.jpg', NULL, '2021-09-01 06:50:39', '2021-10-07 10:33:34'),
-(10, 1, 2, 0, 'hrd', 'hrd@test.com', NULL, '$2a$12$eMNtb1n9EX4bWgOz9k6JoOwM7AArixYDWYmJFu7m2cFwF0.OzIvD.', NULL, '980879', 1, 1, 'DC-53-60-02-84-01', 'verified', NULL, 'uhnjim', 'images/users/1DTA67QiTSv9EFv.jpg', NULL, '2021-10-07 04:00:59', '2021-10-07 04:01:21'),
-(11, 1, 2, 0, 'zulfikar', 'zulfikar@gmail.com', NULL, '$2y$10$uqYs3D2e7OMWW6RkzplsZOuIEE.HFxUoGXvmkjunv2vPN58PMxQNi', NULL, '08078987987987', 1, 1, 'DC-53-60-02-84-01', 'verified', NULL, 'afsadsad', 'images/users/3nfiqLcQLFIeYvP.jpg', NULL, '2022-02-08 07:50:01', '2022-02-08 07:50:21'),
-(12, 1, 2, 0, 'Ahmad', 'ahmad@admin.com', NULL, '$2y$10$0/apONc5K4yeaWx3tsEpkeVwKt5iUDZ6tLPPDL6psiz9PWZW0oMsa', NULL, '023434234324', 1, 2, 'DC-53-60-02-84-01', 'verified', NULL, 'sdasdsadsa', 'images/users/wrfLnDncEXEX8DW.png', NULL, '2022-02-08 08:02:40', '2022-02-08 08:03:00'),
-(13, 1, 2, 9, 'zainuna', 'zainun@test.com', NULL, '$2y$10$IGToEofGjPjv4jsZBesG5.XNy.r5165Es8th2Mwv6ml.EkjeMX79W', NULL, '0909800980', 1, 1, 'DC-53-60-02-84-01', 'verified', NULL, 'sadsadsa', 'images/users/PlK5sRosBKNpYpp.png', NULL, '2022-02-09 04:27:10', '2022-02-09 04:27:27'),
+(1, 1, 2, 1, 'Admin', 'admin@localhost.com', NULL, '$2a$12$fyytii4AV3J8yzB5V4hWHOodVA0lGdkXr4z9wYUun7PwfzjgLIRra', NULL, '82114823280', 1, 1, 'DC-53-60-02-84-01', 'verified', NULL, 'Palmerah, Jakarta Barat', 'images/users/hgitp4V9MG5C6rQ.png', NULL, '2021-07-16 19:36:06', '2022-02-23 07:51:35'),
+(10, 1, 2, 8, 'hrd', 'hrd@test.com', NULL, '$2a$12$eMNtb1n9EX4bWgOz9k6JoOwM7AArixYDWYmJFu7m2cFwF0.OzIvD.', NULL, '980879', 1, 1, 'DC-53-60-02-84-01', 'verified', NULL, 'uhnjim', 'images/users/1DTA67QiTSv9EFv.jpg', NULL, '2021-10-07 04:00:59', '2021-10-07 04:01:21'),
+(13, 1, 2, 0, 'zainuna', 'zainun@test.com', NULL, '$2y$10$IGToEofGjPjv4jsZBesG5.XNy.r5165Es8th2Mwv6ml.EkjeMX79W', NULL, '0909800980', 1, 1, 'DC-53-60-02-84-01', 'verified', NULL, 'sadsadsa', 'images/users/PlK5sRosBKNpYpp.png', NULL, '2022-02-09 04:27:10', '2022-02-09 04:27:27'),
 (14, 1, 2, 10, 'salma', 'salma@gmail.com', NULL, '$2y$10$QVPsc21zrxh3Qee/1zaNoeu8h7LSZZAQPNXaA44G91RpafCN7fEly', NULL, '09090909', 1, 1, 'DC-53-60-02-84-01', 'verified', NULL, 'qwqwq', 'images/users/nykVErTyUXXARxj.png', NULL, '2022-02-15 05:04:31', '2022-02-15 05:04:44');
 
 -- --------------------------------------------------------
@@ -3541,6 +3703,12 @@ INSERT INTO `vouchers` (`id`, `kode_voucher`, `tgl_mulai`, `tgl_akhir`, `min_tra
 ALTER TABLE `absensis`
   ADD PRIMARY KEY (`id`),
   ADD KEY `absensis_pegawai_id_foreign` (`pegawai_id`);
+
+--
+-- Indexes for table `agamas`
+--
+ALTER TABLE `agamas`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `barangs`
@@ -3688,6 +3856,34 @@ ALTER TABLE `payments`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `pegawais`
+--
+ALTER TABLE `pegawais`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `pegawais_user_id_foreign` (`user_id`),
+  ADD KEY `pegawais_status_perkawinan_id_foreign` (`status_perkawinan_id`),
+  ADD KEY `pegawais_agama_id_foreign` (`agama_id`),
+  ADD KEY `pegawais_jabatan_id_foreign` (`jabatan_id`),
+  ADD KEY `pegawais_pendidikan_id_foreign` (`pendidikan_id`),
+  ADD KEY `pegawais_unit_id_foreign` (`unit_id`),
+  ADD KEY `pegawais_perusahaan_id_foreign` (`perusahaan_id`),
+  ADD KEY `pegawais_role_id_foreign` (`role_id`);
+
+--
+-- Indexes for table `pendidikans`
+--
+ALTER TABLE `pendidikans`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `penerimaan_barangs`
+--
+ALTER TABLE `penerimaan_barangs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `penerimaan_barang_id_purchase` (`id_purchase`),
+  ADD KEY `penerimaan_user_id_foriegn` (`id_user`);
+
+--
 -- Indexes for table `pengajuans`
 --
 ALTER TABLE `pengajuans`
@@ -3811,6 +4007,12 @@ ALTER TABLE `status_pasiens`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `status_pernikahans`
+--
+ALTER TABLE `status_pernikahans`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `suppliers`
 --
 ALTER TABLE `suppliers`
@@ -3857,6 +4059,12 @@ ALTER TABLE `vouchers`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `agamas`
+--
+ALTER TABLE `agamas`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `barangs`
@@ -3928,7 +4136,7 @@ ALTER TABLE `images`
 -- AUTO_INCREMENT for table `in_outs`
 --
 ALTER TABLE `in_outs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `jadwals`
@@ -3967,10 +4175,22 @@ ALTER TABLE `payments`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
+-- AUTO_INCREMENT for table `pegawais`
+--
+ALTER TABLE `pegawais`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `pendidikans`
+--
+ALTER TABLE `pendidikans`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
 -- AUTO_INCREMENT for table `pengajuans`
 --
 ALTER TABLE `pengajuans`
-  MODIFY `id` int(250) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(250) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `permissions`
@@ -3988,13 +4208,13 @@ ALTER TABLE `perusahaans`
 -- AUTO_INCREMENT for table `purchases`
 --
 ALTER TABLE `purchases`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `reinbursts`
 --
 ALTER TABLE `reinbursts`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `rekam_medis`
@@ -4018,13 +4238,13 @@ ALTER TABLE `rincian_pembayarans`
 -- AUTO_INCREMENT for table `rincian_pengajuans`
 --
 ALTER TABLE `rincian_pengajuans`
-  MODIFY `id` int(250) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(250) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `rincian_reinbursts`
 --
 ALTER TABLE `rincian_reinbursts`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `rincian_tagihan_spr`
@@ -4036,7 +4256,7 @@ ALTER TABLE `rincian_tagihan_spr`
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `ruangans`
@@ -4081,6 +4301,12 @@ ALTER TABLE `status_pasiens`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `status_pernikahans`
+--
+ALTER TABLE `status_pernikahans`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `suppliers`
 --
 ALTER TABLE `suppliers`
@@ -4114,7 +4340,7 @@ ALTER TABLE `tukar_fakturs`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `vouchers`

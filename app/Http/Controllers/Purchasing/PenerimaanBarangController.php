@@ -65,15 +65,15 @@ class PenerimaanBarangController extends Controller
         }
         return $data;
     }
-    public function create(Request $request)
+    public function create(Purchase $purchase)
     {
-        $purchase = Purchase::wheree('invoice', $request->invoice)->first();
+        $purchases = Purchase::where('invoice', $purchase->invoice)->get();
         $AWAL = 'PN';
         $noUrutAkhir = \App\Purchase::max('id');
         // dd($noUrutAkhir);
         $nourut = $AWAL . '/' .  sprintf("%02s", abs($noUrutAkhir + 1)) . '/' . sprintf("%05s", abs($noUrutAkhir + 1));
         // dd($nourut);
-        return view('purchasing.penerimaan-barang.create', compact('purchase', 'nourut'));
+        return view('purchasing.penerimaan-barang.create', compact('purchases', 'purchase', 'nourut'));
     }
 
     public function store(Request $request)
