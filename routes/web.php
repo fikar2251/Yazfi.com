@@ -217,6 +217,9 @@ Route::middleware('auth')->group(function () {
             Route::get('appointments/ajax', 'AppointmentController@ajax');
             Route::resource('appointments', 'AppointmentController');
 
+            Route::get('/payment', 'FinanceController@index')->name('payment');
+            Route::get('/payment/updatestatus/{id}', 'FinanceController@ubahStatus')->name('payment.status');
+
             // Route Dokter
             Route::resource('dokter', 'DokterController');
 

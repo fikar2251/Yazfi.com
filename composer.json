@@ -16,6 +16,7 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "2.x",
         "laravelcollective/html": "^6.2",
+        "laravolt/indonesia": "v0.26",
         "maatwebsite/excel": "^3.1",
         "mike42/escpos-php": "2.*",
         "spatie/laravel-permission": "^4.2",

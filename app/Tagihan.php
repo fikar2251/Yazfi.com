@@ -18,6 +18,6 @@ class Tagihan extends Model
 
     public function pembayaran()
     {
-        return $this->hasOne(Pembayaran::class, 'rincian_id');
+        return $this->hasMany(Pembayaran::class, 'rincian_id');
     }
 }

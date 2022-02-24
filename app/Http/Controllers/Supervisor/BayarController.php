@@ -18,7 +18,7 @@ class BayarController extends Controller
         $spr = Spr::select('no_transaksi')->distinct()->get();
         $getSpr = Spr::where('no_transaksi', $no)->get();
         $tagihan = Tagihan::where('no_transaksi', $no)->get();
-        $bayar = Pembayaran::where('no_detail_transaksi', $no)->get();
+        $bayar = Pembayaran::where('no_detail_transaksi', $no)->get();  
 
         return view('supervisor.payment.index', compact('spr', 'getSpr', 'tagihan', 'bayar'));
     }

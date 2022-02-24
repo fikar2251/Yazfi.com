@@ -90,12 +90,12 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td style="width: 200px">Tujuan</td>
+                                            <td style="width: 200px">Pembayaran</td>
                                             <td style="width: 20px">:</td>
                                             <td>
                                                 <select name="rincian_id" id="rincian_id" class="form-control rincian"
                                                     style="width: 200px">
-                                                    <option selected value="">-- Tujuan --</option>
+                                                    <option selected value="">-- Pembayaran --</option>
                                                     @foreach ($tagihan as $item)
                                                         <option value="{{ $item->id_rincian }}">
                                                             @if ($item->tipe == 1)
@@ -235,7 +235,6 @@
                                                 <td>
                                                     @currency($item->nominal)
                                                 </td>
-                                                <td> {{ $item->status_approval }} </td>
                                                 <td>
                                                     @if ($item->bank_tujuan == 'Bri')
                                                         BRI
@@ -243,6 +242,13 @@
                                                         BCA
                                                     @else
                                                         Mandiri
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($item->status_approval == 'pending')
+                                                        <span class="btn-danger">{{ $item->status_approval }}</span>
+                                                    @elseif ($item->status_approval == 'paid')
+                                                        <span class="btn-success">{{ $item->status_approval }}</span>
                                                     @endif
                                                 </td>
                                                 <td>
