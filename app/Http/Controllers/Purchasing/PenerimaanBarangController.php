@@ -50,6 +50,7 @@ class PenerimaanBarangController extends Controller
         } else {
             foreach ($tukar as $value) {
                 $data[] = [
+                    'invoice' => $value->invoice,
                     'project_id' => $value->project->nama_project,
                     'lokasi' => $value->lokasi,
                     'created_at' => $value->created_at,
@@ -67,7 +68,7 @@ class PenerimaanBarangController extends Controller
     }
     public function create(Purchase $purchase)
     {
-        $purchases = Purchase::where('invoice', $purchase->invoice)->get();
+        $purchases = Purchase::get();
         $AWAL = 'PN';
         $noUrutAkhir = \App\Purchase::max('id');
         // dd($noUrutAkhir);

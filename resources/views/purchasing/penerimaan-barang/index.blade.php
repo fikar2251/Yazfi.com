@@ -67,7 +67,7 @@
                         <td>{{ $penerimaan->purchase->status_pembayaran }}</td>
                         <td>
 
-                            <!-- <a href="{{ route('purchasing.penerimaan-barang.edit', $penerimaan->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a> -->
+                            <a href="{{ route('purchasing.penerimaan-barang.edit', $penerimaan->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
 
                             <form action="{{ route('purchasing.penerimaan-barang.destroy', $penerimaan->id) }}" method="post" style="display: inline;" class="delete-form">
                                 @method('DELETE')

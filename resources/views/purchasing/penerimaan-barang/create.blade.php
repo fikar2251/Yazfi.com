@@ -33,16 +33,39 @@
                         </ul>
                     </div>
                 </div>
-
-                <form action="{{ route('purchasing.penerimaan-barang.store') }}" method="post">
-                    @csrf
+                <form action="" method="get">
                     <div class="row">
                         <div class="col-sm-6 col-sg-4 m-b-4">
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
                                         <label for="no_po">No PO <span style="color: red">*</span></label>
-                                        <input class="form-control dynamic_function" data-dependent="supplier_id" type="search" maxlength="15" minlength="15" id="no_po">
+                                        <input class="form-control dynamic_function" data-dependent="supplier_id"
+                                            type="search" maxlength="15" minlength="15" id="invoice">
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 col-sg-4 m-b-4">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="form-group">
+                                        <select name="invoice" id="purchases" class="form-control">
+                                            @if (!request()->get('invoice'))
+                                                <option selected value=""></option>
+                                            @endif
+                                            @foreach ($purchases as $item)
+                                                @if (request()->get('invoice') == $item->invoice)
+                                                    <option value="{{ $item->invoice }}" selected>{{ $item->invoice }}</option>
+                                                @else
+                                                    <option value="{{ $item->invoice }}">{{ $item->invoice }}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    
+                                    <div class="col-sm-2">
+                                        <button type="submit" name="submit" class="btn btn-primary">Cari</button>
+                                    </div>
                                     </div>
                                 </li>
                             </ul>
@@ -87,97 +110,124 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered  report">
-                                        <tr style="font-size:12px;" class="bg-success">
-                                            <th class=" text-light">No.</th>
-                                            <th class="text-light">Nama Barang</th>
-                                            <th class="text-light">Qty Received</th>
-                                            <th class="text-light">Qty Order</th>
-                                            <th class="text-light">Harga Satuan</th>
-                                            <th class="text-light"> Total</th>
-                                            <th class="text-light"> Status Barang</th>
+                </form>
+                <br>
+                @if (request()->get($tukar))
+                <form action="{{ route('purchasing.penerimaan-barang.store') }}" method="post">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table class="table table-bordered  report">
+                                    <tr style="font-size:12px;" class="bg-success">
+                                        <th class=" text-light">No.</th>
+                                        <th class="text-light">Nama Barang</th>
+                                        <th class="text-light">Qty Received</th>
+                                        <th class="text-light">Qty Order</th>
+                                        <th class="text-light">Harga Satuan</th>
+                                        <th class="text-light"> Total</th>
+                                        <th class="text-light"> Status Barang</th>
+                                    </tr>
+                                    <tbody>
+                                        @foreach($purchases as $pur)
+                                        <tr style="font-size:12px;">
+                                            <td>{{$loop->iteration  }}</td>
+                                            <td>
+                                                <input type="text" id="barang_id" name="qty_received"
+                                                    class="form-control">
+                                            </td>
+                                            <td>
+                                                <input type="text" onchange="testNum()" id="qty_received"
+                                                    name="qty_received" class="form-control">
+                                            </td>
+                                            <td>
+                                                <input type="text" id="qty" name="qty_received" class="form-control">
+                                            </td>
+                                            <td>
+                                                <input type="text" id="harga_beli" name="qty_received"
+                                                    class="form-control">
+                                            </td>
+                                            <td>
+                                                <input type="text" id="total" name="qty_received" class="form-control">
+                                            </td>
+                                            <td>
+                                                <input type="text" id="status_barang" name="qty_received"
+                                                    class="form-control">
+                                            </td>
                                         </tr>
-                                        <tbody>
-                                            <tr style="font-size:12px;">
-                                                <td></td>
-                                                <td> <input type="text" id="barang_id" class="form-control"></td>
-                                                <td>
-                                                    <input type="text" id="qty_received" name="qty_received" class="form-control">
-                                                </td>
-                                                <td>
-                                                    <input type="text" id="qty" class="form-control">
-                                                </td>
-                                                <td>
-                                                    <input type="text" id="harga_beli" class="form-control">
-                                                </td>
-                                                <td>
-                                                    <input type="text" id="total" class="form-control">
-                                                </td>
-                                                <td>
-                                                    <input type="text" id="status_barang" class="form-control">
-                                                </td>
-                                            </tr>
+                                        @endforeach
 
-                                        </tbody>
-                                    </table>
-                                </div>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-                        <form action="{{ route('purchasing.penerimaan-barang.create', $purchase->id) }}" method="get" style="display: inline;" class="delete-form">
-                            @method('PUT')
-                            @csrf
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered table-striped custom-table report">
-                                            <thead>
-                                                <tr>
-                                                    <th>No</th>
-                                                    <th>Nama Barang</th>
-                                                    <th>Qty</th>
-                                                    <th>Harga</th>
-                                                    <th>Harga</th>
-                                                    <th>Total</th>
-                                                </tr>
-                                            </thead>
-
-                                            <tbody>
-                                                @foreach($purchases as $purchase)
-                                                <tr>
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>
-                                                        <a href="{{ route('logistik.purchase.show', $purchase->id) }}">{{ $purchase->invoice }}</a>
-                                                    </td>
-                                                    <td>{{ $purchase->admin->name }}</td>
-                                                    <td>{{ Carbon\Carbon::parse($purchase->created_at)->format("d/m/Y H:i:s") }}</td>
-                                                    <td>@currency(\App\Purchase::where('invoice', $purchase->invoice)->sum('grand_total'))</td>
-                                                    <td>{{ $purchase->status_barang }}</td>
-                                                    <td>{{ $purchase->status_pembayaran }}</td>
-                                                </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
                     </div>
-                    <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
+                    <div class="m-t-20 text-center">
+                        <button type="submit" name="submit" class="btn btn-primary submit-btn"><i
+                                class="fa fa-save"></i>
+                            Save</button>
+                    </div>
                 </form>
+                @foreach($purchases as $item)
+                @endforeach
+                
+         @if($item->id)
+                <div class="row mt-5">
+                    <div class="col-sm-12" style="text-align: left">
+                        <h4 class="page-title">Riwayat Penerimaan</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered  report">
+                                <thead>
+                                    <tr>
+
+                                        <th>NO</th>
+                                        <th>Nama Barang</th>
+                                        <th>Qty</th>
+                                        <th>Harga</th>
+                                        <th>Total</th>
+                                        <th>admin</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach ($purchases as $item)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $item->barang->nama_barang }}</td>
+                                        <td>{{ $item->qty }}</td>
+                                        <td>{{ $item->harga_beli }}</td>
+                                        <td>{{ $item->total }}</td>
+                                        <td>{{ $item->admin->name }}</td>
+
+                                    </tr>
+                                    @endforeach
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <br>
-            </form>
+            @else
+         @endif
+         @else
+
+@endif
         </div>
     </div>
 </div>
+    
 
 
-</html>
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script>
-    var formatter = function(num) {
+
+ </html>
+ <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+ <script>
+    var formatter = function (num) {
         var str = num.toString().replace("", ""),
             parts = false,
             output = [],
@@ -235,7 +285,7 @@
             placeholder: 'Select Product',
             ajax: {
                 url: `/admin/where/product`,
-                processResults: function(data) {
+                processResults: function (data) {
                     console.log(data)
                     return {
                         results: data
@@ -251,7 +301,7 @@
     function remove(q) {
         $(q).parent().parent().remove()
     }
-    $('.remove').on('click', function() {
+    $('.remove').on('click', function () {
         $(this).parent().parent().remove()
     })
 
@@ -298,14 +348,13 @@
         console.log(grand_total);
     }
 
-
-    $(document).ready(function() {
-        $('#add').on('click', function() {
+    $(document).ready(function () {
+        $('#add').on('click', function () {
             form_dinamic()
         })
     })
-    $(document).ready(function() {
-        $('.dynamic_function').change(function() {
+    $(document).ready(function () {
+        $('.dynamic_function').change(function () {
             var invoice = $(this).val();
             var div = $(this).parent();
             var op = " ";
@@ -316,7 +365,7 @@
                 data: {
                     'invoice': invoice,
                 },
-                success: function(data) {
+                success: function (data) {
                     console.log(data);
                     for (var i = 0; i < data.length; i++) {
                         var supplier_id = data[i].supplier_id;
@@ -361,9 +410,41 @@
 
                     };
                 },
-                error: function() {}
+                error: function () {}
             })
         })
     })
+
+    function testNum(a) {
+        let qty = document.getElementById('qty').value;
+        let qty_received = document.getElementById('qty_received').value;
+        if (qty > qty_received) {
+            result = 'partial';
+
+        } else {
+            result = 'completed';
+        }
+        document.getElementById('status_barang').value = result;
+    }
+
+    function StatusBarang(e) {
+        let status = document.getElementById('status_barang').value;
+        let qty_received = document.getElementById('qty_received').value;
+        if (status == qty_received) {
+
+            let completed = completed;
+            console.log(completed);
+            document.getElementById('status_barang').value = completed;
+
+        } else {
+
+            let partial = completed;
+            console.log(partial);
+            document.getElementById('status_barang').value = partial;
+
+        }
+
+    }
+
 </script>
 @stop
