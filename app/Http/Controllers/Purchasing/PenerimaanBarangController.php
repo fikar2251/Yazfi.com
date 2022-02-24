@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Logistik;
+namespace App\Http\Controllers\Purchasing;
 
 use App\Barang;
 use App\HargaProdukCabang;
 use App\Http\Controllers\Controller;
 use App\InOut;
+use App\PenerimaanBarang;
 use App\Purchase;
 use App\Supplier;
 use App\Project;
@@ -13,34 +14,66 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class PurchaseController extends Controller
+class PenerimaanBarangController extends Controller
 {
-    public function index(Purchase $purchase)
+    public function index(PenerimaanBarang $penerimaan)
     {
         if (request('from') && request('to')) {
             $from = Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s');
             $to = Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s');
-            $purchases = Purchase::groupBy('invoice')->whereBetween('created_at', [$from, $to])->get();
+            $penerimaans = PenerimaanBarang::groupBy('no_penerimaan_barang')->whereBetween('tanggal_penerimaan', [$from, $to])->get();
         } else {
-            $purchases = Purchase::where('user_id', Auth()->user()->id)->get();
+            $penerimaans = PenerimaanBarang::orderBy('tanggal_penerimaan', 'desc')->get();
         }
 
-
-        return view('logistik.purchase.index', compact('purchases'));
+        return view('purchasing.penerimaan-barang.index', compact('penerimaans'));
     }
-
-    public function create()
+    public function search(Request $request)
     {
-        $purchase = new Purchase();
-        $suppliers = Supplier::get();
-        $project = Project::get();
-        $barangs = Barang::where('jenis', 'barang')->get();
-        $AWAL = 'PO';
+        $data = [];
+        $tukar = Purchase::select(
+            "id",
+            "invoice",
+            "grand_total",
+            "supplier_id",
+            "status_barang",
+            "total",
+            "harga_beli",
+            "created_at",
+            "project_id",
+            "lokasi",
+            "barang_id",
+            "qty"
+        )->where('status_barang', 'pending')->where('invoice', $request->invoice)->get();
+        if (count($tukar) == 0) {
+            $data[] = "No Items Found";
+        } else {
+            foreach ($tukar as $value) {
+                $data[] = [
+                    'project_id' => $value->project->nama_project,
+                    'lokasi' => $value->lokasi,
+                    'created_at' => $value->created_at,
+                    'supplier_id' => $value->supplier->nama,
+                    'barang_id' => $value->barang->nama_barang,
+                    'qty' => $value->qty,
+                    'harga_beli' => $value->harga_beli,
+                    'total' => $value->total,
+                    'status_barang' => $value->status_barang,
+                    'grand_total' => $value->grand_total,
+                ];
+            }
+        }
+        return $data;
+    }
+    public function create(Request $request)
+    {
+        $purchase = Purchase::wheree('invoice', $request->invoice)->first();
+        $AWAL = 'PN';
         $noUrutAkhir = \App\Purchase::max('id');
         // dd($noUrutAkhir);
         $nourut = $AWAL . '/' .  sprintf("%02s", abs($noUrutAkhir + 1)) . '/' . sprintf("%05s", abs($noUrutAkhir + 1));
         // dd($nourut);
-        return view('logistik.purchase.create', compact('purchase', 'suppliers', 'barangs', 'project', 'nourut'));
+        return view('purchasing.penerimaan-barang.create', compact('purchase', 'nourut'));
     }
 
     public function store(Request $request)

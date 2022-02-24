@@ -59,8 +59,8 @@
                         <td><a href="{{ route('purchasing.reinburst.show', $reinburst->id) }}">{{ $reinburst->nomor_reinburst }}</a></td>
                         <td>{{ Carbon\Carbon::parse($reinburst->tanggal_reiburst)->format("d/m/Y H:i:s") }}</td>
                         <td>@currency($reinburst->grandtotal)</td>
-                        <td>{{ $reinburst->reinburst->status_hrd }}</td>
-                        <td>{{ $reinburst->reinburst->status_pembayaran }}</td>
+                        <td>{{ $reinburst->status_hrd }}</td>
+                        <td>{{ $reinburst->status_pembayaran }}</td>
                         <td>
 
                             <!-- <a href="{{ route('purchasing.reinburst.edit', $reinburst->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a> -->

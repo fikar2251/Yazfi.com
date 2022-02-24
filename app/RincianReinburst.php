@@ -9,7 +9,7 @@ class RincianReinburst extends Model
     protected $guarded = ['id'];
     public function reinburst()
     {
-        return $this->belongsTo(Reinburst::class, 'id');
+        return $this->belongsTo(Reinburst::class, 'nomor_reinburst');
     }
     public function barang()
     {

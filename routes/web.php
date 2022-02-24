@@ -18,10 +18,9 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/', function () {
     return view('auth.login');
 });
-Route::get('/mac',function()
-{
- $macAddr = substr(exec('getmac'), 0, 17);
- dd($macAddr);
+Route::get('/mac', function () {
+    $macAddr = substr(exec('getmac'), 0, 17);
+    dd($macAddr);
 });
 
 
@@ -326,6 +325,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/where/search', 'TukarFakturController@search');
             Route::resource('tukarfaktur', 'TukarFakturController');
             Route::resource('reinburst', 'ReinburstController');
+            Route::resource('penerimaan-barang', 'PenerimaanBarangController');
+            Route::get('/where/penerimaan/search', 'PenerimaanBarangController@search');
             Route::resource('listpurchase', 'ListPurchsaController');
             Route::resource('permissions', 'PermissionController');
 

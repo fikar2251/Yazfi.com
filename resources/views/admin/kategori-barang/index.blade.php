@@ -21,9 +21,7 @@
                 <thead>
                     <tr>
                         <th class="text-center">No</th>
-                        <th>Kode Barang</th>
                         <th>Nama Barang</th>
-                        <th>Description</th>
                         <th>Jenis</th>
                         <th>is_active</th>
                         <th>Action</th>
@@ -34,9 +32,8 @@
                     @foreach($barangs as $barang)
                     <tr>
                         <td class="text-center">{{ $loop->iteration }}</td>
-                        <td>{{ $barang->kode_barang }}</td>
-                        <td>{{ $barang->nama_barang }}</></td>
-                        <td>{{ $barang->description }}</td>
+                        <td>{{ $barang->nama_barang }}
+                        </td>
                         <td>{{ $barang->jenis }}</td>
                         <td>{{ $barang->is_active }}</td>
                         <td>

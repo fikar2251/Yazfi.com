@@ -1,8 +1,8 @@
-@extends('layouts.master', ['title' => 'Create Pengajuan'])
+@extends('layouts.master', ['title' => 'Edit Purchase'])
 @section('content')
 <div class="row">
     <div class="col-sm-5 col-4">
-        <h4 class="page-title">Pengajuan Dana</h4>
+        <h4 class="page-title">Purchase</h4>
     </div>
     <div class="col-sm-7 col-8 text-right m-b-30">
         <div class="btn-group btn-group-sm">
@@ -18,12 +18,12 @@
         <div class="card shadow" id="card">
             <div class="card-body">
                 <div class="row custom-invoice">
-                    <div class="col-sm-6 col-sg-4 m-b-4">
+                    <div class="col-6 col-sm-6 m-b-20">
                         <div class="dashboard-logo">
                             <img src="{{url('/img/logo/yazfi.png ')}}" alt="Image" />
                         </div>
                     </div>
-                    <div class="col-sm-6 col-sg-4 m-b-4">
+                    <div class="col-6 col-sm-6 m-b-20">
                         <div class="invoice-details">
                             <h3 class="text-uppercase"></h3>
                         </div>
@@ -42,48 +42,20 @@
                     </div>
                 </div>
 
-                <form action="{{ route('logistik.pengajuan.store') }}" method="post" class="needs-validation" novalidate="" enctype="multipart/form-data">
+                <form action="{{ route('logistik.purchase.update', $purchase->id) }}" method="post">
+                    @method('PATCH')
                     @csrf
                     <div class="row">
                         <div class="col-sm-6 col-sg-4 m-b-4">
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <label for="nomor_pengajuan">PD Number <span style="color: red">*</span></label>
-                                        <input required="" type="text" name="nomor_pengajuan" value="{{$nourut}}" id="nomor_pengajuan" class="form-control" readonly>
-                                    </div>
-                                    @error('name')
-                                    <small class="text-danger">{{ $message }}</small>
-                                    @enderror
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-6 col-sg-4 m-b-4">
-                            <ul class="list-unstyled">
-                                <li>
-                                    <div class="form-group">
-                                        <label for="nama">Nama <span style="color: red">*</span></label>
-                                        <input required="" type="text" value="{{auth()->user()->name}}" readonly class="form-control">
-                                        @error('nama')
-                                        <small class="text-danger">{{ $message }}</small>
-                                        @enderror
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-6 col-sg-4 m-b-4">
-                            <ul class="list-unstyled">
-                                <li>
-                                    <div class="form-group">
-                                        <label for="perusahaan">Perusahaan <span style="color: red">*</span></label>
-                                        <select required name="id_perusahaan" id="id_perusahaan" class="form-control select2" required="">
-                                            <option disabled selected>-- Select Perusahaan --</option>
-                                            @foreach($perusahaans as $perusahaan)
-                                            <option value="{{ $perusahaan->id }}">{{ $perusahaan->nama_perusahaan }}</option>
+                                        <label for="supplier">Supplier <span style="color: red">*</span></label>
+                                        <select name="supplier_id" id="supplier" class="form-control select2">
+                                            <option disabled selected>-- Select Supplier --</option>
+                                            @foreach($suppliers as $supplier)
+                                            <option {{ $supplier->id == $purchase->supplier_id ? 'selected' : '' }} value="{{ $supplier->id }}">{{ $supplier->nama }}</option>
                                             @endforeach
-                                            @error('perusahaan')
-                                            <small class="text-danger">{{ $message }}</small>
-                                            @enderror
                                         </select>
                                     </div>
                                 </li>
@@ -93,43 +65,47 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
+                                        <label for="cabang">Project <span style="color: red">*</span></label>
+                                        <select name="project_id" id="nama_project" class="form-control select2" data-dependent="alamat_project" required="">
+                                            <option disabled selected>-- Select Project --</option>
+                                            @foreach($project as $projects)
+                                            <option {{ $projects->id == $purchase->project_id ? 'selected' : '' }} value="{{ $projects->id }}">{{ $projects->nama_project }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 col-sg-4 m-b-4">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="form-group">
+                                        <label for="invoice">Lokasi <span style="color: red">*</span></label>
+                                        <input type="text" name="lokasi" value="{{ $purchase->lokasi }} " id="lokasi" class="form-control">
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 col-sg-4 m-b-4">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="form-group">
+                                        <label for="invoice">No Invoice <span style="color: red">*</span></label>
+                                        <input type="text" name="invoice" id="invoice" class="form-control" value="{{ $purchase->invoice }}">
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 col-sg-4 m-b-4">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="form-group">
                                         <label for="tanggal">Tanggal <span style="color: red">*</span></label>
-                                        <input type="datetime-local" name="tanggal_pengajuan" id="tanggal_pengajuan" class="form-control">
-                                        @error('tanggal')
-                                        <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+                                        <input type="datetime-local" name="tanggal" id="tanggal" value="{{Carbon\Carbon::parse($purchase->created_at)->format('Y-m-d').'T'.Carbon\Carbon::parse($purchase->created_at)->format('H:i:s')}}" class=" form-control">
                                     </div>
                                 </li>
                             </ul>
                         </div>
-                        <div class="col-sm-6 col-sg-4 m-b-4">
-                            <ul class="list-unstyled">
-                                <li>
-                                    <div class="form-group">
-                                        <label for="lampiran">Lampiran <span style="color: red">*</span></label>
-                                        <input type="file" name="file[]" multiple="true" class="form-control">
-                                        <label for=" lampiran">only pdf and doc</label>
-                                        @error('lampiran')
-                                        <small class="text-danger">{{ $message }}</small>
-                                        @enderror
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-6 col-sg-4 m-b-4">
-                            <ul class="list-unstyled">
-                                <li>
-                                    <div class="form-group">
-                                        <label for="nama">Nomor Kwitansi <span style="color: red">*</span></label>
-                                        <input required="" type="text" name="no_kwitansi" class="form-control">
-                                        @error('nama')
-                                        <small class="text-danger">{{ $message }}</small>
-                                        @enderror
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-
                     </div>
 
                     <button type="button" id="add" class="btn btn-primary mb-2">Tambah Row Baru</button>
@@ -139,15 +115,60 @@
                             <div class="table-responsive">
                                 <table class="table table-hover border" id="table-show">
                                     <tr class="bg-success">
-                                        <th style="width:300px;" class="text-light">Deskripsi</th>
-                                        <th style="width:180px;" class="text-light">Harga Satuan</th>
-                                        <th style="width:80px;" class="text-light">Qty</th>
-                                        <th style="width:110px;" class="text-light">Unit</th>
-                                        <th style="width:180px;" class="text-light">Total</th>
-                                        <th style="width:180px;" class="text-light">Keterangan</th>
+                                        <th class="text-light">ITEM</th>
+                                        <th class="text-light">QTY</th>
+                                        <th class="text-light">HARGA BELI</th>
+                                        <th class="text-light">TOTAL</th>
                                         <th class="text-light">#</th>
                                     </tr>
                                     <tbody id="dynamic_field">
+                                        <script src="{{ asset('/') }}js/jquery-3.2.1.min.js"></script>
+                                        <script src="{{ asset('/') }}js/select2.min.js"></script>
+
+                                        @foreach($purchases as $pur)
+                                        <tr class="rowComponent">
+                                            <td hidden>
+                                                <input type="hidden" name="barang_id[{{ $loop->iteration }}]" class="barang_id-{{ $loop->iteration }}">
+                                            </td>
+                                            <td>
+                                                <select name="barang_id[{{ $loop->iteration }}]" id="barang_id{{ $loop->iteration }}" class="form-control select2" data-dependent="alamat_project" required="">
+                                                    <option disabled selected>-- Select Project --</option>
+                                                    @foreach($barangs as $barang)
+                                                    <option {{ $barang->id == $purchase->barang_id ? 'selected' : '' }} value="{{ $barang->id }}">{{ $barang->nama_barang }}</option>
+                                                    @endforeach
+                                                </select>
+                                                <!-- <select required name="barang_id[{{ $loop->iteration }}]" value="{{ $pur->barang_id }}" id="{{ $loop->iteration }}" class="form-control select-{{ $loop->iteration }}">
+                                                </select> -->
+
+                                            </td>
+                                            <td>
+                                                <input type="number" value="{{ $pur->qty }}" name="qty[{{ $loop->iteration }}]" class="form-control qty-{{ $loop->iteration }}" placeholder="0">
+                                            </td>
+                                            <td>
+                                                <input type="number" value="{{ $pur->harga_beli }}" name="harga_beli[{{ $loop->iteration }}]" class="form-control harga_beli-{{ $loop->iteration }}" data="{{ $loop->iteration }}" onkeyup="hitung(this), HowAboutIt(this)" placeholder="0">
+                                            </td>
+                                            <td>
+                                                <input type="number" disabled value="{{ $pur->total }}" name="total[{{ $loop->iteration }}]" class="form-control total-{{ $loop->iteration }} total-form" placeholder="0">
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-danger btn-sm" onclick="remove(this)">Delete</button>
+                                            </td>
+                                        </tr>
+                                        <script>
+                                            $(`.select-{{ $loop->iteration }}`).select2({
+                                                placeholder: 'Select Product',
+                                                ajax: {
+                                                    url: `/admin/where/product`,
+                                                    processResults: function(data) {
+                                                        return {
+                                                            results: data
+                                                        };
+                                                    },
+                                                    cache: true
+                                                }
+                                            });
+                                        </script>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -161,24 +182,13 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Total</label>
-                                        <input type="text" id="sub_total" name="total" readonly class="form-control">
+                                        <input type="text" id="sub_total" readonly class="form-control" value="{{ $purchases->sum('total') }}">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Include PPN</label>
-                                        <input type="type" id="PPN" onchange="HowAboutIt()" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <input type="hidden" id="tax" name="PPN" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>Grand Total</label>
-                                        <input type="text" id="grandtotal" name="grandtotal" readonly class="form-control">
+                                        <label>PPN 10%</label>
+                                        <input type="text" id="PPN" name="PPN" readonly class="form-control" value="{{ $purchase->PPN }}">
                                     </div>
                                 </div>
                             </div>
@@ -194,14 +204,13 @@
     </div>
 </div>
 
-</html>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script>
     var formatter = function(num) {
         var str = num.toString().replace("", ""),
             parts = false,
             output = [],
-            i = 13,
+            i = 1,
             formatted = null;
         if (str.indexOf(".") > 0) {
             parts = str.split(".");
@@ -220,32 +229,28 @@
         formatted = output.reverse().join("");
         return ("" + formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
     };
+
     // document.getElementById('submit').disabled = true
+
     function form_dinamic() {
         let index = $('#dynamic_field tr').length + 1
         document.getElementById('counter').innerHTML = index
         let template = `
-        <tr class="rowComponent">
+            <tr class="rowComponent">
                     <td hidden>
                         <input type="hidden" name="barang_id[${index}]" class="barang_id-${index}">
                     </td>
                     <td>
-                        <input  type="text" name="barang_id[${index}]"  class="form-control barang_id-${index}" placeholder="Tulis Produk">
-                    </td>
-                    <td>
-                        <input type="number" id="rupiah" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), TotalAbout(this)">
+                        <select required name="barang_id[${index}]" id="${index}" class="form-control select-${index}"></select>
                     </td>
                     <td>
                         <input type="number" name="qty[${index}]"  class="form-control qty-${index}" placeholder="0">
                     </td>
                     <td>
-                        <input type="text" name="unit[${index}]"  class="form-control unit-${index}" placeholder="Unit">
+                        <input type="number" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), HowAboutIt(this)">
                     </td>
                     <td>
                         <input type="number" name="total[${index}]" disabled class="form-control total-${index} total-form"  placeholder="0">
-                    </td>
-                    <td>
-                        <input type="text" name="keterangan[${index}]"  class="form-control keterangan-${index}" placeholder="Keterangan">
                     </td>
                     <td>
                         <button type="button" class="btn btn-danger btn-sm" onclick="remove(this)">Delete</button>
@@ -253,10 +258,11 @@
                 </tr>
         `
         $('#dynamic_field').append(template)
+
         $(`.select-${index}`).select2({
             placeholder: 'Select Product',
             ajax: {
-                url: `/admin/where/service`,
+                url: `/admin/where/product`,
                 processResults: function(data) {
                     console.log(data)
                     return {
@@ -266,11 +272,14 @@
                 cache: true
             }
         });
+
+
     }
 
     function remove(q) {
         $(q).parent().parent().remove()
     }
+
     $('.remove').on('click', function() {
         $(this).parent().parent().remove()
     })
@@ -280,20 +289,9 @@
         let attr = $(e).attr('data')
         let qty = $(`.qty-${attr}`).val()
         let total = parseInt(harga * qty)
+
         $(`.total-${attr}`).val(total)
 
-    }
-
-    function TotalAbout(e) {
-        let sub_total = document.getElementById('sub_total')
-        let total = 0;
-        let coll = document.querySelectorAll('.total-form')
-        for (let i = 0; i < coll.length; i++) {
-            let ele = coll[i]
-            total += parseInt(ele.value)
-        }
-        sub_total.value = total
-        document.getElementById('grandtotal').value = total;
     }
 
     function HowAboutIt(e) {
@@ -305,44 +303,16 @@
             total += parseInt(ele.value)
         }
         sub_total.value = total
-        let SUB = document.getElementById('sub_total').value;
-        let PPN = document.getElementById('PPN').value;
-        console.log(PPN);
-        let tax = PPN / 100 * sub_total.value;
-        console.log(tax);
-        console.log(SUB);
-        let grand_total = parseInt(SUB) + parseInt(tax);
-        document.getElementById('grandtotal').value = grand_total;
-        console.log(grand_total);
+        let tax = (10 / 100) * sub_total.value;
+        let total_all = parseInt(tax);
+        // rupiah()
+        document.getElementById('PPN').value = total_all;
+
     }
+
     $(document).ready(function() {
         $('#add').on('click', function() {
             form_dinamic()
-        })
-    })
-    $(document).ready(function() {
-        $('.dynamic').change(function() {
-            var id = $(this).val();
-            var div = $(this).parent();
-            var op = " ";
-            var alamat = "";
-            var lokasi = "";
-            $.ajax({
-                url: `/logistik/where/project`,
-                method: "get",
-                data: {
-                    'id': id
-                },
-                success: function(data) {
-                    console.log(data);
-                    op += '<input value="0" disabled>';
-                    for (var i = 0; i < data.length; i++) {
-                        var alamat = data[i].alamat_project;
-                        document.getElementById('lokasi').value = alamat;
-                    };
-                },
-                error: function() {}
-            })
         })
     })
 </script>

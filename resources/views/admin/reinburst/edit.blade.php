@@ -1,8 +1,8 @@
-@extends('layouts.master', ['title' => 'Create Purchase'])
+@extends('layouts.master', ['title' => 'Edit Pengajuan Dana'])
 @section('content')
 <div class="row">
     <div class="col-sm-5 col-4">
-        <h4 class="page-title">Purchase</h4>
+        <h4 class="page-title">Pengajuan Dana</h4>
     </div>
     <div class="col-sm-7 col-8 text-right m-b-30">
         <div class="btn-group btn-group-sm">
@@ -18,12 +18,12 @@
         <div class="card shadow" id="card">
             <div class="card-body">
                 <div class="row custom-invoice">
-                    <div class="col-sm-6 col-sg-4 m-b-4">
+                    <div class="col-6 col-sm-6 m-b-20">
                         <div class="dashboard-logo">
                             <img src="{{url('/img/logo/yazfi.png ')}}" alt="Image" />
                         </div>
                     </div>
-                    <div class="col-sm-6 col-sg-4 m-b-4">
+                    <div class="col-6 col-sm-6 m-b-20">
                         <div class="invoice-details">
                             <h3 class="text-uppercase"></h3>
                         </div>
@@ -42,38 +42,19 @@
                     </div>
                 </div>
 
-                <form action="{{ route('logistik.purchase.store') }}" method="post">
+                <form action="{{ route('logistik.pengajuan.update', $pengajuan->id) }}" method="post">
+                    @method('PATCH')
                     @csrf
                     <div class="row">
                         <div class="col-sm-6 col-sg-4 m-b-4">
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <label for="invoice">Number PO <span style="color: red">*</span></label>
-                                        <input type="text" name="invoice" value="{{$nourut}}" id="invoice" class="form-control" readonly>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-6 col-sg-4 m-b-4">
-                            <ul class="list-unstyled">
-                                <li>
-                                    <div class="form-group">
-                                        <label for="nama">Nama <span style="color: red">*</span></label>
-                                        <input type="text" value="{{auth()->user()->name}}" readonly class="form-control">
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-6 col-sg-4 m-b-4">
-                            <ul class="list-unstyled">
-                                <li>
-                                    <div class="form-group">
-                                        <label for="supplier">Supplier <span style="color: red">*</span></label>
-                                        <select name="supplier_id" id="supplier" class="form-control select2">
-                                            <option disabled selected>-- Select Supplier --</option>
-                                            @foreach($suppliers as $supplier)
-                                            <option value="{{ $supplier->id }}">{{ $supplier->nama }}</option>
+                                        <label for="perusahaan">Perusahaan <span style="color: red">*</span></label>
+                                        <select name="id_perusahaan" id="id_perusahaan" class="form-control select2">
+                                            <option disabled selected>-- Select Perusahaan --</option>
+                                            @foreach($perusahaans as $perusahaan)
+                                            <option {{ $perusahaan->id == $pengajuan->id_perusahaan ? 'selected' : '' }} value="{{ $perusahaan->id }}">{{ $perusahaan->nama_perusahaan }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -84,23 +65,8 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <label for="cabang">Project <span style="color: red">*</span></label>
-                                        <select name="project_id" id="nama_project" class="form-control input-lg dynamic" data-dependent="alamat_project" required="">
-                                            <option disabled selected>-- Select Project --</option>
-                                            @foreach($project as $projects)
-                                            <option value="{{ $projects->id }}">{{ $projects->nama_project }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-6 col-sg-4 m-b-4">
-                            <ul class="list-unstyled">
-                                <li>
-                                    <div class="form-group">
-                                        <label for="invoice">Lokasi <span style="color: red">*</span></label>
-                                        <input type="text" name="lokasi" id="lokasi" class="form-control" readonly>
+                                        <label for="nomor_pengajuan">No Pengajuan <span style="color: red">*</span></label>
+                                        <input type="text" name="nomor_pengajuan" id="nomor_pengajuan" class="form-control" value="{{ $pengajuan->nomor_pengajuan }}">
                                     </div>
                                 </li>
                             </ul>
@@ -110,7 +76,7 @@
                                 <li>
                                     <div class="form-group">
                                         <label for="tanggal">Tanggal <span style="color: red">*</span></label>
-                                        <input type="datetime-local" name="tanggal" id="tanggal" class="form-control">
+                                        <input type="datetime-local" name="tanggal_pengajuan" id="tanggal_pengajuan" value="{{Carbon\Carbon::parse($pengajuan->tanggal_pengajuan)->format('Y-m-d').'T'.Carbon\Carbon::parse($pengajuan->tanggal_pengajuan)->format('H:i:s')}}" class=" form-control">
                                     </div>
                                 </li>
                             </ul>
@@ -124,14 +90,59 @@
                             <div class="table-responsive">
                                 <table class="table table-hover border" id="table-show">
                                     <tr class="bg-success">
-                                        <th class="text-light" style="width: 30%;">Nama Barang</th>
-                                        <th class="text-light" style="width: 10%;">QTY</th>
-                                        <th class="text-light" style="width: 10%;">UNIT</th>
+                                        <th class="text-light">ITEM</th>
+                                        <th class="text-light">QTY</th>
                                         <th class="text-light">HARGA BELI</th>
                                         <th class="text-light">TOTAL</th>
                                         <th class="text-light">#</th>
                                     </tr>
                                     <tbody id="dynamic_field">
+                                        <script src="{{ asset('/') }}js/jquery-3.2.1.min.js"></script>
+                                        <script src="{{ asset('/') }}js/select2.min.js"></script>
+
+                                        @foreach($peng as $pengs)
+                                        <tr class="rowComponent">
+                                            <td hidden>
+                                                <input type="hidden" name="barang_id[{{ $loop->iteration }}]" class="barang_id-{{ $loop->iteration }}">
+                                            </td>
+                                            <td>
+                                                <select name="barang_id[{{ $loop->iteration }}]" id="barang_id{{ $loop->iteration }}" class="form-control select2" required="">
+                                                    <option disabled selected>-- Select Project --</option>
+                                                    @foreach($barangs as $barang)
+                                                    <option {{ $barang->id == $pengajuan->rincianpengajuan->barang_id  ? 'selected' : '' }} value="{{ $barang->id }}">{{ $barang->nama_barang }}</option>
+                                                    @endforeach
+                                                </select>
+
+
+                                            </td>
+                                            <td>
+                                                <input type="number" value="{{ $pengs->qty }}" name="qty[{{ $loop->iteration }}]" class="form-control qty-{{ $loop->iteration }}" placeholder="0">
+                                            </td>
+                                            <td>
+                                                <input type="number" value="{{ $pengs->harga_beli }}" name="harga_beli[{{ $loop->iteration }}]" class="form-control harga_beli-{{ $loop->iteration }}" data="{{ $loop->iteration }}" onkeyup="hitung(this), HowAboutIt(this)" placeholder="0">
+                                            </td>
+                                            <td>
+                                                <input type="number" disabled value="{{ $pengs->total }}" name="total[{{ $loop->iteration }}]" class="form-control total-{{ $loop->iteration }} total-form" placeholder="0">
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-danger btn-sm" onclick="remove(this)">Delete</button>
+                                            </td>
+                                        </tr>
+                                        <script>
+                                            $(`.select-{{ $loop->iteration }}`).select2({
+                                                placeholder: 'Select Product',
+                                                ajax: {
+                                                    url: `/admin/where/product`,
+                                                    processResults: function(data) {
+                                                        return {
+                                                            results: data
+                                                        };
+                                                    },
+                                                    cache: true
+                                                }
+                                            });
+                                        </script>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -145,24 +156,13 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Total</label>
-                                        <input type="text" id="sub_total" value="" readonly class="form-control">
+                                        <input type="text" id="sub_total" readonly class="form-control" value="{{ $pengajuan->rincianpengajuan->sum('total') }}">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Include PPN</label>
-                                        <input type="type" id="PPN" onchange="HowAboutIt()" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <input type="hidden" id="tax" name="PPN" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>Grand Total</label>
-                                        <input type="text" id="grandtotal" name="grandtotal" readonly class="form-control">
+                                        <label>PPN 10%</label>
+                                        <input type="text" id="PPN" name="PPN" readonly class="form-control" value="{{ $pengajuan->rincianpengajuan->PPN }}">
                                     </div>
                                 </div>
                             </div>
@@ -178,25 +178,13 @@
     </div>
 </div>
 
-</html>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script>
-    function showhide() {
-        var div = document.getElementById("newpost");
-        var ppn2 = document.getElementById("PPN");
-        console.log(ppn2);
-        if (div.style.display !== "none") {
-            div.style.display = "none";
-        } else {
-            div.style.display = "block";
-        }
-    }
-
     var formatter = function(num) {
         var str = num.toString().replace("", ""),
             parts = false,
             output = [],
-            i = 13,
+            i = 1,
             formatted = null;
         if (str.indexOf(".") > 0) {
             parts = str.split(".");
@@ -216,14 +204,13 @@
         return ("" + formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
     };
 
-
     // document.getElementById('submit').disabled = true
 
     function form_dinamic() {
         let index = $('#dynamic_field tr').length + 1
         document.getElementById('counter').innerHTML = index
         let template = `
-        <tr class="rowComponent">
+            <tr class="rowComponent">
                     <td hidden>
                         <input type="hidden" name="barang_id[${index}]" class="barang_id-${index}">
                     </td>
@@ -234,10 +221,7 @@
                         <input type="number" name="qty[${index}]"  class="form-control qty-${index}" placeholder="0">
                     </td>
                     <td>
-                        <input type="text" name="unit[${index}]" class="form-control unit-${index}" placeholder="Unit">
-                    </td>
-                    <td>
-                        <input type="text" id="rupiah" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), HowAboutIt(this)">
+                        <input type="number" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), HowAboutIt(this)">
                     </td>
                     <td>
                         <input type="number" name="total[${index}]" disabled class="form-control total-${index} total-form"  placeholder="0">
@@ -269,6 +253,7 @@
     function remove(q) {
         $(q).parent().parent().remove()
     }
+
     $('.remove').on('click', function() {
         $(this).parent().parent().remove()
     })
@@ -283,18 +268,6 @@
 
     }
 
-    function TotalAbout(e) {
-        let sub_total = document.getElementById('sub_total')
-        let total = 0;
-        let coll = document.querySelectorAll('.total-form')
-        for (let i = 0; i < coll.length; i++) {
-            let ele = coll[i]
-            total += parseInt(ele.value)
-        }
-        sub_total.value = total
-        document.getElementById('grandtotal').value = total;
-    }
-
     function HowAboutIt(e) {
         let sub_total = document.getElementById('sub_total')
         let total = 0;
@@ -304,76 +277,16 @@
             total += parseInt(ele.value)
         }
         sub_total.value = total
-        let SUB = document.getElementById('sub_total').value;
-        let PPN = document.getElementById('PPN').value;
-        console.log(PPN);
-        let tax = PPN / 100 * sub_total.value;
-        console.log(tax);
-        document.getElementById('tax').value = tax;
-        console.log(SUB);
-        let grand_total = parseInt(SUB) + parseInt(tax);
-        document.getElementById('grandtotal').value = grand_total;
-        console.log(grand_total);
-    }
+        let tax = (10 / 100) * sub_total.value;
+        let total_all = parseInt(tax);
+        // rupiah()
+        document.getElementById('PPN').value = total_all;
 
-    var rupiah = document.getElementById('rupiah');
-    if (rupiah) {
-        rupiah.addEventListener('keyup', function(e) {
-            rupiah.value = formatRupiah(this.value, 'Rp. ');
-        });
-    }
-    /* Fungsi formatRupiah */
-    function formatRupiah(angka, prefix) {
-        var number_string = angka.replace(/[^,\d]/g, '').toString(),
-            split = number_string.split(','),
-            sisa = split[0].length % 3,
-            rupiah = split[0].substr(0, sisa),
-            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
-
-        // tambahkan titik jika yang di input sudah menjadi angka satuan ribuan
-        if (ribuan) {
-            separator = sisa ? '.' : '';
-            rupiah += separator + ribuan.join('.');
-        }
-
-        rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-        return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
     }
 
     $(document).ready(function() {
         $('#add').on('click', function() {
             form_dinamic()
-        })
-    })
-
-    $(document).ready(function() {
-        $('.dynamic').change(function() {
-
-            var id = $(this).val();
-            var div = $(this).parent();
-            var op = " ";
-            var alamat = "";
-            var lokasi = "";
-            $.ajax({
-                url: `/logistik/where/project`,
-                method: "get",
-                data: {
-                    'id': id
-
-
-                },
-                success: function(data) {
-                    console.log(data);
-                    op += '<input value="0" disabled>';
-                    for (var i = 0; i < data.length; i++) {
-                        var alamat = data[i].alamat_project;
-                        document.getElementById('lokasi').value = alamat;
-                    };
-                },
-                error: function() {
-
-                }
-            })
         })
     })
 </script>

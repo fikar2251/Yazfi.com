@@ -34,7 +34,7 @@
                         <td class="text-center">{{ $loop->iteration }}</td>
                         <td>{{ $unit->nama }}</td>
                         <td>{{ $unit->perusahaan->nama_perusahaan }}</td>
-                        <td></td>
+                        <td>{{ $unit->pegawais->count() }}</td>
                         <td>
                             @can('product-edit')
                             <a href="{{ route('admin.unit.edit', $unit->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>

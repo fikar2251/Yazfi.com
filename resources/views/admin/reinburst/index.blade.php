@@ -1,18 +1,18 @@
-@extends('layouts.master', ['title' => 'Purchase'])
+@extends('layouts.master', ['title' => 'Reinburst'])
 
 @section('content')
 <div class="row">
     <div class="col-md-4">
-        <h1 class="page-title">Purchase</h1>
+        <h1 class="page-title">Reinburst</h1>
     </div>
 
     <div class="col-sm-8 text-right m-b-20">
-        <a href="{{ route('logistik.purchase.create') }}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Purchase</a>
+        <a href="{{ route('purchasing.reinburst.create') }}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Reinburst</a>
     </div>
 </div>
 <x-alert></x-alert>
 
-<form action="{{ route('logistik.purchase.index') }}" method="get">
+<form action="{{ route('admin.reinburst.index') }}" method="get">
     <div class="row filter-row">
         <div class="col-sm-6 col-md-3">
             <div class="form-group form-focus">
@@ -43,33 +43,29 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Number PO</th>
-                        <th>Di Ajukan</th>
-                        <th>Tanggal</th>
+                        <th>Nomor Reinburst</th>
+                        <th>Tanggal Reinburst</th>
                         <th>Jumlah</th>
-                        <th>Status Barang</th>
+                        <th>Status Hrd</th>
                         <th>Status Pembayaran</th>
                         <th>Action</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    @foreach($purchases as $purchase)
+                    @foreach($reinbursts as $reinburst)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>
-                            <a href="{{ route('logistik.purchase.show', $purchase->id) }}">{{ $purchase->invoice }}</a>
-                        </td>
-                        <td>{{ $purchase->admin->name }}</td>
-                        <td>{{ Carbon\Carbon::parse($purchase->created_at)->format("d/m/Y H:i:s") }}</td>
-                        <td>@currency(\App\Purchase::where('invoice', $purchase->invoice)->sum('grand_total'))</td>
-                        <td>{{ $purchase->status_barang }}</td>
-                        <td>{{ $purchase->status_pembayaran }}</td>
+                        <td><a href="{{ route('admin.reinburst.show', $reinburst->id) }}">{{ $reinburst->nomor_reinburst }}</a></td>
+                        <td>{{ Carbon\Carbon::parse($reinburst->tanggal_reiburst)->format("d/m/Y H:i:s") }}</td>
+                        <td>@currency($reinburst->grandtotal)</td>
+                        <td>{{ $reinburst->reinburst->status_hrd }}</td>
+                        <td>{{ $reinburst->reinburst->status_pembayaran }}</td>
                         <td>
 
-                            <!-- <a href="{{ route('logistik.purchase.edit', $purchase->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a> -->
+                            <!-- <a href="{{ route('admin.reinburst.edit', $reinburst->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a> -->
 
-                            <form action="{{ route('logistik.purchase.destroy', $purchase->id) }}" method="post" style="display: inline;" class="delete-form">
+                            <form action="{{ route('admin.reinburst.destroy', $reinburst->id) }}" method="post" style="display: inline;" class="delete-form">
                                 @method('DELETE')
                                 @csrf
                                 <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>

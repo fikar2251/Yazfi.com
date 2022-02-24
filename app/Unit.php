@@ -8,8 +8,12 @@ class Unit extends Model
 {
     protected $guarded = ['id'];
 
-    public function perusahaan(){
-        return $this->belongsTo(Perusahaan::class,'id_perusahaan');
+    public function perusahaan()
+    {
+        return $this->belongsTo(Perusahaan::class, 'id_perusahaan');
     }
-
+    public function pegawais()
+    {
+        return $this->hasMany(Pegawai::class);
+    }
 }

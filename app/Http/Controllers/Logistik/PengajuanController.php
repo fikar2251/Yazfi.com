@@ -76,7 +76,8 @@ class PengajuanController extends Controller
                     'approval_time' => $request->tanggal_pengajuan,
                     'status_approval' => 'pending',
                     'approval_by' => 'pending',
-                    'id_roles' => 9
+                    'id_roles' => 9,
+
                 ];
                 foreach ($barang as $key => $no) {
                     $in[] = [
@@ -88,7 +89,8 @@ class PengajuanController extends Controller
                         'total' => $request->harga_beli[$key] * $request->qty[$key],
                         'nomor_pengajuan' => $request->nomor_pengajuan,
                         'grandtotal' => $request->grandtotal,
-                        'unit' => $request->unit[$key]
+                        'unit' => $request->unit[$key],
+                        'no_kwitansi' => $request->no_kwitansi
                     ];
                 }
                 RincianPengajuan::insert($in);

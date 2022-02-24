@@ -1,8 +1,8 @@
-@extends('layouts.master', ['title' => 'Create Pengajuan'])
+@extends('layouts.master', ['title' => 'Create Reinburst'])
 @section('content')
 <div class="row">
     <div class="col-sm-5 col-4">
-        <h4 class="page-title">Pengajuan Dana</h4>
+        <h4 class="page-title">Reinburst</h4>
     </div>
     <div class="col-sm-7 col-8 text-right m-b-30">
         <div class="btn-group btn-group-sm">
@@ -42,19 +42,16 @@
                     </div>
                 </div>
 
-                <form action="{{ route('logistik.pengajuan.store') }}" method="post" class="needs-validation" novalidate="" enctype="multipart/form-data">
+                <form action="{{ route('admin.reinburst.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="col-sm-6 col-sg-4 m-b-4">
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <label for="nomor_pengajuan">PD Number <span style="color: red">*</span></label>
-                                        <input required="" type="text" name="nomor_pengajuan" value="{{$nourut}}" id="nomor_pengajuan" class="form-control" readonly>
+                                        <label for="nomor_reinburst">RN Number <span style="color: red">*</span></label>
+                                        <input required="" type="text" name="nomor_reinburst" value="{{$nourut}}" id="nomor_reinburst" class="form-control" readonly>
                                     </div>
-                                    @error('name')
-                                    <small class="text-danger">{{ $message }}</small>
-                                    @enderror
                                 </li>
                             </ul>
                         </div>
@@ -63,10 +60,7 @@
                                 <li>
                                     <div class="form-group">
                                         <label for="nama">Nama <span style="color: red">*</span></label>
-                                        <input required="" type="text" value="{{auth()->user()->name}}" readonly class="form-control">
-                                        @error('nama')
-                                        <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+                                        <input type="text" value="{{ auth()->user()->name }}" class="form-control" readonly>
                                     </div>
                                 </li>
                             </ul>
@@ -75,15 +69,22 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <label for="perusahaan">Perusahaan <span style="color: red">*</span></label>
-                                        <select required name="id_perusahaan" id="id_perusahaan" class="form-control select2" required="">
-                                            <option disabled selected>-- Select Perusahaan --</option>
-                                            @foreach($perusahaans as $perusahaan)
-                                            <option value="{{ $perusahaan->id }}">{{ $perusahaan->nama_perusahaan }}</option>
+                                        <label for="tanggal">Tanggal Reinburst <span style="color: red">*</span></label>
+                                        <input type="datetime-local" name="tanggal_reinburst" id="tanggal_reinburst" class="form-control">
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 col-sg-4 m-b-4">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="form-group">
+                                        <label for="cabang">Project <span style="color: red">*</span></label>
+                                        <select name="id_project" id="id_project" class="form-control required="">
+                                            <option disabled selected>-- Select Project --</option>
+                                            @foreach($projects as $project)
+                                            <option value=" {{ $project->id }}">{{ $project->nama_project }}</option>
                                             @endforeach
-                                            @error('perusahaan')
-                                            <small class="text-danger">{{ $message }}</small>
-                                            @enderror
                                         </select>
                                     </div>
                                 </li>
@@ -93,43 +94,13 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <label for="tanggal">Tanggal <span style="color: red">*</span></label>
-                                        <input type="datetime-local" name="tanggal_pengajuan" id="tanggal_pengajuan" class="form-control">
-                                        @error('tanggal')
-                                        <small class="text-danger">{{ $message }}</small>
-                                        @enderror
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-6 col-sg-4 m-b-4">
-                            <ul class="list-unstyled">
-                                <li>
-                                    <div class="form-group">
-                                        <label for="lampiran">Lampiran <span style="color: red">*</span></label>
+                                        <label for="file">Lampiran <span style="color: red">*</span></label>
                                         <input type="file" name="file[]" multiple="true" class="form-control">
                                         <label for=" lampiran">only pdf and doc</label>
-                                        @error('lampiran')
-                                        <small class="text-danger">{{ $message }}</small>
-                                        @enderror
                                     </div>
                                 </li>
                             </ul>
                         </div>
-                        <div class="col-sm-6 col-sg-4 m-b-4">
-                            <ul class="list-unstyled">
-                                <li>
-                                    <div class="form-group">
-                                        <label for="nama">Nomor Kwitansi <span style="color: red">*</span></label>
-                                        <input required="" type="text" name="no_kwitansi" class="form-control">
-                                        @error('nama')
-                                        <small class="text-danger">{{ $message }}</small>
-                                        @enderror
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-
                     </div>
 
                     <button type="button" id="add" class="btn btn-primary mb-2">Tambah Row Baru</button>
@@ -139,12 +110,10 @@
                             <div class="table-responsive">
                                 <table class="table table-hover border" id="table-show">
                                     <tr class="bg-success">
-                                        <th style="width:300px;" class="text-light">Deskripsi</th>
-                                        <th style="width:180px;" class="text-light">Harga Satuan</th>
-                                        <th style="width:80px;" class="text-light">Qty</th>
-                                        <th style="width:110px;" class="text-light">Unit</th>
-                                        <th style="width:180px;" class="text-light">Total</th>
-                                        <th style="width:180px;" class="text-light">Keterangan</th>
+                                        <th class="text-light">Nota/Bon/Kwitansi</th>
+                                        <th class="text-light">Jumlah</th>
+                                        <th class="text-light">Catatan</th>
+                                        <th class="text-light">Total</th>
                                         <th class="text-light">#</th>
                                     </tr>
                                     <tbody id="dynamic_field">
@@ -168,11 +137,6 @@
                                     <div class="form-group">
                                         <label>Include PPN</label>
                                         <input type="type" id="PPN" onchange="HowAboutIt()" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <input type="hidden" id="tax" name="PPN" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -220,7 +184,10 @@
         formatted = output.reverse().join("");
         return ("" + formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
     };
+
+
     // document.getElementById('submit').disabled = true
+
     function form_dinamic() {
         let index = $('#dynamic_field tr').length + 1
         document.getElementById('counter').innerHTML = index
@@ -230,22 +197,16 @@
                         <input type="hidden" name="barang_id[${index}]" class="barang_id-${index}">
                     </td>
                     <td>
-                        <input  type="text" name="barang_id[${index}]"  class="form-control barang_id-${index}" placeholder="Tulis Produk">
+                        <input  type="text" name="no_kwitansi[${index}]"  class="form-control no_kwitansi-${index}" placeholder="Tulis Kwitansi">
                     </td>
                     <td>
-                        <input type="number" id="rupiah" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), TotalAbout(this)">
+                         <input type="number" id="rupiah" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), TotalAbout(this)">
                     </td>
                     <td>
-                        <input type="number" name="qty[${index}]"  class="form-control qty-${index}" placeholder="0">
-                    </td>
-                    <td>
-                        <input type="text" name="unit[${index}]"  class="form-control unit-${index}" placeholder="Unit">
+                    <input  type="text" name="catatan[${index}]"  class="form-control catatan-${index}" placeholder="Catatan">
                     </td>
                     <td>
                         <input type="number" name="total[${index}]" disabled class="form-control total-${index} total-form"  placeholder="0">
-                    </td>
-                    <td>
-                        <input type="text" name="keterangan[${index}]"  class="form-control keterangan-${index}" placeholder="Keterangan">
                     </td>
                     <td>
                         <button type="button" class="btn btn-danger btn-sm" onclick="remove(this)">Delete</button>
@@ -253,10 +214,11 @@
                 </tr>
         `
         $('#dynamic_field').append(template)
+
         $(`.select-${index}`).select2({
             placeholder: 'Select Product',
             ajax: {
-                url: `/admin/where/service`,
+                url: `/admin/where/product`,
                 processResults: function(data) {
                     console.log(data)
                     return {
@@ -266,6 +228,8 @@
                 cache: true
             }
         });
+
+
     }
 
     function remove(q) {
@@ -278,9 +242,12 @@
     function hitung(e) {
         let harga = e.value
         let attr = $(e).attr('data')
-        let qty = $(`.qty-${attr}`).val()
-        let total = parseInt(harga * qty)
+        let beli = $(`.harga_beli-${attr}`).val()
+        console.log(beli);
+        let total = parseInt(beli);
+        console.log(total);
         $(`.total-${attr}`).val(total)
+
 
     }
 
@@ -318,31 +285,6 @@
     $(document).ready(function() {
         $('#add').on('click', function() {
             form_dinamic()
-        })
-    })
-    $(document).ready(function() {
-        $('.dynamic').change(function() {
-            var id = $(this).val();
-            var div = $(this).parent();
-            var op = " ";
-            var alamat = "";
-            var lokasi = "";
-            $.ajax({
-                url: `/logistik/where/project`,
-                method: "get",
-                data: {
-                    'id': id
-                },
-                success: function(data) {
-                    console.log(data);
-                    op += '<input value="0" disabled>';
-                    for (var i = 0; i < data.length; i++) {
-                        var alamat = data[i].alamat_project;
-                        document.getElementById('lokasi').value = alamat;
-                    };
-                },
-                error: function() {}
-            })
         })
     })
 </script>
