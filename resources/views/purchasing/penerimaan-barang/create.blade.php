@@ -139,24 +139,25 @@
                                                 {{$loop->iteration}}
                                             </td>
                                             <td>
-                                                {{$purchase->barang->nama_barang}}
-                                            </td>
-                                            <td>
-                                                <input type="number" name="qty_received[{{ $loop->iteration }}]" class="form-control" id="qty_received" onchange="testNum()" placeholder=" 0">
-                                            </td>
-                                            <td>
-                                                <input type="number" value="{{$purchase->qty}}" name="qty[${index}]" id="qty" class="form-control qty-${index}" disabled placeholder="0">
+                                                <input type="text" name="barang_id" class="form-control" id="barang_id" value="{{$purchase->barang->nama_barang}}" placeholder=" 0">
 
                                             </td>
                                             <td>
-                                                <input type="number" value="{{$purchase->harga_beli}}" id="harga_beli " name="harga_beli[{{ $loop->iteration }}]" class="form-control harga_beli-${index} waktu" placeholder="0" data="${index}" onkeyup="hitung(this), TotalAbout(this)">
+                                                <input type="number" name="qty_received" class="form-control" id="qty_received" onchange="testNum()" placeholder=" 0">
+                                            </td>
+                                            <td>
+                                                <input type="number" value="{{$purchase->qty}}" name="qty" id="qty" class="form-control qty-${index}" disabled placeholder="0">
 
                                             </td>
                                             <td>
-                                                <input type="number" value="{{$purchase->total}}" id="total" name="total[{{ $loop->iteration }}]" disabled class="form-control total-${index} total-form" placeholder="0">
+                                                <input type="number" value="{{$purchase->harga_beli}}" id="harga_beli " name="harga_beli" class="form-control harga_beli-${index} waktu" placeholder="0" data="${index}" onkeyup="hitung(this), TotalAbout(this)">
+
                                             </td>
                                             <td>
-                                                <input type="text" disabled value="{{$purchase->status_barang}}" name="status_barang[{{ $loop->iteration }}" class="form-control" id="status_barang" placeholder="Status Barang">
+                                                <input type="number" value="{{$purchase->total}}" id="total" name="total" disabled class="form-control total-${index} total-form" placeholder="0">
+                                            </td>
+                                            <td>
+                                                <input type="text" disabled value="{{$purchase->status_barang}}" name="status_barang" class="form-control" id="status_barang" placeholder="Status Barang">
                                             </td>
 
                                         </tr>
@@ -205,31 +206,19 @@
                                         }
                                     </script>
                                 </table>
-                                <div class="row invoice-payment">
-                                    <div class="col-sm-4 offset-sm-8">
-                                        <h6>Total due</h6>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label>Total</label>
-                                                    <input type="text" id="sub_total" name="total" readonly class="form-control">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label>Include PPN</label>
-                                                    <input type="type" id="PPN" onchange="HowAboutIt()" class="form-control">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label>Grand Total</label>
-                                                    <input type="text" id="grandtotal" name="grandtotal" readonly class="form-control">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <tfoot>
+                                    <tr>
+                                        <td><strong>PPN :<strong> </td>
+                                        <td>@currency($purchase->PPN)
+                                        </td>
+                                    </tr>
+                                    <br>
+                                    <tr>
+                                        <td><strong>Total :<strong> </td>
+                                        <td>@currency($purchase->grand_total)
+                                        </td>
+                                    </tr>
+                                </tfoot>
                                 <div class="col-sm-1 offset-sm-8">
                                     <button type="submit" class="btn btn-primary" id="submit">Submit</button>
                                 </div>

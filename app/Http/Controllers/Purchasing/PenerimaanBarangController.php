@@ -85,7 +85,6 @@ class PenerimaanBarangController extends Controller
         // dd($noUrutAkhir);
         $nourut = $AWAL . '/' .  sprintf("%02s", abs($noUrutAkhir + 1)) . '/' . sprintf("%05s", abs($noUrutAkhir + 1));
         $request->validate([
-            'id_purchase' => 'required',
             'id_user' => 'required',
             'no_penerimaan_barang' => 'required',
         ]);
@@ -94,16 +93,8 @@ class PenerimaanBarangController extends Controller
         $request['id_user'] = Auth()->user()->id;
         $barang = ($request->all());
         PenerimaanBarang::insert($barang);
-        $cabangs = PenerimaanBarang::get();
 
-        foreach ($cabangs as $cabang) {
-            Purchase::updateOrInsert([
-                'status_barang' => $cabang->request('status_barang')
-            ]);
-        }
-
-
-        return redirect()->route('logistik.purchase.index')->with('success', 'Purchase barang berhasil');
+        return redirect()->route('purchasing.penerimaan-barang.index')->with('success', 'Purchase barang berhasil');
     }
 
     public function show(Purchase $purchase)
