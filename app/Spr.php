@@ -25,5 +25,15 @@ class Spr extends Model
     {
         return $this->belongsTo(Skema::class, 'skema');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_sales');
+    }
+
+    public function pembatalan()
+    {
+        return $this->hasOne(Pembatalan::class, 'spr_id');
+    }
 }
 

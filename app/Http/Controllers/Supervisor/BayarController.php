@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Supervisor;
 
+use App\Alasan;
 use App\Http\Controllers\Controller;
+use App\Pembatalan;
 use App\Pembayaran;
 use App\Rumah;
 use App\Spr;
@@ -35,6 +37,96 @@ class BayarController extends Controller
 
         return view('supervisor.payment.create', compact('spr', 'getSpr', 'tagihan', 'bayar', 'id'));
 
+    }
+
+    public function sales()
+    {
+        if (auth()->user()->roles()->first()->name == 'supervisor') {
+            $user = User::where('roles_id', 4)->get();
+
+            $batal = Pembatalan::all();
+            // foreach ($batal as $key) {
+            //     $sprid = $key->spr_id;
+            // }
+
+            // $where = [
+            //     'id_spr' => $sprid,
+            //     'tipe' => 1,
+            // ];
+
+            // $bf = Tagihan::select('jumlah_tagihan')->where($where)->first();
+
+            // $where1 = [
+            //     'id_spr' => $sprid,
+            //     'tipe' => 2,
+            // ];
+
+            // $dp = Tagihan::select('jumlah_tagihan')->where($where1)->first();
+
+            return view('supervisor.payment.index', compact('user', 'batal'));
+        }
+
+    }
+
+    public function cancel($id)
+    {
+        $no = request()->get('no_transaksi');
+        $spr = Spr::select('no_transaksi')->where('id_sales', $id)->get();
+        $getSpr = Spr::where('no_transaksi', $no)->get();
+        $tagihan = Tagihan::where('no_transaksi', $no)->get();
+        $bayar = Pembayaran::where('no_detail_transaksi', $no)->get();
+
+        $alasan = Alasan::all();
+
+        // foreach ($getSpr as $key) {
+        //     $idspr = $key->id_transaksi;
+        // }
+        // $spv = auth()->user()->name;
+
+        // $batal = Pembatalan::all();
+        // foreach ($batal as $key) {
+        //     $sprid = $key->spr_id;
+        // }
+
+        // $where = [
+        //     'id_spr' => $sprid,
+        //     'tipe' => 1,
+        // ];
+
+        // $bf = Tagihan::select('jumlah_tagihan')->where($where)->first();
+
+        // $where1 = [
+        //     'id_spr' => $sprid,
+        //     'tipe' => 2,
+        // ];
+
+        // $dp = Tagihan::select('jumlah_tagihan')->where($where1)->first();
+
+        return view('supervisor.payment.cancel', compact('getSpr', 'spr', 'alasan'));
+
+    }
+
+    public function storeBatal(Request $request)
+    {
+
+        $spv = auth()->user()->name;
+
+        $tgl = Carbon::now()->format('d-m-Y');
+        $AWAL = 'PB';
+        $noUrutAkhir = Pembatalan::max('id');
+
+        $nourut = $AWAL . '/' . sprintf('%02s', abs(1)) . '/' . sprintf('%05s', abs($noUrutAkhir + 1));
+
+        Pembatalan::create([
+            'tanggal' => $tgl,
+            'no_pembatalan' => $nourut,
+            'spr_id' => $request->id_spr,
+            'alasan_id' => $request->alasan,
+            'diajukan' => $spv,
+            'status' => 'pending',
+        ]);
+
+        return redirect()->back();
     }
 
     public function nominal(Request $request)
@@ -90,10 +182,9 @@ class BayarController extends Controller
         $unit->save();
         // dd($test);
 
-
         // if ($delete) {
-            DB::table('pembayaran_unit')->where('id', $id)->delete();
-            // dd($tagihan);
+        DB::table('pembayaran_unit')->where('id', $id)->delete();
+        // dd($tagihan);
         // }
         return redirect()->back();
     }

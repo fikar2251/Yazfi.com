@@ -87,13 +87,13 @@
                 </div>
                 <div class="form-group">
                     <label for="address">Alamat</label>
-                    {{-- <textarea name="alamat" id="alamat" rows="3" class="form-control"></textarea> --}}
-                    <select class="form-control" name="alamat" id="alamat">
+                    <textarea name="alamat" id="alamat" rows="3" class="form-control"></textarea>
+                    {{-- <select class="form-control" name="alamat" id="alamat">
                         <option value="">-- Select Provinsi --</option>
                         @foreach ($provinsi as $id => $name)
                             <option value="{{ $id }}">{{ $name }}</option>
                         @endforeach
-                    </select>
+                    </select> --}}
 
                     @error('address')
                         <small class="text-danger">{{ $message }}</small>

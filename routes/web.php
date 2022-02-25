@@ -247,8 +247,10 @@ Route::middleware('auth')->group(function () {
             Route::patch('komisi/{komisi:id}/updatechange', 'KomisiController@updatechange')->name('komisi.updatechange');
             Route::resource('komisi', 'KomisiController');
 
-            Route::get('payment', 'BayarController@index')->name('payment.index');
+            Route::get('payment', 'BayarController@sales')->name('payment.index');
             Route::get('payment/{id}', 'BayarController@show')->name('payment.show');
+            Route::get('cancel/{id}', 'BayarController@cancel')->name('payment.cancel');
+            Route::post('cancel/store', 'BayarController@storeBatal')->name('cancel.store');
             Route::get('/nominal', 'BayarController@nominal');
             Route::post('payment/store', 'BayarController@storeBayar')->name('payment.store');
             Route::get('payment/delete/{id}', 'BayarController@hapuskonfirmasi')->name('payment.delete');

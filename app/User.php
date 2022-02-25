@@ -55,4 +55,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Purchase::class, 'project_id');
     }
+
+    public function spr()
+    {
+        return $this->hasMany(Spr::class, 'id_sales');
+    }
 }
