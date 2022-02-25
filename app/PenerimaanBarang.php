@@ -12,16 +12,30 @@ class PenerimaanBarang extends Model
 
     use HasRoles;
     protected $guarded = ['id'];
+    public function barang()
+    {
+        return $this->belongsTo(Barang::class, 'barang_id');
+    }
+
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class, 'supplier_id');
+    }
+    public function project()
+    {
+        return $this->belongsTo(Project::class, 'project_id');
+    }
+    public function cabang()
+    {
+        return $this->belongsTo(Cabang::class, 'cabang_id');
+    }
     public function admin()
     {
-        return $this->belongsTo(User::class, 'id_user');
+        return $this->belongsTo(User::class, 'user_id');
     }
-    public function purchase()
-    {
-        return $this->belongsTo(Purchase::class);
-    }
+
     public function roles()
     {
-        return $this->belongsTo(Role::class, 'id_roles');
+        return $this->hasMany(User::class, 'users.cabang_id');
     }
 }

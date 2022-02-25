@@ -42,7 +42,8 @@
                     </div>
                 </div>
 
-                <form action="{{ route('logistik.purchase.store') }}" method="post">
+                <form action="{{ route('logistik.purchase.store', $purchase->id) }}" method="post">
+                    @method('PATCH')
                     @csrf
                     <div class="row">
                         <div class="col-sm-6 col-sg-4 m-b-4">

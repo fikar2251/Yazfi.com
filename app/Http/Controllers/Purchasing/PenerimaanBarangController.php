@@ -43,14 +43,15 @@ class PenerimaanBarangController extends Controller
             "project_id",
             "lokasi",
             "barang_id",
-            "qty"
+            "qty",
+            "PPN"
         )->where('status_barang', 'pending')->where('invoice', $request->invoice)->get();
         if (count($tukar) == 0) {
             $data[] = "No Items Found";
         } else {
             foreach ($tukar as $value) {
                 $data[] = [
-                    'invoice' => $value->invoice,
+                    'id' => $value->id,
                     'project_id' => $value->project->nama_project,
                     'lokasi' => $value->lokasi,
                     'created_at' => $value->created_at,
@@ -61,76 +62,46 @@ class PenerimaanBarangController extends Controller
                     'total' => $value->total,
                     'status_barang' => $value->status_barang,
                     'grand_total' => $value->grand_total,
+                    'PPN' => $value->PPN
                 ];
             }
         }
         return $data;
     }
-    public function create(Purchase $purchase)
+    public function create(Request $request)
     {
-        $purchases = Purchase::get();
-        $AWAL = 'PN';
-        $noUrutAkhir = \App\Purchase::max('id');
-        // dd($noUrutAkhir);
-        $nourut = $AWAL . '/' .  sprintf("%02s", abs($noUrutAkhir + 1)) . '/' . sprintf("%05s", abs($noUrutAkhir + 1));
-        // dd($nourut);
-        return view('purchasing.penerimaan-barang.create', compact('purchases', 'purchase', 'nourut'));
+        $tukar = Purchase::select("invoice")->where('invoice', $request->invoice)->get();
+
+        $purchases = Purchase::where('invoice', $request->invoice)->get();
+        $purchase = Purchase::groupBy('invoice')->get();
+        // dd($tukar);
+        return view('purchasing.penerimaan-barang.create', compact('tukar', 'purchases', 'purchase'));
     }
 
     public function store(Request $request)
     {
+        $AWAL = 'PN';
+        $noUrutAkhir = \App\PenerimaanBarang::max('id');
+        // dd($noUrutAkhir);
+        $nourut = $AWAL . '/' .  sprintf("%02s", abs($noUrutAkhir + 1)) . '/' . sprintf("%05s", abs($noUrutAkhir + 1));
         $request->validate([
-            'supplier_id' => 'required',
-            'barang_id' => 'required',
-            'qty' => 'required',
-            'harga_beli' => 'required',
-            'invoice' => 'required',
+            'id_purchase' => 'required',
+            'id_user' => 'required',
+            'no_penerimaan_barang' => 'required',
         ]);
 
-        $barang = $request->input('barang_id', []);
-        $attr = [];
-        $in = [];
-        // dd($request->all());
-        DB::beginTransaction();
-        foreach ($barang as $key => $no) {
-            $attr[] = [
-                'invoice' => $request->invoice,
-                'supplier_id' => $request->supplier_id,
-                'lokasi' => $request->lokasi,
-                'project_id' => $request->project_id,
-                'barang_id' => $no,
-                'qty' => $request->qty[$key],
-                'unit' => $request->unit[$key],
-                'harga_beli' => $request->harga_beli[$key],
-                'PPN' => $request->PPN,
-                'total' => $request->harga_beli[$key] * $request->qty[$key],
-                'user_id' => auth()->user()->id,
-                'created_at' => $request->tanggal,
-                'grand_total' => $request->grandtotal,
-                'status_pembayaran' => 'pending',
-                'status_barang' => 'pending'
-            ];
+        $request['no_penerimaan_barang'] = $nourut;
+        $request['id_user'] = Auth()->user()->id;
+        $barang = ($request->all());
+        PenerimaanBarang::insert($barang);
+        $cabangs = PenerimaanBarang::get();
 
-            // $hargaBarang = HargaProdukCabang::where('project_id', auth()->user()->project_id)->where('barang_id', $no)->first();
-
-            // $hargaBarang->update([
-            //     'qty' => $hargaBarang->qty + $request->qty[$key]
-            // ]);
-
-            $in[] = [
-                'invoice' => $request->invoice,
-                'supplier_id' => $request->supplier_id,
-                'barang_id' => $no,
-                'project_id' => $request->project_id,
-                'in' => $request->qty[$key],
-                'user_id' => auth()->user()->id
-            ];
+        foreach ($cabangs as $cabang) {
+            Purchase::updateOrInsert([
+                'status_barang' => $cabang->request('status_barang')
+            ]);
         }
 
-        Purchase::insert($attr);
-        InOut::insert($in);
-
-        DB::commit();
 
         return redirect()->route('logistik.purchase.index')->with('success', 'Purchase barang berhasil');
     }

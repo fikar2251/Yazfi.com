@@ -326,7 +326,6 @@ Route::middleware('auth')->group(function () {
             Route::resource('tukarfaktur', 'TukarFakturController');
             Route::resource('reinburst', 'ReinburstController');
             Route::resource('penerimaan-barang', 'PenerimaanBarangController');
-            
             Route::get('/where/penerimaan/search', 'PenerimaanBarangController@search');
             Route::resource('listpurchase', 'ListPurchsaController');
             Route::resource('permissions', 'PermissionController');
