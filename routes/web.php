@@ -248,6 +248,7 @@ Route::middleware('auth')->group(function () {
             Route::resource('komisi', 'KomisiController');
 
             Route::get('payment', 'BayarController@index')->name('payment.index');
+            Route::get('payment/{id}', 'BayarController@show')->name('payment.show');
             Route::get('/nominal', 'BayarController@nominal');
             Route::post('payment/store', 'BayarController@storeBayar')->name('payment.store');
             Route::get('payment/delete/{id}', 'BayarController@hapuskonfirmasi')->name('payment.delete');

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
 use App\Booking;
 use App\Customer;
 use App\Holidays;
@@ -10,6 +9,7 @@ use App\Tindakan;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
@@ -39,14 +39,14 @@ class DashboardController extends Controller
 
         $pasien = Customer::count();
         $dokter = User::role('dokter')->count();
-        $appointments =  Booking::count();
-        $tindakan =  Tindakan::with('booking')->where('status', 0)->count();
+        $appointments = Booking::count();
+        $tindakan = Tindakan::with('booking')->where('status', 0)->count();
 
         if (auth()->user()->hasRole('super-admin')) {
             $pasien = Customer::count();
             $dokter = User::role('dokter')->count();
-            $appointments =  Booking::count();
-            $tindakan =  Tindakan::with('booking')->where('status', 0)->count();
+            $appointments = Booking::count();
+            $tindakan = Tindakan::with('booking')->where('status', 0)->count();
 
             return view('dashboard.index', [
                 'pasien' => $pasien,
@@ -63,9 +63,9 @@ class DashboardController extends Controller
             $jadwal = Booking::with('pasien', 'dokter')->where('tanggal_status', $waktu)->where('status_kedatangan_id', 1)->where('cabang_id', $cabang)->get();
             $datang = Booking::with('pasien', 'dokter')->where('status_kedatangan_id', 2)->where('cabang_id', $cabang)->get();
             $periksa = Booking::with('pasien', 'dokter')->where('status_kedatangan_id', 3)->get();
-            $pasien =  Customer::where('cabang_id', $cabang)->count();
-            $appointments =  Booking::where('cabang_id', $cabang)->count();
-            $tindakan =  Tindakan::with('booking')->whereHas('booking', function ($query) {
+            $pasien = Customer::where('cabang_id', $cabang)->count();
+            $appointments = Booking::where('cabang_id', $cabang)->count();
+            $tindakan = Tindakan::with('booking')->whereHas('booking', function ($query) {
                 $cabang = auth()->user()->cabang_id;
                 return $query->where('cabang_id', $cabang);
             })->where('status', 0)->count();
@@ -91,7 +91,7 @@ class DashboardController extends Controller
                 'finish' => $finish,
                 'pending' => $pending,
                 'appointment_count' => $appointment_count,
-                'appointment_pending' => $appointment_pending
+                'appointment_pending' => $appointment_pending,
             ]);
         }
 
@@ -115,8 +115,14 @@ class DashboardController extends Controller
                 'holiday' => $holiday,
                 'count' => $count,
                 'data' => $data,
-                'startdate' => $from->subDays(1)
+                'startdate' => $from->subDays(1),
             ]);
+        }
+
+        if (auth()->user()->roles()->first()->name == 'supervisor') {
+            $user = User::where('roles_id', 4)->get();
+            return view('supervisor.dashboard', compact('user'));
+
         }
 
         if (auth()->user()->hasRole('hrd')) {
@@ -130,7 +136,7 @@ class DashboardController extends Controller
             return view('dashboard.index', [
                 'doctor' => $doctor,
                 'appointment' => $appointment,
-                'tindakan' => $tindakan
+                'tindakan' => $tindakan,
             ]);
         }
 
@@ -154,7 +160,7 @@ class DashboardController extends Controller
         $attr = request()->validate([
             'name' => 'required',
             'email' => 'required',
-            'address' => 'required'
+            'address' => 'required',
         ]);
 
         $user = User::find(auth()->user()->id);
@@ -162,7 +168,7 @@ class DashboardController extends Controller
         if (request('password') == null) {
             $attr['password'] = $user->password;
         } else {
-            $attr['password'] =  Hash::make(request('password'));
+            $attr['password'] = Hash::make(request('password'));
         }
 
         $image = request()->file('image');

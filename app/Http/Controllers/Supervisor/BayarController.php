@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Pembayaran;
 use App\Spr;
 use App\Tagihan;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -18,9 +19,21 @@ class BayarController extends Controller
         $spr = Spr::select('no_transaksi')->distinct()->get();
         $getSpr = Spr::where('no_transaksi', $no)->get();
         $tagihan = Tagihan::where('no_transaksi', $no)->get();
-        $bayar = Pembayaran::where('no_detail_transaksi', $no)->get();  
+        $bayar = Pembayaran::where('no_detail_transaksi', $no)->get();
 
         return view('supervisor.payment.index', compact('spr', 'getSpr', 'tagihan', 'bayar'));
+    }
+
+    public function show($id)
+    {
+        $no = request()->get('no_transaksi');
+        $spr = Spr::select('no_transaksi')->where('id_sales', $id)->get();
+        $getSpr = Spr::where('no_transaksi', $no)->get();
+        $tagihan = Tagihan::where('no_transaksi', $no)->get();
+        $bayar = Pembayaran::where('no_detail_transaksi', $no)->get();
+
+        return view('supervisor.payment.create', compact('spr', 'getSpr', 'tagihan', 'bayar', 'id'));
+
     }
 
     public function nominal(Request $request)

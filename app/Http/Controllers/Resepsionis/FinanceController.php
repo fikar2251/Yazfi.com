@@ -20,17 +20,23 @@ class FinanceController extends Controller
         $bayar->status_approval = 'paid';
         $bayar->save();
 
-        $bayar = Pembayaran::select('rincian_id')
-            ->where('id', $id)->get();
+        $bayar = Pembayaran::select('nominal', 'rincian_id')
+            ->where('id', $id)->first();
 
-        foreach ($bayar as $byr) {
-            $by = $byr->rincian_id;
+        $where = [
+            // 'nominal' => $bayar->nominal,
+            'id_rincian' => $bayar->rincian_id,
+        ];
+
+        $tagihan = Tagihan::where($where)->first();
+
+        if ($bayar->nominal == $tagihan->jumlah_tagihan) {
+            $tagihan->status_pembayaran = 'paid';
+        } else {
+            $tagihan->status_pembayaran = 'partial';
         }
-
-        $tagihan = Tagihan::where('id_rincian', $by)->first();
-        $tagihan->status_pembayaran = 'paid';
         $tagihan->save();
-        // dd($tagihan);
+        // return $bayar->nominal;
 
         return redirect()->back();
     }
