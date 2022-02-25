@@ -11,6 +11,7 @@ use App\Tagihan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Laravolt\Indonesia\Models\Province;
 
 class PricelistController extends Controller
 {
@@ -246,7 +247,9 @@ class PricelistController extends Controller
         $blok = DB::table('unit_rumah')
             ->groupBy('type')
             ->get();
-        return view('marketing.pricelist.create', compact('blok', 'id', 'skema'));
+
+        $provinsi = Province::pluck('name', 'id');
+        return view('marketing.pricelist.create', compact('blok', 'id', 'skema', 'provinsi'));
     }
 
     /**
