@@ -172,10 +172,10 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    @if ($item->status_pembayaran == 'unpaid')
-                                                        Pending
+                                                    @if ($item->status_pembayaran == 'partial')
+                                                        unpaid
                                                     @else
-                                                        Approval
+                                                        {{ $item->status_pembayaran }}
                                                     @endif
                                                 </td>
                                             </tr>
@@ -272,7 +272,6 @@
         @else
         @endif
     @else
-
     @endif
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>

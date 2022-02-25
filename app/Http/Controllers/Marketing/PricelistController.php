@@ -97,7 +97,7 @@ class PricelistController extends Controller
         ];
 
         $data = DB::table('unit_rumah')
-            ->select('unit_rumah.type', 'unit_rumah.id_unit_rumah', 'unit_rumah.blok', 'unit_rumah.no', 'unit_rumah.lt', 'unit_rumah.harga_jual', 'unit_rumah.lb')
+            ->select('unit_rumah.type', 'unit_rumah.id_unit_rumah', 'unit_rumah.blok', 'unit_rumah.no', 'unit_rumah.lt', 'unit_rumah.harga_jual', 'unit_rumah.lb', 'unit_rumah.nstd', 'unit_rumah.total')
             ->groupBy('unit_rumah.lt', 'unit_rumah.no')
             ->where($lutan)->get();
 
@@ -169,6 +169,7 @@ class PricelistController extends Controller
             'diskon' => $request->potongan,
             'harga_net' => $request->harga_net,
             'total_luas_tanah' => $request->tlt,
+            'sumber_informasi' =>$request->sumber_informasi
         ]);
 
         $skema = Skema::select('jumlah_skema')

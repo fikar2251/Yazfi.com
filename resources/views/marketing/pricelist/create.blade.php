@@ -130,6 +130,23 @@
                         <small class="text-danger">{{ $message }}</small>
                     @enderror
                 </div>
+                <div class="form-group">
+                    <label for="email">Sumber Informasi</label>
+                    <select name="sumber_informasi" id="sumber_informasi" class="form-control ">
+                        <option value="">-- Select --</option>
+                        <option value="iklan">Iklan</option>
+                        <option value="media sosial">Media Sosial</option>
+                        <option value="pameran">Pameran</option>
+                        <option value="walk-in">Walk In</option>
+                        <option value="brosur">Brosur</option>
+                        <option value="buyer">Buyer</option>
+                        <option value="lain-lain">Lain-lain</option>
+                    </select>
+
+                    @error('email')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
             </div>
         </div>
 
@@ -182,37 +199,52 @@
                         <small class="text-danger">{{ $message }}</small>
                     @enderror
                 </div>
-                <div class="form-group">
-                    <label for="phone_number">Luas bangunan</label>
-                    <input type="number" name="lb" id="luas_bangunan" class="form-control root6" readonly>
-                    @error('phone_number')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
-                </div>
-                <div class="form-group">
-                    <label for="phone_number">Luas tanah</label>
+                <div class="row">
+                    <div class="col-sm-6 form-group">
+                        <label for="phone_number">Luas bangunan</label>
+                        <div class="row container">
+                            <input type="number" name="lb" id="luas_bangunan" class="col-sm-10 form-control root6" readonly>
+                            <h3 class="col-sm-2">M<sup>2</sup></h3>
+                        </div>
 
-                    <input type="number" name="lt" id="lt" class="form-control root4" readonly>
-                    @error('phone_number')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
+                        @error('phone_number')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label for="phone_number">Luas tanah</label>
+                        <div class="row container">
+                            <input type="number" name="lt" id="lt" class="col-sm-10 form-control root4" readonly>
+                            <h3 class="col-sm-2">M<sup>2</sup></h3>
+                        </div>
+                        @error('phone_number')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="phone_number">Penambahan Luas Tanah</label>
-                    <input type="number" name="plt" id="plt" class="form-control" maxlength="3"
-                        oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                <div class="row">
+                    <div class="col-sm-6 form-group">
+                        <label for="phone_number">Penambahan Luas Tanah</label>
+                        <div class="row container">
+                            <input type="number" name="plt" id="plt" class="col-sm-10 form-control" maxlength="3"
+                                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                            <h3 class="col-sm-2">M<sup>2</sup></h3>
+                        </div>
 
-                    @error('phone_number')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
-                </div>
-                <div class="form-group">
-                    <label for="phone_number">Total Luas Tanah</label>
-                    <input type="number" name="tlt" id="tlt" class="form-control">
-
-                    @error('phone_number')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
+                        @error('phone_number')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label for="phone_number">Total Luas Tanah</label>
+                        <div class="row container">
+                            <input type="number" name="tlt" id="tlt" class="col-sm-10 form-control">
+                            <h3 class="col-sm-2">M<sup>2</sup></h3>
+                        </div>
+                        @error('phone_number')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
                 </div>
             </div>
             <div class="col-md-6">
@@ -404,6 +436,11 @@
                             var luas_bangunan = data[i].lb;
                             document.getElementById('luas_bangunan').value = luas_bangunan;
 
+                            var penambahan = data[i].nstd;
+                            document.getElementById('plt').value = penambahan;
+
+                            var total = data[i].total;
+                            document.getElementById('tlt').value = total;
                         };
                     },
                     error: function() {
@@ -426,9 +463,9 @@
         });
         $(document).ready(function() {
             $("#plt").keyup(function() {
-                var lb = parseInt($("#lb").val());
+                var lt = parseInt($("#lt").val());
                 var plt = parseInt($("#plt").val());
-                var total = lb + plt;
+                var total = lt + plt;
                 $("#tlt").val(total);
             });
         });

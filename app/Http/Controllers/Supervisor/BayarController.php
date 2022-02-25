@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Supervisor;
 
 use App\Http\Controllers\Controller;
 use App\Pembayaran;
+use App\Rumah;
 use App\Spr;
 use App\Tagihan;
 use App\User;
@@ -72,7 +73,28 @@ class BayarController extends Controller
 
     public function hapuskonfirmasi($id)
     {
-        DB::table('pembayaran_unit')->where('id', $id)->delete();
+        $check = Pembayaran::select('rincian_id')->where('id', $id)->first();
+        $id_rincian = $check->rincian_id;
+        $tagihan = Tagihan::where('id_rincian', $id_rincian)->first();
+        $tagihan->status_pembayaran = 'unpaid';
+        $tagihan->save();
+
+        $idspr = $tagihan->id_spr;
+        $spr = Spr::where('id_transaksi', $idspr)->first();
+        $spr->status_booking = 'unpaid';
+        $spr->save();
+
+        $idunit = $spr->id_unit;
+        $unit = Rumah::where('id_unit_rumah', $idunit)->first();
+        $unit->status_penjualan = 'Available';
+        $unit->save();
+        // dd($test);
+
+
+        // if ($delete) {
+            DB::table('pembayaran_unit')->where('id', $id)->delete();
+            // dd($tagihan);
+        // }
         return redirect()->back();
     }
 }

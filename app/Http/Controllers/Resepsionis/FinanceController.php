@@ -3,6 +3,8 @@ namespace App\Http\Controllers\Resepsionis;
 
 use App\Http\Controllers\Controller;
 use App\Pembayaran;
+use App\Rumah;
+use App\Spr;
 use App\Tagihan;
 
 class FinanceController extends Controller
@@ -36,6 +38,17 @@ class FinanceController extends Controller
             $tagihan->status_pembayaran = 'partial';
         }
         $tagihan->save();
+
+        $spr = $tagihan->id_spr;
+        $spr1 = Spr::where('id_transaksi', $spr)->first();
+        $spr1->status_booking = 'paid';
+        $spr1->save();
+
+        $unit = $spr1->id_unit;
+        $rumah = Rumah::where('id_unit_rumah', $unit)->first();
+        $rumah->status_penjualan = 'Sold';
+        $rumah->save();
+
         // return $bayar->nominal;
 
         return redirect()->back();

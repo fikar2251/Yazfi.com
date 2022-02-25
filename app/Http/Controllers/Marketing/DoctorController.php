@@ -27,7 +27,8 @@ class DoctorController extends Controller
 
     public function json()
     {
-        $stok = Marketing::where('status_penjualan', 'Available')->get();
+        // $stok = Marketing::where('status_penjualan', 'Available')->get();
+        $stok = Marketing::all();
 
         return DataTables::of($stok)
                 ->editColumn('harga_jual', function($stok){
