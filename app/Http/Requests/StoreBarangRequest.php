@@ -26,7 +26,10 @@ class StoreBarangRequest extends FormRequest
     {
         return [
             'kode_barang' => 'required|unique:barangs',
-            'nama_barang' => 'required'
+            'nama_barang' => 'required',
+            'description' => 'required',
+            'jenis_barang' => 'required',
+            'created_at' => 'required'
         ];
     }
     public function messages()
@@ -34,7 +37,10 @@ class StoreBarangRequest extends FormRequest
         return [
             'kode_barang.required' => 'The kode produk field is required.',
             'nama_barang.required' => 'The nama field is required.',
-            'kode_barang.unique' => 'The kode produk has already been taken.'
+            'description.required' => 'The description field is required.',
+            'jenis_barang.required' => 'The jenis barang field is required.',
+            'created_at.required' => 'The tanggal field is required.',
+            'kode_barang.unique' => 'The kode barang has already been taken.'
         ];
     }
 }

@@ -49,7 +49,13 @@ Route::middleware('auth')->group(function () {
 
             // Route Master Cabang
 
+         
             Route::resource('unit', 'UnitController');
+         
+            Route::get('pembatalans/ajax', 'PembatalanUnitController@ajax');
+            Route::patch('pembatalans/{id}/update', 'PembatalanUnitController@update');
+            Route::resource('pembatalans', 'PembatalanUnitController');
+         
 
             Route::resource('supplier', 'SupplierController');
             Route::get('/where/product', 'PurchaseController@WhereProduct');

@@ -4,8 +4,8 @@
         <a href="/dashboard"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
     </li>
     @can('product-access')
-    <li class="{{ request()->is('admin/purchase*') ? 'active' : '' }}">
-        <a href="{{ route('admin.purchase.index') }}"><i class="fa fa-calculator"></i> <span>Barang</span></a>
+    <li class="{{ request()->is('admin/product*') ? 'active' : '' }}">
+        <a href="{{ route('admin.product.index') }}"><i class="fa fa-shopping-bag"></i> <span>Barang</span></a>
     </li>
     @endcan
     @can('product-access')
@@ -19,10 +19,22 @@
     </li>
     @endcan
     @can('product-access')
-    <li class="{{ request()->is('admin/kategori-barang*') ? 'active' : '' }}">
-        <a href="{{ route('admin.kategori-barang.index') }}"><i class="fa fa-shopping-bag"></i> <span>Kategori Barang</span></a>
+    <li class="{{ request()->is('admin/purchase*') ? 'active' : '' }}">
+        <a href="{{ route('admin.purchase.index') }}"><i class="fa fa-calculator"></i> <span>Kategori Barang</span></a>
     </li>
     @endcan
+
+    @can('product-access')
+    <li class="{{ request()->is('admin/pembatalans*') ? 'active' : '' }}">
+        <a href="{{ route('admin.pembatalans.index') }}"><i class="fa fa-shopping-bag"></i> <span>Pembatalan Unit</span></a>
+    </li>
+    @endcan
+    @can('product-access')
+    <li class="{{ request()->is('admin/kategori-barang*') ? 'active' : '' }}">
+        <a href="{{ route('admin.kategori-barang.index') }}"><i class="fa fa-shopping-bag"></i> <span>Customer</span></a>
+    </li>
+    @endcan
+    
     @can('product-access')
     <li class="{{ request()->is('admin/product*') ? 'active' : '' }}">
         <a href="{{ route('admin.product.index') }}"><i class="fa fa-shopping-bag"></i> <span>Warehouse</span></a>
@@ -33,11 +45,7 @@
         <a href="{{ route('admin.product.index') }}"><i class="fa fa-shopping-bag"></i> <span>Reinburst</span></a>
     </li>
     @endcan
-    @can('product-access')
-    <li class="{{ request()->is('admin/product*') ? 'active' : '' }}">
-        <a href="{{ route('admin.product.index') }}"><i class="fa fa-shopping-bag"></i> <span>Customer</span></a>
-    </li>
-    @endcan
+
     {{-- @can('service-access')
     <li class="{{ request()->is('admin/service*') ? 'active' : '' }}">
         <a href="{{ route('admin.service.index') }}"><i class="fa fa-stethoscope"></i> <span>Master Service</span></a>

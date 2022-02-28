@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Barang;
-use App\Cabang;
+use App\Project;
 use App\HargaProdukCabang;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBarangRequest;
 use App\Http\Requests\UpdateBarangRequest;
+use App\KategoriBarang;
 
 class BarangController extends Controller
 {
@@ -15,33 +16,38 @@ class BarangController extends Controller
     {
         abort_unless(\Gate::allows('product-access'), 403);
 
-        $products = Barang::where('jenis', 'barang')->get();
+        $products = Barang::OrderBy('created_at','desc')->get();
         return view('admin.product.index', compact('products'));
     }
 
-    public function create()
+    public function create(Barang $product)
     {
         abort_unless(\Gate::allows('product-create'), 403);
+        $AWAL = 'KB';
+        $noUrutAkhir = \App\Barang::max('id');
+        // dd($noUrutAkhir);
+        $nourut  = $AWAL . '/' .  sprintf("%02s", abs($noUrutAkhir + 1)) . '/' . sprintf("%05s", abs($noUrutAkhir + 1));
 
-        $barang = new Barang();
-        return view('admin.product.create', compact('barang'));
+        $kategoris = KategoriBarang::get();
+        return view('admin.product.create', compact('kategoris','nourut','product'));
     }
 
     public function store(StoreBarangRequest $request)
     {
         abort_unless(\Gate::allows('product-create'), 403);
 
-        $request['jenis'] = 'barang';
+        $attr['durasi'] = 20;
+        $attr['type'] = 1;
+        $attr['is_active'] = 1;
+        $attr['id_jenis'] = 1;
+       $barangs= Barang::create($request->all());
 
-        $barang =  Barang::create($request->all());
+        $projects = Project::get();
 
-        $cabangs = Cabang::get();
-
-        foreach ($cabangs as $cabang) {
+        foreach ($projects as $project) {
             HargaProdukCabang::create([
-                'barang_id' => $barang->id,
-                'cabang_id' => $cabang->id,
-                'harga' => request('harga'),
+                'barang_id' => $barangs->id,
+                'project_id' => $project->id,
                 'qty' => 0
             ]);
         }
@@ -56,8 +62,9 @@ class BarangController extends Controller
     public function edit(Barang $product)
     {
         abort_unless(\Gate::allows('product-edit'), 403);
+        $kategoris = KategoriBarang::get();
 
-        return view('admin.product.edit', compact('product'));
+        return view('admin.product.edit', compact('product','kategoris'));
     }
 
     public function update(UpdateBarangRequest $request, Barang $product)

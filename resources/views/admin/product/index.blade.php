@@ -21,13 +21,9 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>No PO</th>
-                        <th>Item</th>
-                        <th>Qty</th>
-                        <th>Unit</th>
-                        <th>Harga</th>
-                        <th>Total</th>
-                        <th>Admin</th>
+                        <th>Kode Barang</th>
+                        <th>Nama Barang</th>
+                        <th>Jenis</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -37,11 +33,9 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                        
-                        <td>{{ $product->nama_barang }}</td>
-                        <td>{{ $product->hargaproduk->qty }}</td>
-                        <td>{{ $product->purchase->unit }}</td>
-                        <td>{{ $product->purchase->harga_beli }}</td>
-                        <td>{{ $product->hargaproduk->id_user }}</td>
+                        <td>{{ $product->kode_barang }}</td>    
+                        <td>{{ $product->nama_barang }}</td>    
+                        <td>{{ $product->jenis }}</td>
                         <td>
                             @can('product-edit')
                             <a href="{{ route('admin.product.edit', $product->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
