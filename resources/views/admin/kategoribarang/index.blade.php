@@ -7,7 +7,7 @@
     </div>
     <div class="col-sm-8 text-right m-b-20">
         @can('product-create')
-        <a href="{{ route('admin.kategori-barang.create') }}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Kategori Barang</a>
+        <a href="{{ route('admin.kategoribarang.create') }}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Kategori Barang</a>
         @endcan
     </div>
 </div>
@@ -21,27 +21,27 @@
                 <thead>
                     <tr>
                         <th class="text-center">No</th>
-                        <th>Nama Barang</th>
-                        <th>Jenis</th>
+                        <th>Nama Kategori</th>
                         <th>is_active</th>
+                        <th>Total</th>
                         <th>Action</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    @foreach($barangs as $barang)
+                    @foreach($kategoris as $kategori)
                     <tr>
                         <td class="text-center">{{ $loop->iteration }}</td>
-                        <td>{{ $barang->nama_barang }}
+                        <td>{{ $kategori->nama_kategori }}
                         </td>
-                        <td>{{ $barang->jenis }}</td>
-                        <td>{{ $barang->is_active }}</td>
+                        <td>{{ $kategori->is_active }}</td>
+                        <td>{{ $kategori->kategori->count()}}</td>
                         <td>
                             @can('product-edit')
-                            <a href="{{ route('admin.kategori-barang.edit', $barang->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
+                            <a href="{{ route('admin.kategoribarang.edit', $kategori->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
                             @endcan
                             @can('product-delete')
-                            <form action="{{ route('admin.kategori-barang.destroy', $barang->id) }}" method="post" style="display: inline;" class="delete-form">
+                            <form action="{{ route('admin.kategoribarang.destroy', $kategori->id) }}" method="post" style="display: inline;" class="delete-form">
                                 @method('DELETE')
                                 @csrf
                                 <button type="submit" class="btn btn-sm btn-danger delete"><i class="fa fa-trash"></i></button>

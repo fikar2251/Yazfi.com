@@ -20,20 +20,10 @@
     @endcan
     @can('product-access')
     <li class="{{ request()->is('admin/purchase*') ? 'active' : '' }}">
-        <a href="{{ route('admin.purchase.index') }}"><i class="fa fa-calculator"></i> <span>Kategori Barang</span></a>
+        <a href="{{ route('admin.purchase.index') }}"><i class="fa fa-calculator"></i> <span>Customer</span></a>
     </li>
     @endcan
 
-    @can('product-access')
-    <li class="{{ request()->is('admin/pembatalans*') ? 'active' : '' }}">
-        <a href="{{ route('admin.pembatalans.index') }}"><i class="fa fa-shopping-bag"></i> <span>Pembatalan Unit</span></a>
-    </li>
-    @endcan
-    @can('product-access')
-    <li class="{{ request()->is('admin/kategori-barang*') ? 'active' : '' }}">
-        <a href="{{ route('admin.kategori-barang.index') }}"><i class="fa fa-shopping-bag"></i> <span>Customer</span></a>
-    </li>
-    @endcan
     
     @can('product-access')
     <li class="{{ request()->is('admin/product*') ? 'active' : '' }}">
@@ -41,8 +31,18 @@
     </li>
     @endcan
     @can('product-access')
-    <li class="{{ request()->is('admin/product*') ? 'active' : '' }}">
-        <a href="{{ route('admin.product.index') }}"><i class="fa fa-shopping-bag"></i> <span>Reinburst</span></a>
+    <li class="{{ request()->is('admin/reinburst*') ? 'active' : '' }}">
+        <a href="{{ route('admin.reinburst.index') }}"><i class="fa fa-shopping-bag"></i> <span>Reinburst</span></a>
+    </li>
+    @endcan
+    @can('product-access')
+    <li class="{{ request()->is('admin/pembatalans*') ? 'active' : '' }}">
+        <a href="{{ route('admin.pembatalans.index') }}"><i class="fa fa-shopping-bag"></i> <span>Pembatalan Unit</span></a>
+    </li>
+    @endcan
+    @can('product-access')
+    <li class="{{ request()->is('admin/kategoribarang*') ? 'active' : '' }}">
+        <a href="{{ route('admin.kategoribarang.index') }}"><i class="fa fa-shopping-bag"></i> <span>Kategori Barang</span></a>
     </li>
     @endcan
 

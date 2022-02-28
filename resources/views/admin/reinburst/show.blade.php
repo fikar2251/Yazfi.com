@@ -79,7 +79,7 @@
                                             @php
                                             $total = 0
                                             @endphp
-                                            @foreach(App\RincianReinburst::where('nomor_reinburst', $reinburst->nomor_reinburst)->get() as $barang)
+                                            @foreach(App\RincianReinburst::where('id_reinburst', $reinburst->id_reinburst)->get() as $barang)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $barang->no_kwitansi }}</td>

@@ -8,6 +8,8 @@ use App\HargaProdukCabang;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreKategoriBarangRequest;
 use App\Http\Requests\UpdateBarangRequest;
+use App\Http\Requests\UpdateKategoriBarangRequest;
+use App\KategoriBarang;
 
 class KategoriBarangController extends Controller
 {
@@ -15,64 +17,46 @@ class KategoriBarangController extends Controller
     {
         abort_unless(\Gate::allows('product-access'), 403);
 
-        $barangs = Barang::get();
-        return view('admin.kategori-barang.index', compact('barangs'));
+        $kategoris = KategoriBarang::OrderBy('created_at','desc')->get();
+        return view('admin.kategoribarang.index', compact('kategoris'));
     }
 
-    public function create(Barang $barangs)
+    public function create(KategoriBarang $kategori)
     {
         abort_unless(\Gate::allows('product-create'), 403);
-
-        $AWAL = 'KB';
-        $noUrutAkhir = \App\Barang::max('id');
-        // dd($noUrutAkhir);
-        $nourut = $AWAL . '/' .  sprintf("%02s", abs($noUrutAkhir + 1)) . '/' . sprintf("%05s", abs($noUrutAkhir + 1));
-        return view('admin.kategori-barang.create', compact('barangs','nourut'));
+        return view('admin.kategoribarang.create', compact('kategori'));
     }
 
     public function store(StoreKategoriBarangRequest $request)
     {
         abort_unless(\Gate::allows('product-create'), 403);
 
-        $request['durasi'] = 20 ;
         $request['is_active'] = 1 ;
 
-        $barangs =  Barang::create($request->all());
+        KategoriBarang::create($request->all());
 
-        $projects = Project::get();
-
-        foreach ($projects as $project) {
-            HargaProdukCabang::create([
-                'barang_id' => $barangs->id,
-                'project_id' => $project->id,
-                'qty' => 0
-            ]);
-        }
-        return redirect()->route('admin.kategori-barang.index')->with('success', 'Kategori Barang has been added');
+        return redirect()->route('admin.kategoribarang.index')->with('success', 'Kategori Barang has been added');
     }
 
+    public function edit(KategoriBarang $kategori)
+    {
 
-    public function edit(Barang $barangs)
+        abort_unless(\Gate::allows('product-edit'), 403);
+        return view('admin.kategoribarang.edit', compact('kategori'));
+    }
+
+    public function update(UpdateKategoriBarangRequest $request, KategoriBarang $kategori)
     {
         abort_unless(\Gate::allows('product-edit'), 403);
 
-        return view('admin.kategori-barang.edit', compact('barangs'));
+        $kategori->update($request->all());
+
+        return redirect()->route('admin.kategoribarang.index')->with('success', 'Kategori Barang has been updated');
     }
 
-    public function update(UpdateBarangRequest $request, Barang $barangs)
+    public function destroy(KategoriBarang $kategori)
     {
-        abort_unless(\Gate::allows('product-edit'), 403);
-
-        $barangs->update($request->all());
-
-        return redirect()->route('admin.kategori-barang.index')->with('success', 'Kategori Barang has been updated');
-    }
-
-    public function destroy(Barang $barangs)
-    {
-        abort_unless(\Gate::allows('product-delete'), 403);
-
-        $barangs->delete();
-        return redirect()->route('admin.kategori-barang.index')->with('success', 'Kategori Barang has been deleted');
+        $kategori->delete();
+        return redirect()->route('admin.kategoribarang.index')->with('success', 'Kategori Barang has been deleted');
     }
 }

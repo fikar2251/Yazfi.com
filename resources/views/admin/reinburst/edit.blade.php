@@ -42,7 +42,7 @@
                     </div>
                 </div>
 
-                <form action="{{ route('logistik.pengajuan.update', $pengajuan->id) }}" method="post">
+                <form action="{{ route('admin.pengajuan.update', $pengajuan->id) }}" method="post">
                     @method('PATCH')
                     @csrf
                     <div class="row">

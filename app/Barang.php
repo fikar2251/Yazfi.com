@@ -36,4 +36,7 @@ class Barang extends Model
     {
         return $this->hasMany(InOut::class);
     }
+ 
+
+
 }

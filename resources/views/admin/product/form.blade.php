@@ -20,7 +20,7 @@
 </div>
 <div class="form-group">
     <label for="description">Description</label>
-    <input name="description"required=""  id="description" class="form-control">
+    <textarea name="description"required=""  id="description" class="form-control"></textarea>
 
     @error('description')
     <small class="text-danger">{{ $message }}</small>
@@ -32,10 +32,18 @@
         <option disabled selected >-- Select Jenis --</option>
         @foreach($kategoris as $kategori)
         <option {{ $product->jenis == $kategori->id ? 'selected' : ''}} value="{{ $kategori->id }}">
-            {{ $kategori->nama }}</option>
+            {{ $kategori->nama_kategori }}</option>
 
         @endforeach
     </select>
+</div>
+<div class="form-group">
+    <label for="created_at">Tanggal</label>
+    <input type="datetime-local" name="created_at" id="created_at" class="form-control" >
+
+    @error('created_at')
+    <small class="text-danger">{{ $message }}</small>
+    @enderror
 </div>
 
 <div class="m-t-20 text-center">

@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBarangRequest;
 use App\Http\Requests\UpdateBarangRequest;
 use App\KategoriBarang;
+use Illuminate\Support\Facades\DB;
 
 class BarangController extends Controller
 {
@@ -16,7 +17,10 @@ class BarangController extends Controller
     {
         abort_unless(\Gate::allows('product-access'), 403);
 
-        $products = Barang::OrderBy('created_at','desc')->get();
+     $products= DB::table('barangs')
+        ->leftJoin('kategori_barangs','barangs.id_jenis','=','kategori_barangs.id')
+         ->select('kategori_barangs.nama_kategori','barangs.id','barangs.kode_barang','barangs.nama_barang')
+        ->OrderBy('barangs.created_at','desc')->get();
         return view('admin.product.index', compact('products'));
     }
 
@@ -39,18 +43,10 @@ class BarangController extends Controller
         $attr['durasi'] = 20;
         $attr['type'] = 1;
         $attr['is_active'] = 1;
-        $attr['id_jenis'] = 1;
-       $barangs= Barang::create($request->all());
+    
+       Barang::create($request->all());
 
-        $projects = Project::get();
-
-        foreach ($projects as $project) {
-            HargaProdukCabang::create([
-                'barang_id' => $barangs->id,
-                'project_id' => $project->id,
-                'qty' => 0
-            ]);
-        }
+    
         return redirect()->route('admin.product.index')->with('success', 'Product has been added');
     }
 
@@ -63,8 +59,9 @@ class BarangController extends Controller
     {
         abort_unless(\Gate::allows('product-edit'), 403);
         $kategoris = KategoriBarang::get();
+        $products = Barang::where('kode_barang', $product->kode_barang)->get();
 
-        return view('admin.product.edit', compact('product','kategoris'));
+        return view('admin.product.edit', compact('product','kategoris','products'));
     }
 
     public function update(UpdateBarangRequest $request, Barang $product)

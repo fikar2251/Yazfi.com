@@ -25,22 +25,19 @@ class StoreKategoriBarangRequest extends FormRequest
     public function rules()
     {
         return [
-            'kode_barang' => 'required|unique:barangs',
-            'nama_barang' => 'required',
-            'description' => 'required',
-            'jenis' => 'required',
-            'type' => 'required'
+         
+            'nama_kategori' => 'required',
+            'created_at' => 'required',
+         
         ];
     }
     public function messages()
     {
         return [
-            'kode_barang.required' => 'The kode produk field is required.',
-            'nama_barang.required' => 'The nama_barang field is required.',
-            'description.required' => 'The description field is required.',
-            'jenis.required' => 'The jenis field is required.',
-            'type.required' => 'The type field is required.',
-            'kode_barang.unique' => 'The kode produk has already been taken.'
+       
+            'nama_kategori.required' => 'The nama Kategori field is required.',
+            'created_at.required' => 'The Tanggal field is required.',
+         
         ];
     }
 }

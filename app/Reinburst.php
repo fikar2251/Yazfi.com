@@ -43,4 +43,9 @@ class Reinburst extends Model
     {
         return $this->belongsTo(Jabatan::class, 'id_jabatans');
     }
+    public function rincianreinburst()
+    {
+        return $this->belongsTo(RincianReinburst::class, 'id_reinburst');
+    }
+
 }

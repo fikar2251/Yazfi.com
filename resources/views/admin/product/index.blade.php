@@ -35,7 +35,7 @@
                        
                         <td>{{ $product->kode_barang }}</td>    
                         <td>{{ $product->nama_barang }}</td>    
-                        <td>{{ $product->jenis }}</td>
+                        <td>{{ $product->nama_kategori }}</td>
                         <td>
                             @can('product-edit')
                             <a href="{{ route('admin.product.edit', $product->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>

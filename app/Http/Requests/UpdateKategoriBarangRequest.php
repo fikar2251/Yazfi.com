@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreBarangRequest extends FormRequest
+class UpdateKategoriBarangRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,20 +25,22 @@ class StoreBarangRequest extends FormRequest
     public function rules()
     {
         return [
-            'kode_barang' => 'required|unique:barangs',
-            'nama_barang' => 'required',
-            'description' => 'required',
-        
+            'nama_kategori' => 'required',
+            'created_at' => 'required'
+          
+
+  
         ];
     }
     public function messages()
     {
         return [
-            'kode_barang.required' => 'The kode produk field is required.',
-            'nama_barang.required' => 'The nama field is required.',
-            'description.required' => 'The description field is required.',
-       
-            'kode_barang.unique' => 'The kode barang has already been taken.'
+          
+            'nama_kategori.required' => 'The nama  kategori field is required.',
+            'created_at.required' => 'The Tanggal field is required.',
+      
+    
+  
         ];
     }
 }

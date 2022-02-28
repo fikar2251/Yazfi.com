@@ -55,6 +55,10 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Purchase::class, 'project_id');
     }
+    public function reinburst()
+    {
+        return $this->belongsTo(Reinburst::class, 'id');
+    }
     public function perusahaan()
     {
         return $this->belongsTo(Perusahaan::class, 'id_perusahaan');

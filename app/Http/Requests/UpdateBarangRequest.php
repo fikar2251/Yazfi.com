@@ -25,11 +25,11 @@ class UpdateBarangRequest extends FormRequest
     public function rules()
     {
         return [
-            'kode_barang' => 'required|unique:barangs',
+            'kode_barang' => 'required',
             'nama_barang' => 'required',
             'description' => 'required',
-            'jenis_barang' => 'required',
-            'created_at' => 'required'
+
+  
         ];
     }
     public function messages()
@@ -38,9 +38,9 @@ class UpdateBarangRequest extends FormRequest
             'kode_barang.required' => 'The kode produk field is required.',
             'nama_barang.required' => 'The nama field is required.',
             'description.required' => 'The description field is required.',
-            'jenis_barang.required' => 'The jenis barang field is required.',
-            'created_at.required' => 'The tanggal field is required.',
-            'kode_barang.unique' => 'The kode barang has already been taken.'
+      
+    
+  
         ];
     }
 }

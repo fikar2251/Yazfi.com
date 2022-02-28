@@ -66,11 +66,15 @@ Route::middleware('auth')->group(function () {
             Route::resource('transfer', 'TransferStokController');
             Route::get('/transfer/where/product', 'TransferStokController@WhereProduct');
 
+            // Route Master Reinburst
+            Route::resource('reinburst', 'ReinburstController');
+
             // Route Master Barang
             Route::resource('product', 'BarangController');
+ // Route Master Kategori Barang
 
-            Route::resource('kategori-barang', 'KategoriBarangController');
-
+            Route::resource('kategoribarang', 'KategoriBarangController');
+        
             // Route Master Service
             Route::resource('service', 'ServiceController');
 
