@@ -29,6 +29,10 @@
     @endcan
 
     <li class="{{ request()->is('resepsionis/payment') ? 'active' : '' }}">
-        <a href="{{ route('resepsionis.payment') }}"><i class="fa fa-files-o"></i> <span>Payment</span></a>
+        <a href="{{ route('resepsionis.payment') }}"><i class="fa-solid fa-money-bill-wave"></i> <span>Payment</span></a>
+    </li>
+
+    <li class="{{ request()->is('resepsionis/refund') ? 'active' : '' }}">
+        <a href="{{ route('resepsionis.refund') }}"><i class="fa fa-files-o"></i> <span>Refund</span></a>
     </li>
 </ul>
