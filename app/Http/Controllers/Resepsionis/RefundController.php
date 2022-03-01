@@ -22,11 +22,10 @@ class RefundController extends Controller
         $rincianid = Tagihan::where('id_spr', $idspr)->first();
         $getrincianid = $rincianid->id_rincian;
 
-        $singlebayar = Pembayaran::where('rincian_id' , $getrincianid)->first();
+        $singlebayar = Pembayaran::where('rincian_id', $getrincianid)->first();
 
         return view('resepsionis.refund.index', compact('batal', 'singlebatal', 'singlebayar', ));
     }
-
 
     public function storeRefund(Request $request)
     {
@@ -38,7 +37,7 @@ class RefundController extends Controller
             'no_pembatalan' => $request->no_pembatalan,
             'diajukan' => $request->diajukan,
             'total_refund' => $request->total_refund,
-            'status' => 'unpaid'
+            'status' => 'unpaid',
         ]);
 
         return redirect()->back();
