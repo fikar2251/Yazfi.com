@@ -20,11 +20,16 @@ class PembatalanUnitController extends Controller
 
 
 
-    public function show(PembatalanUnit $pembatalans, $id)
+    public function show($id)
     {
   
         $post = PembatalanUnit::findOrFail($id);
         $post->update(['status' => 'Approval']);
+        $unit_rumah = DB::table('unit_rumahs')
+        ->leftJoin('sprs','unit_rumahs.id_unit_rumah','=','sprs.id_unit')
+        ->select('unit_rumahs.id_unit_rumah')
+        ->where('unit_rumahs.id_unit_rumah',$id);
+        $unit_rumah->update(['status_penjualan' => 'Available']);
 
         return redirect()->route('admin.pembatalans.index')->with('success', 'Status has been updated');
     }
@@ -37,6 +42,7 @@ class PembatalanUnitController extends Controller
     //     $product->delete();
     //     return redirect()->route('admin.product.index')->with('success', 'Product has been deleted');
     // }
+ 
     public function ajax()
     {
         // $pembatalans = PembatalanUnit::with('no_pembatalan', 'id_spr','alasan_id')->get();
@@ -45,7 +51,7 @@ class PembatalanUnitController extends Controller
         ->leftjoin('sprs','pembatalan_units.id_spr','=','sprs.id_transaksi')
         ->leftjoin('unit_rumahs','sprs.id_unit','=','unit_rumahs.id_unit_rumah')
         ->leftjoin('users','sprs.id_sales','=','users.id')
-        ->select('pembatalan_units.tanggal','users.name','sprs.status_approval','sprs.id_sales','pembatalan_units.no_pembatalan','pembatalan_units.id','pembatalan_units.diajukan','unit_rumahs.type','sprs.no_transaksi','sprs.harga_net','sprs.status_dp','sprs.status_booking','sprs.nama','pembatalan_units.status')
+        ->select('pembatalan_units.tanggal','sprs.no_transaksi','users.name','sprs.status_approval','sprs.id_sales','pembatalan_units.no_pembatalan','pembatalan_units.id','pembatalan_units.diajukan','unit_rumahs.type','sprs.no_transaksi','sprs.harga_net','sprs.status_dp','sprs.status_booking','sprs.nama','pembatalan_units.status')
         ->get();
         // dd($pembatalans);
         return datatables()
@@ -60,7 +66,7 @@ class PembatalanUnitController extends Controller
                 return $pembatalan->type;
             })
             ->editColumn('spr', function ($pembatalan) {
-                return $pembatalan->nama;
+                return $pembatalan->no_transaksi;
             })
             ->editColumn('total_beli', function ($pembatalan) {
                 return $pembatalan->harga_net;

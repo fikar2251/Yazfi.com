@@ -6,7 +6,7 @@
     </div>
     <div class="col-sm-7 col-8 text-right m-b-30">
         <div class="btn-group btn-group-sm ">
-            <a href="{{ route('logistik.pengajuan.pdf',$reinburst->id) }}" class="btn btn-success btn-sm">Export to PDF</a>
+            <a href="{{ route('logistik.pengajuan.pdf',$reinbursts->id) }}" class="btn btn-success btn-sm">Export to PDF</a>
         </div>
     </div>
 </div>
@@ -24,7 +24,7 @@
                                 </div>
                             </div>
                             <div class="col-md-8 text-right">
-                                <h6><span style="font-size: 15px; color:white; background-color:blue;">{{$reinburst->nomor_reinburst}}</span>
+                                <h6><span style="font-size: 15px; color:white; background-color:blue;">{{$reinbursts->nomor_reinburst}}</span>
                                 </h6>
                             </div>
                         </div>
@@ -38,27 +38,27 @@
                                 <div class="col-sm-6">
                                     <p style="font-size: 12px">Nama :
                                         <a>
-                                            {{ $reinburst->admin->name }}
+                                            {{ $reinbursts->admin->name }}
                                         </a>
                                     </p style="font-size: 12px">
                                     <p style="font-size: 12px">Jabatan :
                                         <a style="font-size: 12px">
-                                            {{ $reinburst->jabatan->nama }}
+                                            {{ $reinbursts->jabatan->nama }}
                                         </a>
                                     </p>
                                     <p style="font-size: 12px">Divisi :
                                         <a style="font-size: 12px">
-                                            {{ $reinburst->roles->name }}
+                                            {{ $reinbursts->roles->name }}
                                         </a>
                                     </p>
                                 </div>
                                 <div class="col-sm-6 tex-right">
                                     <div class="form-group">
-                                        <p style="font-size: 12px">Tanggal : <a style="font-size: 12px">{{ Carbon\Carbon::parse($reinburst->tanggal_reinburst)->format('d/m/Y H:i:s') }}
+                                        <p style="font-size: 12px">Tanggal : <a style="font-size: 12px">{{ Carbon\Carbon::parse($reinbursts->tanggal_reinburst)->format('d/m/Y H:i:s') }}
                                             </a></p>
                                     </div>
                                     <div class="form-group">
-                                        <p style="font-size: 12px">Lampiran : <a style="font-size: 12px">{{ $reinburst->file }}</a>
+                                        <p style="font-size: 12px">Lampiran : <a style="font-size: 12px">{{ $reinbursts->file }}</a>
                                         </p>
                                     </div>
                                 </div>
@@ -79,15 +79,15 @@
                                             @php
                                             $total = 0
                                             @endphp
-                                            @foreach(App\RincianReinburst::where('nomor_reinburst', $reinburst->nomor_reinburst)->get() as $barang)
+                                            @foreach( $rincianreinbursts as $rein)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $barang->no_kwitansi }}</td>
-                                                <td>@currency($barang->harga_beli)</td>
-                                                <td>{{ $barang->catatan }}</td>
+                                                <td>{{ $rein->no_kwitansi }}</td>
+                                                <td>@currency($rein->harga_beli)</td>
+                                                <td>{{ $rein->catatan }}</td>
                                             </tr>
                                             @php
-                                            $total += $barang->grandtotal
+                                            $total += $rein->grandtotal
                                             @endphp
                                             @endforeach
 

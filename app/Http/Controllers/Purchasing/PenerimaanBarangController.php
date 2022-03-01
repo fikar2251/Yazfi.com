@@ -68,11 +68,12 @@ class PenerimaanBarangController extends Controller
         }
         return $data;
     }
-    public function create(Request $request)
+    public function create(Purchase $purchase,Request $request)
     {
-        $tukar = Purchase::select("invoice")->where('invoice', $request->invoice)->get();
+        $tukar = Purchase::select("id")->where('id', $purchase->id)->get();
 
         $purchases = Purchase::where('invoice', $request->invoice)->get();
+        
         $purchase = Purchase::groupBy('invoice')->get();
         // dd($tukar);
         return view('purchasing.penerimaan-barang.create', compact('tukar', 'purchases', 'purchase'));

@@ -16,8 +16,8 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Tanggal</th>
                         <th>No Pembatalan</th>
+                        <th>Tanggal</th>
                         <th>Type</th>
                         <th>Spr</th>
                         <th>Total Beli</th>
@@ -84,7 +84,8 @@
                 },
                 {
                     data: 'total_beli',
-                    name: 'total_beli'
+                    name: 'total_beli',
+                    render: $.fn.dataTable.render.number( ',', '.', 3, 'Rp.' )
                 },
                 {
                     data: 'konsumen',

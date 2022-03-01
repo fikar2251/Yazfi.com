@@ -7,7 +7,7 @@
 </div>
 
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-15">
         <div class="card shadow" id="card">
             <div class="card-body">
                 <div class="row custom-invoice">
@@ -42,7 +42,8 @@
                                     <div class="form-group">
                                         <label for="no_po">No Purchasing Order <span style="color: red">*</span></label>
 
-                                        <select id="invoice" name="invoice" data-dependent="barang_id" class="form-control dynamic_function">
+                                        <select id="invoice" name="invoice" data-dependent="barang_id"
+                                            class="form-control dynamic_function">
                                             @if (!request()->get('invoice'))
                                             <option selected value="Select Nomor PO"></option>
                                             @endif
@@ -62,56 +63,65 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="col-sm-6 col-sg-4 m-b-4">
+                        <div class="col-sm-6 col-sg-4" style="margin-top: 32px">
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <label for="supplier">Supplier <span style="color: red">*</span></label>
-                                        <input type="text" readonly id="supplier_id" class="form-control" value="{{ $item ? $item->supplier->nama : '' }}">
+                                        <button type="submit" name="submit" class="btn btn-primary">Cari</button>
                                     </div>
                                 </li>
                             </ul>
-                        </div>
-                        <div class="col-sm-6 col-sg-4 m-b-4">
-                            <ul class="list-unstyled">
-                                <li>
-                                    <div class="form-group">
-                                        <label for="project">Project <span style="color: red">*</span></label>
-                                        <input type="text" id="project_id" value="{{ $item ? $item->project->nama_project : '' }}" class="form-control" readonly>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-6 col-sg-4 m-b-4">
-                            <ul class="list-unstyled">
-                                <li>
-                                    <div class="form-group">
-                                        <label for="lokasi">Lokasi <span style="color: red">*</span></label>
-                                        <input type="text" id="lokasi" value="{{ $item ? $item->lokasi : '' }}" class="form-control" readonly>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-6 col-sg-4 m-b-4">
-                            <ul class="list-unstyled">
-                                <li>
-                                    <div class="form-group">
-                                        <label for="tanggal">Tanggal <span style="color: red">*</span></label>
-                                        <input type="text" id="created_at" value="{{ $item ? $item->created_at : '' }}" class="form-control" readonly>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-8 col-md-9 col-sg-4 m-b-4">
-                            <div class="form-group">
-                                <button type="submit" name="submit" class="btn btn-primary">Cari</button>
-                            </div>
                         </div>
                     </div>
                 </form>
-                <br>
-                <br>
                 @if (request()->get('invoice'))
+                <div class="row">
+                    <div class="col-sm-6 col-sg-4 m-b-4">
+                        <ul class="list-unstyled">
+                            <li>
+                                <div class="form-group">
+                                    <label for="supplier">Supplier <span style="color: red">*</span></label>
+                                    <input type="text" readonly id="supplier_id" class="form-control"
+                                        value="{{ $item ? $item->supplier->nama : '' }}">
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-6 col-sg-4 m-b-4">
+                        <ul class="list-unstyled">
+                            <li>
+                                <div class="form-group">
+                                    <label for="project">Project <span style="color: red">*</span></label>
+                                    <input type="text" id="project_id"
+                                        value="{{ $item ? $item->project->nama_project : '' }}" class="form-control"
+                                        readonly>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-6 col-sg-4 m-b-4">
+                        <ul class="list-unstyled">
+                            <li>
+                                <div class="form-group">
+                                    <label for="lokasi">Lokasi <span style="color: red">*</span></label>
+                                    <input type="text" id="lokasi" value="{{ $item ? $item->lokasi : '' }}"
+                                        class="form-control" readonly>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-6 col-sg-4 m-b-4">
+                        <ul class="list-unstyled">
+                            <li>
+                                <div class="form-group">
+                                    <label for="tanggal">Tanggal <span style="color: red">*</span></label>
+                                    <input type="text" id="created_at" value="{{ $item ? $item->created_at : '' }}"
+                                        class="form-control" readonly>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
                 <form action="{{ route('purchasing.penerimaan-barang.store') }}" method="post">
                     @csrf
                     <div class="row">
@@ -139,156 +149,177 @@
                                                 {{$loop->iteration}}
                                             </td>
                                             <td>
-                                                <input type="text" name="barang_id" class="form-control" id="barang_id" value="{{$purchase->barang->nama_barang}}" placeholder=" 0">
+                                                <input type="text" value="{{$purchase->barang->nama_barang}}"
+                                                    name="barang_id[{{ $loop->iteration }}]"
+                                                    class="form-control barang_id-{{ $loop->iteration }}"
+                                                    placeholder="Nama Barang" disabled>
+                                            </td>
+                                            <td>
+                                                <input type="number" name="qty_received[{{ $loop->iteration }}]"
+                                                    class="form-control qty_received-{{ $loop->iteration }}"   data="{{ $loop->iteration }}"
+                                                    onchange="testNum(this)" placeholder=" 0">
+                                            </td>
+                                            <td>
+                                                <input type="number" value="{{ $purchase->qty }}"
+                                                    name="qty[{{ $loop->iteration }}]" data="{{ $loop->iteration }}"
+                                                    class="form-control qty-{{ $loop->iteration }}" placeholder="0">
 
                                             </td>
                                             <td>
-                                                <input type="number" name="qty_received" class="form-control" id="qty_received" onchange="testNum()" placeholder=" 0">
-                                            </td>
-                                            <td>
-                                                <input type="number" value="{{$purchase->qty}}" name="qty" id="qty" class="form-control qty-${index}" disabled placeholder="0">
+                                                <input type="number" value="{{$purchase->harga_beli}}"
+                                                    name="harga_beli[{{ $loop->iteration }}]"
+                                                    class="form-control harga_beli-{{ $loop->iteration }}"
+                                                    data="{{ $loop->iteration }}"
+                                                    onkeyup="hitung(this), HowAboutIt(this)" placeholder="0">
 
                                             </td>
                                             <td>
-                                                <input type="number" value="{{$purchase->harga_beli}}" id="harga_beli " name="harga_beli" class="form-control harga_beli-${index} waktu" placeholder="0" data="${index}" onkeyup="hitung(this), TotalAbout(this)">
-
+                                                <input type="number" value="{{$purchase->total}}"
+                                                    name="total[{{ $loop->iteration }}]" disabled
+                                                    class="form-control total-{{ $loop->iteration }} total-form"
+                                                    placeholder="0">
                                             </td>
                                             <td>
-                                                <input type="number" value="{{$purchase->total}}" id="total" name="total" disabled class="form-control total-${index} total-form" placeholder="0">
-                                            </td>
-                                            <td>
-                                                <input type="text" disabled value="{{$purchase->status_barang}}" name="status_barang" class="form-control" id="status_barang" placeholder="Status Barang">
+                                                <input type="text" disabled value="{{$purchase->status_barang}}"
+                                                    name="status_barang[{{ $loop->iteration }}]"
+                                                    class="form-control status_barang-{{ $loop->iteration }}"
+                                                    placeholder="Status Barang">
                                             </td>
 
                                         </tr>
                                         @endforeach
                                     </tbody>
-                                    <script>
-                                        function hitung(e) {
-                                            let harga = e.value
-                                            let attr = $(e).attr('data')
-                                            let qty = $(`.qty-${attr}`).val()
-                                            let total = parseInt(harga * qty)
-                                            $(`.total-${attr}`).val(total)
 
-                                        }
-
-                                        function TotalAbout(e) {
-                                            let sub_total = document.getElementById('sub_total')
-                                            let total = 0;
-                                            let coll = document.querySelectorAll('.total-form')
-                                            for (let i = 0; i < coll.length; i++) {
-                                                let ele = coll[i]
-                                                total += parseInt(ele.value)
-                                            }
-                                            sub_total.value = total
-                                            document.getElementById('grandtotal').value = total;
-                                        }
-
-                                        function HowAboutIt(e) {
-                                            let sub_total = document.getElementById('sub_total')
-                                            let total = 0;
-                                            let coll = document.querySelectorAll('.total-form')
-                                            for (let i = 0; i < coll.length; i++) {
-                                                let ele = coll[i]
-                                                total += parseInt(ele.value)
-                                            }
-                                            sub_total.value = total
-                                            let SUB = document.getElementById('sub_total').value;
-                                            let PPN = document.getElementById('PPN').value;
-                                            console.log(PPN);
-                                            let tax = PPN / 100 * sub_total.value;
-                                            console.log(tax);
-                                            console.log(SUB);
-                                            let grand_total = parseInt(SUB) + parseInt(tax);
-                                            document.getElementById('grandtotal').value = grand_total;
-                                            console.log(grand_total);
-                                        }
-                                    </script>
                                 </table>
-                                <tfoot>
-                                    <tr>
-                                        <td><strong>PPN :<strong> </td>
-                                        <td>@currency($purchase->PPN)
-                                        </td>
-                                    </tr>
-                                    <br>
-                                    <tr>
-                                        <td><strong>Total :<strong> </td>
-                                        <td>@currency($purchase->grand_total)
-                                        </td>
-                                    </tr>
-                                </tfoot>
+                                <div class="row invoice-payment">
+                                    <div class="col-sm-4 offset-sm-8">
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Total</label>
+                                                    <input type="text" id="sub_total" readonly class="form-control"
+                                                        value="{{ $purchase->sum('total') }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <script>
+                                    function hitung(e) {
+                                        let harga = e.value
+                                        let attr = $(e).attr('data')
+                                        let qty = $(`.qty-${attr}`).val()
+                                        console.log(qty);
+                                        let total = parseInt(harga * qty)
+                                        $(`.total-${attr}`).val(total)
+
+                                    }
+
+
+                                    // function TotalAbout(e) {
+                                    //     let sub_total = document.getElementById('sub_total')
+                                    //     let total = 0;
+                                    //     let coll = document.querySelectorAll('.total-form')
+                                    //     for (let i = 0; i < coll.length; i++) {
+                                    //         let ele = coll[i]
+                                    //         total += parseInt(ele.value)
+                                    //     }
+                                    //     sub_total.value = total
+                                    //     document.getElementById('grandtotal').value = total;
+                                    // }
+
+                                    function HowAboutIt(e) {
+                                        let sub_total = document.getElementById('sub_total')
+                                        let total = 0;
+                                        let coll = document.querySelectorAll('.total-form')
+                                        for (let i = 0; i < coll.length; i++) {
+                                            let ele = coll[i]
+                                            total += parseInt(ele.value)
+                                        }
+                                        sub_total.value = total
+                                        // let SUB = document.getElementById('sub_total').value;
+                                        // let PPN = document.getElementById('PPN').value;
+                                        // console.log(PPN);
+                                        // let tax = PPN / 100 * sub_total.value;
+                                        // console.log(tax);
+                                        // console.log(SUB);
+                                        // let grand_total = parseInt(SUB) + parseInt(tax);
+                                        // document.getElementById('grandtotal').value = grand_total;
+                                        // console.log(grand_total);
+                                    }
+
+                                </script>
+                                </table>
                                 <div class="col-sm-1 offset-sm-8">
                                     <button type="submit" class="btn btn-primary" id="submit">Submit</button>
                                 </div>
                             </div>
-
-                            @foreach($purchases as $purchase)
-                            @endforeach
-                            @if ($purchase->id)
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="table-responsive">
-                                        <div class="row">
-                                            <div class="col-sm-5 col-4">
-                                                <h4 class="page-title">Riwayat Penerimaan</h4>
-                                            </div>
-                                        </div>
-                                        <table class="table table-bordered  report">
-                                            <tr style="font-size:12px;" class="bg-success">
-                                                <th class=" text-light">No.</th>
-                                                <th class="text-light">Nama Barang</th>
-                                                <th class="text-light">Qty</th>
-                                                <th class="text-light">Harga</th>
-                                                <th class="text-light"> Total</th>
-                                                <th class="text-light"> Diajukan</th>
-                                            </tr>
-                                            <tbody id="dynamic_field">
-                                                @foreach($purchases as $purchase)
-                                                <tr class="rowComponent">
-                                                    <td>
-                                                        {{$loop->iteration}}
-                                                    </td>
-                                                    <td>
-                                                        {{$purchase->barang->nama_barang}}
-                                                    </td>
-                                                    <td>
-                                                        {{$purchase->qty}}
-                                                    </td>
-                                                    <td>
-                                                        @currency($purchase->harga_beli)
-                                                    </td>
-                                                    <td>
-                                                        @currency($purchase->total)
-                                                    </td>
-                                                    <td>
-                                                        {{$purchase->admin->name}}
-                                                    </td>
-                                                </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
+                </form>
+                @foreach($purchases as $purchase)
+                @endforeach
+                @if ($purchase->id)
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <div class="row">
+                                <div class="col-sm-5 col-4">
+                                    <h4 class="page-title">Riwayat Penerimaan</h4>
+                                </div>
+                            </div>
+                            <table class="table table-bordered  report">
+                                <tr style="font-size:12px;" class="bg-success">
+                                    <th class=" text-light">No.</th>
+                                    <th class="text-light">Nama Barang</th>
+                                    <th class="text-light">Qty</th>
+                                    <th class="text-light">Harga</th>
+                                    <th class="text-light"> Total</th>
+                                    <th class="text-light"> Diajukan</th>
+                                </tr>
+                                <tbody id="dynamic_field">
+                                    @foreach($purchases as $purchase)
+                                    <tr class="rowComponent">
+                                        <td>
+                                            {{$loop->iteration}}
+                                        </td>
+                                        <td>
+                                            {{$purchase->barang->nama_barang}}
+                                        </td>
+                                        <td>
+                                            {{$purchase->qty}}
+                                        </td>
+                                        <td>
+                                            @currency($purchase->harga_beli)
+                                        </td>
+                                        <td>
+                                            @currency($purchase->total)
+                                        </td>
+                                        <td>
+                                            {{$purchase->admin->name}}
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                @else
+                @endif
+                @else
+                @endif
             </div>
-            </form>
         </div>
     </div>
 </div>
-@else
-@endif
-@else
-@endif
-</div>
+
 
 </html>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script>
-    var formatter = function(num) {
+    var formatter = function (num) {
         var str = num.toString().replace("", ""),
             parts = false,
             output = [],
@@ -346,7 +377,7 @@
             placeholder: 'Select Product',
             ajax: {
                 url: `/admin/where/product`,
-                processResults: function(data) {
+                processResults: function (data) {
                     console.log(data)
                     return {
                         results: data
@@ -362,18 +393,18 @@
     function remove(q) {
         $(q).parent().parent().remove()
     }
-    $('.remove').on('click', function() {
+    $('.remove').on('click', function () {
         $(this).parent().parent().remove()
     })
 
 
-    $(document).ready(function() {
-        $('#add').on('click', function() {
+    $(document).ready(function () {
+        $('#add').on('click', function () {
             form_dinamic()
         })
     })
-    $(document).ready(function() {
-        $('.dynamic_function').change(function() {
+    $(document).ready(function () {
+        $('.dynamic_function').change(function () {
             var invoice = $(this).val();
             var id = $(this).val();
             var div = $(this).parent();
@@ -386,7 +417,7 @@
                     'id': id,
                     'invoice': invoice,
                 },
-                success: function(data) {
+                success: function (data) {
                     console.log(data);
                     for (var i = 0; i < data.length; i++) {
                         var id = data[i].id;
@@ -436,7 +467,8 @@
                         var status_barang = data[i].status_barang;
                         // console.log(status_barang);
                         document.getElementById('status_barang').value = status_barang;
-                        document.getElementById('status_barang').defaultvalue = status_barang;
+                        document.getElementById('status_barang').defaultvalue =
+                            status_barang;
 
                         var grand_total = data[i].grand_total;
                         // console.log(grand_total);
@@ -450,30 +482,31 @@
 
                     };
                 },
-                error: function() {}
+                error: function () {}
             })
         })
     })
 
-    function testNum(a) {
-        let qty = document.getElementById('qty').value;
-        let qty_received = document.getElementById('qty_received').value;
-        let status_barang = document.getElementById('status_barang').value;
-        let coll = document.querySelectorAll('.total-form')
-        for (let i = 0; i < coll.length; i++) {
-            let ele = coll[i]
-            qty_received += parseInt(ele.value)
-        }
-        qty_received.value = qty_received
-        if (qty == qty_received) {
+    function testNum(e) {
+        let result;
+        let attr = $(e).attr('data')
+
+        let qty_received = $(`.qty_received-${attr}`).val()
+        console.log(qty_received)
+
+        let qty = $(`.qty-${attr}`).val()
+        console.log(qty)
+      
+        if (10 > qty_received) {
             result = 'partial';
-
-
-        } else {
+        } else if (10 = qty_received) {
             result = 'completed';
-
+        } else {
+            result = ' barang lebih'
         }
-        document.getElementById('status_barang').value = result;
+        return result;
+       console.log(testNum());
     }
+
 </script>
 @stop

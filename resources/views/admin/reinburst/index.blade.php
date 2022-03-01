@@ -56,9 +56,9 @@
                     @foreach($reinbursts as $reinburst)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td><a href="{{ route('purchasing.reinburst.show', $reinburst->id) }}">{{ $reinburst->nomor_reinburst }}</a></td>
+                        <td><a href="{{ route('admin.reinburst.show', $reinburst->id) }}">{{ $reinburst->nomor_reinburst }}</a></td>
                         <td>{{ Carbon\Carbon::parse($reinburst->tanggal_reinburst)->format("d/m/Y H:i:s") }}</td>
-                        {{-- <td>@currency($reinburst->rincian->grandtotal)</td> --}}
+                        <td>@currency($reinburst->grandtotal)</td>
                         <td>{{ $reinburst->status_hrd }}</td>
                         <td>{{ $reinburst->status_pembayaran }}</td>
                         <td>

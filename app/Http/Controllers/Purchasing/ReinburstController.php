@@ -12,6 +12,7 @@ use App\{User, Cabang, Pengajuan, Perusahaan, Reinburst, RincianPengajuan, Rinci
 use App\Project;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ReinburstController extends Controller
@@ -23,7 +24,11 @@ class ReinburstController extends Controller
             $to = Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s');
             $reinbursts = Reinburst::groupBy('nomor_reinburst')->whereBetween('tanggal_reinburst', [$from, $to])->get();
         } else {
-            $reinbursts = RincianReinburst::groupBy('nomor_reinburst')->get();
+            $reinbursts = DB::table('reinbursts')
+            ->leftJoin('rincian_reinbursts','reinbursts.id','=','rincian_reinbursts.id_reinburst')
+            ->select('rincian_reinbursts.grandtotal','reinbursts.tanggal_reinburst','reinbursts.nomor_reinburst','reinbursts.status_hrd','reinbursts.status_pembayaran','reinbursts.id')
+            ->where('reinbursts.id',Auth()->user()->id)
+            ->get();
         }
         return view('purchasing.reinburst.index', compact('reinbursts'));
     }
@@ -68,23 +73,27 @@ class ReinburstController extends Controller
                     'id_user' => auth()->user()->id,
                     'id_perusahaan' => auth()->user()->id_perusahaan,
                     'tanggal_reinburst' => $request->tanggal_reinburst,
+                    'id_jabatans' => $request->id_jabatans,
                     'status_hrd' => 'pending',
                     'status_pembayaran' => 'pending',
                     'id_project' => $request->id_project,
                     'id_roles' => auth()->user()->id_roles
                 ];
                 foreach ($barang as $key => $no) {
+                    $reinburst = \App\Reinburst::max('id');
+                    $id = $reinburst + 1;
+             
                     $in[] = [
                         'no_kwitansi' => $request->no_kwitansi[$key],
                         'harga_beli' => $request->harga_beli[$key],
                         'catatan' => $request->catatan[$key],
                         'total' => $request->harga_beli[$key],
-                        'nomor_reinburst' => $request->nomor_reinburst,
+                        'id_reinburst' => $id,
                         'grandtotal' => $request->grandtotal,
                     ];
                 }
-                RincianReinburst::insert($in);
                 Reinburst::insert($attr);
+                RincianReinburst::insert($in);
             }
         }
         DB::commit();
@@ -92,91 +101,107 @@ class ReinburstController extends Controller
     }
 
     public function show(Reinburst $reinburst)
-    {
-        $reinburst = Reinburst::where('nomor_reinburst', $reinburst->nomor_reinburst)->first();
+    {   $reinbursts = Reinburst::where('id', $reinburst->id)->first();
+        $rincianreinbursts = DB::table('reinbursts')
+        ->leftJoin('rincian_reinbursts','reinbursts.id','=','rincian_reinbursts.id_reinburst')
+        ->select('rincian_reinbursts.no_kwitansi','rincian_reinbursts.grandtotal','rincian_reinbursts.total','rincian_reinbursts.harga_beli','rincian_reinbursts.catatan')
+        ->get();
 
-        return view('purchasing.reinburst.show', compact('reinburst'));
+        return view('purchasing.reinburst.show', compact('reinbursts','rincianreinbursts'));
     }
 
-    public function edit(Pengajuan $pengajuan)
+    public function edit(Reinburst $reinburst)
     {
-        $pengajuans = Pengajuan::where('nomor_pengajuan', $pengajuan->nomor_pengajuan)->get();
-        $peng = DB::table('pengajuans')
-            ->leftJoin('rincian_pengajuans', 'pengajuans.nomor_pengajuan', '=', 'rincian_pengajuans.nomor_pengajuan')
-            ->select('rincian_pengajuans.harga_beli', 'rincian_pengajuans.qty', 'rincian_pengajuans.total')
+        $reinbursts = Reinburst::where('id', $reinburst->id)->get();
+        $peng = DB::table('reinbursts')
+            ->leftJoin('rincian_reinbursts', 'reinbursts.id', '=', 'rincian_reinbursts.id_reinburst')
+            ->select('rincian_reinbursts.harga_beli', 'rincian_reinbursts.total', 'rincian_reinbursts.catatan','rincian_reinbursts.no_kwitansi')
             ->get();
-        $perusahaans = Perusahaan::get();
-        $barangs = Barang::where('jenis', 'barang')->get();
+          $projects= Project::get();
 
-        return view('purchasing.reinburst.edit', compact('perusahaans', 'barangs', 'pengajuan', 'pengajuans', 'peng'));
+        return view('purchasing.reinburst.edit',compact('reinburst', 'reinbursts', 'peng','projects'));
     }
 
-    public function update(Request $request, Pengajuan $pengajuan)
+    public function update(Request $request, Reinburst $reinburst)
     {
         $request->validate([
-
-            'barang_id' => 'required',
-            'qty' => 'required',
+            'no_kwitansi' => 'required',
             'harga_beli' => 'required',
-            'invoice' => 'required',
+            'nomor_reinburst' => 'required',
         ]);
-        $barang = $request->input('barang_id', []);
+
+        $barang = $request->input('no_kwitansi', []);
         $attr = [];
-        $in = [];
-        $id = [];
-        $pengajuans = Purchase::where('nomor_pengajuan', $pengajuan->nomor_pengajuan)->pluck('id');
+     
+        $reinburst = Reinburst::where('nomor_reinburst', $reinburst->nomor_reinburst)->pluck('id');
         // dd("ok");
-        // dd($purchases);
+        // dd($reinburst);
+     
+        $attr = [];
+  
+        // dd($request->all());
         DB::beginTransaction();
-        foreach ($barang as $key => $no) {
-            $attr[] = [
-                'nomor_pengajuan' => $request->nomor_pengajuan,
-                'id_user' => auth()->user()->id,
-                'id_perusahaan' => $request->id_perusahaan,
-                'tanggal_pengajuan' => $request->tanggal_pengajuan,
-                'approval_time' => $request->tanggal_pengajuan,
-                'status_approval' => 'pending',
-                'approval_by' => 'pending',
-                'id_roles' => 9
-            ];
 
-            // $rincian_pengajuan = RincianPengajuan::where('barang_id', auth()->user()->pengajuan_id)->where('barang_id', $no)->first();
-            // dd($rincian_pengajuan);
+        if ($request->hasFile('file')) {
+            $files = $request->file('file');
+            foreach ($files as $file) {
+                $AWAL = 'RN';
+                $noUrutAkhir = \App\Reinburst::max('id');
+                $nourut = $AWAL . '/' .  sprintf("%02s", abs($noUrutAkhir + 1)) . '/' . sprintf("%05s", abs($noUrutAkhir + 1));
+                $name = $nourut . '/' . $file->getClientOriginalName();
+                $file->move(public_path() . '/uploads/file/reinburst', $name);
 
-            // $rincian_pengajuan->update([
-            //     'qty' => $rincian_pengajuan->qty + $request->qty[$key]
-            // ]);
-
-            $in[] = [
-                'barang_id' => $no,
-                'PPN' => $request->PPN,
-                'harga_beli' => $request->harga_beli[$key],
-                'qty' => $request->qty[$key],
-                'total' => $request->harga_beli[$key] * $request->qty[$key],
-                'nomor_pengajuan' => $request->nomor_pengajuan,
-            ];
-            $id[] = $pengajuans[$key];
+                $attr[] = [
+                    'nomor_reinburst' => $request->nomor_reinburst,
+                    'file' => $name,
+                    'id_user' => auth()->user()->id,
+                    'id_perusahaan' => auth()->user()->id_perusahaan,
+                    'id_jabatans' => $request->id_jabatans,
+                    'tanggal_reinburst' => $request->tanggal_reinburst,
+                    'status_hrd' => 'pending',
+                    'status_pembayaran' => 'pending',
+                    'id_project' => $request->id_project,
+                    'id_roles' => auth()->user()->id_roles
+                ];
+                dd($attr);
+            
+                foreach ($barang as $key => $no) {
+                    $reinburst = \App\Reinburst::max('id');
+                    $id = $reinburst + 1;
+                    $rincian_reinburst = RincianReinburst::where('no_kwitansi', auth()->user()->id_reinburst)->where('no_kwitansi', $no)->first();
+                    dd($rincian_reinburst);
+    
+                $rincian_reinburst->update([
+                        'no_kwitansi' =>$rincian_reinburst->no_kwitansi + $request->no_kwitansi[$key],
+                        'harga_beli' =>$rincian_reinburst->harga_beli + $request->harga_beli[$key],
+                        'catatan' => $rincian_reinburst->catatan + $request->catatan[$key],
+                        'total' => $rincian_reinburst->total + $request->harga_beli[$key],
+                        'id_reinburst' => $id,
+                        'grandtotal' => $rincian_reinburst->grandtotal + $request->grandtotal,
+                 
+                ]);
+            
+                }
+                Reinburst::updateOrInsert([
+                    'id' => $id
+                ], $attr);
+            }
         }
 
-        Pengajuan::updateOrInsert([
-            'id' => $id
-        ], $attr);
-        Pengajuan::updateOrInsert([
-            'id' => $id
-        ], $attr);
-
+    
 
         DB::commit();
+
 
         return redirect()->route('purchasing.reinburst.index')->with('success', 'Pengajuan barang berhasil');
     }
 
     public function destroy(Reinburst $reinburst)
     {
-        $reinburst = Pengajuan::where('nomor_reinburst', $reinburst->nomor_reinburst)->get();
+        $reinburst = Reinburst::where('id', $reinburst->id)->get();
 
         foreach ($reinburst as $pur) {
-            RincianPengajuan::where('nomor_reinburst', $pur->nomor_reinburst)->delete();
+            RincianReinburst::where('id_reinburst', $pur->id_reinburst)->delete();
             $pur->delete();
         }
 

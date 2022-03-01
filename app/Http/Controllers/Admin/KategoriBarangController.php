@@ -10,6 +10,8 @@ use App\Http\Requests\StoreKategoriBarangRequest;
 use App\Http\Requests\UpdateBarangRequest;
 use App\Http\Requests\UpdateKategoriBarangRequest;
 use App\KategoriBarang;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class KategoriBarangController extends Controller
 {
@@ -17,7 +19,7 @@ class KategoriBarangController extends Controller
     {
         abort_unless(\Gate::allows('product-access'), 403);
 
-        $kategoris = KategoriBarang::OrderBy('created_at','desc')->get();
+        $kategoris = KategoriBarang::select('id','nama_kategori')->OrderBy('created_at','desc')->get();
         return view('admin.kategoribarang.index', compact('kategoris'));
     }
 
@@ -56,7 +58,12 @@ class KategoriBarangController extends Controller
 
     public function destroy(KategoriBarang $kategori)
     {
+    
+        abort_unless(\Gate::allows('product-delete'), 403);
+
         $kategori->delete();
+  
+     
         return redirect()->route('admin.kategoribarang.index')->with('success', 'Kategori Barang has been deleted');
     }
 }

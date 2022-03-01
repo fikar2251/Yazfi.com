@@ -62,6 +62,9 @@
                                         <label for="nama">Nama <span style="color: red">*</span></label>
                                         <input type="text" value="{{ auth()->user()->name }}" class="form-control" readonly>
                                     </div>
+                                    <div class="form-group">
+                                        <input type="hidden" value="{{ auth()->user()->id_jabatans }}" name="id_jabatans" id="id_jabatans" class="form-control" readonly>
+                                    </div>
                                 </li>
                             </ul>
                         </div>
@@ -111,7 +114,7 @@
                                 <table class="table table-hover border" id="table-show">
                                     <tr class="bg-success">
                                         <th class="text-light">Nota/Bon/Kwitansi</th>
-                                        <th class="text-light">Jumlah</th>
+                                        <th class="text-light">Harga</th>
                                         <th class="text-light">Catatan</th>
                                         <th class="text-light">Total</th>
                                         <th class="text-light">#</th>
@@ -133,12 +136,12 @@
                                         <input type="text" id="sub_total" name="total" readonly class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-md-12">
+                                {{-- <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Include PPN</label>
                                         <input type="type" id="PPN" onchange="HowAboutIt()" class="form-control">
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Grand Total</label>

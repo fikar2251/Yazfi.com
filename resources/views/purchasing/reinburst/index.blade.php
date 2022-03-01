@@ -56,14 +56,14 @@
                     @foreach($reinbursts as $reinburst)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td><a href="{{ route('purchasing.reinburst.show', $reinburst->id) }}">{{ $reinburst->nomor_reinburst }}</a></td>
-                        <td>{{ Carbon\Carbon::parse($reinburst->tanggal_reiburst)->format("d/m/Y H:i:s") }}</td>
-                        <td>@currency($reinburst->rincianreinburst->grandtotal)</td>
+                        <td><a href="{{ route('admin.reinburst.show', $reinburst->id) }}">{{ $reinburst->nomor_reinburst }}</a></td>
+                        <td>{{ Carbon\Carbon::parse($reinburst->tanggal_reinburst)->format("d/m/Y H:i:s") }}</td>
+                        <td>@currency($reinburst->grandtotal)</td>
                         <td>{{ $reinburst->status_hrd }}</td>
                         <td>{{ $reinburst->status_pembayaran }}</td>
                         <td>
 
-                            <!-- <a href="{{ route('purchasing.reinburst.edit', $reinburst->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a> -->
+                            <a href="{{ route('purchasing.reinburst.edit', $reinburst->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
 
                             <form action="{{ route('purchasing.reinburst.destroy', $reinburst->id) }}" method="post" style="display: inline;" class="delete-form">
                                 @method('DELETE')

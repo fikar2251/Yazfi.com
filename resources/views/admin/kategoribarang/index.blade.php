@@ -32,8 +32,7 @@
                     @foreach($kategoris as $kategori)
                     <tr>
                         <td class="text-center">{{ $loop->iteration }}</td>
-                        <td>{{ $kategori->nama_kategori }}
-                        </td>
+                        <td>{{ $kategori->nama_kategori }}</td>
                         <td>{{ $kategori->is_active }}</td>
                         <td>{{ $kategori->kategori->count()}}</td>
                         <td>
@@ -42,8 +41,8 @@
                             @endcan
                             @can('product-delete')
                             <form action="{{ route('admin.kategoribarang.destroy', $kategori->id) }}" method="post" style="display: inline;" class="delete-form">
-                                @method('DELETE')
                                 @csrf
+                                @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-danger delete"><i class="fa fa-trash"></i></button>
                             </form>
                             @endcan
