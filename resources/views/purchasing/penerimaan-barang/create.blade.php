@@ -156,8 +156,9 @@
                                             </td>
                                             <td>
                                                 <input type="number" name="qty_received[{{ $loop->iteration }}]"
-                                                    class="form-control qty_received-{{ $loop->iteration }}"   data="{{ $loop->iteration }}"
-                                                    onchange="testNum(this)" placeholder=" 0">
+                                                    class="form-control qty_received-{{ $loop->iteration }}"
+                                                    data="{{ $loop->iteration }}" onkeyup ="testNum(this),tesNumIT(this)"
+                                                    placeholder=" 0">
                                             </td>
                                             <td>
                                                 <input type="number" value="{{ $purchase->qty }}"
@@ -182,7 +183,7 @@
                                             <td>
                                                 <input type="text" disabled value="{{$purchase->status_barang}}"
                                                     name="status_barang[{{ $loop->iteration }}]"
-                                                    class="form-control status_barang-{{ $loop->iteration }}"
+                                                    class="form-control status_barang-{{ $loop->iteration }} status-form"
                                                     placeholder="Status Barang">
                                             </td>
 
@@ -490,22 +491,45 @@
     function testNum(e) {
         let result;
         let attr = $(e).attr('data')
-
         let qty_received = $(`.qty_received-${attr}`).val()
         console.log(qty_received)
-
         let qty = $(`.qty-${attr}`).val()
         console.log(qty)
-      
-        if (10 > qty_received) {
+
+        if (qty > qty_received) {
             result = 'partial';
-        } else if (10 = qty_received) {
+        } else if (qty = qty_received) {
             result = 'completed';
         } else {
             result = ' barang lebih'
         }
         return result;
-       console.log(testNum());
+        let hasil = testNum();
+        console.log(hasil);
+        console.log(result);
+    }
+
+    function tesNumIT(e) {
+        let statusbarang = document.getElementById('status_barang')
+      
+        let status_barang = 0;
+        let coll = document.querySelectorAll('.status-form')
+        for (let i = 0; i < coll.length; i++) {
+            let ele = coll[i]
+            status_barang += parseInt(ele.value)
+        }
+        let SUB = document.getElementById(status_barang);
+   
+        
+        // let SUB = document.getElementById('sub_total').value;
+        // let PPN = document.getElementById('PPN').value;
+        // console.log(PPN);
+        // let tax = PPN / 100 * sub_total.value;
+        // console.log(tax);
+        // console.log(SUB);
+        // let grand_total = parseInt(SUB) + parseInt(tax);
+        // document.getElementById('grandtotal').value = grand_total;
+        // console.log(grand_total);
     }
 
 </script>
