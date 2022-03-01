@@ -223,6 +223,7 @@ Route::middleware('auth')->group(function () {
 
             // Route Refund
             Route::get('/refund', 'RefundController@index')->name('refund');
+            Route::post('refund/store', 'RefundController@storeRefund')->name('refund.store');
 
             // Route Dokter
             Route::resource('dokter', 'DokterController');
