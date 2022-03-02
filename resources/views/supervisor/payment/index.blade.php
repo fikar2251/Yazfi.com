@@ -25,8 +25,12 @@
             </div>
         @endforeach
     </div>
-
     <div class="row mt-5">
+        <div class="col-sm-4 col-3">
+            <h4 class="page-title">List Pembatalan</h4>
+        </div>
+    </div>
+    <div class="row mt-2">
         <div class="col-lg-12">
             <div class="card shadow">
                 <div class="card-body">
@@ -71,7 +75,7 @@
                                         <td> {{ auth()->user()->name }} </td>
                                         <td> {{ $item->status }} </td>
                                         <td>
-                                            Pending
+                                            {{$rf->status}}
                                         </td>
                                     </tr>
                                 @endforeach

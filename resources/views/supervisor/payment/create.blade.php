@@ -97,15 +97,26 @@
                                                     style="width: 200px">
                                                     <option selected value="">-- Pembayaran --</option>
                                                     @foreach ($tagihan as $item)
-                                                        <option value="{{ $item->id_rincian }}">
-                                                            @if ($item->tipe == 1)
-                                                                Booking fee
-                                                            @elseif ($item->tipe == 2)
-                                                                Downpayment
-                                                            @else
-                                                                Cicilan tahap {{ $loop->iteration - 2 }}
-                                                            @endif
-                                                        </option>
+                                                        {{-- <option value="{{ $item->id_rincian }}"> --}}
+                                                        @if ($item->tipe == 1 && $item->status_pembayaran == 'unpaid')
+                                                            <option value="{{ $item->id_rincian }}">Booking fee</option>
+                                                        @elseif ($item->tipe == 1 && $item->status_pembayaran == 'paid')
+                                                            <option hidden value="{{ $item->id_rincian }}">Booking fee
+                                                            </option>
+                                                        @elseif ($item->tipe == 2 && $item->status_pembayaran == 'unpaid')
+                                                            <option value="{{ $item->id_rincian }}">Downpayment</option>
+                                                        @elseif ($item->tipe == 2 && $item->status_pembayaran == 'paid')
+                                                            <option hidden value="{{ $item->id_rincian }}">Downpayment
+                                                            </option>
+                                                        @elseif ($item->tipe == 3 && $item->status_pembayaran == 'unpaid')
+                                                            <option value="{{ $item->id_rincian }}">Cicilan tahap
+                                                                {{ $loop->iteration - 2 }}</option>
+                                                        @elseif ($item->tipe == 3 && $item->status_pembayaran == 'paid')
+                                                            <option hidden value="{{ $item->id_rincian }}">Cicilan tahap
+                                                                {{ $loop->iteration - 2 }}
+                                                            </option>
+                                                        @endif
+                                                        {{-- </option> --}}
                                                     @endforeach
                                             </td>
                                         </tr>

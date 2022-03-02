@@ -65,173 +65,117 @@
     </form>
 
     @if (request()->get('no_transaksi'))
-        <form action="{{ route('supervisor.cancel.store') }}" method="POST">
-            @csrf
-            <div class="row">
-                <div class="col-md-8 container">
-                    <div class="card shadow">
-                        <div class="card-body">
+        @if ($idspr == $idbatal)
+        <h2 class="text-center mt-5"> Anda sudah input SPR ini</h2>
+        @else
+            <form action="{{ route('supervisor.cancel.store') }}" method="POST">
+                @csrf
+                <div class="row">
+                    <div class="col-md-8 container">
+                        <div class="card shadow">
+                            <div class="card-body">
 
-                            <div class="table-responsive">
-                                <table class="table table-bordered custom-table table-striped">
-                                    <thead>
-                                        {{-- @foreach ($getSpr as $item) --}}
-                                        <tr>
-                                            <th style="width: 200px">NO</th>
-                                            <th style="width: 20px">:</th>
-                                            <th> {{ $nourut }} <input type="hidden" name="no_transaksi" value="">
-                                            </th>
-
-                                        </tr>
-                                        {{-- @endforeach --}}
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td style="width: 200px">Tanggal Pembayaran</td>
-                                            <td style="width: 20px">:</td>
-                                            <td>{{ Carbon\Carbon::now()->format('d-m-Y') }}</td>
-                                        </tr>
-                                        @foreach ($getSpr as $item)
+                                <div class="table-responsive">
+                                    <table class="table table-bordered custom-table table-striped">
+                                        <thead>
+                                            {{-- @foreach ($getSpr as $item) --}}
                                             <tr>
-                                                <td style="width: 200px">Harga pembelian</td>
+                                                <th style="width: 200px">NO</th>
+                                                <th style="width: 20px">:</th>
+                                                <th> {{ $nourut }} <input type="hidden" name="no_transaksi" value="">
+                                                </th>
+
+                                            </tr>
+                                            {{-- @endforeach --}}
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td style="width: 200px">Tanggal Pembayaran</td>
+                                                <td style="width: 20px">:</td>
+                                                <td>{{ Carbon\Carbon::now()->format('d-m-Y') }}</td>
+                                            </tr>
+                                            @foreach ($getSpr as $item)
+                                                <tr>
+                                                    <td style="width: 200px">Harga pembelian</td>
+                                                    <td style="width: 20px">:</td>
+                                                    <td>
+                                                        @currency($item->harga_net)
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                            <tr>
+                                                <td style="width: 200px">Unit</td>
                                                 <td style="width: 20px">:</td>
                                                 <td>
-                                                    @currency($item->harga_net)
+                                                    {{ $item->unit->type }} <input type="hidden" name="id_spr"
+                                                        value="{{ $item->id_transaksi }}">
                                                 </td>
                                             </tr>
-                                        @endforeach
-                                        <tr>
-                                            <td style="width: 200px">Unit</td>
-                                            <td style="width: 20px">:</td>
-                                            <td>
-                                                {{ $item->unit->type }} <input type="hidden" name="id_spr"
-                                                    value="{{ $item->id_transaksi }}">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="width: 200px">LT</td>
-                                            <td style="width: 20px">:</td>
-                                            <td>
-                                                {{ $item->unit->lt }}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="width: 200px">LB</td>
-                                            <td style="width: 20px">:</td>
-                                            <td>
-                                                {{ $item->unit->lb }}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="width: 200px">Sales</td>
-                                            <td style="width: 20px">:</td>
-                                            <td>
-                                                {{ $item->user->name }}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="width: 200px">SPV</td>
-                                            <td style="width: 20px">:</td>
-                                            <td>
-                                                {{ auth()->user()->name }}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="width: 200px">Alasan pembatalan</td>
-                                            <td style="width: 20px">:</td>
-                                            <td>
-                                                <select name="alasan" id="alasan" class="form-control"
-                                                    style="width: 200px">
-                                                    <option value="">-- Pilih alasan --</option>
-                                                    @foreach ($alasan as $item)
-                                                        <option value="{{ $item->id }}">{{ $item->alasan }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="width: 200px">Keterangan</td>
-                                            <td style="width: 20px">:</td>
-                                            <td>
-                                                <textarea name="keterangan" id="keterangan" cols="30" rows="5"></textarea>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                            <tr>
+                                                <td style="width: 200px">LT</td>
+                                                <td style="width: 20px">:</td>
+                                                <td>
+                                                    {{ $item->unit->lt }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width: 200px">LB</td>
+                                                <td style="width: 20px">:</td>
+                                                <td>
+                                                    {{ $item->unit->lb }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width: 200px">Sales</td>
+                                                <td style="width: 20px">:</td>
+                                                <td>
+                                                    {{ $item->user->name }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width: 200px">SPV</td>
+                                                <td style="width: 20px">:</td>
+                                                <td>
+                                                    {{ auth()->user()->name }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width: 200px">Alasan pembatalan</td>
+                                                <td style="width: 20px">:</td>
+                                                <td>
+                                                    <select name="alasan" id="alasan" class="form-control"
+                                                        style="width: 200px">
+                                                        <option value="">-- Pilih alasan --</option>
+                                                        @foreach ($alasan as $item)
+                                                            <option value="{{ $item->id }}">{{ $item->alasan }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width: 200px">Keterangan</td>
+                                                <td style="width: 20px">:</td>
+                                                <td>
+                                                    <textarea name="keterangan" id="keterangan" cols="30"
+                                                        rows="5"></textarea>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="m-t-20 text-center">
-                <button type="submit" name="submit" class="btn btn-primary submit-btn"><i class="fa fa-save"></i>
-                    Save</button>
-            </div>
-        </form>
-    @else
-    @endif
-    {{-- <div class="row mt-5">
-        <div class="col-sm-12" style="text-align: center">
-            <h4 class="page-title">Konfirmasi Pembayaran</h4>
-        </div>
-    </div> --}}
-    {{-- <div class="row mt-5">
-        <div class="col-lg-12">
-            <div class="card shadow">
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered custom-table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Tanggal transaksi</th>
-                                    <th>No pembatalan</th>
-                                    <th>Type</th>
-                                    <th>Spr</th>
-                                    <th>Total beli</th>
-                                    <th>Konsumen</th>
-                                    <th>Sales</th>
-                                    <th>Booking Fee</th>
-                                    <th>DP</th>
-                                    <th>Diajukan</th>
-                                    <th>Status</th>
-                                    <th>Refund</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($batal as $item)
-                                    <tr>
-                                        <td> {{$loop->iteration}} </td>
-                                        <td>{{ Carbon\Carbon::now()->format('d-m-Y') }}</td>
-                                        <td> {{$item->no_pembatalan}} </td>
-                                        <td>
-                                            {{$item->spr->unit->type}}
-                                        </td>
-                                        <td>
-                                            {{$item->spr->no_transaksi}}
-                                        </td>
-                                        <td>
-                                            @currency($item->spr->harga_net)
-                                        </td>
-                                        <td> {{$item->spr->nama}} </td>
-                                        <td> {{$item->spr->user->name}} </td>
-                                        <td> @currency($bf->jumlah_tagihan) </td>
-                                        <td> @currency($dp->jumlah_tagihan) </td>
-                                        <td> {{auth()->user()->name}} </td>
-                                        <td> {{$item->status}} </td>
-                                        <td>
-                                            Pending
-                                        </td>
-                                    </tr>
-                                @endforeach
-
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="m-t-20 text-center">
+                    <button type="submit" name="submit" class="btn btn-primary submit-btn"><i class="fa fa-save"></i>
+                        Save</button>
                 </div>
-            </div>
-        </div>
-    </div> --}}
+            </form>
+        @endif
+    @endif
+
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script>

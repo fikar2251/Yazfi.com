@@ -42,8 +42,12 @@ Route::middleware('auth')->group(function () {
             Route::resource('users', 'UserController');
 
             // Route Master Cabang
-            Route::get('cabang/{cabang:id}/ruangan', 'CabangController@ruangan');
-            Route::resource('cabang', 'CabangController');
+
+            Route::resource('unit', 'UnitController');
+
+            Route::get('pembatalans/ajax', 'PembatalanUnitController@ajax');
+            Route::patch('pembatalans/{id}/update', 'PembatalanUnitController@update');
+            Route::resource('pembatalans', 'PembatalanUnitController');
 
             Route::resource('supplier', 'SupplierController');
             Route::get('/where/product', 'PurchaseController@WhereProduct');
@@ -224,6 +228,8 @@ Route::middleware('auth')->group(function () {
             // Route Refund
             Route::get('/refund', 'RefundController@index')->name('refund');
             Route::post('refund/store', 'RefundController@storeRefund')->name('refund.store');
+            Route::get('refund/list', 'RefundController@list')->name('refund.list');
+            Route::get('refund/update/{id}', 'RefundController@updateStatus')->name('refund.update');
 
             // Route Dokter
             Route::resource('dokter', 'DokterController');

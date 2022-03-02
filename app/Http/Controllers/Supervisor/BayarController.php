@@ -6,6 +6,7 @@ use App\Alasan;
 use App\Http\Controllers\Controller;
 use App\Pembatalan;
 use App\Pembayaran;
+use App\Refund;
 use App\Rumah;
 use App\Spr;
 use App\Tagihan;
@@ -35,6 +36,14 @@ class BayarController extends Controller
         $tagihan = Tagihan::where('no_transaksi', $no)->get();
         $bayar = Pembayaran::where('no_detail_transaksi', $no)->get();
 
+       foreach ($tagihan as $key) {
+           $status[] = [
+               'id_rincian' => $key->id_rincian,
+               'status_pembayaran' => $key->status_pembayaran
+           ];
+       };
+
+
         return view('supervisor.payment.create', compact('spr', 'getSpr', 'tagihan', 'bayar', 'id'));
 
     }
@@ -45,25 +54,14 @@ class BayarController extends Controller
             $user = User::where('roles_id', 4)->get();
 
             $batal = Pembatalan::all();
-            // foreach ($batal as $key) {
-            //     $sprid = $key->spr_id;
-            // }
+            $refund = Refund::all();
+            foreach ($refund as $rf) {
 
-            // $where = [
-            //     'id_spr' => $sprid,
-            //     'tipe' => 1,
-            // ];
+            }
 
-            // $bf = Tagihan::select('jumlah_tagihan')->where($where)->first();
+            // dd($rf);
 
-            // $where1 = [
-            //     'id_spr' => $sprid,
-            //     'tipe' => 2,
-            // ];
-
-            // $dp = Tagihan::select('jumlah_tagihan')->where($where1)->first();
-
-            return view('supervisor.payment.index', compact('user', 'batal'));
+            return view('supervisor.payment.index', compact('user', 'batal', 'rf'));
         }
 
     }
@@ -77,32 +75,15 @@ class BayarController extends Controller
         $bayar = Pembayaran::where('no_detail_transaksi', $no)->get();
 
         $alasan = Alasan::all();
+        foreach ($getSpr as $sp) {
+            $idspr = $sp->id_transaksi;
+        }
 
-        // foreach ($getSpr as $key) {
-        //     $idspr = $key->id_transaksi;
-        // }
-        // $spv = auth()->user()->name;
+        $pembatalan = Pembatalan::where('spr_id', $idspr)->first();
+        $idbatal = $pembatalan->spr_id;
 
-        // $batal = Pembatalan::all();
-        // foreach ($batal as $key) {
-        //     $sprid = $key->spr_id;
-        // }
 
-        // $where = [
-        //     'id_spr' => $sprid,
-        //     'tipe' => 1,
-        // ];
-
-        // $bf = Tagihan::select('jumlah_tagihan')->where($where)->first();
-
-        // $where1 = [
-        //     'id_spr' => $sprid,
-        //     'tipe' => 2,
-        // ];
-
-        // $dp = Tagihan::select('jumlah_tagihan')->where($where1)->first();
-
-        return view('supervisor.payment.cancel', compact('getSpr', 'spr', 'alasan'));
+        return view('supervisor.payment.cancel', compact('getSpr', 'spr', 'alasan', 'idspr', 'idbatal'));
 
     }
 

@@ -16,15 +16,48 @@ class RefundController extends Controller
     {
         $getno = request()->get('no_pembatalan');
         $batal = Pembatalan::all();
-        $singlebatal = Pembatalan::where('no_pembatalan', $getno)->first();
-        $idspr = $singlebatal->spr_id;
+        if ($getno) {
 
-        $rincianid = Tagihan::where('id_spr', $idspr)->first();
-        $getrincianid = $rincianid->id_rincian;
+            $singlebatal = Pembatalan::where('no_pembatalan', $getno)->first();
+            $idspr = $singlebatal->spr_id;
 
-        $singlebayar = Pembayaran::where('rincian_id', $getrincianid)->first();
+            $rincianid = Tagihan::where('id_spr', $idspr)->first();
+            $getrincianid = $rincianid->id_rincian;
 
-        return view('resepsionis.refund.index', compact('batal', 'singlebatal', 'singlebayar', ));
+            $singlebayar = Pembayaran::where('rincian_id', $getrincianid)->first();
+
+            $idbatal = $singlebatal->no_pembatalan;
+            $refund = Refund::where('no_pembatalan', $idbatal)->first();
+            $idbatalrefund = $refund->no_pembatalan;
+
+            return view('resepsionis.refund.index', compact('batal', 'singlebatal', 'singlebayar', 'idbatal', 'idbatalrefund'));
+        } else {
+            $batal = Pembatalan::all();
+
+            return view('resepsionis.refund.index', compact('batal'));
+
+        }
+
+    }
+
+    function list() {
+        $refund = Refund::all();
+
+        foreach ($refund as $rf) {
+            $no = $rf->no_pembatalan;
+        }
+        $batal = Pembatalan::where('no_pembatalan', $no)->first();
+
+        return view('resepsionis.refund.list', compact('refund', 'batal'));
+    }
+
+    public function updateStatus($id)
+    {
+        $refund = Refund::find($id);
+        $refund->status = 'paid';
+        $refund->save();
+
+        return redirect()->back();
     }
 
     public function storeRefund(Request $request)

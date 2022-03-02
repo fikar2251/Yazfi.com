@@ -66,121 +66,130 @@
     </form>
 
     @if (request()->get('no_pembatalan'))
-        <form action="{{route('resepsionis.refund.store')}}" method="POST">
-            @csrf
-            <div class="row">
-                <div class="col-md-8 container">
-                    <div class="card shadow">
-                        <div class="card-body">
+        @if ($idbatal == $idbatalrefund)
+            <h2 class="text-center mt-5">Anda sudah input refund ini</h2>
+        @else
+            <form action="{{ route('resepsionis.refund.store') }}" method="POST">
+                @csrf
+                <div class="row">
+                    <div class="col-md-8 container">
+                        <div class="card shadow">
+                            <div class="card-body">
 
-                            <div class="table-responsive">
-                                <table class="table table-bordered custom-table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 200px">No Refund</th>
-                                            <th style="width: 20px">:</th>
-                                            <th> {{ $nourut }} <input type="hidden" name="no_refund" value="{{$nourut}}">
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td style="width: 200px">No Pembatalan</td>
-                                            <td style="width: 20px">:</td>
-                                            <td> {{ $singlebatal->no_pembatalan }} <input type="hidden" name="no_pembatalan" value="{{$singlebatal->no_pembatalan}}"></td>
-                                        </tr>
-                                        {{-- @foreach ($getSpr as $item) --}}
-                                        <tr>
-                                            <td style="width: 200px">Konsumen</td>
-                                            <td style="width: 20px">:</td>
-                                            <td>
-                                                {{ $item->spr->nama }}
-                                            </td>
-                                        </tr>
-                                        {{-- @endforeach --}}
-                                        <tr>
-                                            <td style="width: 200px">Sales</td>
-                                            <td style="width: 20px">:</td>
-                                            <td>
-                                                {{ $item->spr->user->name }}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="width: 200px">Spv</td>
-                                            <td style="width: 20px">:</td>
-                                            <td>
-                                                {{ $item->diajukan }} <input type="hidden" name="diajukan" value="{{$item->diajukan}}">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="width: 200px">Tanggal</td>
-                                            <td style="width: 20px">:</td>
-                                            <td>
-                                                {{ Carbon\Carbon::now()->format('d-m-Y') }}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="width: 200px">Total yang sudah dibayar</td>
-                                            <td style="width: 20px">:</td>
-                                            <td>
-                                                @currency($singlebayar->nominal) <input type="hidden"
-                                                    value="{{ $singlebayar->nominal }}" name="nominal" id="nominal">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="width: 200px">Potongan</td>
-                                            <td style="width: 20px">:</td>
-                                            <td class="d-flex">
-                                                <input type="number" name="potongan" id="potongan" class="form-control"
-                                                    style="width: 20%" value="">&nbsp;
-                                                <h3> % </h3>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="width: 200px">Total refund</td>
-                                            <td style="width: 20px">:</td>
-                                            <td id="total" name="total">
-                                            </td>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered custom-table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 200px">No Refund</th>
+                                                <th style="width: 20px">:</th>
+                                                <th> {{ $nourut }} <input type="hidden" name="no_refund"
+                                                        value="{{ $nourut }}">
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td style="width: 200px">No Pembatalan</td>
+                                                <td style="width: 20px">:</td>
+                                                <td> {{ $singlebatal->no_pembatalan }} <input type="hidden"
+                                                        name="no_pembatalan" value="{{ $singlebatal->no_pembatalan }}">
+                                                </td>
+                                            </tr>
+                                            {{-- @foreach ($getSpr as $item) --}}
+                                            <tr>
+                                                <td style="width: 200px">Konsumen</td>
+                                                <td style="width: 20px">:</td>
+                                                <td>
+                                                    {{ $item->spr->nama }}
+                                                </td>
+                                            </tr>
+                                            {{-- @endforeach --}}
+                                            <tr>
+                                                <td style="width: 200px">Sales</td>
+                                                <td style="width: 20px">:</td>
+                                                <td>
+                                                    {{ $item->spr->user->name }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width: 200px">Spv</td>
+                                                <td style="width: 20px">:</td>
+                                                <td>
+                                                    {{ $item->diajukan }} <input type="hidden" name="diajukan"
+                                                        value="{{ $item->diajukan }}">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width: 200px">Tanggal</td>
+                                                <td style="width: 20px">:</td>
+                                                <td>
+                                                    {{ Carbon\Carbon::now()->format('d-m-Y') }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width: 200px">Total yang sudah dibayar</td>
+                                                <td style="width: 20px">:</td>
+                                                <td>
+                                                    @currency($singlebayar->nominal) <input type="hidden"
+                                                        value="{{ $singlebayar->nominal }}" name="nominal" id="nominal">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width: 200px">Potongan</td>
+                                                <td style="width: 20px">:</td>
+                                                <td class="d-flex">
+                                                    <input type="number" name="potongan" id="potongan"
+                                                        class="form-control" style="width: 20%" value="">&nbsp;
+                                                    <h3> % </h3>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width: 200px">Total refund</td>
+                                                <td style="width: 20px">:</td>
+                                                <td id="total" name="total">
+                                                </td>
 
-                                            <input type="text" name="total_refund" id="total_refund" class="form-control" readonly hidden>
-                                        </tr>
-                                        <tr>
-                                            <td style="width: 200px">Status</td>
-                                            <td style="width: 20px">:</td>
-                                            <td>
-                                                unpaid
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="width: 200px">Sumber pembayaran</td>
-                                            <td style="width: 20px">:</td>
-                                            <td>
-                                              <select name="sumber_pembayaran" id="" class="form-control">
-                                                  <option value="bank bca">Bank BCA</option>
-                                                  <option value="bank mandiri">Bank Mandiri</option>
-                                              </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="width: 200px">Ditransfer ke rekening</td>
-                                            <td style="width: 20px">:</td>
-                                            <td>
-                                                <textarea name="keterangan" id="keterangan" cols="30" rows="5"></textarea>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                                <input type="text" name="total_refund" id="total_refund"
+                                                    class="form-control" readonly hidden>
+                                            </tr>
+                                            <tr>
+                                                <td style="width: 200px">Status</td>
+                                                <td style="width: 20px">:</td>
+                                                <td>
+                                                    unpaid
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width: 200px">Sumber pembayaran</td>
+                                                <td style="width: 20px">:</td>
+                                                <td>
+                                                    <select name="sumber_pembayaran" id="" class="form-control">
+                                                        <option value="bank bca">Bank BCA</option>
+                                                        <option value="bank mandiri">Bank Mandiri</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width: 200px">Ditransfer ke rekening</td>
+                                                <td style="width: 20px">:</td>
+                                                <td>
+                                                    <textarea name="keterangan" id="keterangan" cols="30"
+                                                        rows="5"></textarea>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="m-t-20 text-center">
-                <button type="submit" name="submit" class="btn btn-primary submit-btn"><i class="fa fa-save"></i>
-                    Save</button>
-            </div>
-        </form>
-    @else
+                <div class="m-t-20 text-center">
+                    <button type="submit" name="submit" class="btn btn-primary submit-btn"><i class="fa fa-save"></i>
+                        Save</button>
+                </div>
+            </form>
+        @endif
     @endif
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

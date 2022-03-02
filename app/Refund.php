@@ -10,4 +10,9 @@ class Refund extends Model
     protected $primaryKey = 'id';
     protected $guarded = ['id'];
     public $timestamps = false;
+
+    public function pembatalan()
+    {
+        return $this->belongsTo(Pembatalan::class, 'no_pembatalan' , 'id');
+    }
 }
