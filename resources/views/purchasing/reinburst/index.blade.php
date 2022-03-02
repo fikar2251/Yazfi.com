@@ -60,7 +60,7 @@
                         <td><a href="{{ route('admin.reinburst.show', $reinburst->id) }}">{{ $reinburst->nomor_reinburst }}</a></td>
                         <td>{{ Carbon\Carbon::parse($reinburst->tanggal_reinburst)->format("d/m/Y H:i:s") }}</td>
                         <td>{{ \App\Reinburst::where('nomor_reinburst', $reinburst->nomor_reinburst)->count() }}</td>
-                        <td>@currency(\App\RincianReinburst::where('id_reinburst', $reinburst->id_reinburst)->sum('total'))</td>
+                        <td>@currency(\App\RincianReinburst::sum('total'))</td>
                         <td>{{ $reinburst->status_hrd }}</td>
                         <td>{{ $reinburst->status_pembayaran }}</td>
                         <td>

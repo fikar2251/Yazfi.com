@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Purchasing;
 use App\Barang;
 use App\HargaProdukCabang;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StorePenerimaanRequest;
 use App\InOut;
 use App\PenerimaanBarang;
 use App\Purchase;
@@ -79,7 +80,7 @@ class PenerimaanBarangController extends Controller
         return view('purchasing.penerimaan-barang.create', compact('tukar', 'purchases', 'purchase'));
     }
 
-    public function store(Request $request)
+    public function store(StorePenerimaanRequest $request)
     {
         $request->validate([
             'id_user' => 'required',
@@ -91,10 +92,7 @@ class PenerimaanBarangController extends Controller
             'qty_received' => 'required',
         ]);
 
-        $AWAL = 'PN';
-        $noUrutAkhir = \App\PenerimaanBarang::max('id');
-        // dd($noUrutAkhir);
-        $nourut = $AWAL . '/' .  sprintf("%02s", abs($noUrutAkhir + 1)) . '/' . sprintf("%05s", abs($noUrutAkhir + 1));
+      
         
         $barang = $request->input('barang_id', []);
         $attr = [];
@@ -102,24 +100,34 @@ class PenerimaanBarangController extends Controller
         // dd($request->all());
         DB::beginTransaction();
         foreach ($barang as $key => $no) {
+
+            $AWAL = 'PN';
+            $noUrutAkhir = \App\PenerimaanBarang::max('id');
+            // dd($noUrutAkhir);
+            $nourut = $AWAL . '/' .  sprintf("%02s", abs($noUrutAkhir + 1)) . '/' . sprintf("%05s", abs($noUrutAkhir + 1));
             $attr[] = [
                 'id_user' => auth()->user()->id,
-                'id_purchase' => $request->id,
+                // 'id_purchase' => $request->id,
                 'barang_id' => $no,
+                'no_penerimaan_barang' => $nourut,
                 'qty' => $request->qty[$key],
                 'qty_received' => $request->qty_received[$key],
                 'harga_beli' => $request->harga_beli[$key],
                 'total' => $request->harga_beli[$key] * $request->qty[$key],
-                'tanggal_penerimaan' => $request->tanggal,
+                // 'tanggal_penerimaan' => $request->tanggal,
+                'status_barang' => $request->status_barang[$key]
                 
             ];
 
-            $purchase = Purchase::where('id_user', auth()->user()->id)->where('barang_id', $no)->first();
+            // $purchase = Purchase::where('id_user', auth()->user()->id)->where('barang_id', $no)->first();
 
-            $purchase->update([
-                'qty' => $purchase->qty + $request->qty[$key],
-                'status_barang' => $request->status_barang[$key]
-            ]);
+            // $purchase->update([
+            //     'qty' => $request->qty[$key],
+            //     'qty_received' => $request->qty_received[$key],
+            //     'harga_beli' => $request->harga_beli[$key],
+            //     'total' => $request->harga_beli[$key] * $request->qty[$key],
+            //     'status_barang' => $request->status_barang[$key]
+            // ]);
         }
         PenerimaanBarang::insert($attr);
         DB::commit();

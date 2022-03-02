@@ -29,8 +29,11 @@ class StorePenerimaanRequest extends FormRequest
             'no_penerimaan_barang' => 'required',
             'tanggal_penerimaan' => 'required',
             'harga_beli' => 'required',
-            'total' => 'required',
+           
             'qty_received' => 'required',
+            'status_barang' => 'required',
+            'qty' => 'required',
+            
         ];
     }
 
@@ -43,8 +46,10 @@ class StorePenerimaanRequest extends FormRequest
             'no_penerimaan_barang.required' => 'The nomor penerimaan barang field is required.',
             'tanggal_penerimaan.required' => 'The tanggal penerimaan field is required.',
             'harga_satuan.required' => 'The harga satuan field is required.',
-            'total.required' => 'The persentase field is required.',
+           
             'qty_received.required' => 'The qty received field is required.',
+            'status_barang.required' => 'The status barang field is required.',
+            'qty.required' => 'The qty field is required.',
         ];
     }
 }

@@ -85,7 +85,7 @@
                 {
                     data: 'total_beli',
                     name: 'total_beli',
-                    render: $.fn.dataTable.render.number( ',', '.', 3, 'Rp.' )
+                    render: $.fn.dataTable.render.number( '.', ',', 0, 'Rp.' )
                 },
                 {
                     data: 'konsumen',

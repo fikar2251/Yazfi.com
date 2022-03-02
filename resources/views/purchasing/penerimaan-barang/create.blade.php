@@ -150,20 +150,32 @@
                                             </td>
                                             <td>
                                                 <input type="text" value="{{$purchase->barang->nama_barang}}"
-                                                    name="barang_id[{{ $loop->iteration }}]"
+                                                    name="barang_id[{{ $loop->iteration }}]" id="barang_id" required=""
                                                     class="form-control barang_id-{{ $loop->iteration }}"
                                                     placeholder="Nama Barang" disabled>
+
+                                                    @error('barang_id')
+                                                    <small class="text-danger">{{ $message }}</small>
+                                                    @enderror
                                             </td>
                                             <td>
                                                 <input type="number" name="qty_received[{{ $loop->iteration }}]"
                                                     class="form-control qty_received-{{ $loop->iteration }}"
-                                                    data="{{ $loop->iteration }}" onkeyup ="testNum(this)"
+                                                    data="{{ $loop->iteration }}" required="" onkeyup ="testNum(this)" id="qty_received"
                                                     placeholder=" 0">
+
+                                                    @error('qty_received')
+                                                    <small class="text-danger">{{ $message }}</small>
+                                                    @enderror
                                             </td>
                                             <td>
                                                 <input type="number" value="{{ $purchase->qty }}"
-                                                    name="qty[{{ $loop->iteration }}]" data="{{ $loop->iteration }}"
-                                                    class="form-control qty-{{ $loop->iteration }}" placeholder="0">
+                                                    name="qty[{{ $loop->iteration }}]" data="{{ $loop->iteration }}" id="qty"
+                                                    class="form-control qty-{{ $loop->iteration }}" placeholder="0" required="">
+
+                                                    @error('qty')
+                                                    <small class="text-danger">{{ $message }}</small>
+                                                    @enderror
 
                                             </td>
                                             <td>
@@ -171,20 +183,30 @@
                                                     name="harga_beli[{{ $loop->iteration }}]"
                                                     class="form-control harga_beli-{{ $loop->iteration }}"
                                                     data="{{ $loop->iteration }}"
-                                                    onkeyup="hitung(this), HowAboutIt(this)" placeholder="0">
+                                                    onkeyup="hitung(this), HowAboutIt(this)" placeholder="0" id="harga_beli" required="">
 
+                                                    @error('harga_beli')
+                                                    <small class="text-danger">{{ $message }}</small>
+                                                    @enderror
                                             </td>
                                             <td>
                                                 <input type="number" value="{{$purchase->total}}"
                                                     name="total[{{ $loop->iteration }}]" disabled
                                                     class="form-control total-{{ $loop->iteration }} total-form"
-                                                    placeholder="0">
+                                                    placeholder="0" required="">
+
+                                                    @error('total')
+                                                    <small class="text-danger">{{ $message }}</small>
+                                                    @enderror
                                             </td>
                                             <td>
-                                                <input type="text" disabled value="{{$purchase->status_barang}}"
+                                                <input type="text"  value="{{$purchase->status_barang}}"
                                                     name="status_barang[{{ $loop->iteration }}]" id="status_barang"
                                                     class="form-control status_barang-{{ $loop->iteration }} status-form"
-                                                    placeholder="Status Barang">
+                                                    placeholder="Status Barang" required="">
+                                                    @error('status_barang')
+                                                    <small class="text-danger">{{ $message }}</small>
+                                                    @enderror
                                             </td>
 
                                         </tr>
@@ -200,7 +222,7 @@
                                                 <div class="form-group">
                                                     <label>Total</label>
                                                     <input type="text" id="sub_total" readonly class="form-control"
-                                                        value="{{ $purchase->sum('total') }}">
+                                                        value="{{ $purchases->sum('grand_total') }}">
                                                 </div>
                                             </div>
                                         </div>
@@ -251,7 +273,7 @@
                                     }
 
                                 </script>
-                                </table>
+                             
                                 <div class="col-sm-1 offset-sm-8">
                                     <button type="submit" class="btn btn-primary" id="submit">Submit</button>
                                 </div>
