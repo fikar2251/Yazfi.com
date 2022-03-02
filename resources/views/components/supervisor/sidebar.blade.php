@@ -10,12 +10,16 @@
     </li> --}}
     {{-- @endcan --}}
     {{-- @can('appointment-access') --}}
-    {{-- <li class="{{ request()->is('supervisor/komisi*') ? 'active' : '' }}">
+    <li class="{{ request()->is('supervisor/komisi*') ? 'active' : '' }}">
         <a href="{{ route('supervisor.komisi.index') }}"><i class="fa fa-money"></i> <span>Komisi</span></a>
-    </li> --}}
+    </li>
     {{-- @endcan --}}
 
      <li class="{{ request()->is('supervisor/payment') ? 'active' : '' }}">
         <a href="{{ route('supervisor.payment.index') }}"><i class="fa fa-money"></i> <span>Pembatalan</span></a>
     </li>
+
+
+
+
 </ul>

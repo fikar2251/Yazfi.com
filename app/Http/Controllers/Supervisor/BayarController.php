@@ -36,13 +36,12 @@ class BayarController extends Controller
         $tagihan = Tagihan::where('no_transaksi', $no)->get();
         $bayar = Pembayaran::where('no_detail_transaksi', $no)->get();
 
-       foreach ($tagihan as $key) {
-           $status[] = [
-               'id_rincian' => $key->id_rincian,
-               'status_pembayaran' => $key->status_pembayaran
-           ];
-       };
-
+        foreach ($tagihan as $key) {
+            $status[] = [
+                'id_rincian' => $key->id_rincian,
+                'status_pembayaran' => $key->status_pembayaran,
+            ];
+        };
 
         return view('supervisor.payment.create', compact('spr', 'getSpr', 'tagihan', 'bayar', 'id'));
 
@@ -75,15 +74,19 @@ class BayarController extends Controller
         $bayar = Pembayaran::where('no_detail_transaksi', $no)->get();
 
         $alasan = Alasan::all();
-        foreach ($getSpr as $sp) {
-            $idspr = $sp->id_transaksi;
+        if ($no) {
+            # code...
+            foreach ($getSpr as $sp) {
+                $idspr = $sp->id_transaksi;
+            }
+
+            $pembatalan = Pembatalan::where('spr_id', $idspr)->first();
+            $idbatal = $pembatalan->spr_id;
+            return view('supervisor.payment.cancel', compact('getSpr', 'spr', 'alasan', 'idspr', 'idbatal'));
+        } else {
+            return view('supervisor.payment.cancel', compact('getSpr', 'spr', 'alasan'));
+
         }
-
-        $pembatalan = Pembatalan::where('spr_id', $idspr)->first();
-        $idbatal = $pembatalan->spr_id;
-
-
-        return view('supervisor.payment.cancel', compact('getSpr', 'spr', 'alasan', 'idspr', 'idbatal'));
 
     }
 

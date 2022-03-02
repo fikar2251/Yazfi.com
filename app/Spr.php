@@ -35,5 +35,10 @@ class Spr extends Model
     {
         return $this->hasOne(Pembatalan::class, 'spr_id');
     }
+
+    public function project()
+    {
+        return $this->belongsTo(Project::class, 'id_project');
+    }
 }
 
