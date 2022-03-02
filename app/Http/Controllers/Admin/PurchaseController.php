@@ -187,7 +187,7 @@ class PurchaseController extends Controller
     public function WhereService(Request $request)
     {
         $data = [];
-        $product =  Barang::where('jenis', 'service')
+        $product =  Barang::where('id_jenis', '2')
             ->where('nama_barang', 'like', '%' . $request->q . '%')
             ->get();
         foreach ($product as $row) {
@@ -199,7 +199,7 @@ class PurchaseController extends Controller
     public function WhereProduct(Request $request)
     {
         $data = [];
-        $product =  Barang::where('jenis', 'barang')
+        $product =  Barang::where('id_jenis', '1')
             ->where('nama_barang', 'like', '%' . $request->q . '%')
             ->get();
         foreach ($product as $row) {

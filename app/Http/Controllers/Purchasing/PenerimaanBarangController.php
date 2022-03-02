@@ -81,20 +81,48 @@ class PenerimaanBarangController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'id_user' => 'required',
+            'id_purchase' => 'required',
+            'no_penerimaan_barang' => 'required',
+            'tanggal_penerimaan' => 'required',
+            'harga_beli' => 'required',
+            'total' => 'required',
+            'qty_received' => 'required',
+        ]);
+
         $AWAL = 'PN';
         $noUrutAkhir = \App\PenerimaanBarang::max('id');
         // dd($noUrutAkhir);
         $nourut = $AWAL . '/' .  sprintf("%02s", abs($noUrutAkhir + 1)) . '/' . sprintf("%05s", abs($noUrutAkhir + 1));
-        $request->validate([
-            'id_user' => 'required',
-            'no_penerimaan_barang' => 'required',
-        ]);
+        
+        $barang = $request->input('barang_id', []);
+        $attr = [];
+        $in = [];
+        // dd($request->all());
+        DB::beginTransaction();
+        foreach ($barang as $key => $no) {
+            $attr[] = [
+                'id_user' => auth()->user()->id,
+                'id_purchase' => $request->id,
+                'barang_id' => $no,
+                'qty' => $request->qty[$key],
+                'qty_received' => $request->qty_received[$key],
+                'harga_beli' => $request->harga_beli[$key],
+                'total' => $request->harga_beli[$key] * $request->qty[$key],
+                'tanggal_penerimaan' => $request->tanggal,
+                
+            ];
 
-        $request['no_penerimaan_barang'] = $nourut;
-        $request['id_user'] = Auth()->user()->id;
-        $barang = ($request->all());
-        PenerimaanBarang::insert($barang);
+            $purchase = Purchase::where('id_user', auth()->user()->id)->where('barang_id', $no)->first();
 
+            $purchase->update([
+                'qty' => $purchase->qty + $request->qty[$key],
+                'status_barang' => $request->status_barang[$key]
+            ]);
+        }
+        PenerimaanBarang::insert($attr);
+        DB::commit();
         return redirect()->route('purchasing.penerimaan-barang.index')->with('success', 'Purchase barang berhasil');
     }
 

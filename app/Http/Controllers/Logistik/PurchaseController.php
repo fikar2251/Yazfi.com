@@ -12,6 +12,7 @@ use App\Project;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class PurchaseController extends Controller
 {
@@ -22,7 +23,7 @@ class PurchaseController extends Controller
             $to = Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s');
             $purchases = Purchase::groupBy('invoice')->whereBetween('created_at', [$from, $to])->get();
         } else {
-            $purchases = Purchase::where('user_id', Auth()->user()->id)->get();
+            $purchases = Purchase::where('user_id', Auth::user()->id)->get();
         }
 
 
@@ -34,7 +35,7 @@ class PurchaseController extends Controller
         $purchase = new Purchase();
         $suppliers = Supplier::get();
         $project = Project::get();
-        $barangs = Barang::where('jenis', 'barang')->get();
+        $barangs = Barang::where('id_jenis', '1')->get();
         $AWAL = 'PO';
         $noUrutAkhir = \App\Purchase::max('id');
         // dd($noUrutAkhir);
@@ -193,14 +194,15 @@ class PurchaseController extends Controller
     }
     public function WhereProduct(Request $request)
     {
+   
         $data = [];
-        $product =  Barang::where('jenis', 'barang_id')
+        $product =  Barang::where('id_jenis', 'barang')
             ->where('nama_barang', 'like', '%' . $request->q . '%')
             ->get();
         foreach ($product as $row) {
             $data[] = ['id' => $row->id,  'text' => $row->nama_barang];
         }
 
-        return redirect()->route('logistik.purchase.index')->with('success', 'Purchase barang didelete');
+        return response()->json($data);
     }
 }

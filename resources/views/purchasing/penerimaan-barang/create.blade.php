@@ -7,7 +7,7 @@
 </div>
 
 <div class="row">
-    <div class="col-md-15">
+    <div class="col-md-12">
         <div class="card shadow" id="card">
             <div class="card-body">
                 <div class="row custom-invoice">
@@ -157,7 +157,7 @@
                                             <td>
                                                 <input type="number" name="qty_received[{{ $loop->iteration }}]"
                                                     class="form-control qty_received-{{ $loop->iteration }}"
-                                                    data="{{ $loop->iteration }}" onkeyup ="testNum(this),tesNumIT(this)"
+                                                    data="{{ $loop->iteration }}" onkeyup ="testNum(this)"
                                                     placeholder=" 0">
                                             </td>
                                             <td>
@@ -182,7 +182,7 @@
                                             </td>
                                             <td>
                                                 <input type="text" disabled value="{{$purchase->status_barang}}"
-                                                    name="status_barang[{{ $loop->iteration }}]"
+                                                    name="status_barang[{{ $loop->iteration }}]" id="status_barang"
                                                     class="form-control status_barang-{{ $loop->iteration }} status-form"
                                                     placeholder="Status Barang">
                                             </td>
@@ -489,7 +489,7 @@
     })
 
     function testNum(e) {
-        let result;
+        let result = 0;
         let attr = $(e).attr('data')
         let qty_received = $(`.qty_received-${attr}`).val()
         console.log(qty_received)
@@ -497,40 +497,38 @@
         console.log(qty)
 
         if (qty > qty_received) {
-            result = 'partial';
-        } else if (qty = qty_received) {
-            result = 'completed';
+            result = 'partial'
         } else {
-            result = ' barang lebih'
-        }
-        return result;
-        let hasil = testNum();
-        console.log(hasil);
-        console.log(result);
+            result = 'completed';   
+        }  
+        
+         $(`.status_barang-${attr}`).val(result)
+       
+        // console.log(status_barang);
+        // let coll = document.querySelectorAll('.status-form')
+        // for (let i = 0; i < coll.length; i++) {
+        //     let ele = coll[i]
+        //     status_barang += parseInt(ele.value)
+        // }
+        // document.getElementById("status_barang").value = result;
+    
+        // console.log(status_barang)
+   
+   
     }
 
-    function tesNumIT(e) {
-        let statusbarang = document.getElementById('status_barang')
+    // function tesNumIT(e) {
+       
       
-        let status_barang = 0;
-        let coll = document.querySelectorAll('.status-form')
-        for (let i = 0; i < coll.length; i++) {
-            let ele = coll[i]
-            status_barang += parseInt(ele.value)
-        }
-        let SUB = document.getElementById(status_barang);
+    //     let status_barang = 0;
+    //     let coll = document.querySelectorAll('.status-form')
+    //     for (let i = 0; i < coll.length; i++) {
+    //         let ele = coll[i]
+    //         status_barang += parseInt(ele.value)
+    //     }
+    //     let SUB = document.getElementById(status_barang);
    
-        
-        // let SUB = document.getElementById('sub_total').value;
-        // let PPN = document.getElementById('PPN').value;
-        // console.log(PPN);
-        // let tax = PPN / 100 * sub_total.value;
-        // console.log(tax);
-        // console.log(SUB);
-        // let grand_total = parseInt(SUB) + parseInt(tax);
-        // document.getElementById('grandtotal').value = grand_total;
-        // console.log(grand_total);
-    }
+    // }
 
 </script>
 @stop

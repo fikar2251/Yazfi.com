@@ -12,4 +12,8 @@ class PembatalanUnit extends Model
        
        return $this->belongsTo(Users::class,'id_sales');
    }
+   public function spr(){
+       
+       return $this->belongsTo(Users::class,'id_spr');
+   }
 }

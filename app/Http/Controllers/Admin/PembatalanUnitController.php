@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateBarangRequest;
 use Carbon\Carbon;
 
 use App\PembatalanUnit;
+use App\Spr;
 
 class PembatalanUnitController extends Controller
 {
@@ -20,15 +21,16 @@ class PembatalanUnitController extends Controller
 
 
 
-    public function show($id)
+    public function show($id, Spr $spr)
     {
   
         $post = PembatalanUnit::findOrFail($id);
+        $unit = $post->spr->unit->id_unit_rumah;
         $post->update(['status' => 'Approval']);
         $unit_rumah = DB::table('unit_rumahs')
         ->leftJoin('sprs','unit_rumahs.id_unit_rumah','=','sprs.id_unit')
-        ->select('unit_rumahs.id_unit_rumah')
-        ->where('unit_rumahs.id_unit_rumah',$id);
+        ->select('unit_rumahs.id_unit_rumah','sprs.id_unit')
+        ->where('unit_rumahs.id_unit_rumah', $unit);
         $unit_rumah->update(['status_penjualan' => 'Available']);
 
         return redirect()->route('admin.pembatalans.index')->with('success', 'Status has been updated');

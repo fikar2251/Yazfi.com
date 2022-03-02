@@ -45,7 +45,7 @@ class Reinburst extends Model
     }
     public function rincianreinburst()
     {
-        return $this->belongsTo(RincianReinburst::class, 'id_reinburst');
+        return $this->hasMany(RincianReinburst::class, 'id_reinburst');
     }
 
 }

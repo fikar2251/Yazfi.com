@@ -205,15 +205,14 @@ class ReinburstController extends Controller
         return redirect()->route('admin.reinburst.index')->with('success', 'Pengajuan barang berhasil');
     }
 
-    public function destroy(Reinburst $reinburst)
+    public function destroy($id)
     {
-        $reinburst = Reinburst::where('id', $reinburst->id)->get();
-
-        foreach ($reinburst as $pur) {
-            RincianReinburst::where('id_reinburst', $pur->id_reinburst)->delete();
-            $pur->delete();
-        }
-
+        $post = Reinburst::findOrFail($id);
+          
+        $rincian = $post->id;
+        // dd($rincian);
+        RincianReinburst::where('id_reinburst', $rincian)->delete();
+        Reinburst::where('id', $id)->delete();
         return redirect()->route('admin.reinburst.index')->with('success', 'Purchase barang didelete');
     }
 }

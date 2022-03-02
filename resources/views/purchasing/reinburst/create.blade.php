@@ -142,12 +142,12 @@
                                         <input type="type" id="PPN" onchange="HowAboutIt()" class="form-control">
                                     </div>
                                 </div> --}}
-                                <div class="col-md-12">
+                                {{-- <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Grand Total</label>
                                         <input type="text" id="grandtotal" name="grandtotal" readonly class="form-control">
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                         <div class="col-sm-1 offset-sm-8">

@@ -36,7 +36,7 @@ class PengajuanController extends Controller
     {
         $pengajuans = Pengajuan::groupBy('nomor_pengajuan')->get();
         $perusahaans = Perusahaan::get();
-        $barangs = Barang::where('jenis', 'barang')->get();
+        // $barangs = Barang::where('id_jenis', '1')->get();
         $projects = Project::get();
         $AWAL = 'PD';
         $noUrutAkhir = \App\Pengajuan::max('id');
@@ -232,7 +232,7 @@ class PengajuanController extends Controller
     public function WhereProduct(Request $request)
     {
         $data = [];
-        $product =  Barang::where('jenis', 'barang_id')
+        $product =  Barang::where('id_jenis', 'barang_id')
             ->where('nama_barang', 'like', '%' . $request->q . '%')
             ->get();
         foreach ($product as $row) {

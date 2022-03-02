@@ -26,8 +26,8 @@ class ReinburstController extends Controller
         } else {
             $reinbursts = DB::table('reinbursts')
             ->leftJoin('rincian_reinbursts','reinbursts.id','=','rincian_reinbursts.id_reinburst')
-            ->select('rincian_reinbursts.grandtotal','reinbursts.tanggal_reinburst','reinbursts.nomor_reinburst','reinbursts.status_hrd','reinbursts.status_pembayaran','reinbursts.id')
-            ->where('reinbursts.id',Auth()->user()->id)
+            ->select('reinbursts.id_user','reinbursts.tanggal_reinburst','reinbursts.nomor_reinburst','reinbursts.status_hrd','rincian_reinbursts.id_reinburst','rincian_reinbursts.total','reinbursts.status_pembayaran','reinbursts.id')
+            ->where('reinbursts.id_user',auth()->user()->id)
             ->get();
         }
         return view('purchasing.reinburst.index', compact('reinbursts'));
@@ -89,7 +89,7 @@ class ReinburstController extends Controller
                         'catatan' => $request->catatan[$key],
                         'total' => $request->harga_beli[$key],
                         'id_reinburst' => $id,
-                        'grandtotal' => $request->grandtotal,
+                   
                     ];
                 }
                 Reinburst::insert($attr);
@@ -104,7 +104,7 @@ class ReinburstController extends Controller
     {   $reinbursts = Reinburst::where('id', $reinburst->id)->first();
         $rincianreinbursts = DB::table('reinbursts')
         ->leftJoin('rincian_reinbursts','reinbursts.id','=','rincian_reinbursts.id_reinburst')
-        ->select('rincian_reinbursts.no_kwitansi','rincian_reinbursts.grandtotal','rincian_reinbursts.total','rincian_reinbursts.harga_beli','rincian_reinbursts.catatan')
+        ->select('rincian_reinbursts.no_kwitansi','rincian_reinbursts.total','rincian_reinbursts.harga_beli','rincian_reinbursts.catatan')
         ->get();
 
         return view('purchasing.reinburst.show', compact('reinbursts','rincianreinbursts'));
@@ -177,7 +177,7 @@ class ReinburstController extends Controller
                         'catatan' => $rincian_reinburst->catatan + $request->catatan[$key],
                         'total' => $rincian_reinburst->total + $request->harga_beli[$key],
                         'id_reinburst' => $id,
-                        'grandtotal' => $rincian_reinburst->grandtotal + $request->grandtotal,
+                      
                  
                 ]);
             
@@ -196,14 +196,16 @@ class ReinburstController extends Controller
         return redirect()->route('purchasing.reinburst.index')->with('success', 'Pengajuan barang berhasil');
     }
 
-    public function destroy(Reinburst $reinburst)
+    public function destroy($id)
     {
-        $reinburst = Reinburst::where('id', $reinburst->id)->get();
-
-        foreach ($reinburst as $pur) {
-            RincianReinburst::where('id_reinburst', $pur->id_reinburst)->delete();
-            $pur->delete();
-        }
+        
+            $post = Reinburst::findOrFail($id);
+          
+            $rincian = $post->id;
+            // dd($rincian);
+            RincianReinburst::where('id_reinburst', $rincian)->delete();
+            Reinburst::where('id', $id)->delete();
+          
 
         return redirect()->route('purchasing.reinburst.index')->with('success', 'Purchase barang didelete');
     }
