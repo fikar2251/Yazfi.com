@@ -165,9 +165,12 @@
                                     </div>
                                 </div>
                                 <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>Include PPN</label>
-                                        <input type="type" id="PPN" onchange="HowAboutIt()" class="form-control">
+                                    <label>Include PPN</label>
+                                    <div class="input-group">
+                                        <input type="type" id="PPN" onchange="HowAboutIt()" class="form-control"  aria-label="Amount (to the nearest dollar)">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">%</span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-12">

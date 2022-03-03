@@ -149,9 +149,12 @@
                                     </div>
                                 </div>
                                 <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>Include PPN</label>
-                                        <input type="type" id="PPN" onchange="HowAboutIt()" class="form-control">
+                                    <label>Include PPN</label>
+                                    <div class="input-group">
+                                        <input type="type" id="PPN" onchange="HowAboutIt()" class="form-control"  aria-label="Amount (to the nearest dollar)">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">%</span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -181,16 +184,7 @@
 </html>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script>
-    function showhide() {
-        var div = document.getElementById("newpost");
-        var ppn2 = document.getElementById("PPN");
-        console.log(ppn2);
-        if (div.style.display !== "none") {
-            div.style.display = "none";
-        } else {
-            div.style.display = "block";
-        }
-    }
+   
 
     var formatter = function(num) {
         var str = num.toString().replace("", ""),

@@ -117,6 +117,9 @@
                                     <label for="tanggal">Tanggal <span style="color: red">*</span></label>
                                     <input type="text" id="created_at" value="{{ $item ? $item->created_at : '' }}"
                                         class="form-control" readonly>
+                                        @error('tanggal')
+                                        <small class="text-danger">{{ $message }}</small>
+                                        @enderror
                                 </div>
                             </li>
                         </ul>
@@ -372,28 +375,28 @@
     function form_dinamic() {
         let index = $('#dynamic_field tr').length + 1
         document.getElementById('counter').innerHTML = index
-        let template = `
-        <tr class="rowComponent">
-                    <td hidden>
-                        <input type="hidden" name="barang_id[${index}]" class="barang_id-${index}">
-                    </td>
-                    <td>
-                        <select required name="barang_id[${index}]" id="${index}" class="form-control select-${index}"></select>
-                    </td>
-                    <td>
-                        <input type="number" name="qty[${index}]"  class="form-control qty-${index}" placeholder="0">
-                    </td>
-                    <td>
-                        <input type="number" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this)">
-                    </td>
-                    <td>
-                        <input type="number" name="total[${index}]" disabled class="form-control total-${index} total-form"  placeholder="0">
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-danger btn-sm" onclick="remove(this)">Delete</button>
-                    </td>
-                </tr>
-        `
+        // let template = `
+        // <tr class="rowComponent">
+        //             <td hidden>
+        //                 <input type="hidden" name="barang_id[${index}]" class="barang_id-${index}">
+        //             </td>
+        //             <td>
+        //                 <select required name="barang_id[${index}]" id="${index}" class="form-control select-${index}"></select>
+        //             </td>
+        //             <td>
+        //                 <input type="number" name="qty[${index}]"  class="form-control qty-${index}" placeholder="0">
+        //             </td>
+        //             <td>
+        //                 <input type="number" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this)">
+        //             </td>
+        //             <td>
+        //                 <input type="number" name="total[${index}]" disabled class="form-control total-${index} total-form"  placeholder="0">
+        //             </td>
+        //             <td>
+        //                 <button type="button" class="btn btn-danger btn-sm" onclick="remove(this)">Delete</button>
+        //             </td>
+        //         </tr>
+        // `
         $('#dynamic_field').append(template)
 
         $(`.select-${index}`).select2({
@@ -467,41 +470,6 @@
                         document.getElementById('created_at').value = created_at;
                         document.getElementById('created_at').defaultvalue = created_at;
 
-                        var barang_id = data[i].barang_id;
-                        // console.log(barang_id);
-                        document.getElementById('barang_id').value = barang_id;
-                        document.getElementById('barang_id').defaultvalue = barang_id;
-
-                        var qty = data[i].qty;
-                        // console.log(qty);
-                        document.getElementById('qty').value = qty;
-                        document.getElementById('qty').defaultvalue = qty;
-
-                        var harga_beli = data[i].harga_beli;
-                        // console.log(harga_beli);
-                        document.getElementById('harga_beli').value = harga_beli;
-                        document.getElementById('harga_beli').defaultvalue = harga_beli;
-
-                        var total = data[i].total;
-                        // console.log(total);
-                        document.getElementById('total').value = total;
-                        document.getElementById('total').defaultvalue = total;
-
-                        var status_barang = data[i].status_barang;
-                        // console.log(status_barang);
-                        document.getElementById('status_barang').value = status_barang;
-                        document.getElementById('status_barang').defaultvalue =
-                            status_barang;
-
-                        var grand_total = data[i].grand_total;
-                        // console.log(grand_total);
-                        document.getElementById('grand_total').value = grand_total;
-                        document.getElementById('grand_total').defaultvalue = grand_total;
-
-                        var PPN = data[i].PPN;
-                        console.log(PPN);
-                        document.getElementById('PPN').value = PPN;
-                        document.getElementById('PPN').defaultvalue = PPN;
 
                     };
                 },

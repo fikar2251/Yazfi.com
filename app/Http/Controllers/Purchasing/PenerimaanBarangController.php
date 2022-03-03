@@ -57,13 +57,7 @@ class PenerimaanBarangController extends Controller
                     'lokasi' => $value->lokasi,
                     'created_at' => $value->created_at,
                     'supplier_id' => $value->supplier->nama,
-                    'barang_id' => $value->barang->nama_barang,
-                    'qty' => $value->qty,
-                    'harga_beli' => $value->harga_beli,
-                    'total' => $value->total,
-                    'status_barang' => $value->status_barang,
-                    'grand_total' => $value->grand_total,
-                    'PPN' => $value->PPN
+              
                 ];
             }
         }
@@ -74,17 +68,23 @@ class PenerimaanBarangController extends Controller
         $tukar = Purchase::select("id")->where('id', $purchase->id)->get();
 
         $purchases = Purchase::where('invoice', $request->invoice)->get();
+
+        // dd($purchases);
         
         $purchase = Purchase::groupBy('invoice')->get();
+        
+      
+      
         // dd($tukar);
         return view('purchasing.penerimaan-barang.create', compact('tukar', 'purchases', 'purchase'));
     }
+
 
     public function store(StorePenerimaanRequest $request)
     {
         $request->validate([
             'id_user' => 'required',
-            'id_purchase' => 'required',
+           
             'no_penerimaan_barang' => 'required',
             'tanggal_penerimaan' => 'required',
             'harga_beli' => 'required',
@@ -96,9 +96,9 @@ class PenerimaanBarangController extends Controller
         
         $barang = $request->input('barang_id', []);
         $attr = [];
-        $in = [];
-        // dd($request->all());
-        DB::beginTransaction();
+     
+      
+        // DB::beginTransaction();
         foreach ($barang as $key => $no) {
 
             $AWAL = 'PN';
@@ -107,17 +107,18 @@ class PenerimaanBarangController extends Controller
             $nourut = $AWAL . '/' .  sprintf("%02s", abs($noUrutAkhir + 1)) . '/' . sprintf("%05s", abs($noUrutAkhir + 1));
             $attr[] = [
                 'id_user' => auth()->user()->id,
-                // 'id_purchase' => $request->id,
+                'id_purchase' => $request->id,
                 'barang_id' => $no,
                 'no_penerimaan_barang' => $nourut,
                 'qty' => $request->qty[$key],
                 'qty_received' => $request->qty_received[$key],
                 'harga_beli' => $request->harga_beli[$key],
-                'total' => $request->harga_beli[$key] * $request->qty[$key],
+                'total' => $request->total[$key],
                 // 'tanggal_penerimaan' => $request->tanggal,
                 'status_barang' => $request->status_barang[$key]
                 
             ];
+          
 
             // $purchase = Purchase::where('id_user', auth()->user()->id)->where('barang_id', $no)->first();
 
@@ -129,9 +130,12 @@ class PenerimaanBarangController extends Controller
             //     'status_barang' => $request->status_barang[$key]
             // ]);
         }
-        PenerimaanBarang::insert($attr);
+       
+ 
+        DB::insert($attr);
         DB::commit();
-        return redirect()->route('purchasing.penerimaan-barang.index')->with('success', 'Purchase barang berhasil');
+        
+        return redirect()->route('purchasing.penerimaan-barang.index')->with('success', 'Penerimaan barang berhasil');
     }
 
     public function show(Purchase $purchase)

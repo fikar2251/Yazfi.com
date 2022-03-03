@@ -25,7 +25,7 @@ class StorePenerimaanRequest extends FormRequest
     {
         return [
             'id_user' => 'required',
-            'id_purchase' => 'required',
+          
             'no_penerimaan_barang' => 'required',
             'tanggal_penerimaan' => 'required',
             'harga_beli' => 'required',
@@ -42,7 +42,7 @@ class StorePenerimaanRequest extends FormRequest
      
         return [
             'id_user.required' => 'The id user field is required.',
-            'id_purchase.required' => 'The purchase field is required.',
+        
             'no_penerimaan_barang.required' => 'The nomor penerimaan barang field is required.',
             'tanggal_penerimaan.required' => 'The tanggal penerimaan field is required.',
             'harga_satuan.required' => 'The harga satuan field is required.',

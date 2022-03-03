@@ -30,11 +30,40 @@ class TukarFakturController extends Controller
         return view('purchasing.tukarfaktur.index', compact('purchases'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $purchasing = DB::table('dokumen_tukar_faktur')->get();
+        $purchases = Purchase::where('invoice', $request->invoice)->get();
 
-        return view('purchasing.tukarfaktur.create', compact('purchasing'));
+        // $purchases = $purchases->when($request->invoice, function($purchases) use($request){
+        //     return $purchases->where('invoice',$request->invoice);
+        //   })
+        //   ->when($request->designation, function($purchases) use($request){
+        //     return $purchases->where('invoice',$request->id);
+        //   })
+        //   ->when($request->designation, function($purchases) use($request){
+        //     return "Not Found";
+        //   });
+      
+        $suppliers = Supplier::get();
+        $project = Project::get();
+        //no PO
+        $barangs = Barang::where('id_jenis', '1')->get();
+        $AWALPO = 'PO';
+        $noUrutAkhirPO = \App\Purchase::max('id');
+        $nourutPO = $AWALPO . '/' .  sprintf("%02s", abs($noUrutAkhirPO + 1)) . '/' . sprintf("%05s", abs($noUrutAkhirPO + 1));
+        //nomor tukarfaktur
+
+        $tukarfaktur = 'TF';
+        $noUrutAkhirTF = \App\DetailTukarFaktur::max('id_detail_tukar_faktur');
+        // dd($noUrutAkhir);
+        $nourutTF = $tukarfaktur . '/' .  sprintf("%02s", abs($noUrutAkhirTF + 1)) . '/' . sprintf("%05s", abs($noUrutAkhirTF + 1));
+
+        // dd($purchases);
+        
+        $purchase = Purchase::groupBy('invoice')->get();
+
+        return view('purchasing.tukarfaktur.create', compact('purchasing','purchases','purchase','suppliers', 'barangs', 'project', 'nourutPO','nourutTF'));
     }
 
     public function store(Request $request)
