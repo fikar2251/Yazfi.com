@@ -41,8 +41,11 @@ class FinanceController extends Controller
 
         $spr = $tagihan->id_spr;
         $spr1 = Spr::where('id_transaksi', $spr)->first();
-        $spr1->status_booking = 'paid';
-        $spr1->status_dp = 'paid';
+        if ($spr->tipe == 1) {
+            $spr1->status_booking = 'paid';
+        }elseif ($spr->tipe == 2) {
+            $spr1->status_dp = 'paid';
+        }
         $spr1->save();
 
         $unit = $spr1->id_unit;
