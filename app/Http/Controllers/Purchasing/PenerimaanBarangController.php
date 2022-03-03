@@ -13,6 +13,7 @@ use App\Supplier;
 use App\Project;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class PenerimaanBarangController extends Controller
@@ -69,14 +70,17 @@ class PenerimaanBarangController extends Controller
 
         $purchases = Purchase::where('invoice', $request->invoice)->get();
 
-        // dd($purchases);
+        $AWAL = 'PN';
+        $noUrutAkhir = \App\PenerimaanBarang::max('id');
+        // dd($noUrutAkhir);
+        $nourut = $AWAL . '/' .  sprintf("%02s", abs($noUrutAkhir + 1)) . '/' . sprintf("%05s", abs($noUrutAkhir + 1));
         
         $purchase = Purchase::groupBy('invoice')->get();
         
       
       
         // dd($tukar);
-        return view('purchasing.penerimaan-barang.create', compact('tukar', 'purchases', 'purchase'));
+        return view('purchasing.penerimaan-barang.create', compact('tukar', 'purchases', 'purchase','nourut'));
     }
 
 
@@ -93,28 +97,23 @@ class PenerimaanBarangController extends Controller
         ]);
 
       
-        
         $barang = $request->input('barang_id', []);
         $attr = [];
+        
      
       
-        // DB::beginTransaction();
+        DB::beginTransaction();
         foreach ($barang as $key => $no) {
-
-            $AWAL = 'PN';
-            $noUrutAkhir = \App\PenerimaanBarang::max('id');
-            // dd($noUrutAkhir);
-            $nourut = $AWAL . '/' .  sprintf("%02s", abs($noUrutAkhir + 1)) . '/' . sprintf("%05s", abs($noUrutAkhir + 1));
-            $attr[] = [
-                'id_user' => auth()->user()->id,
-                'id_purchase' => $request->id,
+            $attr []= [
+                'id_user' => $request->id_user,
+                'id_purchase' => $request->id_purchase,
+                'no_penerimaan_barang' => $request->no_penerimaan_barang,
                 'barang_id' => $no,
-                'no_penerimaan_barang' => $nourut,
                 'qty' => $request->qty[$key],
                 'qty_received' => $request->qty_received[$key],
                 'harga_beli' => $request->harga_beli[$key],
-                'total' => $request->total[$key],
-                // 'tanggal_penerimaan' => $request->tanggal,
+                'total' => $request->total,
+                'tanggal_penerimaan' => $request->tanggal_penerimaan,
                 'status_barang' => $request->status_barang[$key]
                 
             ];
@@ -129,10 +128,13 @@ class PenerimaanBarangController extends Controller
             //     'total' => $request->harga_beli[$key] * $request->qty[$key],
             //     'status_barang' => $request->status_barang[$key]
             // ]);
+            // echo json_encode($attr);
+            // die();
+            // print_r($attr);
+            // var_dump($attr);
+            // dd($attr);
         }
-       
- 
-        DB::insert($attr);
+        PenerimaanBarang::insert($attr);
         DB::commit();
         
         return redirect()->route('purchasing.penerimaan-barang.index')->with('success', 'Penerimaan barang berhasil');
@@ -202,21 +204,17 @@ class PenerimaanBarangController extends Controller
         return redirect()->route('logistik.purchase.index')->with('success', 'Purchase barang berhasil');
     }
 
-    public function destroy(Purchase $purchase)
+    public function destroy($id)
     {
-        $purchases = Purchase::where('invoice', $purchase->invoice)->get();
+        
+        $post = PenerimaanBarang::findOrFail($id);
+          
+        $rincian = $post->id;
+        // dd($rincian);
+      
+        PenerimaanBarang::where('id', $id)->delete();
 
-        foreach ($purchases as $pur) {
-            InOut::where('invoice', $pur->invoice)->delete();
-            // $harga = HargaProdukCabang::where('barang_id', $pur->barang_id)->where('project_id', auth()->user()->project_id)->first();
-
-            // // $harga->update([
-            // //     'qty' => $harga->qty - $pur->qty
-            // // ]);
-            $pur->delete();
-        }
-
-        return redirect()->route('logistik.purchase.index')->with('success', 'Purchase barang didelete');
+        return redirect()->route('purchasing.penerimaan-barang.index')->with('success', 'Penerimaan Barang barang didelete');
     }
 
     public function whereProject(Request $request)

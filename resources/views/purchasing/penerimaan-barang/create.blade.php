@@ -42,7 +42,7 @@
                                     <div class="form-group">
                                         <label for="no_po">No Purchasing Order <span style="color: red">*</span></label>
 
-                                        <select id="invoice" name="invoice" data-dependent="barang_id"
+                                        {{-- <select id="invoice" name="invoice" data-dependent="barang_id"
                                             class="form-control dynamic_function">
                                             @if (!request()->get('invoice'))
                                             <option selected value="Select Nomor PO"></option>
@@ -54,7 +54,8 @@
                                             <option value="{{ $item->invoice }}">{{ $item->invoice }}</option>
                                             @endif
                                             @endforeach
-                                        </select>
+                                        </select> --}} <input type="text" id="invoice" name="invoice" data-dependent="barang_id"
+                                                class="form-control dynamic_function">
 
                                     </div>
                                     <div class="form-group">
@@ -74,7 +75,9 @@
                         </div>
                     </div>
                 </form>
-                @if (request()->get('invoice'))
+                @foreach ($purchase as $item)
+                @endforeach
+                @if (request()->get('invoice') == $item->invoice)
                 <div class="row">
                     <div class="col-sm-6 col-sg-4 m-b-4">
                         <ul class="list-unstyled">
@@ -128,6 +131,46 @@
                 <form action="{{ route('purchasing.penerimaan-barang.store') }}" method="post">
                     @csrf
                     <div class="row">
+                        <div class="col-sm-6 col-sg-4 m-b-4">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="form-group">
+                                        <input type="hidden" readonly id="id" name="id_purchase" class="form-control"
+                                            value="{{ $item ? $item->id : '' }}">
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 col-sg-4 m-b-4">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="form-group">
+                                        <input type="hidden" id="no_penerimaan_barang" name="no_penerimaan_barang" readonly class="form-control"
+                                            value="{{ $nourut}}">
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 col-sg-4 m-b-4">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="form-group">
+                                        <input type="text" id="id_user" name="id_user" readonly class="form-control"
+                                            value="{{ auth()->user()->id }}">
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 col-sg-4 m-b-4">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="form-group">
+                                        <input type="datetime-local" id="tanggal_penerimaan"name="tanggal_penerimaan"  class="form-control"
+                                            value="">
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
                         <div class="col-md-12">
                             <div class="table-responsive">
                                 <table class="table table-bordered  report">
@@ -149,13 +192,12 @@
                                         @foreach($purchases as $purchase)
                                         <tr class="rowComponent">
                                             <td>
-                                                {{$loop->iteration}}
+                                               {{ $loop->iteration }}
                                             </td>
                                             <td>
-                                                <input type="text" value="{{$purchase->barang->nama_barang}}"
-                                                    name="barang_id[{{ $loop->iteration }}]" id="barang_id" required=""
-                                                    class="form-control barang_id-{{ $loop->iteration }}"
-                                                    placeholder="Nama Barang" disabled>
+                                               
+                                                <input type="text" value="{{$purchase->barang->nama_barang}}" class="form-control" disabled>
+                                                <input type="hidden" name="barang_id[{{ $loop->iteration }}]"  data="{{ $loop->iteration }}" id="barang_id" value="{{ $purchase->barang_id }}" class="form-control barang_id-{{ $loop->iteration }}" >
 
                                                     @error('barang_id')
                                                     <small class="text-danger">{{ $message }}</small>
@@ -224,7 +266,7 @@
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label>Total</label>
-                                                    <input type="text" id="sub_total" readonly class="form-control"
+                                                    <input type="text" id="sub_total" name="total" readonly class="form-control"
                                                         value="{{ $purchases->sum('grand_total') }}">
                                                 </div>
                                             </div>
@@ -232,6 +274,9 @@
                                     </div>
                                 </div>
                                 <script>
+                              
+                                           
+                                     
                                     function hitung(e) {
                                         let harga = e.value
                                         let attr = $(e).attr('data')

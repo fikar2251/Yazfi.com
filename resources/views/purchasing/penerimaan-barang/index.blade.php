@@ -45,8 +45,9 @@
                         <th>No</th>
                         <th>Number PN</th>
                         <th>Di Ajukan</th>
-                        <th>Tanggal Penerimaan Barang</th>
-                        <th>Jumlah</th>
+                        <th>Tanggal</th>
+                        <th>Total Item</th>
+                        <th>Total Pembelian</th>
                         <th>Status Barang</th>
                         <th>Status Pembayaran</th>
                         <th>Action</th>
@@ -62,8 +63,9 @@
                         </td>
                         <td>{{ $penerimaan->admin->name }}</td>
                         <td>{{ Carbon\Carbon::parse($penerimaan->tanggal_penerimaan)->format("d/m/Y H:i:s") }}</td>
-                        <td>@currency(\App\Purchase::where('no_penerimaan_barang', $penerimaan->no_penerimaan_barang)->sum('grand_total'))</td>
-                        <td>{{ $penerimaan->purchase->status_barang }}</td>
+                        <td>{{ \App\PenerimaanBarang::where('no_penerimaan_barang', $penerimaan->no_penerimaan_barang)->count() }}</td> 
+                        <td>@currency(\App\PenerimaanBarang::where('no_penerimaan_barang', $penerimaan->no_penerimaan_barang)->sum('total'))</td>
+                        <td>{{ $penerimaan->status_barang }}</td>
                         <td>{{ $penerimaan->purchase->status_pembayaran }}</td>
                         <td>
 
@@ -78,6 +80,15 @@
                     </tr>
                     @endforeach
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td>Total : </td>
+                        <td colspan="3"></td>
+                        <td>{{ request('from') && request('to') ? \App\PenerimaanBarang::whereBetween('tanggal_penerimaan', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->count() : \App\PenerimaanBarang::count() }}</td>
+                        <td>@currency( request('from') && request('to') ? \App\PenerimaanBarang::whereBetween('tanggal_penerimaan', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->sum('total') : \App\PenerimaanBarang::sum('total') )</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>

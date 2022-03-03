@@ -12,6 +12,7 @@ class PenerimaanBarang extends Model
 
     use HasRoles;
     protected $guarded = ['id'];
+    Protected $primaryKey = "id";
     public function barang()
     {
         return $this->belongsTo(Barang::class, 'barang_id');
@@ -31,7 +32,11 @@ class PenerimaanBarang extends Model
     }
     public function admin()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'id_user');
+    }
+    public function purchase()
+    {
+        return $this->belongsTo(Purchase::class, 'id_purchase');
     }
 
     public function roles()

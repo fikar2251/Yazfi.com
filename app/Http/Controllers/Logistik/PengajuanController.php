@@ -27,10 +27,14 @@ class PengajuanController extends Controller
         } else {
             $pengajuans = Pengajuan::where('id_user', Auth::user()->id)
                 ->get();
-            // $pengajuan = Pengajuan::where('id', $id)->where('nomor_pengajuan', $pengajuan->nomor_pengajuan)->first();
+            }
+            $counting = DB::table('pengajuans')
+            ->leftJoin('rincian_pengajuans','pengajuans.nomor_pengajuan','=','rincian_pengajuans.nomor_pengajuan')
+            ->select('pengajuans.id_user','rincian_pengajuans.total','rincian_pengajuans.id')
+            ->where('id_user', Auth()->user()->id)
+            ->get();
+            return view('logistik.pengajuan.index', compact('pengajuans','counting'));
         }
-        return view('logistik.pengajuan.index', compact('pengajuans'));
-    }
 
     public function create()
     {
