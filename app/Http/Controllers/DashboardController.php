@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Booking;
 use App\Customer;
 use App\Holidays;
+use App\Pembayaran;
+use App\Refund;
 use App\Tindakan;
 use App\User;
 use Carbon\Carbon;
@@ -69,8 +71,10 @@ class DashboardController extends Controller
                 $cabang = auth()->user()->cabang_id;
                 return $query->where('cabang_id', $cabang);
             })->where('status', 0)->count();
+            $bayar = Pembayaran::all()->count();
+            $refund = Refund::all()->count();
 
-            return view('dashboard.index', compact('jadwal', 'datang', 'periksa', 'pasien', 'appointments', 'tindakan', 'dokter'));
+            return view('dashboard.index', compact('jadwal', 'datang', 'periksa', 'pasien', 'appointments', 'tindakan', 'dokter', 'bayar', 'refund'));
         }
 
         if (auth()->user()->hasRole('dokter')) {
