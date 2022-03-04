@@ -57,10 +57,12 @@ class BayarController extends Controller
             foreach ($refund as $rf) {
 
             }
+            $nobatal = $rf->no_pembatalan;
+            $refund1 = Refund::where('no_pembatalan', $nobatal)->get();
+            foreach ($refund1 as $rf1) {
 
-            // dd($rf);
-
-            return view('supervisor.payment.index', compact('user', 'batal', 'rf'));
+            }
+            return view('supervisor.payment.index', compact('user', 'batal', 'rf1'));
         }
 
     }
