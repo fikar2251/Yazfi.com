@@ -256,6 +256,7 @@ Route::middleware('auth')->group(function () {
             Route::get('komisi/ajax', 'KomisiController@ajaxKomisi');
             Route::get('komisi/{komisi:id}/change', 'KomisiController@change')->name('komisi.change');
             Route::patch('komisi/{komisi:id}/updatechange', 'KomisiController@updatechange')->name('komisi.updatechange');
+            Route::post('komisi/store', 'KomisiController@storeKomisi')->name('komisi.storekomisi');
             Route::resource('komisi', 'KomisiController');
 
             Route::get('payment', 'BayarController@sales')->name('payment.index');

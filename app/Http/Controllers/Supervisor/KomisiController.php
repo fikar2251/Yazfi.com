@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Supervisor;
 
 use App\Http\Controllers\Controller;
+use App\Komisi;
 use App\Spr;
 use App\User;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class KomisiController extends Controller
 {
@@ -26,13 +29,61 @@ class KomisiController extends Controller
         foreach ($spr as $sp) {
             $hj = $sp->harga_jual;
         }
-
+        $nospr = request()->get('no_transaksi');
+        $sprkom = Komisi::where('no_spr', $nospr)->first();
+        
         $pph = $hj * (2.5 / 100);
         $bphtb = $hj * (2.5 / 100);
         $pll = $hj * (2.5 / 100);
 
+        $potongan = [
+            'pph' => $pph,
+            'bphtb' => $bphtb,
+            'pll' => $pll
+        ];
 
-        return view('supervisor.komisi.show', compact('spr', 'pph', 'pph' , 'bphtb', 'pll'));
+        $dasar = $hj - ($pph + $bphtb + $pll);
+
+        $totalfee  = $pph + $bphtb + $pll;
+
+        $kmsales = $dasar * (0.1 / 100);
+
+        $kmspv = $dasar * (0.1 / 100);
+
+        $kmmanager = $dasar * (0.1 / 100);
+
+        $komisi = [
+            'sales' => $kmsales,
+            'spv' => $kmspv,
+            'manager' => $kmmanager
+        ];
+
+
+        // dd($sales);
+
+
+
+        return view('supervisor.komisi.show', compact('spr','potongan','dasar', 'totalfee', 'komisi'));
+    }
+
+    public function storeKomisi(Request $request)
+    {
+        $tgl = Carbon::now()->format('d-m-Y');
+        Komisi::create([
+            'no_komisi' => $request->no_komisi,
+            'tanggal_komisi' => $tgl,
+            'no_spr' => $request->no_transaksi,
+            'sales' => $request->sales,
+            'nominal_sales' => $request->nominal_sales,
+            'spv' => $request->spv,
+            'nominal_spv' => $request->nominal_spv,
+            'manager' => $request->manager,
+            'nominal_manager' => $request->nominal_manager,
+            'status_pembayaran' => 'unpaid',
+            'is_active' => 1,
+        ]);
+
+        return redirect()->back();
     }
 
     // public function ajaxKomisi()
