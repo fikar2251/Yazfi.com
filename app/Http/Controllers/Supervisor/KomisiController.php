@@ -14,11 +14,11 @@ class KomisiController extends Controller
     public function index()
     {
         if (auth()->user()->roles()->first()->name == 'supervisor') {
-            $user = User::where('roles_id', 4)->get();
+            $user = User::where('id_roles', 4)->get();
 
+            $komisi = Komisi::all();
 
-
-            return view('supervisor.komisi.index', compact('user'));
+            return view('supervisor.komisi.index', compact('user', 'komisi'));
         }
 
     }

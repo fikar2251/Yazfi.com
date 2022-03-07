@@ -1,6 +1,9 @@
 @extends('layouts.master', ['title' => 'Dashboard'])
 
 @section('content')
+<div class="text-center">
+    <h4 style="font-size: 30px; font-weight: 500;" class="page-title mb-3">PEMBAYARAN KONSUMEN</h4>
+</div>
     <div class="row">
         <div class="col-sm-4 col-3">
             <h4 class="page-title">List Sales</h4>

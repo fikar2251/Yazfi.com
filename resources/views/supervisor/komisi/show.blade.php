@@ -89,7 +89,10 @@
 
                                                 <td>Harga Jual</td>
                                                 <td>:</td>
-                                                <td> @currency($item->harga_jual) </td>
+                                                <td> @currency($item->harga_jual) 
+                                                    <input type="hidden"
+                                                        value="{{ $item->harga_jual }}" name="harga_jual" id="harga_jual">
+                                                </td>
 
                                             </tr>
                                             {{-- @endforeach --}}
@@ -102,7 +105,10 @@
 
                                             <td>PPH</td>
                                             <td>:</td>
-                                            <td> 2.5% / @currency($potongan['pph']) </td>
+                                            <td class="d-flex">  <input type="number" name="persenpph" id="persenpph"
+                                                class="form-control" style="width: 80px" value="">&nbsp;
+                                            <h3> % </h3> <input type="text" name="pph" id="pph"
+                                            class="form-control" style="width: 140px" value="" style="text-decoration: none" readonly></td> 
                                         </tr>
                                         {{-- @foreach ($getSpr as $item) --}}
                                         <tr>
@@ -114,7 +120,10 @@
 
                                             <td>BPHTB</td>
                                             <td>:</td>
-                                            <td> 2.5% / @currency($potongan['bphtb']) </td>
+                                            <td class="d-flex"> <input type="number" name="persenbphtb" id="persenbphtb"
+                                                class="form-control" style="width: 80px" value="">&nbsp;
+                                            <h3> % </h3> <input type="text" name="bphtb" id="bphtb"
+                                            class="form-control" style="width: 140px" value="" style="text-decoration: none" readonly> </td>
                                         </tr>
                                         {{-- @endforeach --}}
                                         <tr>
@@ -126,7 +135,10 @@
 
                                             <td>Pengurangan lain-lain</td>
                                             <td>:</td>
-                                            <td> 2.5% / @currency($potongan['pll']) </td>
+                                            <td class="d-flex"> <input type="number" name="persenpll" id="persenpll"
+                                                class="form-control" style="width: 80px" value="">&nbsp;
+                                            <h3> % </h3> <input type="text" name="pll" id="pll"
+                                            class="form-control" style="width: 140px" value="" style="text-decoration: none" readonly> </td>
                                         </tr>
                                         <tr>
                                             <td style="width: 200px">SPV ({{ auth()->user()->name }})</td> <input type="hidden" name="spv" value="{{ auth()->user()->name }}">
@@ -135,9 +147,10 @@
                                                 @currency($komisi['spv']) <input type="hidden" name="nominal_spv" value="{{$komisi['spv']}}">
                                             </td>
 
-                                            <td>Dasar perhitungan</td>
+                                            <td>Total potongan</td>
                                             <td>:</td>
-                                            <td> @currency($dasar) </td>
+                                            <td> @currency($totalfee) </td>
+
                                         </tr>
                                         <tr>
                                             <td style="width: 200px">Manager</td> <input type="hidden" name="manager" value="Yanto">
@@ -146,9 +159,9 @@
                                                 @currency($komisi['manager']) <input type="hidden" name="nominal_manager" value="{{$komisi['manager']}}">
                                             </td>
 
-                                            <td>Total fee</td>
+                                            <td>Dasar perhitungan</td>
                                             <td>:</td>
-                                            <td> @currency($totalfee) </td>
+                                            <td> @currency($dasar) </td>
                                         </tr>
                                     </tbody>
     @endforeach
@@ -166,7 +179,47 @@
     {{-- @endif --}}
     @endif
 
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
+    
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#persenpph").keyup(function() {
+                var harga_jual = parseInt($("#harga_jual").val());
+                var persenpph = parseFloat($("#persenpph").val());
+                var angkapotongan = harga_jual * (persenpph / 100);
+                var pph = rupiah(angkapotongan);
+                document.getElementById("pph").value = pph;
+            });
+        });
 
+        $(document).ready(function() {
+            $("#persenbphtb").keyup(function() {
+                var harga_jual = parseInt($("#harga_jual").val());
+                var persenpph = parseInt($("#persenbphtb").val());
+                var angkapotongan = harga_jual * (persenpph / 100);
+                var pph = rupiah(angkapotongan);
+                document.getElementById("bphtb").value = pph;
+            });
+        });
 
+        $(document).ready(function() {
+            $("#persenpll").keyup(function() {
+                var harga_jual = parseInt($("#harga_jual").val());
+                var persenpph = parseInt($("#persenpll").val());
+                var angkapotongan = harga_jual * (persenpph / 100);
+                var pph = rupiah(angkapotongan);
+                document.getElementById("pll").value = pph;
+            });
+        });
+
+        const rupiah = (number) => {
+            return new Intl.NumberFormat("id-ID", {
+                style: "currency",
+                currency: "IDR"
+            }).format(number);
+        }
+
+    </script>
 @stop

@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Resepsionis;
 
 use App\Http\Controllers\Controller;
+use App\Komisi;
 use App\Pembayaran;
 use App\Rumah;
 use App\Spr;
@@ -14,6 +15,12 @@ class FinanceController extends Controller
         $bayar = Pembayaran::all();
 
         return view('resepsionis.payment.index', compact('bayar'));
+    }
+
+    public function komisiFinance()
+    {
+        $komisi =  Komisi::all();
+        return view('resepsionis.komisi.index', compact('komisi'));
     }
 
     public function ubahStatus($id)
@@ -57,4 +64,5 @@ class FinanceController extends Controller
 
         return redirect()->back();
     }
+
 }

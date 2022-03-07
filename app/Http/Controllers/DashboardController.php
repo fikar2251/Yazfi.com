@@ -99,7 +99,7 @@ class DashboardController extends Controller
             ]);
         }
 
-        if (auth()->user()->roles()->first()->name == 'marketing') {
+        if (auth()->user()->hasRole('marketing')) {
             $dokter = User::whereHas('roles', function ($role) {
                 return $role->where('name', 'dokter');
             })->where('cabang_id', auth()->user()->cabang_id)->where('is_active', 1)->get();
@@ -123,8 +123,8 @@ class DashboardController extends Controller
             ]);
         }
 
-        if (auth()->user()->roles()->first()->name == 'supervisor') {
-            $user = User::where('roles_id', 4)->get();
+        if (auth()->user()->hasRole('supervisor')) {
+            $user = User::where('id_roles', 4)->get();
             return view('supervisor.dashboard', compact('user'));
 
         }

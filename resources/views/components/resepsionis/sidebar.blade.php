@@ -39,4 +39,8 @@
     <li class="{{ request()->is('resepsionis/refund/list') ? 'active' : '' }}">
         <a href="{{ route('resepsionis.refund.list') }}"><i class="fa fa-files-o"></i> <span>List Refund</span></a>
     </li>
+
+    <li class="{{ request()->is('resepsionis/komisi') ? 'active' : '' }}">
+        <a href="{{ route('resepsionis.komisi') }}"><i class="fa fa-files-o"></i> <span>Komisi</span></a>
+    </li>
 </ul>

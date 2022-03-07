@@ -50,7 +50,7 @@ class BayarController extends Controller
     public function sales()
     {
         if (auth()->user()->roles()->first()->name == 'supervisor') {
-            $user = User::where('roles_id', 4)->get();
+            $user = User::where('id_roles', 4)->get();
 
             $batal = Pembatalan::all();
             $refund = Refund::all();

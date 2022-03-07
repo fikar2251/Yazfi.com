@@ -231,6 +231,9 @@ Route::middleware('auth')->group(function () {
             Route::get('refund/list', 'RefundController@list')->name('refund.list');
             Route::get('refund/update/{id}', 'RefundController@updateStatus')->name('refund.update');
 
+            //Route Komisi
+            Route::get('/komisi', 'FinanceController@komisiFinance')->name('komisi');
+
             // Route Dokter
             Route::resource('dokter', 'DokterController');
 

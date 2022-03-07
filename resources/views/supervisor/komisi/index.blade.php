@@ -3,7 +3,7 @@
 @section('content')
 <div class="row">
     <div class="col-md-4">
-        <h1 class="page-title">Rincian Komisi</h1>
+        <h1 class="page-title">List Sales</h1>
     </div>
 </div>
 
@@ -24,9 +24,15 @@
             </div>
         @endforeach
     </div>
-{{--
+    
+
 <x-alert></x-alert>
 
+<div class="row mt-5">
+    <div class="col-md-4">
+        <h1 class="page-title">Rincian Komisi</h1>
+    </div>
+</div>
 <div class="row">
     <div class="col-md-12">
         <div class="table-responsive">
@@ -34,17 +40,28 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>No Appointment</th>
-                        <th>Nama Pasien</th>
-                        <th>Cabang</th>
-                        <th>Tanggal Booking</th>
-                        <th>Waktu Booking</th>
-                        <th>Status Kedatangan</th>
-                        <th>Status Tindakan</th>
+                        <th>No Komisi</th>
+                        <th>Tanggal</th>
+                        <th>No SPR</th>
+                        <th>Komisi Sales</th>
+                        <th>Komisi SPV</th>
+                        <th>Komisi Manager</th>
+                        <th>Diajukan</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
-
                 <tbody>
+                    @foreach($komisi as $km)
+                    <td>{{$loop->iteration}}</td>
+                    <td>{{$km->no_komisi}}</td>
+                    <td>{{$km->tanggal_komisi}}</td>
+                    <td>{{$km->no_spr}}</td>
+                    <td>@currency($km->nominal_sales)</td>
+                    <td>@currency($km->nominal_spv)</td>
+                    <td>@currency($km->nominal_manager)</td>
+                    <td>{{$km->spv}}</td>
+                    <td>{{$km->status_pembayaran}}</td>
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -52,55 +69,55 @@
 </div>
 @stop
 
-@section('footer')
-<script>
-    $(document).ready(function() {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $('#appointments').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: {
-                url: '/supervisor/komisi/ajax',
-                get: 'get'
-            },
-            columns: [{
-                    data: 'DT_RowIndex',
-                    name: 'DT_RowIndex'
-                },
-                {
-                    data: 'booking',
-                    name: 'booking'
-                },
-                {
-                    data: 'pasien',
-                    name: 'pasien'
-                },
-                {
-                    data: 'cabang',
-                    name: 'cabang'
-                },
-                {
-                    data: 'tgl',
-                    name: 'tgl'
-                },
-                {
-                    data: 'waktu',
-                    name: 'waktu'
-                },
-                {
-                    data: 'status',
-                    name: 'status'
-                },
-                {
-                    data: 'tindakan',
-                    name: 'tindakan'
-                },
-            ]
-        })
-    })
-</script> --}}
-@stop
+<!--@section('footer')-->
+<!--<script>-->
+<!--    $(document).ready(function() {-->
+<!--        $.ajaxSetup({-->
+<!--            headers: {-->
+<!--                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')-->
+<!--            }-->
+<!--        });-->
+<!--        $('#appointments').DataTable({-->
+<!--            processing: true,-->
+<!--            serverSide: true,-->
+<!--            ajax: {-->
+<!--                url: '/supervisor/komisi/ajax',-->
+<!--                get: 'get'-->
+<!--            },-->
+<!--            columns: [{-->
+<!--                    data: 'DT_RowIndex',-->
+<!--                    name: 'DT_RowIndex'-->
+<!--                },-->
+<!--                {-->
+<!--                    data: 'booking',-->
+<!--                    name: 'booking'-->
+<!--                },-->
+<!--                {-->
+<!--                    data: 'pasien',-->
+<!--                    name: 'pasien'-->
+<!--                },-->
+<!--                {-->
+<!--                    data: 'cabang',-->
+<!--                    name: 'cabang'-->
+<!--                },-->
+<!--                {-->
+<!--                    data: 'tgl',-->
+<!--                    name: 'tgl'-->
+<!--                },-->
+<!--                {-->
+<!--                    data: 'waktu',-->
+<!--                    name: 'waktu'-->
+<!--                },-->
+<!--                {-->
+<!--                    data: 'status',-->
+<!--                    name: 'status'-->
+<!--                },-->
+<!--                {-->
+<!--                    data: 'tindakan',-->
+<!--                    name: 'tindakan'-->
+<!--                },-->
+<!--            ]-->
+<!--        })-->
+<!--    })-->
+<!--</script> -->
+<!--@stop-->
