@@ -89,7 +89,7 @@
 
                                                 <td>Harga Jual</td>
                                                 <td>:</td>
-                                                <td> @currency($item->harga_jual) 
+                                                <td> @currency($item->harga_jual)
                                                     <input type="hidden"
                                                         value="{{ $item->harga_jual }}" name="harga_jual" id="harga_jual">
                                                 </td>
@@ -106,9 +106,9 @@
                                             <td>PPH</td>
                                             <td>:</td>
                                             <td class="d-flex">  <input type="number" name="persenpph" id="persenpph"
-                                                class="form-control" style="width: 80px" value="">&nbsp;
+                                                class="form-control" style="width: 80px" value="2.5">&nbsp;
                                             <h3> % </h3> <input type="text" name="pph" id="pph"
-                                            class="form-control" style="width: 145px" value="" style="text-decoration: none" readonly></td> 
+                                            class="form-control" style="width: 145px" value="" style="text-decoration: none" readonly></td>
                                         </tr>
                                         {{-- @foreach ($getSpr as $item) --}}
                                         <tr>
@@ -191,7 +191,7 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
-    
+
     <script type="text/javascript">
         $(document).ready(function() {
             $("#persenpph").keyup(function() {
@@ -213,7 +213,7 @@
             });
         });
 
-       
+
 
         $(document).ready(function(pph) {
             $("#persenpll").keyup(function() {
@@ -232,11 +232,11 @@
                 var totalpotongan = rupiah(total);
                 var dasarperhitungan = harga_jual - total;
                 var dasar = rupiah(dasarperhitungan);
-                
+
                 document.getElementById("pll").value = pph;
                 document.getElementById("totalpotongan").innerHTML = totalpotongan;
                 document.getElementById("dasar").innerHTML = dasar;
-                
+
             });
         });
 
@@ -256,11 +256,11 @@
                 var total = potonganpll + potonganbphtb + potonganpph;
                 var totalpotongan = rupiah(total);
                 var dasarperhitungan = harga_jual - total;
-            
+
                 var persensales = parseFloat($("#persensales").val());
                 var potongansales = dasarperhitungan * (persensales / 100);
                 var sales = rupiah(potongansales);
-                
+
                 document.getElementById("sales").value = sales;
             });
         });
@@ -281,11 +281,11 @@
                 var total = potonganpll + potonganbphtb + potonganpph;
                 var totalpotongan = rupiah(total);
                 var dasarperhitungan = harga_jual - total;
-            
+
                 var persenspv = parseFloat($("#persenspv").val());
                 var potonganspv = dasarperhitungan * (persenspv / 100);
                 var spv = rupiah(potonganspv);
-                
+
                 document.getElementById("spv").value = spv;
             });
         });
@@ -306,11 +306,11 @@
                 var total = potonganpll + potonganbphtb + potonganpph;
                 var totalpotongan = rupiah(total);
                 var dasarperhitungan = harga_jual - total;
-            
+
                 var persenmanager = parseFloat($("#persenmanager").val());
                 var potonganmanager = dasarperhitungan * (persenmanager / 100);
                 var manager = rupiah(potonganmanager);
-                
+
                 document.getElementById("manager").value = manager;
             });
         });
