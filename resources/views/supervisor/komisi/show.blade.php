@@ -108,7 +108,7 @@
                                             <td class="d-flex">  <input type="number" name="persenpph" id="persenpph"
                                                 class="form-control" style="width: 80px" value="">&nbsp;
                                             <h3> % </h3> <input type="text" name="pph" id="pph"
-                                            class="form-control" style="width: 140px" value="" style="text-decoration: none" readonly></td> 
+                                            class="form-control" style="width: 145px" value="" style="text-decoration: none" readonly></td> 
                                         </tr>
                                         {{-- @foreach ($getSpr as $item) --}}
                                         <tr>
@@ -123,14 +123,17 @@
                                             <td class="d-flex"> <input type="number" name="persenbphtb" id="persenbphtb"
                                                 class="form-control" style="width: 80px" value="">&nbsp;
                                             <h3> % </h3> <input type="text" name="bphtb" id="bphtb"
-                                            class="form-control" style="width: 140px" value="" style="text-decoration: none" readonly> </td>
+                                            class="form-control" style="width: 145px" value="" style="text-decoration: none" readonly> </td>
                                         </tr>
                                         {{-- @endforeach --}}
                                         <tr>
                                             <td style="width: 200px">Sales ({{ $item->user->name }}) <input type="hidden" name="sales" value="{{ $item->user->name }}"></td>
                                             <td style="width: 20px">:</td>
-                                            <td>
-                                                @currency($komisi['sales']) <input type="hidden" name="nominal_sales" value="{{$komisi['sales']}}">
+                                            <td class="d-flex">
+                                                <input type="number" name="persensales" id="persensales"
+                                                class="form-control" style="width: 80px" value="">&nbsp;
+                                            <h3> % </h3> <input type="text" name="sales" id="sales"
+                                            class="form-control" style="width: 145px" value="" style="text-decoration: none" readonly>
                                             </td>
 
                                             <td>Pengurangan lain-lain</td>
@@ -138,30 +141,36 @@
                                             <td class="d-flex"> <input type="number" name="persenpll" id="persenpll"
                                                 class="form-control" style="width: 80px" value="">&nbsp;
                                             <h3> % </h3> <input type="text" name="pll" id="pll"
-                                            class="form-control" style="width: 140px" value="" style="text-decoration: none" readonly> </td>
+                                            class="form-control" style="width: 145px" value="" style="text-decoration: none" readonly> </td>
                                         </tr>
                                         <tr>
                                             <td style="width: 200px">SPV ({{ auth()->user()->name }})</td> <input type="hidden" name="spv" value="{{ auth()->user()->name }}">
                                             <td style="width: 20px">:</td>
-                                            <td>
-                                                @currency($komisi['spv']) <input type="hidden" name="nominal_spv" value="{{$komisi['spv']}}">
+                                            <td class="d-flex">
+                                                <input type="number" name="persenspv" id="persenspv"
+                                                class="form-control" style="width: 80px" value="">&nbsp;
+                                            <h3> % </h3> <input type="text" name="spv" id="spv"
+                                            class="form-control" style="width: 145px" value="" style="text-decoration: none" readonly>
                                             </td>
 
                                             <td>Total potongan</td>
                                             <td>:</td>
-                                            <td> @currency($totalfee) </td>
+                                            <td id="totalpotongan"></td>
 
                                         </tr>
                                         <tr>
                                             <td style="width: 200px">Manager</td> <input type="hidden" name="manager" value="Yanto">
                                             <td style="width: 20px">:</td>
-                                            <td>
-                                                @currency($komisi['manager']) <input type="hidden" name="nominal_manager" value="{{$komisi['manager']}}">
+                                            <td class="d-flex">
+                                                <input type="number" name="persenmanager" id="persenmanager"
+                                                class="form-control" style="width: 80px" value="">&nbsp;
+                                            <h3> % </h3> <input type="text" name="manager" id="manager"
+                                            class="form-control" style="width: 145px" value="" style="text-decoration: none" readonly>
                                             </td>
 
                                             <td>Dasar perhitungan</td>
                                             <td>:</td>
-                                            <td> @currency($dasar) </td>
+                                            <td id="dasar"> </td>
                                         </tr>
                                     </tbody>
     @endforeach
@@ -188,8 +197,8 @@
             $("#persenpph").keyup(function() {
                 var harga_jual = parseInt($("#harga_jual").val());
                 var persenpph = parseFloat($("#persenpph").val());
-                var angkapotongan = harga_jual * (persenpph / 100);
-                var pph = rupiah(angkapotongan);
+                var potonganpph = harga_jual * (persenpph / 100);
+                var pph = rupiah(potonganpph);
                 document.getElementById("pph").value = pph;
             });
         });
@@ -197,20 +206,112 @@
         $(document).ready(function() {
             $("#persenbphtb").keyup(function() {
                 var harga_jual = parseInt($("#harga_jual").val());
-                var persenpph = parseInt($("#persenbphtb").val());
-                var angkapotongan = harga_jual * (persenpph / 100);
-                var pph = rupiah(angkapotongan);
+                var persenpph = parseFloat($("#persenbphtb").val());
+                var potonganbphtb = harga_jual * (persenpph / 100);
+                var pph = rupiah(potonganbphtb);
                 document.getElementById("bphtb").value = pph;
             });
         });
 
-        $(document).ready(function() {
+       
+
+        $(document).ready(function(pph) {
             $("#persenpll").keyup(function() {
                 var harga_jual = parseInt($("#harga_jual").val());
-                var persenpph = parseInt($("#persenpll").val());
-                var angkapotongan = harga_jual * (persenpph / 100);
-                var pph = rupiah(angkapotongan);
+                var persenpph = parseFloat($("#persenpll").val());
+                var potonganpll = harga_jual * (persenpph / 100);
+                var pph = rupiah(potonganpll);
+
+                var persenpph = parseFloat($("#persenbphtb").val());
+                var potonganbphtb = harga_jual * (persenpph / 100);
+
+                var persenpph = parseFloat($("#persenpph").val());
+                var potonganpph = harga_jual * (persenpph / 100);
+
+                var total = potonganpll + potonganbphtb + potonganpph;
+                var totalpotongan = rupiah(total);
+                var dasarperhitungan = harga_jual - total;
+                var dasar = rupiah(dasarperhitungan);
+                
                 document.getElementById("pll").value = pph;
+                document.getElementById("totalpotongan").innerHTML = totalpotongan;
+                document.getElementById("dasar").innerHTML = dasar;
+                
+            });
+        });
+
+        $(document).ready(function() {
+            $("#persensales").keyup(function() {
+                var harga_jual = parseInt($("#harga_jual").val());
+                var persenpph = parseFloat($("#persenpll").val());
+                var potonganpll = harga_jual * (persenpph / 100);
+                var pph = rupiah(potonganpll);
+
+                var persenpph = parseFloat($("#persenbphtb").val());
+                var potonganbphtb = harga_jual * (persenpph / 100);
+
+                var persenpph = parseFloat($("#persenpph").val());
+                var potonganpph = harga_jual * (persenpph / 100);
+
+                var total = potonganpll + potonganbphtb + potonganpph;
+                var totalpotongan = rupiah(total);
+                var dasarperhitungan = harga_jual - total;
+            
+                var persensales = parseFloat($("#persensales").val());
+                var potongansales = dasarperhitungan * (persensales / 100);
+                var sales = rupiah(potongansales);
+                
+                document.getElementById("sales").value = sales;
+            });
+        });
+
+        $(document).ready(function() {
+            $("#persenspv").keyup(function() {
+                var harga_jual = parseInt($("#harga_jual").val());
+                var persenpph = parseFloat($("#persenpll").val());
+                var potonganpll = harga_jual * (persenpph / 100);
+                var pph = rupiah(potonganpll);
+
+                var persenpph = parseFloat($("#persenbphtb").val());
+                var potonganbphtb = harga_jual * (persenpph / 100);
+
+                var persenpph = parseFloat($("#persenpph").val());
+                var potonganpph = harga_jual * (persenpph / 100);
+
+                var total = potonganpll + potonganbphtb + potonganpph;
+                var totalpotongan = rupiah(total);
+                var dasarperhitungan = harga_jual - total;
+            
+                var persenspv = parseFloat($("#persenspv").val());
+                var potonganspv = dasarperhitungan * (persenspv / 100);
+                var spv = rupiah(potonganspv);
+                
+                document.getElementById("spv").value = spv;
+            });
+        });
+
+        $(document).ready(function() {
+            $("#persenmanager").keyup(function() {
+                var harga_jual = parseInt($("#harga_jual").val());
+                var persenpph = parseFloat($("#persenpll").val());
+                var potonganpll = harga_jual * (persenpph / 100);
+                var pph = rupiah(potonganpll);
+
+                var persenpph = parseFloat($("#persenbphtb").val());
+                var potonganbphtb = harga_jual * (persenpph / 100);
+
+                var persenpph = parseFloat($("#persenpph").val());
+                var potonganpph = harga_jual * (persenpph / 100);
+
+                var total = potonganpll + potonganbphtb + potonganpph;
+                var totalpotongan = rupiah(total);
+                var dasarperhitungan = harga_jual - total;
+            
+                var persenmanager = parseFloat($("#persenmanager").val());
+                var potonganmanager = dasarperhitungan * (persenmanager / 100);
+                var manager = rupiah(potonganmanager);
+                
+                document.getElementById("manager").value = manager;
             });
         });
 
