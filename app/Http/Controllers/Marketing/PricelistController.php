@@ -26,7 +26,7 @@ class PricelistController extends Controller
             ->groupBy('type')
             ->get();
 
-        $spr = Spr::all();
+        $spr = Spr::orderBy('id_transaksi', 'desc')->get();
 
         // foreach ($spr as $sp) {
         //     $sp->no_transaksi;
@@ -248,8 +248,8 @@ class PricelistController extends Controller
             ->groupBy('type')
             ->get();
 
-        $provinsi = Province::pluck('name', 'id');
-        return view('marketing.pricelist.create', compact('blok', 'id', 'skema', 'provinsi'));
+
+        return view('marketing.pricelist.create', compact('blok', 'id', 'skema'));
     }
 
     /**

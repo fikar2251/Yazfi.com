@@ -26,44 +26,52 @@ class KomisiController extends Controller
     public function show($id)
     {
         $spr = Spr::all();
-        foreach ($spr as $sp) {
-            $hj = $sp->harga_jual;
-        }
+        // foreach ($spr as $sp) {
+        //     $hj = $sp->harga_jual;
+        // }
         $nospr = request()->get('no_transaksi');
-        $sprkom = Komisi::where('no_spr', $nospr)->first();
-        
-        $pph = $hj * (2.5 / 100);
-        $bphtb = $hj * (2.5 / 100);
-        $pll = $hj * (2.5 / 100);
+        if ($nospr) {
 
-        $potongan = [
-            'pph' => $pph,
-            'bphtb' => $bphtb,
-            'pll' => $pll
-        ];
+            $harga = Spr::where('no_transaksi', $nospr)->first();
+            $hj = $harga->harga_jual;
+            $kom = Komisi::where('no_spr', $nospr)->first();
+            if ($kom) {
+                # code...
+                $sprno = $kom->no_spr;
+            }else {
+                $sprno = 'No data';
+            }
 
-        $dasar = $hj - ($pph + $bphtb + $pll);
+            $pph = $hj * (2.5 / 100);
+            $bphtb = $hj * (2.5 / 100);
+            $pll = $hj * (2.5 / 100);
 
-        $totalfee  = $pph + $bphtb + $pll;
+            $potongan = [
+                'pph' => $pph,
+                'bphtb' => $bphtb,
+                'pll' => $pll,
+            ];
 
-        $kmsales = $dasar * (0.1 / 100);
+            $dasar = $hj - ($pph + $bphtb + $pll);
 
-        $kmspv = $dasar * (0.1 / 100);
+            $totalfee = $pph + $bphtb + $pll;
 
-        $kmmanager = $dasar * (0.1 / 100);
+            $kmsales = $dasar * (0.1 / 100);
 
-        $komisi = [
-            'sales' => $kmsales,
-            'spv' => $kmspv,
-            'manager' => $kmmanager
-        ];
+            $kmspv = $dasar * (0.1 / 100);
 
+            $kmmanager = $dasar * (0.1 / 100);
 
-        // dd($sales);
+            $komisi = [
+                'sales' => $kmsales,
+                'spv' => $kmspv,
+                'manager' => $kmmanager,
+            ];
 
-
-
-        return view('supervisor.komisi.show', compact('spr','potongan','dasar', 'totalfee', 'komisi'));
+            return view('supervisor.komisi.show', compact('spr', 'potongan', 'dasar', 'totalfee', 'komisi', 'sprno'));
+        } else {
+            return view('supervisor.komisi.show', compact('spr'));
+        }
     }
 
     public function storeKomisi(Request $request)
@@ -73,11 +81,11 @@ class KomisiController extends Controller
             'no_komisi' => $request->no_komisi,
             'tanggal_komisi' => $tgl,
             'no_spr' => $request->no_transaksi,
-            'sales' => $request->sales,
+            'sales' => $request->nama_sales,
             'nominal_sales' => $request->nominal_sales,
-            'spv' => $request->spv,
+            'spv' => $request->nama_spv,
             'nominal_spv' => $request->nominal_spv,
-            'manager' => $request->manager,
+            'manager' => $request->nama_manager,
             'nominal_manager' => $request->nominal_manager,
             'status_pembayaran' => 'unpaid',
             'is_active' => 1,

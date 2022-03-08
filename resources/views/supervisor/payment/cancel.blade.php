@@ -64,115 +64,118 @@
         </div>
     </form>
 
+
     @if (request()->get('no_transaksi'))
-        @if ($idspr == $idbatal)
-        <h2 class="text-center mt-5"> Anda sudah input SPR ini</h2>
-        @else
-            <form action="{{ route('supervisor.cancel.store') }}" method="POST">
-                @csrf
-                <div class="row">
-                    <div class="col-md-8 container">
-                        <div class="card shadow">
-                            <div class="card-body">
+            @if (request()->get('no_transaksi') == $idbatal)
+                <h2 class="text-center mt-5"> Anda sudah input SPR ini</h2>
+            @else
+                <form action="{{ route('supervisor.cancel.store') }}" method="POST">
+                    @csrf
+                    <div class="row">
+                        <div class="col-md-8 container">
+                            <div class="card shadow">
+                                <div class="card-body">
 
-                                <div class="table-responsive">
-                                    <table class="table table-bordered custom-table table-striped">
-                                        <thead>
-                                            {{-- @foreach ($getSpr as $item) --}}
-                                            <tr>
-                                                <th style="width: 200px">NO</th>
-                                                <th style="width: 20px">:</th>
-                                                <th> {{ $nourut }} <input type="hidden" name="no_transaksi" value="">
-                                                </th>
-
-                                            </tr>
-                                            {{-- @endforeach --}}
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td style="width: 200px">Tanggal Pembayaran</td>
-                                                <td style="width: 20px">:</td>
-                                                <td>{{ Carbon\Carbon::now()->format('d-m-Y') }}</td>
-                                            </tr>
-                                            @foreach ($getSpr as $item)
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered custom-table table-striped">
+                                            <thead>
+                                                {{-- @foreach ($getSpr as $item) --}}
                                                 <tr>
-                                                    <td style="width: 200px">Harga pembelian</td>
+                                                    <th style="width: 200px">NO</th>
+                                                    <th style="width: 20px">:</th>
+                                                    <th> {{ $nourut }} <input type="hidden" name="no_transaksi"
+                                                            value="">
+                                                    </th>
+
+                                                </tr>
+                                                {{-- @endforeach --}}
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td style="width: 200px">Tanggal Pembayaran</td>
+                                                    <td style="width: 20px">:</td>
+                                                    <td>{{ Carbon\Carbon::now()->format('d-m-Y') }}</td>
+                                                </tr>
+                                                @foreach ($getSpr as $item)
+                                                    <tr>
+                                                        <td style="width: 200px">Harga pembelian</td>
+                                                        <td style="width: 20px">:</td>
+                                                        <td>
+                                                            @currency($item->harga_net)
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                                <tr>
+                                                    <td style="width: 200px">Unit</td>
                                                     <td style="width: 20px">:</td>
                                                     <td>
-                                                        @currency($item->harga_net)
+                                                        {{ $item->unit->type }} <input type="hidden" name="id_spr"
+                                                            value="{{ $item->id_transaksi }}">
                                                     </td>
                                                 </tr>
-                                            @endforeach
-                                            <tr>
-                                                <td style="width: 200px">Unit</td>
-                                                <td style="width: 20px">:</td>
-                                                <td>
-                                                    {{ $item->unit->type }} <input type="hidden" name="id_spr"
-                                                        value="{{ $item->id_transaksi }}">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="width: 200px">LT</td>
-                                                <td style="width: 20px">:</td>
-                                                <td>
-                                                    {{ $item->unit->lt }}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="width: 200px">LB</td>
-                                                <td style="width: 20px">:</td>
-                                                <td>
-                                                    {{ $item->unit->lb }}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="width: 200px">Sales</td>
-                                                <td style="width: 20px">:</td>
-                                                <td>
-                                                    {{ $item->user->name }}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="width: 200px">SPV</td>
-                                                <td style="width: 20px">:</td>
-                                                <td>
-                                                    {{ auth()->user()->name }}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="width: 200px">Alasan pembatalan</td>
-                                                <td style="width: 20px">:</td>
-                                                <td>
-                                                    <select name="alasan" id="alasan" class="form-control"
-                                                        style="width: 200px">
-                                                        <option value="">-- Pilih alasan --</option>
-                                                        @foreach ($alasan as $item)
-                                                            <option value="{{ $item->id }}">{{ $item->alasan }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="width: 200px">Keterangan</td>
-                                                <td style="width: 20px">:</td>
-                                                <td>
-                                                    <textarea name="keterangan" id="keterangan" cols="30"
-                                                        rows="5"></textarea>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                                <tr>
+                                                    <td style="width: 200px">LT</td>
+                                                    <td style="width: 20px">:</td>
+                                                    <td>
+                                                        {{ $item->unit->lt }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width: 200px">LB</td>
+                                                    <td style="width: 20px">:</td>
+                                                    <td>
+                                                        {{ $item->unit->lb }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width: 200px">Sales</td>
+                                                    <td style="width: 20px">:</td>
+                                                    <td>
+                                                        {{ $item->user->name }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width: 200px">SPV</td>
+                                                    <td style="width: 20px">:</td>
+                                                    <td>
+                                                        {{ auth()->user()->name }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width: 200px">Alasan pembatalan</td>
+                                                    <td style="width: 20px">:</td>
+                                                    <td>
+                                                        <select name="alasan" id="alasan" class="form-control"
+                                                            style="width: 200px">
+                                                            <option value="">-- Pilih alasan --</option>
+                                                            @foreach ($alasan as $item)
+                                                                <option value="{{ $item->id }}">{{ $item->alasan }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width: 200px">Keterangan</td>
+                                                    <td style="width: 20px">:</td>
+                                                    <td>
+                                                        <textarea name="keterangan" id="keterangan" cols="30"
+                                                            rows="5"></textarea>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="m-t-20 text-center">
-                    <button type="submit" name="submit" class="btn btn-primary submit-btn"><i class="fa fa-save"></i>
-                        Save</button>
-                </div>
-            </form>
+                    <div class="m-t-20 text-center">
+                        <button type="submit" name="submit" class="btn btn-primary submit-btn"><i
+                                class="fa fa-save"></i>
+                            Save</button>
+                    </div>
+                </form>
         @endif
     @endif
 

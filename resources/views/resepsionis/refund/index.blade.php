@@ -66,7 +66,7 @@
     </form>
 
     @if (request()->get('no_pembatalan'))
-        @if ($idbatal == $idbatalrefund)
+        @if (request()->get('no_pembatalan') == $batalid)
             <h2 class="text-center mt-5">Anda sudah input refund ini</h2>
         @else
             <form action="{{ route('resepsionis.refund.store') }}" method="POST">

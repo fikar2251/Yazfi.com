@@ -31,8 +31,7 @@
                     <label for=" tanggal" class="col-sm-1">Tanggal <span>:</span></label>
                     <div class="col-sm-2">
                         <input style="text-decoration: none; border-style: none; background-color: #FAFAFA" type="text"
-                            name="tanggal_komisi" id="tanggal_komisi"
-                            value="{{ Carbon\Carbon::now()->format('d-m-Y') }}">
+                            name="tanggal_komisi" id="tanggal_komisi" value="{{ Carbon\Carbon::now()->format('d-m-Y') }}">
                     </div>
                 </div>
             </div>
@@ -66,126 +65,156 @@
     </form>
 
     @if (request()->get('no_transaksi'))
-        {{-- @if ($idspr == $idbatal)
+        @if (request()->get('no_transaksi') == $sprno)
             <h2 class="text-center mt-5"> Anda sudah input SPR ini</h2>
-        @else --}}
-        <form action="{{ route('supervisor.komisi.storekomisi') }}" method="POST">
-            @csrf
-            <div class="row">
-                <div class="col-lg-12 container">
-                    <div class="card shadow">
-                        <div class="card-body">
+        @else
+            <form action="{{ route('supervisor.komisi.storekomisi') }}" method="POST">
+                @csrf
+                <div class="row">
+                    <div class="col-lg-12 container">
+                        <div class="card shadow">
+                            <div class="card-body">
 
-                            <div class="table-responsive">
-                                <table class="table table-bordered custom-table table-striped">
-                                    <thead>
-                                        @foreach ($spr as $item)
+                                <div class="table-responsive">
+                                    <table class="table table-bordered custom-table table-striped">
+                                        <thead>
+                                            @foreach ($spr as $item)
+                                                <tr>
+                                                    <th style="width: 200px">NO</th>
+                                                    <th style="width: 20px">:</th>
+                                                    <th> {{ $nourut }} <input type="hidden" name="no_komisi"
+                                                            value="{{ $nourut }}">
+                                                        <input type="hidden" name="no_transaksi"
+                                                            value="{{ $item->no_transaksi }}">
+                                                    </th>
+
+                                                    <td>Harga Jual</td>
+                                                    <td>:</td>
+                                                    <td> @currency($item->harga_jual)
+                                                        <input type="hidden" value="{{ $item->harga_jual }}"
+                                                            name="harga_jual" id="harga_jual">
+                                                    </td>
+
+                                                </tr>
+                                                {{-- @endforeach --}}
+                                        </thead>
+                                        <tbody>
                                             <tr>
-                                                <th style="width: 200px">NO</th>
-                                                <th style="width: 20px">:</th>
-                                                <th> {{ $nourut }} <input type="hidden" name="no_komisi" value="{{$nourut}}">
-                                                     <input type="hidden" name="no_transaksi" value="{{$item->no_transaksi}}">
-                                                </th>
+                                                <td style="width: 200px">Tanggal</td>
+                                                <td style="width: 20px">:</td>
+                                                <td>{{ Carbon\Carbon::now()->format('d-m-Y') }}</td>
 
-                                                <td>Harga Jual</td>
+                                                <td>PPH</td>
                                                 <td>:</td>
-                                                <td> @currency($item->harga_jual)
-                                                    <input type="hidden"
-                                                        value="{{ $item->harga_jual }}" name="harga_jual" id="harga_jual">
+                                                <td class="d-flex"> <input type="number" name="persenpph"
+                                                        id="persenpph" class="form-control" style="width: 80px"
+                                                        value="2.5">&nbsp;
+                                                    <h3> % </h3> <input type="text" name="pph" id="pph"
+                                                        class="form-control" style="width: 145px"
+                                                        value="@currency($potongan['pph'])" style="text-decoration: none"
+                                                        readonly>
+                                                </td>
+                                            </tr>
+                                            {{-- @foreach ($getSpr as $item) --}}
+                                            <tr>
+                                                <td style="width: 200px">Project</td>
+                                                <td style="width: 20px">:</td>
+                                                <td>
+                                                    {{ $item->project->nama_project }}
                                                 </td>
 
+                                                <td>BPHTB</td>
+                                                <td>:</td>
+                                                <td class="d-flex"> <input type="number" name="persenbphtb"
+                                                        id="persenbphtb" class="form-control" style="width: 80px"
+                                                        value="2.5">&nbsp;
+                                                    <h3> % </h3> <input type="text" name="bphtb" id="bphtb"
+                                                        class="form-control" style="width: 145px"
+                                                        value="@currency($potongan['bphtb'])" style="text-decoration: none"
+                                                        readonly>
+                                                </td>
                                             </tr>
                                             {{-- @endforeach --}}
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td style="width: 200px">Tanggal</td>
-                                            <td style="width: 20px">:</td>
-                                            <td>{{ Carbon\Carbon::now()->format('d-m-Y') }}</td>
+                                            <tr>
+                                                <td style="width: 200px">Sales ({{ $item->user->name }}) <input
+                                                        type="hidden" name="nama_sales" value="{{ $item->user->name }}">
+                                                </td>
+                                                <td style="width: 20px">:</td>
+                                                <td class="d-flex">
+                                                    <input type="number" name="persensales" id="persensales"
+                                                        class="form-control" style="width: 80px" value="0.1">&nbsp;
+                                                    <h3> % </h3> <input type="text" name="sales" id="sales"
+                                                        class="form-control" style="width: 145px"
+                                                        value="@currency($komisi['sales'])" style="text-decoration: none"
+                                                        readonly>
+                                                    <input type="hidden" id="nominal_sales" name="nominal_sales"
+                                                        value="{{ $komisi['sales'] }}">
+                                                </td>
 
-                                            <td>PPH</td>
-                                            <td>:</td>
-                                            <td class="d-flex">  <input type="number" name="persenpph" id="persenpph"
-                                                class="form-control" style="width: 80px" value="2.5">&nbsp;
-                                            <h3> % </h3> <input type="text" name="pph" id="pph"
-                                            class="form-control" style="width: 145px" value="" style="text-decoration: none" readonly></td>
-                                        </tr>
-                                        {{-- @foreach ($getSpr as $item) --}}
-                                        <tr>
-                                            <td style="width: 200px">Project</td>
-                                            <td style="width: 20px">:</td>
-                                            <td>
-                                                {{ $item->project->nama_project }}
-                                            </td>
+                                                <td>Pengurangan lain-lain</td>
+                                                <td>:</td>
+                                                <td class="d-flex"> <input type="number" name="persenpll"
+                                                        id="persenpll" class="form-control" style="width: 80px"
+                                                        value="2.5">&nbsp;
+                                                    <h3> % </h3> <input type="text" name="pll" id="pll"
+                                                        class="form-control" style="width: 145px"
+                                                        value="@currency($potongan['pll'])" style="text-decoration: none"
+                                                        readonly>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width: 200px">SPV ({{ auth()->user()->name }})</td> <input
+                                                    type="hidden" name="nama_spv" value="{{ auth()->user()->name }}">
+                                                <td style="width: 20px">:</td>
+                                                <td class="d-flex">
+                                                    <input type="number" name="persenspv" id="persenspv"
+                                                        class="form-control" style="width: 80px" value="0.1">&nbsp;
+                                                    <h3> % </h3> <input type="text" name="spv" id="spv"
+                                                        class="form-control" style="width: 145px"
+                                                        value="@currency($komisi['spv'])" style="text-decoration: none"
+                                                        readonly>
+                                                    <input type="hidden" id="nominal_spv" name="nominal_spv"
+                                                        value="{{ $komisi['spv'] }}">
+                                                </td>
 
-                                            <td>BPHTB</td>
-                                            <td>:</td>
-                                            <td class="d-flex"> <input type="number" name="persenbphtb" id="persenbphtb"
-                                                class="form-control" style="width: 80px" value="">&nbsp;
-                                            <h3> % </h3> <input type="text" name="bphtb" id="bphtb"
-                                            class="form-control" style="width: 145px" value="" style="text-decoration: none" readonly> </td>
-                                        </tr>
-                                        {{-- @endforeach --}}
-                                        <tr>
-                                            <td style="width: 200px">Sales ({{ $item->user->name }}) <input type="hidden" name="sales" value="{{ $item->user->name }}"></td>
-                                            <td style="width: 20px">:</td>
-                                            <td class="d-flex">
-                                                <input type="number" name="persensales" id="persensales"
-                                                class="form-control" style="width: 80px" value="">&nbsp;
-                                            <h3> % </h3> <input type="text" name="sales" id="sales"
-                                            class="form-control" style="width: 145px" value="" style="text-decoration: none" readonly>
-                                            </td>
+                                                <td>Total potongan</td>
+                                                <td>:</td>
+                                                <td id="totalpotongan">@currency($totalfee)</td>
 
-                                            <td>Pengurangan lain-lain</td>
-                                            <td>:</td>
-                                            <td class="d-flex"> <input type="number" name="persenpll" id="persenpll"
-                                                class="form-control" style="width: 80px" value="">&nbsp;
-                                            <h3> % </h3> <input type="text" name="pll" id="pll"
-                                            class="form-control" style="width: 145px" value="" style="text-decoration: none" readonly> </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="width: 200px">SPV ({{ auth()->user()->name }})</td> <input type="hidden" name="spv" value="{{ auth()->user()->name }}">
-                                            <td style="width: 20px">:</td>
-                                            <td class="d-flex">
-                                                <input type="number" name="persenspv" id="persenspv"
-                                                class="form-control" style="width: 80px" value="">&nbsp;
-                                            <h3> % </h3> <input type="text" name="spv" id="spv"
-                                            class="form-control" style="width: 145px" value="" style="text-decoration: none" readonly>
-                                            </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width: 200px">Manager</td> <input type="hidden"
+                                                    name="nama_manager" value="Yanto">
+                                                <td style="width: 20px">:</td>
+                                                <td class="d-flex">
+                                                    <input type="number" name="persenmanager" id="persenmanager"
+                                                        class="form-control" style="width: 80px" value="0.1">&nbsp;
+                                                    <h3> % </h3> <input type="text" name="manager" id="manager"
+                                                        class="form-control" style="width: 145px"
+                                                        value="@currency($komisi['manager'])" style="text-decoration: none"
+                                                        readonly>
+                                                    <input type="hidden" id="nominal_manager" name="nominal_manager"
+                                                        value="{{ $komisi['manager'] }}">
+                                                </td>
 
-                                            <td>Total potongan</td>
-                                            <td>:</td>
-                                            <td id="totalpotongan"></td>
-
-                                        </tr>
-                                        <tr>
-                                            <td style="width: 200px">Manager</td> <input type="hidden" name="manager" value="Yanto">
-                                            <td style="width: 20px">:</td>
-                                            <td class="d-flex">
-                                                <input type="number" name="persenmanager" id="persenmanager"
-                                                class="form-control" style="width: 80px" value="">&nbsp;
-                                            <h3> % </h3> <input type="text" name="manager" id="manager"
-                                            class="form-control" style="width: 145px" value="" style="text-decoration: none" readonly>
-                                            </td>
-
-                                            <td>Dasar perhitungan</td>
-                                            <td>:</td>
-                                            <td id="dasar"> </td>
-                                        </tr>
-                                    </tbody>
-    @endforeach
-    </table>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    <div class="m-t-20 text-center">
-        <button type="submit" name="submit" class="btn btn-primary submit-btn"><i class="fa fa-save"></i>
-            Save</button>
-    </div>
-    </form>
-    {{-- @endif --}}
+                                                <td>Dasar perhitungan</td>
+                                                <td>:</td>
+                                                <td id="dasar">@currency($dasar)</td>
+                                            </tr>
+                                        </tbody>
+        @endforeach
+        </table>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        <div class="m-t-20 text-center">
+            <button type="submit" name="submit" class="btn btn-primary submit-btn"><i class="fa fa-save"></i>
+                Save</button>
+        </div>
+        </form>
+    @endif
     @endif
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -262,6 +291,7 @@
                 var sales = rupiah(potongansales);
 
                 document.getElementById("sales").value = sales;
+                document.getElementById("nominal_sales").value = potongansales;
             });
         });
 
@@ -287,6 +317,7 @@
                 var spv = rupiah(potonganspv);
 
                 document.getElementById("spv").value = spv;
+                document.getElementById("nominal_spv").value = potonganspv;
             });
         });
 
@@ -312,6 +343,7 @@
                 var manager = rupiah(potonganmanager);
 
                 document.getElementById("manager").value = manager;
+                document.getElementById("nominal_manager").value = potonganmanager;
             });
         });
 
@@ -321,6 +353,5 @@
                 currency: "IDR"
             }).format(number);
         }
-
     </script>
 @stop

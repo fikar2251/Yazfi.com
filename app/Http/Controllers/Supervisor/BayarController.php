@@ -52,13 +52,13 @@ class BayarController extends Controller
         if (auth()->user()->roles()->first()->name == 'supervisor') {
             $user = User::where('id_roles', 4)->get();
 
-            $batal = Pembatalan::all();
+            $batal = Pembatalan::orderBy('no_pembatalan', 'desc')->get();
             $refund = Refund::all();
             foreach ($refund as $rf) {
 
             }
             $nobatal = $rf->no_pembatalan;
-            $refund1 = Refund::where('no_pembatalan', $nobatal)->get();
+            $refund1 = Refund::where('no_pembatalan', $nobatal)->orderBy('no_refund', 'desc')->get();
             foreach ($refund1 as $rf1) {
 
             }
@@ -77,17 +77,24 @@ class BayarController extends Controller
 
         $alasan = Alasan::all();
         if ($no) {
-            # code...
-            foreach ($getSpr as $sp) {
-                $idspr = $sp->id_transaksi;
+
+            $notf = Spr::select('id_transaksi')->where('no_transaksi', $no)->get();
+            foreach ($notf as $no) {
+                # code...
             }
+            $idtf = $no->id_transaksi;
+            $batal = Pembatalan::select('no_pembatalan')->where('spr_id', $idtf)->first();
+            dd($batal);
 
-            $pembatalan = Pembatalan::where('spr_id', $idspr)->first();
-            $idbatal = $pembatalan->spr_id;
-            return view('supervisor.payment.cancel', compact('getSpr', 'spr', 'alasan', 'idspr', 'idbatal'));
+            foreach ($batal as $bt) {
+                # code...
+            }
+            $idbatal = $bt->spr->no_transaksi;
+
+            return view('supervisor.payment.cancel', compact('getSpr', 'spr', 'alasan', 'idbatal'));
         } else {
+            # code...
             return view('supervisor.payment.cancel', compact('getSpr', 'spr', 'alasan'));
-
         }
 
     }
@@ -112,7 +119,7 @@ class BayarController extends Controller
             'status' => 'pending',
         ]);
 
-        return redirect()->back();
+        return redirect()->route('supervisor.payment.index');
     }
 
     public function nominal(Request $request)

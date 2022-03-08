@@ -27,10 +27,12 @@ class RefundController extends Controller
             $singlebayar = Pembayaran::where('rincian_id', $getrincianid)->first();
 
             $idbatal = $singlebatal->no_pembatalan;
-            $refund = Refund::where('no_pembatalan', $idbatal)->first();
-            $idbatalrefund = $refund->no_pembatalan;
+            $refund = Refund::all();
+            foreach ($refund as $rf) {
+                $batalid = $rf->no_pembatalan;
+            }
 
-            return view('resepsionis.refund.index', compact('batal', 'singlebatal', 'singlebayar', 'idbatal', 'idbatalrefund'));
+            return view('resepsionis.refund.index', compact('batal', 'singlebatal', 'singlebayar', 'idbatal', 'batalid'));
         } else {
             $batal = Pembatalan::all();
 
@@ -41,12 +43,12 @@ class RefundController extends Controller
     }
 
     function list() {
-        $refund = Refund::all();
+        $refund = Refund::orderBy('no_refund', 'desc')->get();
 
         foreach ($refund as $rf) {
             $no = $rf->no_pembatalan;
         }
-        $batal = Pembatalan::where('no_pembatalan', $no)->first();
+        $batal = Pembatalan::where('no_pembatalan', $no)->orderBy('no_pembatalan', 'desc')->first();
 
         return view('resepsionis.refund.list', compact('refund', 'batal'));
     }
