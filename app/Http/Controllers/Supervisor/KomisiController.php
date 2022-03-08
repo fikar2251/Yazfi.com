@@ -68,7 +68,7 @@ class KomisiController extends Controller
                 'manager' => $kmmanager,
             ];
 
-            return view('supervisor.komisi.show', compact('spr', 'potongan', 'dasar', 'totalfee', 'komisi', 'sprno'));
+            return view('supervisor.komisi.show', compact('spr', 'potongan', 'dasar', 'totalfee', 'komisi', 'sprno', 'hj'));
         } else {
             return view('supervisor.komisi.show', compact('spr'));
         }

@@ -78,27 +78,27 @@
                                 <div class="table-responsive">
                                     <table class="table table-bordered custom-table table-striped">
                                         <thead>
-                                            @foreach ($spr as $item)
-                                                <tr>
-                                                    <th style="width: 200px">NO</th>
-                                                    <th style="width: 20px">:</th>
-                                                    <th> {{ $nourut }} <input type="hidden" name="no_komisi"
-                                                            value="{{ $nourut }}">
-                                                        <input type="hidden" name="no_transaksi"
-                                                            value="{{ $item->no_transaksi }}">
-                                                    </th>
 
-                                                    <td>Harga Jual</td>
-                                                    <td>:</td>
-                                                    <td> @currency($item->harga_jual)
-                                                        <input type="hidden" value="{{ $item->harga_jual }}"
-                                                            name="harga_jual" id="harga_jual">
-                                                    </td>
+                                            <tr>
+                                                <th style="width: 200px">NO</th>
+                                                <th style="width: 20px">:</th>
+                                                <th> {{ $nourut }} <input type="hidden" name="no_komisi"
+                                                    value="{{ $nourut }}">
+                                                    <input type="hidden" name="no_transaksi"
+                                                    value="{{ request()->get('no_transaksi') }}">
+                                                </th>
 
-                                                </tr>
-                                                {{-- @endforeach --}}
+                                                <td>Harga Jual</td>
+                                                <td>:</td>
+                                                <td> @currency($hj)
+                                                    <input type="hidden" value="{{ $hj }}"
+                                                    name="harga_jual" id="harga_jual">
+                                                </td>
+
+                                            </tr>
                                         </thead>
                                         <tbody>
+
                                             <tr>
                                                 <td style="width: 200px">Tanggal</td>
                                                 <td style="width: 20px">:</td>
@@ -115,6 +115,7 @@
                                                         readonly>
                                                 </td>
                                             </tr>
+
                                             {{-- @foreach ($getSpr as $item) --}}
                                             <tr>
                                                 <td style="width: 200px">Project</td>
@@ -201,8 +202,8 @@
                                                 <td>:</td>
                                                 <td id="dasar">@currency($dasar)</td>
                                             </tr>
+
                                         </tbody>
-        @endforeach
         </table>
         </div>
         </div>
