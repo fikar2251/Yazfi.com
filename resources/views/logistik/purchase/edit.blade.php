@@ -115,8 +115,9 @@
                             <div class="table-responsive">
                                 <table class="table table-hover border" id="table-show">
                                     <tr class="bg-success">
-                                        <th class="text-light">ITEM</th>
+                                        <th class="text-light">NAM BARANG</th>
                                         <th class="text-light">QTY</th>
+                                        <th class="text-light">UNIT</th>
                                         <th class="text-light">HARGA BELI</th>
                                         <th class="text-light">TOTAL</th>
                                         <th class="text-light">#</th>
@@ -143,6 +144,9 @@
                                             </td>
                                             <td>
                                                 <input type="number" value="{{ $pur->qty }}" name="qty[{{ $loop->iteration }}]" class="form-control qty-{{ $loop->iteration }}" placeholder="0">
+                                            </td>
+                                            <td>
+                                                <input type="text" value="{{ $pur->unit }}" name="unit[{{ $loop->iteration }}]" class="form-control unit-{{ $loop->iteration }}" placeholder="0">
                                             </td>
                                             <td>
                                                 <input type="number" value="{{ $pur->harga_beli }}" name="harga_beli[{{ $loop->iteration }}]" class="form-control harga_beli-{{ $loop->iteration }}" data="{{ $loop->iteration }}" onkeyup="hitung(this), HowAboutIt(this)" placeholder="0">
@@ -186,9 +190,23 @@
                                     </div>
                                 </div>
                                 <div class="col-md-12">
+                                    <label>Include PPN</label>
+                                    <div class="input-group">
+                                        <input type="type" id="PPN" onchange="HowAboutIt()" class="form-control" name="PPN" aria-label="Amount (to the nearest dollar)" value="{{ $purchase->PPN }}">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>PPN 10%</label>
-                                        <input type="text" id="PPN" name="PPN" readonly class="form-control" value="{{ $purchase->PPN }}">
+                                        <input type="hidden" id="tax" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Grand Total</label>
+                                        <input type="text" id="grandtotal" name="grandtotal" readonly class="form-control" value="{{ $purchase->grand_total }}">
                                     </div>
                                 </div>
                             </div>
@@ -237,7 +255,7 @@
         document.getElementById('counter').innerHTML = index
         let template = `
             <tr class="rowComponent">
-                    <td hidden>
+                <td hidden>
                         <input type="hidden" name="barang_id[${index}]" class="barang_id-${index}">
                     </td>
                     <td>
@@ -247,7 +265,10 @@
                         <input type="number" name="qty[${index}]"  class="form-control qty-${index}" placeholder="0">
                     </td>
                     <td>
-                        <input type="number" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), HowAboutIt(this)">
+                        <input type="text" name="unit[${index}]" class="form-control unit-${index}" placeholder="Unit">
+                    </td>
+                    <td>
+                        <input type="text" id="rupiah" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), HowAboutIt(this)">
                     </td>
                     <td>
                         <input type="number" name="total[${index}]" disabled class="form-control total-${index} total-form"  placeholder="0">
@@ -279,7 +300,6 @@
     function remove(q) {
         $(q).parent().parent().remove()
     }
-
     $('.remove').on('click', function() {
         $(this).parent().parent().remove()
     })
@@ -294,6 +314,18 @@
 
     }
 
+    function TotalAbout(e) {
+        let sub_total = document.getElementById('sub_total')
+        let total = 0;
+        let coll = document.querySelectorAll('.total-form')
+        for (let i = 0; i < coll.length; i++) {
+            let ele = coll[i]
+            total += parseInt(ele.value)
+        }
+        sub_total.value = total
+        document.getElementById('grandtotal').value = total;
+    }
+
     function HowAboutIt(e) {
         let sub_total = document.getElementById('sub_total')
         let total = 0;
@@ -303,16 +335,76 @@
             total += parseInt(ele.value)
         }
         sub_total.value = total
-        let tax = (10 / 100) * sub_total.value;
-        let total_all = parseInt(tax);
-        // rupiah()
-        document.getElementById('PPN').value = total_all;
+        let SUB = document.getElementById('sub_total').value;
+        let PPN = document.getElementById('PPN').value;
+        console.log(PPN);
+        let tax = PPN / 100 * sub_total.value;
+        console.log(tax);
+        document.getElementById('tax').value = tax;
+        console.log(SUB);
+        let grand_total = parseInt(SUB) + parseInt(tax);
+        document.getElementById('grandtotal').value = grand_total;
+        console.log(grand_total);
+    }
 
+    var rupiah = document.getElementById('rupiah');
+    if (rupiah) {
+        rupiah.addEventListener('keyup', function(e) {
+            rupiah.value = formatRupiah(this.value, 'Rp. ');
+        });
+    }
+    /* Fungsi formatRupiah */
+    function formatRupiah(angka, prefix) {
+        var number_string = angka.replace(/[^,\d]/g, '').toString(),
+            split = number_string.split(','),
+            sisa = split[0].length % 3,
+            rupiah = split[0].substr(0, sisa),
+            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+        // tambahkan titik jika yang di input sudah menjadi angka satuan ribuan
+        if (ribuan) {
+            separator = sisa ? '.' : '';
+            rupiah += separator + ribuan.join('.');
+        }
+
+        rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+        return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
     }
 
     $(document).ready(function() {
         $('#add').on('click', function() {
             form_dinamic()
+        })
+    })
+
+    $(document).ready(function() {
+        $('.dynamic').change(function() {
+
+            var id = $(this).val();
+            var div = $(this).parent();
+            var op = " ";
+            var alamat = "";
+            var lokasi = "";
+            $.ajax({
+                url: `/logistik/where/project`,
+                method: "get",
+                data: {
+                    'id': id
+
+
+                },
+                success: function(data) {
+                    console.log(data);
+                    op += '<input value="0" disabled>';
+                    for (var i = 0; i < data.length; i++) {
+                        var alamat = data[i].alamat_project;
+                        document.getElementById('lokasi').value = alamat;
+                    };
+                },
+                error: function() {
+
+                }
+            })
         })
     })
 </script>

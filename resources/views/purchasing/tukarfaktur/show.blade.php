@@ -35,12 +35,12 @@
                                 <div class="col-sm-6">
                                     <p style="font-size: 12px">Nama Vendor :
                                         <a>
-                                            <td>{{ $tukar->nama }}</td>
+                                            <td>{{ $tukars->nama }}</td>
                                         </a>
                                     </p style="font-size: 12px">
                                     <p style="font-size: 12px">Nilai Invoice :
                                         <a style="font-size: 12px">
-                                            @currency($tukar->nilai_invoice)
+                                            @currency($tukars->nilai_invoice)
                                         </a>
                                     </p>
                                     <p style="font-size: 12px">Keterangan Pembayaran :
@@ -52,10 +52,10 @@
                                     <div class="form-group">
                                         <p style="font-size: 12px">No Faktur :
                                             <a style="font-size: 12px">
-                                                <td>{{$tukar->no_faktur}}</td>
+                                                <td>{{$tukars->no_faktur}}</td>
                                             </a>
                                         </p>
-                                        <p style="font-size: 12px">Tanggal Tukar Faktur : <a style="font-size: 12px">{{ Carbon\Carbon::parse($tukar->tanggal_tukar_faktur)->format('d/m/Y H:i:s') }}
+                                        <p style="font-size: 12px">Tanggal Tukar Faktur : <a style="font-size: 12px">{{ Carbon\Carbon::parse($tukars->tanggal_tukar_faktur)->format('d/m/Y H:i:s') }}
                                             </a></p>
                                     </div>
                                 </div>
@@ -74,13 +74,13 @@
                                             <th class="text-light"> Catatan</th>
                                         </tr>
                                         <tbody>
-                                            @foreach($purchasing as $barang)
+                                            @foreach(App\TukarFaktur::where('no_faktur', $tukar->no_faktur)->get() as $dokumens)
                                             <tr style="font-size:12px;">
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $barang->nama_dokumen }}</td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
+                                                <td>{{ $dokumens->nama_dokumen }}</td>
+                                                <td>{{ $dokumens->pilihan == 'Y'}}</td>
+                                                <td>{{ $dokumens->pilihan == 'T'}}</td>
+                                                <td>{{ $dokumens->catatan }}</td>
                                             </tr>
                                             @endforeach
                                         </tbody>

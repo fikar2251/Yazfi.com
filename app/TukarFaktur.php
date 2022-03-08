@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class TukarFaktur extends Model
 {
     protected $guarded = ['id'];
+    protected $table = 'tukar_fakturs';
 
     public function barang()
     {
@@ -28,8 +29,8 @@ class TukarFaktur extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-    public function roles()
+    public function dokumen()
     {
-        return $this->hasMany(User::class, 'users.cabang_id');
+        return $this->hasMany(DetailTukarFaktur::class, 'no_faktur');
     }
 }

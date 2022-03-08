@@ -71,7 +71,7 @@
                                         <tr class="bg-success">
                                             <th class="text-light">No.</th>
                                             <th class="text-light">Keterangan</th>
-                                            <th style="width:20%;" class="text-light">Harga Satuan</th>
+                                            <th style="width:15%;" class="text-light">Harga Satuan</th>
                                             <th class="text-light">Kwitansi</th>
                                             <th style="width:5%;" class="text-light">Qty</th>
                                             <th style="width:5%;" class="text-light">Unit</th>

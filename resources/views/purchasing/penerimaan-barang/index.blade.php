@@ -59,19 +59,19 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>
-                            <a href="{{ route('purchasing.penerimaan-barang.show', $penerimaan->id) }}">{{ $penerimaan->no_penerimaan_barang }}</a>
+                            {{ $penerimaan->no_penerimaan_barang }}
                         </td>
                         <td>{{ $penerimaan->admin->name }}</td>
                         <td>{{ Carbon\Carbon::parse($penerimaan->tanggal_penerimaan)->format("d/m/Y H:i:s") }}</td>
                         <td>{{ \App\PenerimaanBarang::where('no_penerimaan_barang', $penerimaan->no_penerimaan_barang)->count() }}</td> 
                         <td>@currency(\App\PenerimaanBarang::where('no_penerimaan_barang', $penerimaan->no_penerimaan_barang)->sum('total'))</td>
-                        <td>{{ $penerimaan->status_barang }}</td>
+                        <td>{{ $penerimaan->purchase->status_barang }}</td>
                         <td>{{ $penerimaan->purchase->status_pembayaran }}</td>
                         <td>
 
                             <a href="{{ route('purchasing.penerimaan-barang.edit', $penerimaan->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
 
-                            <form action="{{ route('purchasing.penerimaan-barang.destroy', $penerimaan->id) }}" method="post" style="display: inline;" class="delete-form">
+                            <form action="{{ route('purchasing.penerimaan-barang.destroy', $penerimaan->id) }}" method="post" style="display: inline;" >
                                 @method('DELETE')
                                 @csrf
                                 <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>

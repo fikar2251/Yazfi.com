@@ -1,8 +1,8 @@
-@extends('layouts.master', ['title' => 'Edit Purchase'])
+@extends('layouts.master', ['title' => 'Edit Pengajuan Dana'])
 @section('content')
 <div class="row">
     <div class="col-sm-5 col-4">
-        <h4 class="page-title">Purchase</h4>
+        <h4 class="page-title">Reinburst</h4>
     </div>
     <div class="col-sm-7 col-8 text-right m-b-30">
         <div class="btn-group btn-group-sm">
@@ -42,7 +42,7 @@
                     </div>
                 </div>
 
-                <form action="{{ route('logistik.purchase.update', $purchase->id) }}" method="post">
+                <form action="{{ route('purchasing.reinburst.update', $reinburst->id) }}" method="post">
                     @method('PATCH')
                     @csrf
                     <div class="row">
@@ -50,13 +50,11 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <label for="supplier">Supplier <span style="color: red">*</span></label>
-                                        <select name="supplier_id" id="supplier" class="form-control select2">
-                                            <option disabled selected>-- Select Supplier --</option>
-                                            @foreach($suppliers as $supplier)
-                                            <option {{ $supplier->id == $purchase->supplier_id ? 'selected' : '' }} value="{{ $supplier->id }}">{{ $supplier->nama }}</option>
-                                            @endforeach
-                                        </select>
+                                        <label for="nama">Nama <span style="color: red">*</span></label>
+                                        <input type="text" value="{{ auth()->user()->name }}" class="form-control" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="hidden" value="{{ auth()->user()->id_jabatans }}" name="id_jabatans" id="id_jabatans" class="form-control" readonly>
                                     </div>
                                 </li>
                             </ul>
@@ -66,10 +64,10 @@
                                 <li>
                                     <div class="form-group">
                                         <label for="cabang">Project <span style="color: red">*</span></label>
-                                        <select name="project_id" id="nama_project" class="form-control select2" data-dependent="alamat_project" required="">
+                                        <select name="id_project" id="id_project" class="form-control" required="">
                                             <option disabled selected>-- Select Project --</option>
-                                            @foreach($project as $projects)
-                                            <option {{ $projects->id == $purchase->project_id ? 'selected' : '' }} value="{{ $projects->id }}">{{ $projects->nama_project }}</option>
+                                            @foreach($projects as $project)
+                                            <option {{ $project->id == $reinburst->id_project ? 'selected' : '' }} value="{{ $project->id }}">{{ $project->nama_project }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -80,34 +78,25 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <label for="invoice">Lokasi <span style="color: red">*</span></label>
-                                        <input type="text" name="lokasi" value="{{ $purchase->lokasi }} " id="lokasi" class="form-control">
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-6 col-sg-4 m-b-4">
-                            <ul class="list-unstyled">
-                                <li>
-                                    <div class="form-group">
-                                        <label for="invoice">No Invoice <span style="color: red">*</span></label>
-                                        <input type="text" name="invoice" id="invoice" class="form-control" value="{{ $purchase->invoice }}">
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-6 col-sg-4 m-b-4">
-                            <ul class="list-unstyled">
-                                <li>
-                                    <div class="form-group">
-                                        <label for="tanggal">Tanggal <span style="color: red">*</span></label>
-                                        <input type="datetime-local" name="tanggal" id="tanggal" value="{{Carbon\Carbon::parse($purchase->created_at)->format('Y-m-d').'T'.Carbon\Carbon::parse($purchase->created_at)->format('H:i:s')}}" class=" form-control">
+                                        <label for="tanggal">Tanggal Reinburst<span style="color: red">*</span></label>
+                                        <input type="datetime-local" name="tanggal_reinburst" id="tanggal_reinburst" value="{{Carbon\Carbon::parse($reinburst->tanggal_reinburst)->format('Y-m-d').'T'.Carbon\Carbon::parse($reinburst->reinburst)->format('H:i:s')}}" class=" form-control">
                                     </div>
                                 </li>
                             </ul>
                         </div>
                     </div>
-
+                    <div class="col-sm-6 col-sg-4 m-b-4">
+                        <ul class="list-unstyled">
+                            <li>
+                                <div class="form-group">
+                                    <label for="file">Lampiran <span style="color: red">*</span></label>
+                                    <input type="file" name="file[]" multiple="true" class="form-control">
+                                    <label for=" lampiran">only pdf and doc</label>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
                     <button type="button" id="add" class="btn btn-primary mb-2">Tambah Row Baru</button>
 
                     <div class="row">
@@ -115,40 +104,32 @@
                             <div class="table-responsive">
                                 <table class="table table-hover border" id="table-show">
                                     <tr class="bg-success">
-                                        <th class="text-light">ITEM</th>
-                                        <th class="text-light">QTY</th>
-                                        <th class="text-light">HARGA BELI</th>
-                                        <th class="text-light">TOTAL</th>
+                                        <th class="text-light">Nota/Bon/Kwitansi</th>
+                                        <th class="text-light">Harga</th>
+                                        <th class="text-light">Catatan</th>
+                                        <th class="text-light">Total</th>
                                         <th class="text-light">#</th>
                                     </tr>
                                     <tbody id="dynamic_field">
                                         <script src="{{ asset('/') }}js/jquery-3.2.1.min.js"></script>
                                         <script src="{{ asset('/') }}js/select2.min.js"></script>
 
-                                        @foreach($purchases as $pur)
+                                        @foreach($peng as $pengs)
                                         <tr class="rowComponent">
                                             <td hidden>
                                                 <input type="hidden" name="barang_id[{{ $loop->iteration }}]" class="barang_id-{{ $loop->iteration }}">
                                             </td>
                                             <td>
-                                                <select name="barang_id[{{ $loop->iteration }}]" id="barang_id{{ $loop->iteration }}" class="form-control select2" data-dependent="alamat_project" required="">
-                                                    <option disabled selected>-- Select Project --</option>
-                                                    @foreach($barangs as $barang)
-                                                    <option {{ $barang->id == $purchase->barang_id ? 'selected' : '' }} value="{{ $barang->id }}">{{ $barang->nama_barang }}</option>
-                                                    @endforeach
-                                                </select>
-                                                <!-- <select required name="barang_id[{{ $loop->iteration }}]" value="{{ $pur->barang_id }}" id="{{ $loop->iteration }}" class="form-control select-{{ $loop->iteration }}">
-                                                </select> -->
-
+                                                <input type="text" value="{{ $pengs->no_kwitansi }}" name="no_kwitansi[{{ $loop->iteration }}]" class="form-control no_kwitansi-{{ $loop->iteration }}" placeholder="Tulis Kwitansi">
                                             </td>
                                             <td>
-                                                <input type="number" value="{{ $pur->qty }}" name="qty[{{ $loop->iteration }}]" class="form-control qty-{{ $loop->iteration }}" placeholder="0">
+                                                <input type="number" value="{{ $pengs->harga_beli }}" name="harga_beli[{{ $loop->iteration }}]" class="form-control harga_beli-{{ $loop->iteration }}" data="{{ $loop->iteration }}" onkeyup="hitung(this), HowAboutIt(this)" placeholder="0">
                                             </td>
                                             <td>
-                                                <input type="number" value="{{ $pur->harga_beli }}" name="harga_beli[{{ $loop->iteration }}]" class="form-control harga_beli-{{ $loop->iteration }}" data="{{ $loop->iteration }}" onkeyup="hitung(this), HowAboutIt(this)" placeholder="0">
+                                                <input type="text" value="{{ $pengs->catatan }}" name="catatan[{{ $loop->iteration }}]" class="form-control catatan-{{ $loop->iteration }}" data="{{ $loop->iteration }}"  placeholder="0">
                                             </td>
                                             <td>
-                                                <input type="number" disabled value="{{ $pur->total }}" name="total[{{ $loop->iteration }}]" class="form-control total-{{ $loop->iteration }} total-form" placeholder="0">
+                                                <input type="number" disabled value="{{ $pengs->total }}" name="total[{{ $loop->iteration }}]" class="form-control total-{{ $loop->iteration }} total-form" placeholder="0">
                                             </td>
                                             <td>
                                                 <button type="button" class="btn btn-danger btn-sm" onclick="remove(this)">Delete</button>
@@ -182,15 +163,15 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Total</label>
-                                        <input type="text" id="sub_total" readonly class="form-control" value="{{ $purchases->sum('total') }}">
+                                        <input type="text" id="sub_total" readonly class="form-control" value="{{ $peng->sum('total') }}">
                                     </div>
                                 </div>
-                                <div class="col-md-12">
+                                {{-- <div class="col-md-12">
                                     <div class="form-group">
                                         <label>PPN 10%</label>
-                                        <input type="text" id="PPN" name="PPN" readonly class="form-control" value="{{ $purchase->PPN }}">
+                                        <input type="text" id="PPN" name="PPN" readonly class="form-control" value="{{ $peng->PPN }}">
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                         <div class="col-sm-1 offset-sm-8">
@@ -287,11 +268,25 @@
     function hitung(e) {
         let harga = e.value
         let attr = $(e).attr('data')
-        let qty = $(`.qty-${attr}`).val()
-        let total = parseInt(harga * qty)
-
+        let beli = $(`.harga_beli-${attr}`).val()
+        console.log(beli);
+        let total = parseInt(beli);
+        console.log(total);
         $(`.total-${attr}`).val(total)
 
+
+    }
+
+    function TotalAbout(e) {
+        let sub_total = document.getElementById('sub_total')
+        let total = 0;
+        let coll = document.querySelectorAll('.total-form')
+        for (let i = 0; i < coll.length; i++) {
+            let ele = coll[i]
+            total += parseInt(ele.value)
+        }
+        sub_total.value = total
+        document.getElementById('grandtotal').value = total;
     }
 
     function HowAboutIt(e) {
@@ -303,11 +298,15 @@
             total += parseInt(ele.value)
         }
         sub_total.value = total
-        let tax = (10 / 100) * sub_total.value;
-        let total_all = parseInt(tax);
-        // rupiah()
-        document.getElementById('PPN').value = total_all;
-
+        let SUB = document.getElementById('sub_total').value;
+        let PPN = document.getElementById('PPN').value;
+        console.log(PPN);
+        let tax = PPN / 100 * sub_total.value;
+        console.log(tax);
+        console.log(SUB);
+        let grand_total = parseInt(SUB) + parseInt(tax);
+        document.getElementById('grandtotal').value = grand_total;
+        console.log(grand_total);
     }
 
     $(document).ready(function() {

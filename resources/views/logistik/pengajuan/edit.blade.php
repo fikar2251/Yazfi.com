@@ -5,11 +5,11 @@
         <h4 class="page-title">Pengajuan Dana</h4>
     </div>
     <div class="col-sm-7 col-8 text-right m-b-30">
-        <div class="btn-group btn-group-sm">
+        {{-- <div class="btn-group btn-group-sm">
             <button class="btn btn-white">CSV</button>
             <button class="btn btn-white">PDF</button>
             <button class="btn btn-white"><i class="fa fa-print fa-lg"></i> Print</button>
-        </div>
+        </div> --}}
     </div>
 </div>
 
@@ -50,12 +50,29 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
+                                        <label for="nama">Nama <span style="color: red">*</span></label>
+                                        <input required="" type="text" value="{{auth()->user()->name}}" readonly
+                                            class="form-control">
+                                        @error('nama')
+                                        <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 col-sg-4 m-b-4">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="form-group">
                                         <label for="perusahaan">Perusahaan <span style="color: red">*</span></label>
                                         <select name="id_perusahaan" id="id_perusahaan" class="form-control select2">
                                             <option disabled selected>-- Select Perusahaan --</option>
                                             @foreach($perusahaans as $perusahaan)
                                             <option {{ $perusahaan->id == $pengajuan->id_perusahaan ? 'selected' : '' }} value="{{ $perusahaan->id }}">{{ $perusahaan->nama_perusahaan }}</option>
                                             @endforeach
+                                            @error('perusahaan')
+                                            <small class="text-danger">{{ $message }}</small>
+                                            @enderror
                                         </select>
                                     </div>
                                 </li>
@@ -65,8 +82,25 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <label for="nomor_pengajuan">No Pengajuan <span style="color: red">*</span></label>
-                                        <input type="text" name="nomor_pengajuan" id="nomor_pengajuan" class="form-control" value="{{ $pengajuan->nomor_pengajuan }}">
+                                        <label for="kwitansi">Nomor Kwitansi <span style="color: red">*</span></label>
+                                        <input required="" type="text" name="no_kwitansi" value="{{ $pengajuans->no_kwitansi }}" class="form-control">
+                                        @error('kwitansi')
+                                        <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="col-sm-6 col-sg-4 m-b-4">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="form-group">
+                                        <label for="tanggal">Tanggal <span style="color: red">*</span></label>
+                                        <input type="datetime-local" name="tanggal_pengajuan" id="tanggal_pengajuan" value="{{Carbon\Carbon::parse($pengajuan->tanggal_pengajuan)->format('Y-m-d').'T'.Carbon\Carbon::parse($pengajuan->tanggal_pengajuan)->format('H:i:s')}}" class=" form-control">
+                                        @error('tanggal')
+                                        <small class="text-danger">{{ $message }}</small>
+                                        @enderror
                                     </div>
                                 </li>
                             </ul>
@@ -75,8 +109,12 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <label for="tanggal">Tanggal <span style="color: red">*</span></label>
-                                        <input type="datetime-local" name="tanggal_pengajuan" id="tanggal_pengajuan" value="{{Carbon\Carbon::parse($pengajuan->tanggal_pengajuan)->format('Y-m-d').'T'.Carbon\Carbon::parse($pengajuan->tanggal_pengajuan)->format('H:i:s')}}" class=" form-control">
+                                        <label for="lampiran">Lampiran <span style="color: red">*</span></label>
+                                        <input type="file" name="file[]" multiple="true" value="{{ $pengajuan->file }}" class="form-control">
+                                        <label for=" lampiran">only pdf and doc</label>
+                                        @error('lampiran')
+                                        <small class="text-danger">{{ $message }}</small>
+                                        @enderror
                                     </div>
                                 </li>
                             </ul>
@@ -90,33 +128,31 @@
                             <div class="table-responsive">
                                 <table class="table table-hover border" id="table-show">
                                     <tr class="bg-success">
-                                        <th class="text-light">ITEM</th>
-                                        <th class="text-light">QTY</th>
-                                        <th class="text-light">HARGA BELI</th>
-                                        <th class="text-light">TOTAL</th>
+                                        <th style="width:300px;" class="text-light">Deskripsi</th>
+                                        <th style="width:80px;" class="text-light">Qty</th>
+                                        <th style="width:110px;" class="text-light">Unit</th>
+                                        <th style="width:180px;" class="text-light">Harga Satuan</th>
+                                        <th style="width:180px;" class="text-light">Total</th>
+                                        <th style="width:180px;" class="text-light">Keterangan</th>
                                         <th class="text-light">#</th>
                                     </tr>
                                     <tbody id="dynamic_field">
                                         <script src="{{ asset('/') }}js/jquery-3.2.1.min.js"></script>
                                         <script src="{{ asset('/') }}js/select2.min.js"></script>
 
-                                        @foreach($peng as $pengs)
+                                        @foreach($rincians as $pengs)
                                         <tr class="rowComponent">
                                             <td hidden>
                                                 <input type="hidden" name="barang_id[{{ $loop->iteration }}]" class="barang_id-{{ $loop->iteration }}">
                                             </td>
                                             <td>
-                                                <select name="barang_id[{{ $loop->iteration }}]" id="barang_id{{ $loop->iteration }}" class="form-control select2" required="">
-                                                    <option disabled selected>-- Select Project --</option>
-                                                    @foreach($barangs as $barang)
-                                                    <option {{ $barang->id == $pengajuan->rincianpengajuan->barang_id  ? 'selected' : '' }} value="{{ $barang->id }}">{{ $barang->nama_barang }}</option>
-                                                    @endforeach
-                                                </select>
-
-
+                                                <input type="text" value="{{ $pengs->barang_id }}" name="barang_id[{{ $loop->iteration }}]" class="form-control barang_id-{{ $loop->iteration }}" placeholder="Nama Barang">
                                             </td>
                                             <td>
                                                 <input type="number" value="{{ $pengs->qty }}" name="qty[{{ $loop->iteration }}]" class="form-control qty-{{ $loop->iteration }}" placeholder="0">
+                                            </td>
+                                            <td>
+                                                <input type="text" value="{{ $pengs->unit }}" name="unit[{{ $loop->iteration }}]" class="form-control unit-{{ $loop->iteration }}" placeholder="0">
                                             </td>
                                             <td>
                                                 <input type="number" value="{{ $pengs->harga_beli }}" name="harga_beli[{{ $loop->iteration }}]" class="form-control harga_beli-{{ $loop->iteration }}" data="{{ $loop->iteration }}" onkeyup="hitung(this), HowAboutIt(this)" placeholder="0">
@@ -125,23 +161,12 @@
                                                 <input type="number" disabled value="{{ $pengs->total }}" name="total[{{ $loop->iteration }}]" class="form-control total-{{ $loop->iteration }} total-form" placeholder="0">
                                             </td>
                                             <td>
+                                                <input type="text" value="{{ $pengs->keterangan }}" name="keterangan[{{ $loop->iteration }}]" class="form-control keterangan-{{ $loop->iteration }}" data="{{ $loop->iteration }}" placeholder="Keterangan">
+                                            </td>
+                                            <td>
                                                 <button type="button" class="btn btn-danger btn-sm" onclick="remove(this)">Delete</button>
                                             </td>
                                         </tr>
-                                        <script>
-                                            $(`.select-{{ $loop->iteration }}`).select2({
-                                                placeholder: 'Select Product',
-                                                ajax: {
-                                                    url: `/admin/where/product`,
-                                                    processResults: function(data) {
-                                                        return {
-                                                            results: data
-                                                        };
-                                                    },
-                                                    cache: true
-                                                }
-                                            });
-                                        </script>
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -156,13 +181,27 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Total</label>
-                                        <input type="text" id="sub_total" readonly class="form-control" value="{{ $pengajuan->rincianpengajuan->sum('total') }}">
+                                        <input type="text" id="sub_total" readonly class="form-control" value="{{ $pengajuans->sum('total') }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <label>Include PPN</label>
+                                    <div class="input-group">
+                                        <input type="type" id="PPN" onchange="HowAboutIt()" class="form-control" name="PPN" aria-label="Amount (to the nearest dollar)" value="{{ $pengajuans->PPN }}">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">%</span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>PPN 10%</label>
-                                        <input type="text" id="PPN" name="PPN" readonly class="form-control" value="{{ $pengajuan->rincianpengajuan->PPN }}">
+                                        <input type="hidden" id="tax" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Grand Total</label>
+                                        <input type="text" id="grandtotal" name="grandtotal" readonly class="form-control" value="{{ $pengajuans->grandtotal }}">
                                     </div>
                                 </div>
                             </div>
@@ -211,20 +250,26 @@
         document.getElementById('counter').innerHTML = index
         let template = `
             <tr class="rowComponent">
-                    <td hidden>
+                <td hidden>
                         <input type="hidden" name="barang_id[${index}]" class="barang_id-${index}">
                     </td>
                     <td>
-                        <select required name="barang_id[${index}]" id="${index}" class="form-control select-${index}"></select>
+                        <input  type="text" name="barang_id[${index}]"  class="form-control barang_id-${index}" placeholder="Tulis Produk">
                     </td>
                     <td>
                         <input type="number" name="qty[${index}]"  class="form-control qty-${index}" placeholder="0">
                     </td>
                     <td>
-                        <input type="number" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), HowAboutIt(this)">
-                    </td>
+                        <input type="text" name="unit[${index}]"  class="form-control unit-${index}" placeholder="Unit">
+                        </td>
+                        <td>
+                                <input type="number" id="rupiah" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), TotalAbout(this)">
+                      </td>
                     <td>
                         <input type="number" name="total[${index}]" disabled class="form-control total-${index} total-form"  placeholder="0">
+                    </td>
+                    <td>
+                        <input type="text" name="keterangan[${index}]"  class="form-control keterangan-${index}" placeholder="Keterangan">
                     </td>
                     <td>
                         <button type="button" class="btn btn-danger btn-sm" onclick="remove(this)">Delete</button>
@@ -253,7 +298,6 @@
     function remove(q) {
         $(q).parent().parent().remove()
     }
-
     $('.remove').on('click', function() {
         $(this).parent().parent().remove()
     })
@@ -268,6 +312,18 @@
 
     }
 
+    function TotalAbout(e) {
+        let sub_total = document.getElementById('sub_total')
+        let total = 0;
+        let coll = document.querySelectorAll('.total-form')
+        for (let i = 0; i < coll.length; i++) {
+            let ele = coll[i]
+            total += parseInt(ele.value)
+        }
+        sub_total.value = total
+        document.getElementById('grandtotal').value = total;
+    }
+
     function HowAboutIt(e) {
         let sub_total = document.getElementById('sub_total')
         let total = 0;
@@ -277,11 +333,40 @@
             total += parseInt(ele.value)
         }
         sub_total.value = total
-        let tax = (10 / 100) * sub_total.value;
-        let total_all = parseInt(tax);
-        // rupiah()
-        document.getElementById('PPN').value = total_all;
+        let SUB = document.getElementById('sub_total').value;
+        let PPN = document.getElementById('PPN').value;
+        console.log(PPN);
+        let tax = PPN / 100 * sub_total.value;
+        console.log(tax);
+        document.getElementById('tax').value = tax;
+        console.log(SUB);
+        let grand_total = parseInt(SUB) + parseInt(tax);
+        document.getElementById('grandtotal').value = grand_total;
+        console.log(grand_total);
+    }
 
+    var rupiah = document.getElementById('rupiah');
+    if (rupiah) {
+        rupiah.addEventListener('keyup', function(e) {
+            rupiah.value = formatRupiah(this.value, 'Rp. ');
+        });
+    }
+    /* Fungsi formatRupiah */
+    function formatRupiah(angka, prefix) {
+        var number_string = angka.replace(/[^,\d]/g, '').toString(),
+            split = number_string.split(','),
+            sisa = split[0].length % 3,
+            rupiah = split[0].substr(0, sisa),
+            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+        // tambahkan titik jika yang di input sudah menjadi angka satuan ribuan
+        if (ribuan) {
+            separator = sisa ? '.' : '';
+            rupiah += separator + ribuan.join('.');
+        }
+
+        rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+        return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
     }
 
     $(document).ready(function() {
@@ -289,5 +374,6 @@
             form_dinamic()
         })
     })
+
 </script>
 @stop

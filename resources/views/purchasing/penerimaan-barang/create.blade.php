@@ -50,17 +50,15 @@
                                             @foreach ($purchase as $item)
                                             @if (request()->get('invoice') == $item->invoice)
                                             <option value="{{ $item->invoice }}" selected>{{ $item->invoice }}</option>
-                                            @else
-                                            <option value="{{ $item->invoice }}">{{ $item->invoice }}</option>
-                                            @endif
-                                            @endforeach
-                                        </select> --}} <input type="text" id="invoice" name="invoice" data-dependent="barang_id"
-                                                class="form-control dynamic_function">
+                                        @else
+                                        <option value="{{ $item->invoice }}">{{ $item->invoice }}</option>
+                                        @endif
+                                        @endforeach
+                                        </select> --}} <input type="text" id="invoice" name="invoice"
+                                            data-dependent="barang_id" class="form-control dynamic_function">
 
                                     </div>
-                                    <div class="form-group">
-                                        <input class="form-control" type="hidden" id="id">
-                                    </div>
+                                    
                                 </li>
                             </ul>
                         </div>
@@ -75,17 +73,19 @@
                         </div>
                     </div>
                 </form>
-                @foreach ($purchase as $item)
-                @endforeach
-                @if (request()->get('invoice') == $item->invoice)
+
+                @foreach($purchase as $item)
+
+                @if (request()->get('invoice') == $item->invoice && $item->status_barang == $item->status_barang =
+                'pending' )
                 <div class="row">
                     <div class="col-sm-6 col-sg-4 m-b-4">
                         <ul class="list-unstyled">
                             <li>
                                 <div class="form-group">
                                     <label for="supplier">Supplier <span style="color: red">*</span></label>
-                                    <input type="text" readonly id="supplier_id" class="form-control"
-                                        value="{{ $item ? $item->supplier->nama : '' }}">
+                                    <input type="text" readonly class="form-control"
+                                        value="{{ $item->supplier->nama }}">
                                 </div>
                             </li>
                         </ul>
@@ -95,8 +95,7 @@
                             <li>
                                 <div class="form-group">
                                     <label for="project">Project <span style="color: red">*</span></label>
-                                    <input type="text" id="project_id"
-                                        value="{{ $item ? $item->project->nama_project : '' }}" class="form-control"
+                                    <input type="text" value="{{$item->project->nama_project  }} " class="form-control"
                                         readonly>
                                 </div>
                             </li>
@@ -107,8 +106,7 @@
                             <li>
                                 <div class="form-group">
                                     <label for="lokasi">Lokasi <span style="color: red">*</span></label>
-                                    <input type="text" id="lokasi" value="{{ $item ? $item->lokasi : '' }}"
-                                        class="form-control" readonly>
+                                    <input type="text" value="{{ $item->lokasi }}" class="form-control" readonly>
                                 </div>
                             </li>
                         </ul>
@@ -118,16 +116,15 @@
                             <li>
                                 <div class="form-group">
                                     <label for="tanggal">Tanggal <span style="color: red">*</span></label>
-                                    <input type="text" id="created_at" value="{{ $item ? $item->created_at : '' }}"
-                                        class="form-control" readonly>
-                                        @error('tanggal')
-                                        <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+                                    <input type="text" value="{{ $item->created_at }}" class="form-control" readonly>
+
                                 </div>
                             </li>
                         </ul>
                     </div>
+
                 </div>
+
                 <form action="{{ route('purchasing.penerimaan-barang.store') }}" method="post">
                     @csrf
                     <div class="row">
@@ -145,33 +142,54 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <input type="hidden" id="no_penerimaan_barang" name="no_penerimaan_barang" readonly class="form-control"
-                                            value="{{ $nourut}}">
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-6 col-sg-4 m-b-4">
-                            <ul class="list-unstyled">
-                                <li>
-                                    <div class="form-group">
-                                        <input type="text" id="id_user" name="id_user" readonly class="form-control"
+                                        <input type="hidden" id="id_user" name="id_user" readonly class="form-control"
                                             value="{{ auth()->user()->id }}">
                                     </div>
                                 </li>
                             </ul>
                         </div>
-                        <div class="col-sm-6 col-sg-4 m-b-4">
-                            <ul class="list-unstyled">
-                                <li>
-                                    <div class="form-group">
-                                        <input type="datetime-local" id="tanggal_penerimaan"name="tanggal_penerimaan"  class="form-control"
-                                            value="">
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
+                        <br>
                         <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-sm-6 col-sg-4 m-b-4">
+                                    <ul class="list-unstyled">
+                                        <li>
+                                            <div class="form-group">
+                                                <h4 class="page-title">Insert Penerimaan Barang</h4>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6 col-sg-4 m-b-4">
+                                    <ul class="list-unstyled">
+                                        <li>
+                                            <div class="form-group">
+                                                <label for="tanggal">No Penerimaan Barang <span
+                                                        style="color: red">*</span></label>
+                                                <input type="text" id="no_penerimaan_barang" name="no_penerimaan_barang"
+                                                    readonly class="form-control" value="{{ $nourut}}">
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-sm-6 col-sg-4 m-b-4">
+                                    <ul class="list-unstyled">
+                                        <li>
+                                            <div class="form-group">
+                                                <label for="tanggal_penerimaan">Tanggal Penerimaan Barang<span
+                                                        style="color: red">*</span></label>
+                                                <input type="datetime-local" id="tanggal_penerimaan"
+                                                    name="tanggal_penerimaan" class="form-control" required="" value="">
+                                                @error('tanggal_penerimaan')
+                                                <small class="text-danger">{{ $message }}</small>
+                                                @enderror
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                             <div class="table-responsive">
                                 <table class="table table-bordered  report">
                                     <tr style="font-size:12px;" class="bg-success">
@@ -192,35 +210,40 @@
                                         @foreach($purchases as $purchase)
                                         <tr class="rowComponent">
                                             <td>
-                                               {{ $loop->iteration }}
+                                                {{ $loop->iteration }}
                                             </td>
                                             <td>
-                                               
-                                                <input type="text" value="{{$purchase->barang->nama_barang}}" class="form-control" disabled>
-                                                <input type="hidden" name="barang_id[{{ $loop->iteration }}]"  data="{{ $loop->iteration }}" id="barang_id" value="{{ $purchase->barang_id }}" class="form-control barang_id-{{ $loop->iteration }}" >
 
-                                                    @error('barang_id')
-                                                    <small class="text-danger">{{ $message }}</small>
-                                                    @enderror
+                                                <input type="text" value="{{$purchase->barang->nama_barang}}"
+                                                    class="form-control" disabled>
+                                                <input type="hidden" name="barang_id[{{ $loop->iteration }}]"
+                                                    data="{{ $loop->iteration }}" id="barang_id"
+                                                    value="{{ $purchase->barang_id }}"
+                                                    class="form-control barang_id-{{ $loop->iteration }}">
+
+                                                @error('barang_id')
+                                                <small class="text-danger">{{ $message }}</small>
+                                                @enderror
                                             </td>
                                             <td>
                                                 <input type="number" name="qty_received[{{ $loop->iteration }}]"
                                                     class="form-control qty_received-{{ $loop->iteration }}"
-                                                    data="{{ $loop->iteration }}" required="" onkeyup ="testNum(this)" id="qty_received"
-                                                    placeholder=" 0">
+                                                    data="{{ $loop->iteration }}" required="" onkeyup="testNum(this)"
+                                                    id="qty_received" placeholder=" 0">
 
-                                                    @error('qty_received')
-                                                    <small class="text-danger">{{ $message }}</small>
-                                                    @enderror
+                                                @error('qty_received')
+                                                <small class="text-danger">{{ $message }}</small>
+                                                @enderror
                                             </td>
                                             <td>
                                                 <input type="number" value="{{ $purchase->qty }}"
-                                                    name="qty[{{ $loop->iteration }}]" data="{{ $loop->iteration }}" id="qty"
-                                                    class="form-control qty-{{ $loop->iteration }}" placeholder="0" required="">
+                                                    name="qty[{{ $loop->iteration }}]" data="{{ $loop->iteration }}"
+                                                    id="qty" class="form-control qty-{{ $loop->iteration }}"
+                                                    placeholder="0" required="">
 
-                                                    @error('qty')
-                                                    <small class="text-danger">{{ $message }}</small>
-                                                    @enderror
+                                                @error('qty')
+                                                <small class="text-danger">{{ $message }}</small>
+                                                @enderror
 
                                             </td>
                                             <td>
@@ -228,11 +251,12 @@
                                                     name="harga_beli[{{ $loop->iteration }}]"
                                                     class="form-control harga_beli-{{ $loop->iteration }}"
                                                     data="{{ $loop->iteration }}"
-                                                    onkeyup="hitung(this), HowAboutIt(this)" placeholder="0" id="harga_beli" required="">
+                                                    onkeyup="hitung(this), HowAboutIt(this)" placeholder="0"
+                                                    id="harga_beli" required="">
 
-                                                    @error('harga_beli')
-                                                    <small class="text-danger">{{ $message }}</small>
-                                                    @enderror
+                                                @error('harga_beli')
+                                                <small class="text-danger">{{ $message }}</small>
+                                                @enderror
                                             </td>
                                             <td>
                                                 <input type="number" value="{{$purchase->total}}"
@@ -240,18 +264,18 @@
                                                     class="form-control total-{{ $loop->iteration }} total-form"
                                                     placeholder="0" required="">
 
-                                                    @error('total')
-                                                    <small class="text-danger">{{ $message }}</small>
-                                                    @enderror
+                                                @error('total')
+                                                <small class="text-danger">{{ $message }}</small>
+                                                @enderror
                                             </td>
                                             <td>
-                                                <input type="text"  value="{{$purchase->status_barang}}"
+                                                <input type="text" value="{{$purchase->status_barang}}"
                                                     name="status_barang[{{ $loop->iteration }}]" id="status_barang"
                                                     class="form-control status_barang-{{ $loop->iteration }} status-form"
                                                     placeholder="Status Barang" required="">
-                                                    @error('status_barang')
-                                                    <small class="text-danger">{{ $message }}</small>
-                                                    @enderror
+                                                @error('status_barang')
+                                                <small class="text-danger">{{ $message }}</small>
+                                                @enderror
                                             </td>
 
                                         </tr>
@@ -266,7 +290,8 @@
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label>Total</label>
-                                                    <input type="text" id="sub_total" name="total" readonly class="form-control"
+                                                    <input type="text" id="sub_total" name="total" readonly
+                                                        class="form-control"
                                                         value="{{ $purchases->sum('grand_total') }}">
                                                 </div>
                                             </div>
@@ -274,9 +299,6 @@
                                     </div>
                                 </div>
                                 <script>
-                              
-                                           
-                                     
                                     function hitung(e) {
                                         let harga = e.value
                                         let attr = $(e).attr('data')
@@ -321,7 +343,7 @@
                                     }
 
                                 </script>
-                             
+
                                 <div class="col-sm-1 offset-sm-8">
                                     <button type="submit" class="btn btn-primary" id="submit">Submit</button>
                                 </div>
@@ -329,15 +351,12 @@
                         </div>
                     </div>
                 </form>
-                @foreach($purchases as $purchase)
-                @endforeach
-                @if ($purchase->id)
                 <div class="row">
                     <div class="col-md-12">
                         <div class="table-responsive">
                             <div class="row">
                                 <div class="col-sm-5 col-4">
-                                    <h4 class="page-title">Riwayat Penerimaan</h4>
+                                    <h4 class="page-title">Riwayat Purchasing Order</h4>
                                 </div>
                             </div>
                             <table class="table table-bordered  report">
@@ -377,10 +396,22 @@
                         </div>
                     </div>
                 </div>
-                @else
-                @endif
-                @else
-                @endif
+
+                @elseif ($item->invoice <= request()->get('invoice'))
+                    <div class="row">
+                        <div class="col-sm-6 col-sg-4 m-b-4">
+                            <div class="alert alert-success alert-dismissible" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                  Data Not Found
+                            </div>
+                        </div>
+
+                    </div>
+
+                    @else
+
+                    @endif
+                    @endforeach
             </div>
         </div>
     </div>
@@ -485,7 +516,6 @@
                 url: `/purchasing/where/penerimaan/search`,
                 method: "get",
                 data: {
-                    'id': id,
                     'invoice': invoice,
                 },
                 success: function (data) {
@@ -495,25 +525,25 @@
                         // console.log(supplier_id);
                         document.getElementById('id').value = id;
 
-                        var supplier_id = data[i].supplier_id;
-                        // console.log(supplier_id);
-                        document.getElementById('supplier_id').value = supplier_id;
-                        document.getElementById('supplier_id').defaultvalue = supplier_id;
+                        // var supplier_id = data[i].supplier_id;
+                        // // console.log(supplier_id);
+                        // document.getElementById('supplier_id').value = supplier_id;
+                        // document.getElementById('supplier_id').defaultvalue = supplier_id;
 
-                        var project_id = data[i].project_id;
-                        // console.log(project_id);
-                        document.getElementById('project_id').value = project_id;
-                        document.getElementById('project_id').defaultvalue = project_id;
+                        // var project_id = data[i].project_id;
+                        // // console.log(project_id);
+                        // document.getElementById('project_id').value = project_id;
+                        // document.getElementById('project_id').defaultvalue = project_id;
 
-                        var lokasi = data[i].lokasi;
-                        // console.log(lokasi);
-                        document.getElementById('lokasi').value = lokasi;
-                        document.getElementById('lokasi').defaultvalue = lokasi;
+                        // var lokasi = data[i].lokasi;
+                        // // console.log(lokasi);
+                        // document.getElementById('lokasi').value = lokasi;
+                        // document.getElementById('lokasi').defaultvalue = lokasi;
 
-                        var created_at = data[i].created_at;
-                        // console.log(created_at);
-                        document.getElementById('created_at').value = created_at;
-                        document.getElementById('created_at').defaultvalue = created_at;
+                        // var created_at = data[i].created_at;
+                        // // console.log(created_at);
+                        // document.getElementById('created_at').value = created_at;
+                        // document.getElementById('created_at').defaultvalue = created_at;
 
 
                     };
@@ -534,11 +564,11 @@
         if (qty > qty_received) {
             result = 'partial'
         } else {
-            result = 'completed';   
-        }  
-        
-         $(`.status_barang-${attr}`).val(result)
-       
+            result = 'completed';
+        }
+
+        $(`.status_barang-${attr}`).val(result)
+
         // console.log(status_barang);
         // let coll = document.querySelectorAll('.status-form')
         // for (let i = 0; i < coll.length; i++) {
@@ -546,15 +576,15 @@
         //     status_barang += parseInt(ele.value)
         // }
         // document.getElementById("status_barang").value = result;
-    
+
         // console.log(status_barang)
-   
-   
+
+
     }
 
     // function tesNumIT(e) {
-       
-      
+
+
     //     let status_barang = 0;
     //     let coll = document.querySelectorAll('.status-form')
     //     for (let i = 0; i < coll.length; i++) {
@@ -562,7 +592,7 @@
     //         status_barang += parseInt(ele.value)
     //     }
     //     let SUB = document.getElementById(status_barang);
-   
+
     // }
 
 </script>

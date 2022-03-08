@@ -4,13 +4,13 @@
     <div class="col-sm-5 col-4">
         <h4 class="page-title">Pengajuan Dana</h4>
     </div>
-    <div class="col-sm-7 col-8 text-right m-b-30">
+    {{-- <div class="col-sm-7 col-8 text-right m-b-30">
         <div class="btn-group btn-group-sm">
             <button class="btn btn-white">CSV</button>
             <button class="btn btn-white">PDF</button>
             <button class="btn btn-white"><i class="fa fa-print fa-lg"></i> Print</button>
         </div>
-    </div>
+    </div> --}}
 </div>
 
 <div class="row">
@@ -42,7 +42,8 @@
                     </div>
                 </div>
 
-                <form action="{{ route('logistik.pengajuan.store') }}" method="post" class="needs-validation" novalidate="" enctype="multipart/form-data">
+                <form action="{{ route('logistik.pengajuan.store') }}" method="post" class="needs-validation"
+                    novalidate="" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="col-sm-6 col-sg-4 m-b-4">
@@ -50,36 +51,27 @@
                                 <li>
                                     <div class="form-group">
                                         <label for="nomor_pengajuan">PD Number <span style="color: red">*</span></label>
-                                        <input required="" type="text" name="nomor_pengajuan" value="{{$nourut}}" id="nomor_pengajuan" class="form-control" readonly>
+                                        <input required="" type="text" name="nomor_pengajuan" value="{{$nourut}}"
+                                            id="nomor_pengajuan" class="form-control" readonly>
                                     </div>
-                                    @error('name')
+                                    @error('nomor_pengajuan')
                                     <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </li>
                             </ul>
                         </div>
-                        <div class="col-sm-6 col-sg-4 m-b-4">
-                            <ul class="list-unstyled">
-                                <li>
-                                    <div class="form-group">
-                                        <label for="nama">Nama <span style="color: red">*</span></label>
-                                        <input required="" type="text" value="{{auth()->user()->name}}" readonly class="form-control">
-                                        @error('nama')
-                                        <small class="text-danger">{{ $message }}</small>
-                                        @enderror
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
+                      
                         <div class="col-sm-6 col-sg-4 m-b-4">
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
                                         <label for="perusahaan">Perusahaan <span style="color: red">*</span></label>
-                                        <select required name="id_perusahaan" id="id_perusahaan" class="form-control select2" required="">
+                                        <select required name="id_perusahaan" id="id_perusahaan"
+                                            class="form-control select2" required="">
                                             <option disabled selected>-- Select Perusahaan --</option>
                                             @foreach($perusahaans as $perusahaan)
-                                            <option value="{{ $perusahaan->id }}">{{ $perusahaan->nama_perusahaan }}</option>
+                                            <option value="{{ $perusahaan->id }}">{{ $perusahaan->nama_perusahaan }}
+                                            </option>
                                             @endforeach
                                             @error('perusahaan')
                                             <small class="text-danger">{{ $message }}</small>
@@ -94,8 +86,22 @@
                                 <li>
                                     <div class="form-group">
                                         <label for="tanggal">Tanggal <span style="color: red">*</span></label>
-                                        <input type="datetime-local" name="tanggal_pengajuan" id="tanggal_pengajuan" class="form-control">
+                                        <input type="datetime-local" name="tanggal" id="tanggal"
+                                            class="form-control">
                                         @error('tanggal')
+                                        <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 col-sg-4 m-b-4">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="form-group">
+                                        <label for="no_kwitansi">Nomor Kwitansi <span style="color: red">*</span></label>
+                                        <input required="" type="text" name="no_kwitansi" class="form-control">
+                                        @error('no_kwitansi')
                                         <small class="text-danger">{{ $message }}</small>
                                         @enderror
                                     </div>
@@ -116,19 +122,18 @@
                                 </li>
                             </ul>
                         </div>
+                        
                         <div class="col-sm-6 col-sg-4 m-b-4">
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <label for="nama">Nomor Kwitansi <span style="color: red">*</span></label>
-                                        <input required="" type="text" name="no_kwitansi" class="form-control">
-                                        @error('nama')
-                                        <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+                                       
+                                        <input type="hidden" value="{{auth()->user()->id}}" name="id_user" readonly class="form-control">
+                                      
                                     </div>
                                 </li>
                             </ul>
-                        </div>
+                        </div>  
 
                     </div>
 
@@ -140,9 +145,9 @@
                                 <table class="table table-hover border" id="table-show">
                                     <tr class="bg-success">
                                         <th style="width:300px;" class="text-light">Deskripsi</th>
-                                        <th style="width:180px;" class="text-light">Harga Satuan</th>
                                         <th style="width:80px;" class="text-light">Qty</th>
                                         <th style="width:110px;" class="text-light">Unit</th>
+                                        <th style="width:180px;" class="text-light">Harga Satuan</th>
                                         <th style="width:180px;" class="text-light">Total</th>
                                         <th style="width:180px;" class="text-light">Keterangan</th>
                                         <th class="text-light">#</th>
@@ -153,35 +158,48 @@
                             </div>
                         </div>
                     </div>
-                    <p class="text-info">*Mohon Untuk Input Dengan Benar dan Berurut : <span class="badge badge-primary" id="counter"></span></p>
+                    <p class="text-info">*Mohon Untuk Input Dengan Benar dan Berurut : <span class="badge badge-primary"
+                            id="counter"></span></p>
                     <div class="row invoice-payment">
                         <div class="col-sm-4 offset-sm-8">
                             <h6>Total due</h6>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Total</label>
+                                        <label for="total">Total</label>
                                         <input type="text" id="sub_total" name="total" readonly class="form-control">
+                                    
+                                        @error('total')
+                                        <small class="text-danger">{{ $message }}</small>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="col-md-12">
-                                    <label>Include PPN</label>
+                                    <label for="PPN">Include PPN</label>
                                     <div class="input-group">
-                                        <input type="type" id="PPN" onchange="HowAboutIt()" class="form-control"  aria-label="Amount (to the nearest dollar)">
+                                        <input type="type" id="PPN" name="PPN"  onchange="HowAboutIt()" class="form-control"
+                                            aria-label="Amount (to the nearest dollar)">
                                         <div class="input-group-append">
                                             <span class="input-group-text">%</span>
                                         </div>
+
+                                        
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <input type="hidden" id="tax" name="PPN" class="form-control">
+                                        <input type="hidden" id="tax"class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Grand Total</label>
-                                        <input type="text" id="grandtotal" name="grandtotal" readonly class="form-control">
+                                        <label for="grandtotal">Grand Total</label>
+                                        <input type="text" id="grandtotal" name="grandtotal" readonly
+                                            class="form-control">
+
+                                            @error('grandtotal')
+                                            <small class="text-danger">{{ $message }}</small>
+                                            @enderror
                                     </div>
                                 </div>
                             </div>
@@ -200,7 +218,7 @@
 </html>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script>
-    var formatter = function(num) {
+    var formatter = function (num) {
         var str = num.toString().replace("", ""),
             parts = false,
             output = [],
@@ -236,13 +254,13 @@
                         <input  type="text" name="barang_id[${index}]"  class="form-control barang_id-${index}" placeholder="Tulis Produk">
                     </td>
                     <td>
-                        <input type="number" id="rupiah" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), TotalAbout(this)">
-                    </td>
-                    <td>
                         <input type="number" name="qty[${index}]"  class="form-control qty-${index}" placeholder="0">
                     </td>
                     <td>
                         <input type="text" name="unit[${index}]"  class="form-control unit-${index}" placeholder="Unit">
+                        </td>
+                    <td>
+                                <input type="number" id="rupiah" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), TotalAbout(this)">
                     </td>
                     <td>
                         <input type="number" name="total[${index}]" disabled class="form-control total-${index} total-form"  placeholder="0">
@@ -260,7 +278,7 @@
             placeholder: 'Select Product',
             ajax: {
                 url: `/admin/where/service`,
-                processResults: function(data) {
+                processResults: function (data) {
                     console.log(data)
                     return {
                         results: data
@@ -274,7 +292,7 @@
     function remove(q) {
         $(q).parent().parent().remove()
     }
-    $('.remove').on('click', function() {
+    $('.remove').on('click', function () {
         $(this).parent().parent().remove()
     })
 
@@ -318,13 +336,13 @@
         document.getElementById('grandtotal').value = grand_total;
         console.log(grand_total);
     }
-    $(document).ready(function() {
-        $('#add').on('click', function() {
+    $(document).ready(function () {
+        $('#add').on('click', function () {
             form_dinamic()
         })
     })
-    $(document).ready(function() {
-        $('.dynamic').change(function() {
+    $(document).ready(function () {
+        $('.dynamic').change(function () {
             var id = $(this).val();
             var div = $(this).parent();
             var op = " ";
@@ -336,7 +354,7 @@
                 data: {
                     'id': id
                 },
-                success: function(data) {
+                success: function (data) {
                     console.log(data);
                     op += '<input value="0" disabled>';
                     for (var i = 0; i < data.length; i++) {
@@ -344,9 +362,10 @@
                         document.getElementById('lokasi').value = alamat;
                     };
                 },
-                error: function() {}
+                error: function () {}
             })
         })
     })
+
 </script>
 @stop

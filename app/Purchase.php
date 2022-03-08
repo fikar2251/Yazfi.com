@@ -34,4 +34,5 @@ class Purchase extends Model
     {
         return $this->hasMany(User::class, 'users.cabang_id');
     }
+
 }

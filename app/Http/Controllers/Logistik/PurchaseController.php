@@ -23,7 +23,9 @@ class PurchaseController extends Controller
             $to = Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s');
             $purchases = Purchase::groupBy('invoice')->whereBetween('created_at', [$from, $to])->get();
         } else {
-            $purchases = Purchase::where('user_id', Auth::user()->id)->get();
+            $purchases = Purchase::where('user_id', Auth::user()->id)
+            ->orderBy('id','desc')
+            ->groupBy('invoice')->get();
         }
 
 
@@ -114,7 +116,7 @@ class PurchaseController extends Controller
         $purchases = Purchase::where('invoice', $purchase->invoice)->get();
         $suppliers = Supplier::get();
         $project = Project::get();
-        $barangs = Barang::where('jenis', 'barang')->get();
+        $barangs = Barang::where('id_jenis', '1')->get();
 
         return view('logistik.purchase.edit', compact('project', 'purchase', 'suppliers', 'barangs', 'purchases'));
     }
@@ -129,15 +131,14 @@ class PurchaseController extends Controller
             'invoice' => 'required',
         ]);
         $barang = $request->input('barang_id', []);
-        $attr = [];
-        // $in = [];
-        $id = [];
-        $purchases = Purchase::where('invoice', $purchase->invoice)->pluck('id');
         // dd("ok");
         // dd($purchases);
-        DB::beginTransaction();
+        // DB::beginTransaction();
         foreach ($barang as $key => $no) {
-            $attr[] = [
+
+            $purchase = Purchase::where('id', $purchase->id)->where('barang_id', $no)->first();
+            // dd($purchase);
+            $purchase->update([
                 'invoice' => $request->invoice,
                 'supplier_id' => $request->supplier_id,
                 'barang_id' => $no,
@@ -148,22 +149,26 @@ class PurchaseController extends Controller
                 'total' => $request->harga_beli[$key] * $request->qty[$key],
                 'user_id' => auth()->user()->id,
                 'created_at' => $request->tanggal,
-                'grand_total' => $request->grand_total,
+                'grand_total' => $request->grandtotal,
                 'status_pembayaran' => 'pending',
                 'status_barang' => 'pending'
-            ];
-            $id[] = $purchases[$key];
+            ]);
+     
+            $inout = Purchase::where('id', $purchase->id)->where('barang_id', $no)->first();
+            $inout->update([
+                'invoice' => $request->invoice,
+                    'supplier_id' => $request->supplier_id,
+                    'barang_id' => $no,
+                    'project_id' => $request->project_id,
+                    'in' => $request->qty[$key],
+                    'user_id' => auth()->user()->id
+            ]);
+        
         }
 
-        // Purchase::updateOrInsert([
-        //     'id' => $id
-        // ], $attr);
+   
 
-        // InOut::insert($in);
-
-        DB::commit();
-
-        return redirect()->route('logistik.purchase.index')->with('success', 'Purchase barang berhasil');
+        return redirect()->route('logistik.purchase.index')->with('success', 'Edit Purchase barang berhasil');
     }
 
     public function destroy(Purchase $purchase)

@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class UnitRumah extends Model
 {
-    protected $guarded = ['id'];
+    protected $table = 'unit_rumahs';
+    protected $guarded = ['id_unit_rumah'];
 
-   public function unit(){
-       
-       return $this->belongsTo(Spr::class,'id_spr');
-   }
+    public function spr()
+    {
+        return $this->hasOne(Spr::class, 'id_unit');
+    }
+   
 }

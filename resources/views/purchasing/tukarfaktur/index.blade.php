@@ -53,7 +53,7 @@
                 </thead>
 
                 <tbody>
-                    @foreach($purchases as $purchase)
+                    @foreach($tukar as $purchase)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>
@@ -61,8 +61,8 @@
                         </td>
                         <td>{{ Carbon\Carbon::parse($purchase->tanggal_tukar_faktur)->format("d/m/Y H:i:s") }}</td>
                         <td>{{ $purchase->no_po_vendor }}</td>
-                        <td>{{ $purchase->nilai_invoice }}</td>
-                        <td>{{ $purchase->supplier->nama }}</td>
+                        <td>@currency($purchase->nilai_invoice)</td>
+                        <td>{{ $purchase->nama }}</td>
                         <td>
 
                             <!-- <a href="{{ route('logistik.purchase.edit', $purchase->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a> -->
@@ -76,6 +76,14 @@
                     </tr>
                     @endforeach
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td>Total : </td>
+                        <td colspan="3"></td>
+                        <td>@currency( request('from') && request('to') ? \App\TukarFaktur::whereBetween('tanggal_tukar_faktur', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->sum('nilai_invoice') : \App\TukarFaktur::sum('nilai_invoice') )</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>

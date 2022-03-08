@@ -28,9 +28,9 @@ class PembatalanUnitController extends Controller
         $unit = $post->spr->unit->id_unit_rumah;
         $post->update(['status' => 'Approval']);
         $unit_rumah = DB::table('unit_rumahs')
-        ->leftJoin('sprs','unit_rumahs.id_unit_rumah','=','sprs.id_unit')
-        ->select('unit_rumahs.id_unit_rumah','sprs.id_unit')
-        ->where('unit_rumahs.id_unit_rumah', $unit);
+        ->leftJoin('sprs','unit_rumahs.id','=','sprs.id_unit')
+        ->select('unit_rumahs.id','sprs.id_unit')
+        ->where('unit_rumahs.id', $unit);
         $unit_rumah->update(['status_penjualan' => 'Available']);
 
         return redirect()->route('admin.pembatalans.index')->with('success', 'Status has been updated');
@@ -50,8 +50,8 @@ class PembatalanUnitController extends Controller
         // $pembatalans = PembatalanUnit::with('no_pembatalan', 'id_spr','alasan_id')->get();
 
         $pembatalans = DB:: table('pembatalan_units')
-        ->leftjoin('sprs','pembatalan_units.id_spr','=','sprs.id_transaksi')
-        ->leftjoin('unit_rumahs','sprs.id_unit','=','unit_rumahs.id_unit_rumah')
+        ->leftjoin('sprs','pembatalan_units.spr_id','=','sprs.id')
+        ->leftjoin('unit_rumahs','sprs.id_unit','=','unit_rumahs.id')
         ->leftjoin('users','sprs.id_sales','=','users.id')
         ->select('pembatalan_units.tanggal','sprs.no_transaksi','users.name','sprs.status_approval','sprs.id_sales','pembatalan_units.no_pembatalan','pembatalan_units.id','pembatalan_units.diajukan','unit_rumahs.type','sprs.no_transaksi','sprs.harga_net','sprs.status_dp','sprs.status_booking','sprs.nama','pembatalan_units.status')
         ->get();

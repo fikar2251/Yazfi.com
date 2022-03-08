@@ -10,18 +10,13 @@ use Spatie\Permission\Traits\HasRoles;
 class Pengajuan extends Model
 {
 
-    use HasRoles;
+
     protected $guarded = ['id'];
 
     public function barang()
     {
         return $this->belongsTo(Barang::class, 'barang_id');
     }
-    public function rincianpengajuan()
-    {
-        return $this->belongsTo(RincianPengajuan::class, 'id');
-    }
-
     public function project()
     {
         return $this->belongsTo(Project::class, 'id');

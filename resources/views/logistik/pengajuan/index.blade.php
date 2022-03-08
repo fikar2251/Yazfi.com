@@ -58,13 +58,13 @@
 
                 <tbody>
                     @foreach($pengajuans as $peng)
-                    <tr>
+                    <tr style="font-size:13px;">
                         <td>{{ $loop->iteration }}</td>
                         <td><a href="{{ route('logistik.pengajuan.show', $peng->id) }}">{{ $peng->nomor_pengajuan }}</a>
                         </td>
 
                         <td>{{$peng->perusahaan->nama_perusahaan }}</td>
-                        <td>{{ Carbon\Carbon::parse($peng->tanggal_pengajuan)->format("d/m/Y H:i:s") }}</td>
+                        <td>{{ Carbon\Carbon::parse($peng->tanggal_pengajuan)->format("d/m/Y") }}</td>
                         <td>{{ $peng->roles->name }}</td>
                         <td>{{ $peng->admin->name }}</td>
                         <td>{{ \App\RincianPengajuan::where('nomor_pengajuan', $peng->nomor_pengajuan)->count() }}</td>
@@ -74,7 +74,7 @@
 
                         <td>
 
-                            <!-- <a href="{{ route('logistik.pengajuan.edit', $peng->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a> -->
+                        <a href="{{ route('logistik.pengajuan.edit', $peng->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
 
                             <form action="{{ route('logistik.pengajuan.destroy', $peng->id) }}" method="post"
                                 style="display: inline;" class="delete-form">
@@ -90,7 +90,7 @@
                     <tr>
                         <td>Total : </td>
                         <td colspan="5"></td>
-                        <td>{{ request('from') && request('to') ? \App\Pengajuan::whereBetween('tanggal_pengajuan', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->count() : \App\Pengajuan::where('id_user',Auth()->user()->id)->count() }}
+                        <td>{{ request('from') && request('to') ? \App\RincianPengajuan::whereBetween('tanggal_pengajuan', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->count() : \App\RincianPengajuan::count() }}
                         </td>
                         <td>@currency( request('from') && request('to') ? \App\RincianPengajuan::whereBetween('tanggal_pengajuan', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->sum('total') : \App\RincianPengajuan::sum('total') )</td>
                         <td>&nbsp;</td>

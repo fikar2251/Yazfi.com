@@ -135,14 +135,14 @@
                                             <tr style="font-size:12px;">
                                                 <td></td>
                                                 <td colspan="4"></td>
-                                                <td>PPN 10% </td>
-                                                <td><b>@currency($purchase->PPN)</b></td>
+                                                <td>PPN</td>
+                                                <td><b>{{ $purchase->PPN}}%</b></td>
                                             </tr>
                                             <tr style="font-size:12px;">
                                                 <td></td>
                                                 <td colspan="4"></td>
                                                 <td><strong>TOTAL<strong> </td>
-                                                <td><b>@currency($total + $purchase->PPN)</b></td>
+                                                <td><b>@currency($purchase->grand_total)</b></td>
                                             </tr>
                                             <tr style="font-size:12px;">
                                                 <td rowspan="20"></td>

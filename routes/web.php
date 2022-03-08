@@ -124,12 +124,10 @@ Route::middleware('auth')->group(function () {
             Route::get('ruangan/{cabang:id}/create', 'RuanganController@create');
             Route::resource('ruangan', 'RuanganController');
 
-            // Route Appointment
-            Route::post('appointments/voucher', 'AppointmentController@voucher')->name('appointments.voucher');
-            Route::post('appointments/bayar', 'AppointmentController@bayar')->name('appointments.bayar');
-            Route::get('appointments/print/{id}', 'AppointmentController@print')->name('appointments.print');
-            Route::get('appointments/ajax', 'AppointmentController@ajax');
-            Route::resource('appointments', 'AppointmentController');
+            // Route customer
+        
+            Route::get('customer/ajax', 'CustomerController@ajax');
+            Route::resource('customer', 'CustomerController');
 
             // Route Report
             Route::get('report/pasien', 'ReportController@pasien')->name('report.pasien');
@@ -332,10 +330,11 @@ Route::middleware('auth')->group(function () {
             //Route Roles
             Route::get('/where/product', 'TukarFakturController@WhereProduct');
             Route::get('/where/project', 'TukarFakturController@whereProject');
-            Route::get('/where/search', 'TukarFakturController@search');
+            Route::get('/where/tukar/search', 'TukarFakturController@search');
             Route::resource('tukarfaktur', 'TukarFakturController');
             Route::resource('reinburst', 'ReinburstController');
             Route::resource('penerimaan-barang', 'PenerimaanBarangController');
+            Route::post('penerimaan-barang/{id}/update', 'PenerimaanBarangController@update');
             Route::get('/where/penerimaan/search', 'PenerimaanBarangController@search');
             Route::resource('listpurchase', 'ListPurchsaController');
             Route::resource('permissions', 'PermissionController');

@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\DB;
 
 class ReinburstController extends Controller
 {
-    public function index(Reinburst $reinburst)
+    public function index(Reinburst $reinburst,Request $request)
     {
         if (request('from') && request('to')) {
             $from = Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s');
@@ -25,10 +25,13 @@ class ReinburstController extends Controller
             $reinbursts = Reinburst::groupBy('nomor_reinburst')->whereBetween('tanggal_reinburst', [$from, $to])->get();
         } else {
             $reinbursts = DB::table('reinbursts')
-            ->leftJoin('rincian_reinbursts','reinbursts.id','=','rincian_reinbursts.id_reinburst')
-            ->select('reinbursts.id_user','reinbursts.tanggal_reinburst','reinbursts.nomor_reinburst','reinbursts.status_hrd','rincian_reinbursts.id_reinburst','rincian_reinbursts.total','reinbursts.status_pembayaran','reinbursts.id')
+            ->leftJoin('rincian_reinbursts','reinbursts.nomor_reinburst','=','rincian_reinbursts.nomor_reinburst')
+            ->select('reinbursts.id_user','reinbursts.id','reinbursts.tanggal_reinburst','reinbursts.nomor_reinburst','reinbursts.status_hrd','rincian_reinbursts.nomor_reinburst','rincian_reinbursts.total','reinbursts.status_pembayaran','reinbursts.id')
+            ->orderBy('reinbursts.id','desc')
+            ->groupBy('reinbursts.nomor_reinburst')
             ->where('reinbursts.id_user',auth()->user()->id)
             ->get();
+            // dd($reinburst);
         }
         return view('purchasing.reinburst.index', compact('reinbursts'));
     }
@@ -80,15 +83,12 @@ class ReinburstController extends Controller
                     'id_roles' => auth()->user()->id_roles
                 ];
                 foreach ($barang as $key => $no) {
-                    $reinburst = \App\Reinburst::max('id');
-                    $id = $reinburst + 1;
-             
                     $in[] = [
                         'no_kwitansi' => $request->no_kwitansi[$key],
                         'harga_beli' => $request->harga_beli[$key],
                         'catatan' => $request->catatan[$key],
                         'total' => $request->harga_beli[$key],
-                        'id_reinburst' => $id,
+                        'nomor_reinburst' => $request->nomor_reinburst,
                    
                     ];
                 }
@@ -102,12 +102,8 @@ class ReinburstController extends Controller
 
     public function show(Reinburst $reinburst)
     {   $reinbursts = Reinburst::where('id', $reinburst->id)->first();
-        $rincianreinbursts = DB::table('reinbursts')
-        ->leftJoin('rincian_reinbursts','reinbursts.id','=','rincian_reinbursts.id_reinburst')
-        ->select('rincian_reinbursts.no_kwitansi','rincian_reinbursts.total','rincian_reinbursts.harga_beli','rincian_reinbursts.catatan')
-        ->get();
-
-        return view('purchasing.reinburst.show', compact('reinbursts','rincianreinbursts'));
+        $rincianreinbursts = RincianReinburst::where('nomor_reinburst', $reinburst->nomor_reinburst)->get();
+        return view('purchasing.reinburst.show', compact('reinbursts','rincianreinbursts','reinburst'));
     }
 
     public function edit(Reinburst $reinburst)
@@ -196,15 +192,19 @@ class ReinburstController extends Controller
         return redirect()->route('purchasing.reinburst.index')->with('success', 'Pengajuan barang berhasil');
     }
 
-    public function destroy($id)
+    public function destroy(Reinburst $reinburst)
     {
-        
-            $post = Reinburst::findOrFail($id);
-          
-            $rincian = $post->id;
-            // dd($rincian);
-            RincianReinburst::where('id_reinburst', $rincian)->delete();
-            Reinburst::where('id', $id)->delete();
+        $reinbursts = Reinburst::where('nomor_reinburst', $reinburst->nomor_reinburst)->get();
+
+        foreach ($reinbursts as $pur) {
+            RincianReinburst::where('nomor_reinburst', $pur->nomor_reinburst)->delete();
+            // $harga = HargaProdukCabang::where('barang_id', $pur->barang_id)->where('project_id', auth()->user()->project_id)->first();
+
+            // // $harga->update([
+            // //     'qty' => $harga->qty - $pur->qty
+            // // ]);
+            $pur->delete();
+        }
           
 
         return redirect()->route('purchasing.reinburst.index')->with('success', 'Purchase barang didelete');

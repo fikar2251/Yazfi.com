@@ -13,6 +13,7 @@ class PenerimaanBarang extends Model
     use HasRoles;
     protected $guarded = ['id'];
     Protected $primaryKey = "id";
+    
     public function barang()
     {
         return $this->belongsTo(Barang::class, 'barang_id');
@@ -20,7 +21,7 @@ class PenerimaanBarang extends Model
 
     public function supplier()
     {
-        return $this->belongsTo(Supplier::class, 'supplier_id');
+        return $this->belongsTo(Supplier::class, 'id_supplier');
     }
     public function project()
     {
@@ -43,4 +44,6 @@ class PenerimaanBarang extends Model
     {
         return $this->hasMany(User::class, 'users.cabang_id');
     }
+
+     
 }
