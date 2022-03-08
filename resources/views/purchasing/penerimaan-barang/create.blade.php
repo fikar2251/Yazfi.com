@@ -77,7 +77,7 @@
                 @foreach($purchase as $item)
 
                 @if (request()->get('invoice') == $item->invoice && $item->status_barang == $item->status_barang =
-                'pending' )
+                'pending' && $item->barang_id )
                 <div class="row">
                     <div class="col-sm-6 col-sg-4 m-b-4">
                         <ul class="list-unstyled">
@@ -132,8 +132,9 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <input type="hidden" readonly id="id" name="id_purchase" class="form-control"
-                                            value="{{ $item ? $item->id : '' }}">
+                                        <label for="tanggal">No Purchase Order <span style="color: red">*</span></label>
+                                        <input type="text" readonly id="no_po" name="no_po" class="form-control"
+                                            value="{{ $item ? $item->invoice : '' }}">
                                     </div>
                                 </li>
                             </ul>
@@ -142,8 +143,19 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <input type="hidden" id="id_user" name="id_user" readonly class="form-control"
-                                            value="{{ auth()->user()->id }}">
+                                        <label for="tanggal">Di ajukan <span style="color: red">*</span></label>
+                                        <input type="text"readonly class="form-control"
+                                            value="{{$item ? $item->admin->name : ''}}">
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 col-sg-4 m-b-4">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="form-group">
+                                        <input type="hidden"readonly name="id_user" id="id_user"class="form-control"
+                                            value="{{auth()->user()->id}}">
                                     </div>
                                 </li>
                             </ul>
@@ -292,7 +304,7 @@
                                                     <label>Total</label>
                                                     <input type="text" id="sub_total" name="total" readonly
                                                         class="form-control"
-                                                        value="{{ $purchases->sum('grand_total') }}">
+                                                        value="{{ $purchases->sum('total') }}">
                                                 </div>
                                             </div>
                                         </div>

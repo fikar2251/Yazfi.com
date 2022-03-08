@@ -73,7 +73,7 @@ Route::middleware('auth')->group(function () {
             Route::resource('product', 'BarangController');
  // Route Master Kategori Barang
 
-            Route::resource('kategoribarang', 'KategoriBarangController');
+            Route::resource('kategori', 'KategoriController');
         
             // Route Master Service
             Route::resource('service', 'ServiceController');

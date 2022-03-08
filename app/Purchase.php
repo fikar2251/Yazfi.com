@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use JetBrains\PhpStorm\Pure;
 
 class Purchase extends Model
 {
@@ -33,6 +34,10 @@ class Purchase extends Model
     public function roles()
     {
         return $this->hasMany(User::class, 'users.cabang_id');
+    }
+    public function purchase()
+    {
+        return $this->belongsTo(PenerimaanBarang::class, 'no_po');
     }
 
 }

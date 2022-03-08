@@ -45,20 +45,23 @@
                         <th>No</th>
                         <th>Nomor Reinburst</th>
                         <th>Tanggal Reinburst</th>
-                        <th>Jumlah</th>
+                        <th>Total Item</th>
+                        <th>Total Pembelian</th>
                         <th>Status Hrd</th>
                         <th>Status Pembayaran</th>
                         <th>Action</th>
                     </tr>
                 </thead>
-
+                @foreach($reinbursts as $reinburst)
                 <tbody>
-                    @foreach($reinbursts as $reinburst)
+                  
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td><a href="{{ route('admin.reinburst.show', $reinburst->id) }}">{{ $reinburst->nomor_reinburst }}</a></td>
                         <td>{{ Carbon\Carbon::parse($reinburst->tanggal_reinburst)->format("d/m/Y H:i:s") }}</td>
-                        <td>@currency($reinburst->grandtotal)</td>
+                        <td>{{ \App\Reinburst::where('nomor_reinburst', $reinburst->nomor_reinburst)->count() }}</td>
+                        <td>@currency(\App\RincianReinburst::where('nomor_reinburst',
+                            $reinburst->nomor_reinburst)->sum('total'))</td>
                         <td>{{ $reinburst->status_hrd }}</td>
                         <td>{{ $reinburst->status_pembayaran }}</td>
                         <td>
@@ -74,6 +77,15 @@
                     </tr>
                     @endforeach
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td>Total : </td>
+                        <td colspan="2"></td>
+                        <td>{{ request('from') && request('to') ? \App\Reinburst::whereBetween('tanggal_reinburst', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->count() : \App\Reinburst::count() }}</td>
+                        <td>@currency( request('from') && request('to') ? \App\RincianReinburst::whereBetween('created_at', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->sum('total') : \App\RincianReinburst::sum('total') )</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>

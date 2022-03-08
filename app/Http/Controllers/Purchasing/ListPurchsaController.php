@@ -18,7 +18,8 @@ class ListPurchsaController extends Controller
 {
     public function index(Request $request)
     {
-        $purchases = Purchase::groupBy('invoice')->get();
+        $purchases = Purchase::groupBy('invoice')
+        ->orderBy('id','desc')->get();
         return view('purchasing.listpurchase.index', compact('purchases'));
     }
 

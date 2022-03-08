@@ -7,7 +7,7 @@
     </div>
     <div class="col-sm-8 text-right m-b-20">
         @can('product-create')
-        <a href="{{ route('admin.kategoribarang.create') }}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Kategori Barang</a>
+        <a href="{{ route('admin.kategori.create') }}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Kategori Barang</a>
         @endcan
     </div>
 </div>
@@ -37,10 +37,10 @@
                         <td>{{ $kategori->kategori->count()}}</td>
                         <td>
                             @can('product-edit')
-                            <a href="{{ route('admin.kategoribarang.edit', $kategori->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
+                            <a href="{{ route('admin.kategori.edit', $kategori->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
                             @endcan
                             @can('product-delete')
-                            <form action="{{ route('admin.kategoribarang.destroy', $kategori->id) }}" method="post" style="display: inline;" class="delete-form">
+                            <form action="{{ route('admin.kategori.destroy', $kategori->id) }}" method="post" style="display: inline;" class="delete-form">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-danger delete"><i class="fa fa-trash"></i></button>

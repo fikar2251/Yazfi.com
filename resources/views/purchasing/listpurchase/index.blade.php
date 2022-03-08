@@ -17,6 +17,7 @@
                         <th>Invoice</th>
                         <th>Di Ajukan</th>
                         <th>Tanggal</th>
+                        <th>Total Item</th>
                         <th>Jumlah</th>
                         <th>Status Barang</th>
                         <th>Status Pembayaran</th>
@@ -28,10 +29,11 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>
-                            {{ $purchase->invoice }}
+                            <a href="{{ route('purchasing.listpurchase.show', $purchase->id) }}">{{ $purchase->invoice }}</a>
                         </td>
                         <td>{{ $purchase->admin->name }}</td>
                         <td>{{ Carbon\Carbon::parse($purchase->created_at)->format("d/m/Y H:i:s") }}</td>
+                        <td>{{ \App\Purchase::where('invoice', $purchase->invoice)->count() }}</td> 
                         <td>@currency(\App\Purchase::where('invoice', $purchase->invoice)->sum('total'))</td>
                         <td>{{ $purchase->status_barang }}</td>
                         <td>{{ $purchase->status_pembayaran }}</td>

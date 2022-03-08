@@ -6,16 +6,21 @@ use Illuminate\Support\Facades\DB;
 use App\Booking;
 use App\Customer;
 use App\Holidays;
+use App\Purchase;
+use App\Reinburst;
 use App\Tindakan;
+use App\Spr;
+use App\TukarFaktur;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         // $macAddr = substr(exec('getmac'), 0, 17);
 
@@ -43,16 +48,14 @@ class DashboardController extends Controller
         $tindakan =  Tindakan::with('booking')->where('status', 0)->count();
 
         if (auth()->user()->hasRole('super-admin')) {
-            $pasien = Customer::count();
-            $dokter = User::role('dokter')->count();
-            $appointments =  Booking::count();
-            $tindakan =  Tindakan::with('booking')->where('status', 0)->count();
+            $customer = Spr::count();
+            $reinburst = Reinburst::where('id_user','1')->count();
+            $warehouse =  Booking::count();
 
             return view('dashboard.index', [
-                'pasien' => $pasien,
-                'dokter' => $dokter,
-                'appointments' => $appointments,
-                'tindakan' => $tindakan,
+                'customer' => $customer,
+                'reinburst' => $reinburst,
+                'warehouse' => $warehouse,
             ]);
         }
 
@@ -73,25 +76,17 @@ class DashboardController extends Controller
             return view('dashboard.index', compact('jadwal', 'datang', 'periksa', 'pasien', 'appointments', 'tindakan', 'dokter'));
         }
 
-        if (auth()->user()->hasRole('dokter')) {
+        if (auth()->user()->hasRole('purchasing')) {
 
             $now = Carbon::now()->format('Y-m-d');
-            $total_pasien = Customer::where('cabang_id', auth()->user()->cabang_id)->get()->count();
-
-            $finish = Booking::where('dokter_id', auth()->user()->id)->whereDate('tanggal_status', $now)->where('status_kedatangan_id', 4)->orderBy('jam_status', 'asc')->get();
-            $pending = Booking::where('dokter_id', auth()->user()->id)->whereDate('tanggal_status', $now)->where('status_kedatangan_id', 3)->orderBy('jam_status', 'asc')->get();
-            $appointment_count = Booking::where('dokter_id', auth()->user()->id)->whereDate('tanggal_status', $now)->get()->count();
-            // $appointment_pending = Booking::where('dokter_id', auth()->user()->id)->whereDate('tanggal_status', $now)->where('status_kedatangan_id','!=',3)->get()->count();
-            $appointment_pending = Tindakan::whereHas('booking', function ($qr) use ($now) {
-                return $qr->where('dokter_id', auth()->user()->id)->whereDate('tanggal_status', $now)->where('status_kedatangan_id', '!=', 4);
-            })->where('status', 0)->get()->count();
-
-            return view('dashboard.index', [
-                'total_pasien' => $total_pasien,
-                'finish' => $finish,
-                'pending' => $pending,
-                'appointment_count' => $appointment_count,
-                'appointment_pending' => $appointment_pending
+            $tukar_faktur_count = TukarFaktur::where('id_user', auth()->user()->id)->get()->count();
+            $reinburst_pending = Reinburst::where('id_user', auth()->user()->id)->whereDate('tanggal_reinburst', $now)->where('status_pembayaran','!=','pending')->get()->count();
+            $received_pending = Purchase::whereDate('tanggal_status', $now)->where('status_barang','!=','pending')->get()->count();
+            return view('admin.dashboard', [
+                'received_pending' => $received_pending,
+                'tukar_faktur_count' => $tukar_faktur_count,
+                'reinburst_pending' => $reinburst_pending,
+                
             ]);
         }
 

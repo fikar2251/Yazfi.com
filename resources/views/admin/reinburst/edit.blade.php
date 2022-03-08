@@ -84,20 +84,21 @@
                                 </li>
                             </ul>
                         </div>
+                        <div class="col-sm-6 col-sg-4 m-b-4">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="form-group">
+                                        <label for="file">Lampiran <span style="color: red">*</span></label>
+                                        <input type="file" name="file[]" multiple="true" class="form-control">
+                                        <label for=" lampiran">only pdf and doc</label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="col-sm-6 col-sg-4 m-b-4">
-                        <ul class="list-unstyled">
-                            <li>
-                                <div class="form-group">
-                                    <label for="file">Lampiran <span style="color: red">*</span></label>
-                                    <input type="file" name="file[]" multiple="true" class="form-control">
-                                    <label for=" lampiran">only pdf and doc</label>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                    <button type="button" id="add" class="btn btn-primary mb-2">Tambah Row Baru</button>
+                   
+             
+                  <button type="button" id="add" class="btn btn-primary mb-2">Tambah Row Baru</button>
 
                     <div class="row">
                         <div class="col-md-12">

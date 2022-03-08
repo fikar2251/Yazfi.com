@@ -14,6 +14,7 @@ use App\Project;
 use App\TukarFaktur;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class TukarFakturController extends Controller
@@ -48,10 +49,11 @@ class TukarFakturController extends Controller
         ->leftJoin('suppliers','purchases.supplier_id','=','suppliers.id')
         ->leftJoin('barangs','penerimaan_barangs.barang_id','=','barangs.id')
         ->leftJoin('users','users.id','=','penerimaan_barangs.id_user')
-        ->select('purchases.status_barang','purchases.project_id','purchases.invoice','penerimaan_barangs.total','penerimaan_barangs.id','purchases.supplier_id','barangs.nama_barang','penerimaan_barangs.id_purchase','penerimaan_barangs.qty',
+        ->select('penerimaan_barangs.status_tukar_faktur','purchases.status_barang','purchases.project_id','purchases.invoice','penerimaan_barangs.total','penerimaan_barangs.id','purchases.supplier_id','barangs.nama_barang','penerimaan_barangs.id_purchase','penerimaan_barangs.qty',
         'penerimaan_barangs.harga_beli','users.name','suppliers.nama','penerimaan_barangs.no_penerimaan_barang')
         ->where('penerimaan_barangs.no_penerimaan_barang', $request->no_penerimaan_barang)
         ->where('purchases.status_barang','completed')
+        ->where('penerimaan_barangs.status_tukar_faktur','pending')
         ->get();
         // $purchases = Purchase::where('status_barang', 'pending')->where('invoice',$request->invoice)->get();
       
@@ -108,7 +110,7 @@ class TukarFakturController extends Controller
             'nama_barang' => $request->nama_barang,
             'nilai_invoice' => $request->nilai_invoice,
             'id_project' => $request->id_project,
-            'id_user' => $request->id_user,
+            'id_user' => Auth::user()->id,
             'tanggal_tukar_faktur' => $request->tanggal_tukar_faktur,
             'is_active' =>1,
             
@@ -124,8 +126,16 @@ class TukarFakturController extends Controller
                 'is_active' => 1,
             ];
             // dd($in);
+
+            $penerimaan = PenerimaanBarang::where('no_po', $request->no_po_vendor)->first();
+            //  dd($penerimaan);
+            $array =  DB::table('penerimaan_barangs')->whereIn('id', $penerimaan)->update(array( 
+            'status_tukar_faktur' => 'completed'));
+            // dd($array);
             
         }
+        
+       
 
         DB::table('tukar_fakturs')->insert($attr);
         DB::table('detail_tukar_fakturs')->insert($in);

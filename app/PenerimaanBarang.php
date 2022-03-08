@@ -39,11 +39,12 @@ class PenerimaanBarang extends Model
     {
         return $this->belongsTo(Purchase::class, 'id_purchase');
     }
+ 
 
-    public function roles()
-    {
-        return $this->hasMany(User::class, 'users.cabang_id');
-    }
+    // public function roles()
+    // {
+    //     return $this->hasMany(User::class, 'users.cabang_id');
+    // }
 
      
 }

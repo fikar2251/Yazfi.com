@@ -79,7 +79,7 @@
                                             @php
                                             $total = 0
                                             @endphp
-                                            @foreach( $rincianreinbursts as $rein)
+                                            @foreach(App\RincianReinburst::where('nomor_reinburst', $reinburst->nomor_reinburst)->get() as $rein)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $rein->no_kwitansi }}</td>
@@ -87,7 +87,7 @@
                                                 <td>{{ $rein->catatan }}</td>
                                             </tr>
                                             @php
-                                            $total += $rein->grandtotal
+                                            $total += $rein->total
                                             @endphp
                                             @endforeach
 

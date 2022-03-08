@@ -48,6 +48,7 @@
                         <th>No Po</th>
                         <th>No Invoice</th>
                         <th>Vendor</th>
+                        <th>Status Pembayaran</th>
                         <th>Action</th>
                     </tr>
                 </thead>

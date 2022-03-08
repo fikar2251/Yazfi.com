@@ -49,8 +49,12 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <label for="nomor_reinburst">RN Number <span style="color: red">*</span></label>
+                                        <label for="nomor_reinburst">Number Reinburst <span style="color: red">*</span></label>
                                         <input required="" type="text" name="nomor_reinburst" value="{{$nourut}}" id="nomor_reinburst" class="form-control" readonly>
+
+                                        @error('nomor_reinburst')
+                                        <small class="text-danger">{{ $message }}</small>
+                                        @enderror
                                     </div>
                                 </li>
                             </ul>
@@ -61,6 +65,7 @@
                                     <div class="form-group">
                                         <label for="nama">Nama <span style="color: red">*</span></label>
                                         <input type="text" value="{{ auth()->user()->name }}" class="form-control" readonly>
+                                        
                                     </div>
                                     <div class="form-group">
                                         <input type="hidden" value="{{ auth()->user()->id_jabatans }}" name="id_jabatans" id="id_jabatans" class="form-control" readonly>
@@ -73,7 +78,10 @@
                                 <li>
                                     <div class="form-group">
                                         <label for="tanggal">Tanggal Reinburst <span style="color: red">*</span></label>
-                                        <input type="datetime-local" name="tanggal_reinburst" id="tanggal_reinburst" class="form-control">
+                                        <input type="datetime-local" name="tanggal_reinburst" id="tanggal_reinburst" required=""class="form-control">
+                                        @error('tanggal')
+                                        <small class="text-danger">{{ $message }}</small>
+                                        @enderror
                                     </div>
                                 </li>
                             </ul>
@@ -82,12 +90,16 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <label for="cabang">Project <span style="color: red">*</span></label>
+                                        <label for="project">Project <span style="color: red">*</span></label>
                                         <select name="id_project" id="id_project" class="form-control required="">
                                             <option disabled selected>-- Select Project --</option>
                                             @foreach($projects as $project)
                                             <option value=" {{ $project->id }}">{{ $project->nama_project }}</option>
                                             @endforeach
+
+                                            @error('project')
+                                        <small class="text-danger">{{ $message }}</small>
+                                        @enderror
                                         </select>
                                     </div>
                                 </li>
@@ -100,6 +112,10 @@
                                         <label for="file">Lampiran <span style="color: red">*</span></label>
                                         <input type="file" name="file[]" multiple="true" class="form-control">
                                         <label for=" lampiran">only pdf and doc</label>
+
+                                        @error('file')
+                                        <small class="text-danger">{{ $message }}</small>
+                                        @enderror
                                     </div>
                                 </li>
                             </ul>
@@ -142,12 +158,12 @@
                                         <input type="type" id="PPN" onchange="HowAboutIt()" class="form-control">
                                     </div>
                                 </div> --}}
-                                <div class="col-md-12">
+                                {{-- <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Grand Total</label>
                                         <input type="text" id="grandtotal" name="grandtotal" readonly class="form-control">
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                         <div class="col-sm-1 offset-sm-8">

@@ -98,36 +98,46 @@ class PenerimaanBarangController extends Controller
 
       
         $barang = $request->input('barang_id', []);
+      
+
         $attr = [];
         
      
       
         DB::beginTransaction();
         foreach ($barang as $key => $no) {
+            $purchases = Purchase::where('barang_id', $no)->first()->id;
             $attr []= [
                 'id_user' => $request->id_user,
-                'id_purchase' => $request->id_purchase,
+                'no_po' => $request->no_po,
                 'no_penerimaan_barang' => $request->no_penerimaan_barang,
                 'barang_id' => $no,
+                'id_purchase' => $purchases,
                 'qty' => $request->qty[$key],
                 'qty_received' => $request->qty_received[$key],
                 'harga_beli' => $request->harga_beli[$key],
                 'total' => $request->total,
                 'tanggal_penerimaan' => $request->tanggal_penerimaan,
+                'status_tukar_faktur' => 'pending',
             ];
-          
 
-            $purchase = Purchase::where('id', $request->id_purchase)->where('barang_id', $no)->first();
-            // dd($purchase);
-            $purchase->update([
-                'qty' => $request->qty[$key],
-                'harga_beli' =>$request->harga_beli[$key],
-                'total' => $request->harga_beli[$key] * $request->qty[$key],
-                'status_barang' => $request->status_barang[$key]
-            ]);
-            
-            // dd($attr);
-           
+       
+            $purchase = Purchase::where('barang_id', $no)->get();
+            //  dd($purchase);
+         
+            if ( $request->status_barang[$key] == 'completed') {
+                DB::table('purchases')->whereIn('id', $purchase)->update(array( 
+                    'qty' => $request->qty[$key],
+                    'harga_beli' =>$request->harga_beli[$key],
+                    'total' => $request->harga_beli[$key] * $request->qty[$key],
+                    'status_barang' => $request->status_barang[$key]));
+
+                 } else {
+                  
+
+        
+                }
+        // dd($array);
         }
         PenerimaanBarang::insert($attr);
         DB::commit();
@@ -135,55 +145,6 @@ class PenerimaanBarangController extends Controller
         return redirect()->route('purchasing.penerimaan-barang.index')->with('success', 'Penerimaan barang berhasil');
     }
 
-    public function show(Purchase $purchase,Request $request)
-    {
-        $request->validate([
-            'supplier_id' => 'required',
-            'barang_id' => 'required',
-            'qty' => 'required',
-            'harga_beli' => 'required',
-            'invoice' => 'required',
-        ]);
-        $barang = $request->input('barang_id', []);
-        $attr = [];
-        // $in = [];
-        $id = [];
-        $purchases = Purchase::where('invoice', $purchase->invoice)->pluck('id');
-        dd($purchases);
-        DB::beginTransaction();
-        foreach ($barang as $key => $no) {
-            $attr []= [
-                'id_user' => $request->id_user,
-                'id_purchase' => $request->id_purchase,
-                'no_penerimaan_barang' => $request->no_penerimaan_barang,
-                'barang_id' => $no,
-                'qty' => $request->qty[$key],
-                'qty_received' => $request->qty_received[$key],
-                'harga_beli' => $request->harga_beli[$key],
-                'total' => $request->total,
-                'tanggal_penerimaan' => $request->tanggal_penerimaan,
-            ];
-        //   dd($attr);
-
-            $purchases = Purchase::where('id', $request->id_purchase)->where('barang_id', $no)->first();
-            // dd($purchases);
-            $purchases->update([
-                'qty' => $request->qty[$key],
-                'harga_beli' =>$request->harga_beli[$key],
-                'total' => $request->harga_beli[$key] * $request->qty[$key],
-                'status_barang' => $request->status_barang[$key]
-            ]);
-            $id[] = $purchases[$key];
-            // dd($attr);
-           
-        }
-        PenerimaanBarang::updateOrInsert([
-            'id' => $id
-        ], $attr);
-        DB::commit();
-       
-        return redirect()->route('purchasing.penerimaan-barang.index')->with('success', 'Update Penerimaan barang berhasil');
-    }
 
     public function edit($id,Purchase $purchase,Request $request )
     {
@@ -260,25 +221,19 @@ class PenerimaanBarangController extends Controller
 
     public function destroy( $id)
     {
-        $post = PenerimaanBarang::findOrFail($id);
-          
-        $rincian = $post->purchase->id;
-        // dd($rincian);   
-        $purchase = Purchase::where('id', $rincian)->first();
-        // dd($purchase);
-        // $inOuts =DB::table('in_outs')
-        // ->leftJoin('purchases','in_outs.invoice','=','purchases.invoice')
-        // ->select('purchases.id')
-        // ->where('purchases.id',$rincian)
-        // ->first();
-        // dd($inOuts);
+        // $post = PenerimaanBarang::findOrFail($id);
+        // $purchase = Purchase::where('id', $post)->first();
+        $penerimaans = PenerimaanBarang::where('id', $id)->get();
+        // dd($penerimaans);
+        foreach ($penerimaans as $pur) {
+            $purchase = Purchase::where('barang_id', $pur->barang_id)->get();
+            // dd($purchase);
+            DB::table('purchases')->whereIn('id', $purchase)->update(array( 
+                'status_barang' => 'pending'));
+        
+            $pur->delete();
+        }
             
-        $purchase->update([
-        'status_barang' => 'pending'
-        ]);
-
-        PenerimaanBarang::where('id', $id)->delete();
-
         return redirect()->route('purchasing.penerimaan-barang.index')->with('success', 'Penerimaan Barang barang didelete');
     }
 

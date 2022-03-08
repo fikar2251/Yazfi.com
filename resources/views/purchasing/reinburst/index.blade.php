@@ -66,7 +66,7 @@
                         <td>{{ $reinburst->status_pembayaran }}</td>
                         <td>
 
-                            {{-- <a href="{{ route('purchasing.reinburst.edit', $reinburst->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a> --}}
+                            <a href="{{ route('purchasing.reinburst.edit', $reinburst->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
 
                             <form action="{{ route('purchasing.reinburst.destroy', $reinburst->id) }}" method="post" style="display: inline;" class="delete-form">
                                 @method('DELETE')

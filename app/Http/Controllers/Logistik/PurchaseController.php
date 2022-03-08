@@ -6,6 +6,7 @@ use App\Barang;
 use App\HargaProdukCabang;
 use App\Http\Controllers\Controller;
 use App\InOut;
+use App\PenerimaanBarang;
 use App\Purchase;
 use App\Supplier;
 use App\Project;
@@ -177,6 +178,7 @@ class PurchaseController extends Controller
 
         foreach ($purchases as $pur) {
             InOut::where('invoice', $pur->invoice)->delete();
+            PenerimaanBarang::where('no_po', $pur->invoice)->delete();
             // $harga = HargaProdukCabang::where('barang_id', $pur->barang_id)->where('project_id', auth()->user()->project_id)->first();
 
             // // $harga->update([
