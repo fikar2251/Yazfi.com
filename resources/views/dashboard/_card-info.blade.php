@@ -8,7 +8,7 @@
         <div class="dash-widget">
             <span class="dash-widget-bg2"><i class="fa fa-money"></i></span>
             <div class="dash-widget-info text-right">
-                <h3>{{$reinburst}}</h3>
+                <h3>{{$reinburst_pending}}</h3>
                 <span class="widget-title2">Reinburst <i class="fa fa-check" aria-hidden="true"></i></span>
             </div>
         </div>

@@ -88,7 +88,7 @@
 
                     @foreach($purchase as $item)
 
-                    @if (request()->get('no_penerimaan_barang') == $item->no_penerimaan_barang )
+                    @if (request()->get('no_penerimaan_barang') == $item->no_penerimaan_barang &&  $item->status_tukar_faktur == $item->status_tukar_faktur = 'pending'  )
 
                     <form action="{{ route('purchasing.tukarfaktur.store') }}" method="post">
                         @csrf

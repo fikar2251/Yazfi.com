@@ -24,18 +24,17 @@ class PengajuanController extends Controller
             $from = Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s');
             $to = Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s');
             $pengajuans = Pengajuan::groupBy('nomor_pengajuan')->whereBetween('tanggal_pengajuan', [$from, $to])->get();
+            // $purchases = Purchase::groupBy('invoice')->whereBetween('created_at', [$from, $to])->get();
+            // dd($pengajuans);
+            $coba = DB::table('rincian_pengajuans')->leftjoin('pengajuans','rincian_pengajuans.nomor_pengajuan','=','pengajuans.nomor_pengajuan')->whereBetween('rincian_pengajuans.tanggal_pengajuan', [$from, $to])->where('pengajuans.id_user',auth()->user()->id)->sum('rincian_pengajuans.total'); 
         } else {
             $pengajuans = Pengajuan::where('id_user', Auth::user()->id)
             ->orderBy('id','desc')
             ->groupBy('nomor_pengajuan')
-                ->get();
-            }
-            $counting = DB::table('pengajuans')
-            ->leftJoin('rincian_pengajuans','pengajuans.nomor_pengajuan','=','rincian_pengajuans.nomor_pengajuan')
-            ->select('pengajuans.id_user','rincian_pengajuans.total','rincian_pengajuans.id')
-            ->where('id_user', Auth()->user()->id)
             ->get();
-            return view('logistik.pengajuan.index', compact('pengajuans','counting'));
+            }
+   
+            return view('logistik.pengajuan.index', compact('pengajuans','coba'));
         }
 
     public function create()

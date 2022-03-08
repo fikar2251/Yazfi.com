@@ -74,7 +74,7 @@
                                             <th class="text-light"> Catatan</th>
                                         </tr>
                                         <tbody>
-                                            @foreach(App\TukarFaktur::where('no_faktur', $tukar->no_faktur)->get() as $dokumens)
+                                            @foreach(App\TukarFaktur::where('no_faktur', $detail->no_faktur)->get() as $dokumens)
                                             <tr style="font-size:12px;">
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $dokumens->nama_dokumen }}</td>

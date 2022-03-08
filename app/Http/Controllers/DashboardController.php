@@ -48,13 +48,14 @@ class DashboardController extends Controller
         $tindakan =  Tindakan::with('booking')->where('status', 0)->count();
 
         if (auth()->user()->hasRole('super-admin')) {
+            $now = Carbon::now()->format('Y-m-d');
             $customer = Spr::count();
-            $reinburst = Reinburst::where('id_user','1')->count();
+            $reinburst_pending = Reinburst::where('id_user', auth()->user()->id)->whereDate('tanggal_reinburst', $now)->where('status_pembayaran','!=','pending')->get()->count();;
             $warehouse =  Booking::count();
 
             return view('dashboard.index', [
                 'customer' => $customer,
-                'reinburst' => $reinburst,
+                'reinburst' => $reinburst_pending,
                 'warehouse' => $warehouse,
             ]);
         }
@@ -80,9 +81,9 @@ class DashboardController extends Controller
 
             $now = Carbon::now()->format('Y-m-d');
             $tukar_faktur_count = TukarFaktur::where('id_user', auth()->user()->id)->get()->count();
-            $reinburst_pending = Reinburst::where('id_user', auth()->user()->id)->whereDate('tanggal_reinburst', $now)->where('status_pembayaran','!=','pending')->get()->count();
-            $received_pending = Purchase::whereDate('tanggal_status', $now)->where('status_barang','!=','pending')->get()->count();
-            return view('admin.dashboard', [
+            $reinburst_pending = Reinburst::where('id_user', auth()->user()->id)->whereDate('tanggal_reinburst', $now)->where('status_pembayaran','=','pending')->get()->count();
+            $received_pending = Purchase::whereDate('created_at', $now)->where('status_barang','=','pending')->get()->count();
+            return view('dashboard.index', [
                 'received_pending' => $received_pending,
                 'tukar_faktur_count' => $tukar_faktur_count,
                 'reinburst_pending' => $reinburst_pending,

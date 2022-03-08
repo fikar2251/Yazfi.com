@@ -22,7 +22,9 @@ class ReinburstController extends Controller
         if (request('from') && request('to')) {
             $from = Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s');
             $to = Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s');
-            $reinbursts = Reinburst::groupBy('nomor_reinburst')->whereBetween('tanggal_reinburst', [$from, $to])->get();
+            $reinbursts = Reinburst::groupBy('nomor_reinburst')->whereBetween('tanggal_reinburst', [$from, $to])->where('id_user',auth()->user()->id)->get();
+            $coba = DB::table('rincian_reinbursts')->leftjoin('reinbursts','rincian_reinbursts.nomor_reinburst','=','reinbursts.nomor_reinburst')->whereBetween('rincian_reinbursts.created_at', [$from, $to])->where('reinbursts.id_user',auth()->user()->id)->sum('rincian_reinbursts.total') ;
+            // dd($coba);
         } else {
             $reinbursts = DB::table('reinbursts')
             ->leftJoin('rincian_reinbursts','reinbursts.nomor_reinburst','=','rincian_reinbursts.nomor_reinburst')
@@ -31,9 +33,10 @@ class ReinburstController extends Controller
             ->groupBy('reinbursts.nomor_reinburst')
             ->where('reinbursts.id_user',auth()->user()->id)
             ->get();
-            // dd($reinburst);
+            
+        
         }
-        return view('purchasing.reinburst.index', compact('reinbursts'));
+        return view('purchasing.reinburst.index', compact('reinbursts','coba'));
     }
 
     public function create()

@@ -90,9 +90,9 @@
                     <tr>
                         <td>Total : </td>
                         <td colspan="5"></td>
-                        <td>{{ request('from') && request('to') ? \App\RincianPengajuan::whereBetween('tanggal_pengajuan', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->count() : \App\RincianPengajuan::count() }}
+                        <td>{{ request('from') && request('to') ? \App\Pengajuan::whereBetween('tanggal_pengajuan', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->where('id_user',auth()->user()->id)->count() : \App\Pengajuan::where('id_user',auth()->user()->id)->count() }}
                         </td>
-                        <td>@currency( request('from') && request('to') ? \App\RincianPengajuan::whereBetween('tanggal_pengajuan', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->sum('total') : \App\RincianPengajuan::sum('total') )</td>
+                        <td>@currency( request('from') && request('to') ?  $coba :   DB::table('rincian_pengajuans')->leftjoin('pengajuans','rincian_pengajuans.nomor_pengajuan','=','pengajuans.nomor_pengajuan')->where('pengajuans.id_user',auth()->user()->id)->sum('rincian_pengajuans.grandtotal')  )</td>
                         <td>&nbsp;</td>
                     </tr>
                 </tfoot>

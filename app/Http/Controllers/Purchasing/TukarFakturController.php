@@ -19,20 +19,21 @@ use Illuminate\Support\Facades\DB;
 
 class TukarFakturController extends Controller
 {
-    public function index(Purchase $purchase)
+    public function index(Request $request)
     {
         if (request('from') && request('to')) {
             $from = Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s');
             $to = Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s');
-            $purchases = TukarFaktur::groupBy('no_faktur')->whereBetween('tanggal_tukar_faktur', [$from, $to])->get();
+            $purchases = TukarFaktur::groupBy('no_faktur')->whereBetween('tanggal_tukar_faktur', [$from, $to])->where('id_user'.auth()->user()->id)->get();
         } else {
 
             $tukar = DB::table('tukar_fakturs')
             ->leftJoin('suppliers','tukar_fakturs.id_supplier','=','suppliers.id')
-            ->select('tukar_fakturs.no_faktur','tukar_fakturs.id','tukar_fakturs.tanggal_tukar_faktur','tukar_fakturs.no_po_vendor','tukar_fakturs.nilai_invoice','suppliers.nama')
+            ->leftJoin('purchases','tukar_fakturs.no_po_vendor','=','purchases.invoice')
+            ->select('purchases.barang_id','purchases.status_pembayaran','tukar_fakturs.no_invoice','tukar_fakturs.no_faktur','tukar_fakturs.id','tukar_fakturs.tanggal_tukar_faktur','tukar_fakturs.no_po_vendor','tukar_fakturs.nilai_invoice','suppliers.nama')
+           ->groupBy('tukar_fakturs.no_faktur')
             ->orderBy('tukar_fakturs.id','desc')
-            ->get();
-          
+            ->get();        
         }
 
 
@@ -53,8 +54,9 @@ class TukarFakturController extends Controller
         'penerimaan_barangs.harga_beli','users.name','suppliers.nama','penerimaan_barangs.no_penerimaan_barang')
         ->where('penerimaan_barangs.no_penerimaan_barang', $request->no_penerimaan_barang)
         ->where('purchases.status_barang','completed')
-        ->where('penerimaan_barangs.status_tukar_faktur','pending')
+  
         ->get();
+        // dd($purchases);
         // $purchases = Purchase::where('status_barang', 'pending')->where('invoice',$request->invoice)->get();
       
         $suppliers = Supplier::get();
@@ -224,18 +226,18 @@ class TukarFakturController extends Controller
 
        
         $detail = DB::table('tukar_fakturs')
-            // ->leftJoin('detail_tukar_fakturs', 'tukar_fakturs.no_faktur', '=', 'detail_tukar_fakturs.no_faktur')
-            // ->leftJoin('dokumen_tukar_faktur','detail_tukar_fakturs.id_dokumen','=','dokumen_tukar_faktur.id_dokumen')
-            // ->select('tukar_fakturs.no_faktur','tukar_fakturs.id','tukar_fakturs.nilai_invoice','detail_tukar_fakturs.pilihan','dokumen_tukar_faktur.nama_dokumen', 'detail_tukar_fakturs.catatan')
-            ->where('id',$tukar->id)
-            ->get();
-            dd($tukar);
+            ->leftJoin('detail_tukar_fakturs', 'tukar_fakturs.no_faktur', '=', 'detail_tukar_fakturs.no_faktur')
+            ->leftJoin('dokumen_tukar_faktur','detail_tukar_fakturs.id_dokumen','=','dokumen_tukar_faktur.id_dokumen')
+            ->select('tukar_fakturs.no_faktur','tukar_fakturs.id','tukar_fakturs.nilai_invoice','detail_tukar_fakturs.pilihan','dokumen_tukar_faktur.nama_dokumen', 'detail_tukar_fakturs.catatan')
+            ->first();
+            dd($detail);
             $dokumen = DB::table('dokumen_tukar_faktur')->get();
 
              $tukars = DB::table('tukar_fakturs')
             ->leftJoin('suppliers', 'tukar_fakturs.id_supplier', '=', 'suppliers.id')
             ->select('suppliers.nama', 'tukar_fakturs.no_faktur', 'tukar_fakturs.nilai_invoice', 'tukar_fakturs.tanggal_tukar_faktur')
             ->first();
+            // dd($tukars);
         return view('purchasing.tukarfaktur.show', compact('tukars','tukar','detail','dokumen'));
     }
 

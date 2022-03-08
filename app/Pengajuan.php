@@ -10,7 +10,8 @@ use Spatie\Permission\Traits\HasRoles;
 class Pengajuan extends Model
 {
 
-
+    use HasRoles;
+    protected $table = 'pengajuans';
     protected $guarded = ['id'];
 
     public function barang()

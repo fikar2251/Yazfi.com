@@ -77,7 +77,7 @@
                 @foreach($purchase as $item)
 
                 @if (request()->get('invoice') == $item->invoice && $item->status_barang == $item->status_barang =
-                'pending' && $item->barang_id )
+                'pending'  )
                 <div class="row">
                     <div class="col-sm-6 col-sg-4 m-b-4">
                         <ul class="list-unstyled">
@@ -315,8 +315,10 @@
                                         let harga = e.value
                                         let attr = $(e).attr('data')
                                         let qty = $(`.qty-${attr}`).val()
+                                        let qty_received = $(`.qty_received-${attr}`).val()
                                         console.log(qty);
-                                        let total = parseInt(harga * qty)
+                                        let total_qty = parseInt(harga * qty_received)
+                                        let total = parseInt(harga * qty) + total_qty
                                         $(`.total-${attr}`).val(total)
 
                                     }
@@ -408,6 +410,8 @@
                         </div>
                     </div>
                 </div>
+                @elseif(request()->get('invoice') == $item->invoice && $item->status_barang == $item->status_barang =
+                'pending' && $item->qty = $item->qty_received  )
 
                 @elseif ($item->invoice <= request()->get('invoice'))
                     <div class="row">
@@ -573,11 +577,18 @@
         let qty = $(`.qty-${attr}`).val()
         console.log(qty)
 
-        if (qty > qty_received) {
-            result = 'partial'
-        } else {
+
+        if (qty != qty_received) {
+            result = 'partial';
+        }else {
             result = 'completed';
+        }if (qty > qty_received) { 
+            result = 'partial';
+        }else{
+            result = 'Barang Lebih';
         }
+      
+
 
         $(`.status_barang-${attr}`).val(result)
 
