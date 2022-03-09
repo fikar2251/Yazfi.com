@@ -16,7 +16,7 @@ class KomisiController extends Controller
         if (auth()->user()->roles()->first()->name == 'supervisor') {
             $user = User::where('id_roles', 4)->get();
 
-            $komisi = Komisi::all();
+            $komisi = Komisi::orderBy('id', 'desc')->get(); 
 
             return view('supervisor.komisi.index', compact('user', 'komisi'));
         }
@@ -25,7 +25,7 @@ class KomisiController extends Controller
 
     public function show($id)
     {
-        $spr = Spr::all();
+        $spr = Spr::orderBy('id_transaksi', 'desc')->get();
         // foreach ($spr as $sp) {
         //     $hj = $sp->harga_jual;
         // }
@@ -91,7 +91,7 @@ class KomisiController extends Controller
             'is_active' => 1,
         ]);
 
-        return redirect()->back();
+        return redirect('/supervisor/komisi');
     }
 
     // public function ajaxKomisi()

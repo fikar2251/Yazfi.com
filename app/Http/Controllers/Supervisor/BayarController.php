@@ -1,4 +1,4 @@
-    <?php
+<?php
 
     namespace App\Http\Controllers\Supervisor;
 
@@ -70,7 +70,14 @@
         public function cancel($id)
         {
             $no = request()->get('no_transaksi');
-            $spr = Spr::select('no_transaksi')->where('id_sales', $id)->get();
+            $spr = Spr::select('no_transaksi', 'id_transaksi')->where('id_sales', $id)->orderBy('id_transaksi', 'desc')->get();
+            foreach ($spr as $sp) {
+                $idtrf =  $sp->id_transaksi;   
+            }
+            $idtrs[] = [
+                'id_transaksi' => $idtrf
+            ];
+           
             $getSpr = Spr::where('no_transaksi', $no)->get();
             $tagihan = Tagihan::where('no_transaksi', $no)->get();
             $bayar = Pembayaran::where('no_detail_transaksi', $no)->get();
@@ -83,15 +90,17 @@
                     # code...
                 }
                 $idtf = $no->id_transaksi;
-                $batal = Pembatalan::select('no_pembatalan')->where('spr_id', $idtf)->first();
-
-                foreach ($batal as $bt) {
+                $batal = Pembatalan::where('spr_id', $idtf)->first();
+                if ($batal) {
                     # code...
+                    $idbatal = $batal->spr->no_transaksi;
+                    return view('supervisor.payment.cancel', compact('getSpr', 'spr', 'alasan', 'idbatal'));
+                }else {
+                    $idbatal = '';
+                    return view('supervisor.payment.cancel', compact('getSpr', 'spr', 'alasan', 'idbatal'));
                 }
-                $idbatal = $bt->spr->no_transaksi;
-
-                return view('supervisor.payment.cancel', compact('getSpr', 'spr', 'alasan', 'idbatal'));
-            } else {
+               
+            } else{
                 # code...
                 return view('supervisor.payment.cancel', compact('getSpr', 'spr', 'alasan'));
             }

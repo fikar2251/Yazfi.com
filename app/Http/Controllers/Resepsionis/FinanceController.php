@@ -19,7 +19,7 @@ class FinanceController extends Controller
 
     public function komisiFinance()
     {
-        $komisi =  Komisi::all();
+        $komisi =  Komisi::orderBy('id', 'desc')->get();
         return view('resepsionis.komisi.index', compact('komisi'));
     }
 

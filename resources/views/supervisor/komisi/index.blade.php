@@ -7,24 +7,23 @@
     </div>
 </div>
 
- <div class="row doctor-grid">
-        @foreach ($user as $u)
-            <div class="col-md-4 col-sm-4  col-lg-3">
-                <div class="profile-widget">
-                    <div class="doctor-img">
-                        <a class="avatar" href="#"><img alt="" src=""
-                                style="object-fit: cover; object-position: center;"></a>
-                    </div>
-                    <h4 class="doctor-name text-ellipsis"><a
-                            href="{{ url('supervisor/komisi/' . $u->id) }}">{{ $u->name }}</a></h4>
-                    <div class="user-country">
-                        <i class="fa fa-map-marker"></i> {{ $u->address }}
-                    </div>
-                </div>
+<div class="row doctor-grid">
+    @foreach ($user as $u)
+    <div class="col-md-4 col-sm-4  col-lg-3">
+        <div class="profile-widget">
+            <div class="doctor-img">
+                <a class="avatar" href="#"><img alt="" src="" style="object-fit: cover; object-position: center;"></a>
             </div>
-        @endforeach
+            <h4 class="doctor-name text-ellipsis"><a href="{{ url('supervisor/komisi/' . $u->id) }}">{{ $u->name }}</a>
+            </h4>
+            <div class="user-country">
+                <i class="fa fa-map-marker"></i> {{ $u->address }}
+            </div>
+        </div>
     </div>
-    
+    @endforeach
+</div>
+
 
 <x-alert></x-alert>
 
@@ -52,15 +51,17 @@
                 </thead>
                 <tbody>
                     @foreach($komisi as $km)
-                    <td>{{$loop->iteration}}</td>
-                    <td>{{$km->no_komisi}}</td>
-                    <td>{{$km->tanggal_komisi}}</td>
-                    <td>{{$km->no_spr}}</td>
-                    <td>@currency($km->nominal_sales)</td>
-                    <td>@currency($km->nominal_spv)</td>
-                    <td>@currency($km->nominal_manager)</td>
-                    <td>{{$km->spv}}</td>
-                    <td>{{$km->status_pembayaran}}</td>
+                    <tr>
+                        <td>{{$loop->iteration}}</td>
+                        <td>{{$km->no_komisi}}</td>
+                        <td>{{$km->tanggal_komisi}}</td>
+                        <td>{{$km->no_spr}}</td>
+                        <td>@currency($km->nominal_sales)</td>
+                        <td>@currency($km->nominal_spv)</td>
+                        <td>@currency($km->nominal_manager)</td>
+                        <td>{{$km->spv}}</td>
+                        <td>{{$km->status_pembayaran}}</td>
+                    </tr>
                     @endforeach
                 </tbody>
             </table>

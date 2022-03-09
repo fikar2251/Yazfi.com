@@ -18,6 +18,6 @@ class Pembatalan extends Model
 
     public function refund()
     {
-        return $this->hasOne(Refund::class, 'no_pembatalan' , 'id');
+        return $this->hasOne(Refund::class, 'pembatalan_id');
     }
 }

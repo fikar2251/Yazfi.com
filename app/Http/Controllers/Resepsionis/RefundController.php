@@ -15,7 +15,7 @@ class RefundController extends Controller
     public function index()
     {
         $getno = request()->get('no_pembatalan');
-        $batal = Pembatalan::all();
+        $batal = Pembatalan::orderBy('id', 'desc')->get();
         if ($getno) {
 
             $singlebatal = Pembatalan::where('no_pembatalan', $getno)->first();
@@ -25,16 +25,22 @@ class RefundController extends Controller
             $getrincianid = $rincianid->id_rincian;
 
             $singlebayar = Pembayaran::where('rincian_id', $getrincianid)->first();
-
+            
             $idbatal = $singlebatal->no_pembatalan;
-            $refund = Refund::all();
-            foreach ($refund as $rf) {
-                $batalid = $rf->no_pembatalan;
-            }
+            
+            $refund = Refund::where('no_pembatalan', $getno)->first();
+            if ($refund) {
+                $idbatal1 = $refund->no_pembatalan;
 
-            return view('resepsionis.refund.index', compact('batal', 'singlebatal', 'singlebayar', 'idbatal', 'batalid'));
+                return view('resepsionis.refund.index', compact('batal', 'singlebatal', 'singlebayar', 'idbatal1'));
+            }else {
+               $idbatal1 = '';
+               return view('resepsionis.refund.index', compact('batal', 'singlebatal', 'singlebayar', 'idbatal1'));
+            }
+            
+
         } else {
-            $batal = Pembatalan::all();
+            $batal = Pembatalan::orderBy('id', 'desc')->get();
 
             return view('resepsionis.refund.index', compact('batal'));
 
@@ -50,7 +56,7 @@ class RefundController extends Controller
         }
         $batal = Pembatalan::where('no_pembatalan', $no)->orderBy('no_pembatalan', 'desc')->first();
 
-        return view('resepsionis.refund.list', compact('refund', 'batal'));
+        return view('resepsionis.refund.list', compact('refund', 'batal',));
     }
 
     public function updateStatus($id)
@@ -75,6 +81,6 @@ class RefundController extends Controller
             'status' => 'unpaid',
         ]);
 
-        return redirect()->back();
+        return redirect('resepsionis/refund/list');
     }
 }

@@ -1,31 +1,32 @@
 @extends('layouts.master', ['title' => 'Komisi'])
 @section('content')
-    <div class="row">
-        <div class="col-sm-4 col-3">
-            <h4 class="page-title">Komisi</h4>
-        </div>
+<div class="row">
+    <div class="col-sm-4 col-3">
+        <h4 class="page-title">Komisi</h4>
     </div>
+</div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="table-responsive">
-                <table class="table table-striped custom-table" id="appointments" width="100%">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>No Komisi</th>
-                            <th>Tanggal</th>
-                            <th>No SPR</th>
-                            <th>Komisi Sales</th>
-                            <th>Komisi SPV</th>
-                            <th>Komisi Manager</th>
-                            <th>Diajukan</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($komisi as $km)
+<div class="row">
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table class="table table-striped custom-table" id="appointments" width="100%">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>No Komisi</th>
+                        <th>Tanggal</th>
+                        <th>No SPR</th>
+                        <th>Komisi Sales</th>
+                        <th>Komisi SPV</th>
+                        <th>Komisi Manager</th>
+                        <th>Diajukan</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($komisi as $km)
+                    <tr>
                         <td>{{$loop->iteration}}</td>
                         <td>{{$km->no_komisi}}</td>
                         <td>{{$km->tanggal_komisi}}</td>
@@ -43,10 +44,11 @@
                                 </a>
                             </div>
                         </td>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
+</div>
 @stop
