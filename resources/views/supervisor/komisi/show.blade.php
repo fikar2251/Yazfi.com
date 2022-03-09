@@ -108,7 +108,7 @@
                                                 <td>:</td>
                                                 <td class="d-flex"> <input type="number" name="persenpph"
                                                         id="persenpph" class="form-control" style="width: 80px"
-                                                        value="2.5">&nbsp;
+                                                        value="2.5" step="any">&nbsp;
                                                     <h3> % </h3> <input type="text" name="pph" id="pph"
                                                         class="form-control" style="width: 145px"
                                                         value="@currency($potongan['pph'])" style="text-decoration: none"
@@ -128,7 +128,7 @@
                                                 <td>:</td>
                                                 <td class="d-flex"> <input type="number" name="persenbphtb"
                                                         id="persenbphtb" class="form-control" style="width: 80px"
-                                                        value="2.5">&nbsp;
+                                                        value="2.5" step="any">&nbsp;
                                                     <h3> % </h3> <input type="text" name="bphtb" id="bphtb"
                                                         class="form-control" style="width: 145px"
                                                         value="@currency($potongan['bphtb'])" style="text-decoration: none"
@@ -143,7 +143,7 @@
                                                 <td style="width: 20px">:</td>
                                                 <td class="d-flex">
                                                     <input type="number" name="persensales" id="persensales"
-                                                        class="form-control" style="width: 80px" value="0.1">&nbsp;
+                                                        class="form-control" style="width: 80px" value="0.1" step="any">&nbsp;
                                                     <h3> % </h3> <input type="text" name="sales" id="sales"
                                                         class="form-control" style="width: 145px"
                                                         value="@currency($komisi['sales'])" style="text-decoration: none"
@@ -156,7 +156,7 @@
                                                 <td>:</td>
                                                 <td class="d-flex"> <input type="number" name="persenpll"
                                                         id="persenpll" class="form-control" style="width: 80px"
-                                                        value="2.5">&nbsp;
+                                                        value="2.5" step="any">&nbsp;
                                                     <h3> % </h3> <input type="text" name="pll" id="pll"
                                                         class="form-control" style="width: 145px"
                                                         value="@currency($potongan['pll'])" style="text-decoration: none"
@@ -169,7 +169,7 @@
                                                 <td style="width: 20px">:</td>
                                                 <td class="d-flex">
                                                     <input type="number" name="persenspv" id="persenspv"
-                                                        class="form-control" style="width: 80px" value="0.1">&nbsp;
+                                                        class="form-control" style="width: 80px" value="0.1" step="any">&nbsp;
                                                     <h3> % </h3> <input type="text" name="spv" id="spv"
                                                         class="form-control" style="width: 145px"
                                                         value="@currency($komisi['spv'])" style="text-decoration: none"
@@ -189,7 +189,7 @@
                                                 <td style="width: 20px">:</td>
                                                 <td class="d-flex">
                                                     <input type="number" name="persenmanager" id="persenmanager"
-                                                        class="form-control" style="width: 80px" value="0.1">&nbsp;
+                                                        class="form-control" style="width: 80px" value="0.1" step="any">&nbsp;
                                                     <h3> % </h3> <input type="text" name="manager" id="manager"
                                                         class="form-control" style="width: 145px"
                                                         value="@currency($komisi['manager'])" style="text-decoration: none"

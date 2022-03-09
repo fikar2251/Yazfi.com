@@ -70,14 +70,15 @@
         public function cancel($id)
         {
             $no = request()->get('no_transaksi');
-            $spr = Spr::select('no_transaksi', 'id_transaksi')->where('id_sales', $id)->orderBy('id_transaksi', 'desc')->get();
-            foreach ($spr as $sp) {
-                $idtrf =  $sp->id_transaksi;   
-            }
-            $idtrs[] = [
-                'id_transaksi' => $idtrf
-            ];
            
+            $spr = Spr::where('id_sales', $id)->orderBy('id_transaksi', 'desc')->get();
+            $attr[] = [
+                'no' => ['1' , '2']
+            ];
+            $cekbatal = DB::table('pembatalan_unit')
+            ->whereIn('spr_id', [1, 2])
+            ->get();
+        
             $getSpr = Spr::where('no_transaksi', $no)->get();
             $tagihan = Tagihan::where('no_transaksi', $no)->get();
             $bayar = Pembayaran::where('no_detail_transaksi', $no)->get();

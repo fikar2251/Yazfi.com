@@ -74,7 +74,7 @@ $nourut = $AWAL . '/' . sprintf('%02s', abs(1)) . '/' . sprintf('%05s', abs($noU
     <div class="row">
         <div class="col-md-8 container">
             <div class="card shadow">
-                <div class="card-body">
+                <div class="card-body"> 
                     <div class="table-responsive">
                         <table class="table table-bordered custom-table table-striped">
                             <thead>
@@ -90,7 +90,7 @@ $nourut = $AWAL . '/' . sprintf('%02s', abs(1)) . '/' . sprintf('%05s', abs($noU
                                     <td style="width: 200px">No Pembatalan</td>
                                     <td style="width: 20px">:</td>
                                     <td> {{ $singlebatal->no_pembatalan }} <input type="hidden" name="no_pembatalan"
-                                            value="{{ $singlebatal->no_pembatalan }}">
+                                            value="{{ $singlebatal->no_pembatalan }}"> <input type="hidden" name="pembatalan_id" value="{{$singlebatal->id}}">
                                     </td>
                                 </tr>
                                 {{-- @foreach ($getSpr as $item) --}}

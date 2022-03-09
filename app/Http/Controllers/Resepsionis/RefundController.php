@@ -79,6 +79,7 @@ class RefundController extends Controller
             'diajukan' => $request->diajukan,
             'total_refund' => $request->total_refund,
             'status' => 'unpaid',
+            'pembatalan_id' => $request->pembatalan_id
         ]);
 
         return redirect('resepsionis/refund/list');

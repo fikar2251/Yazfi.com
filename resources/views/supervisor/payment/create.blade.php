@@ -159,7 +159,7 @@
                                         <tr>
 
                                             <th>NO</th>
-                                            <th>Tanggal Pembayaran</th>
+                                            <th>Tanggal Jatuh tempo</th>
                                             <th>Nominal</th>
                                             <th>Tipe</th>
                                             <th>Status</th>
@@ -171,7 +171,7 @@
                                         @foreach ($tagihan as $item)
                                             <tr>
                                                 <td>{{ $item->id_rincian }}</td>
-                                                <td>{{ Carbon\Carbon::now()->format('d-m-Y') }}</td>
+                                                <td>{{ $item->jatuh_tempo }}</td>
                                                 <td>@currency($item->jumlah_tagihan)</td>
                                                 <td>
                                                     @if ($item->tipe == 1)
