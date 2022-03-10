@@ -331,13 +331,19 @@ Route::middleware('auth')->group(function () {
             Route::get('/where/product', 'TukarFakturController@WhereProduct');
             Route::get('/where/project', 'TukarFakturController@whereProject');
             Route::get('/where/tukar/search', 'TukarFakturController@search');
+            Route::get('/where/pdf','TukarFakturController@pdf');
+            Route::get('/pdf/{id}', 'TukarFakturController@pdf')->name('tukarfaktur.pdf');
             Route::resource('tukarfaktur', 'TukarFakturController');
+
+
             Route::resource('reinburst', 'ReinburstController');
             Route::resource('penerimaan-barang', 'PenerimaanBarangController');
             Route::post('penerimaan-barang/{id}/update', 'PenerimaanBarangController@update');
             Route::get('/where/penerimaan/search', 'PenerimaanBarangController@search');
             Route::resource('listpurchase', 'ListPurchsaController');
             Route::resource('permissions', 'PermissionController');
+
+         
 
             // Route Roles
             Route::resource('roles', 'RolesController');

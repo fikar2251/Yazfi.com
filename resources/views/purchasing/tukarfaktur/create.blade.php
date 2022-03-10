@@ -219,21 +219,6 @@ $item->status_tukar_faktur == $item->status_tukar_faktur = 'pending' )
                                     </li>
                                 </ul>
                             </div>
-
-                            {{-- <div class="col-sm-6 col-sg-4 m-b-4">
-                                <ul class="list-unstyled">
-                                    <li>
-                                        <div class="form-group">
-                                            
-                                            <input type="text" value="{{$penerimaans->nama_barang}}"
-                                            name="nama_barang[{{ $loop->iteration }}]" id="nama_barang" required=""
-                                            class="form-control nama_barang-{{ $loop->iteration }}"
-                                            style="font-size:13px;">
-
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div> --}}
                             <div class="col-sm-6 col-sg-4 m-b-4">
                                 <ul class="list-unstyled">
                                     <li>
@@ -278,7 +263,7 @@ $item->status_tukar_faktur == $item->status_tukar_faktur = 'pending' )
                                         <input type="text" value="{{$barang->nama_dokumen}}" required=""
                                             class="form-control id_dokumen-{{ $loop->iteration }} disabled"
                                             placeholder="Nama Dokumen" style="font-size:13px;">
-                                        <input type="hidden" value="{{$barang->id_dokumen}}"
+                                        <input type="hidden" value="{{$barang->id}}"
                                             name="id_dokumen[{{ $loop->iteration }}]" id="id_dokumen" required=""
                                             class="form-control id_dokumen-{{ $loop->iteration }}"
                                             placeholder="Nama Dokumen" style="font-size:13px;">
@@ -338,6 +323,7 @@ $item->status_tukar_faktur == $item->status_tukar_faktur = 'pending' )
                                                     <th class="text-light"> Total</th>
                                                     <th class="text-light"> Diajukan</th>
                                                     <th class="text-light"> Status Barang</th>
+                                              
                                                 </tr>
                                                 <tbody id="dynamic_field">
                                                     @foreach($purchases as $purchase)
@@ -366,18 +352,20 @@ $item->status_tukar_faktur == $item->status_tukar_faktur = 'pending' )
                                                             {{$purchase->name}}
                                                         </td>
                                                         <td>
-                                                            {{$purchase->status_barang}}
+                                                            {{$purchase->status_pemabyaran}}
                                                         </td>
                                                     </tr>
                                                     @endforeach
                                                 </tbody>
                                                 <tfoot>
                                                     <tr>
-                                                        <td colspan="3"><b>Total Pembelian : </b>
+                                                        <td colspan="2"><b>Total Pembelian : </b>
                                                         </td>
-                                                        <td><b>{{ \App\PenerimaanBarang::where('qty',$purchase->qty)->sum('qty')}}</b>
-                                                        </td>
+                                                        {{-- <td><b>{{ \App\PenerimaanBarang::where('qty_received',$purchase->qty_received)->sum('qty_received')}}</b>
+                                                        </td> --}}
+                                                        <td> {{$purchase->qty_received}}</td>
                                                         <td><b>@currency($purchase->total)</b></td>
+                                                        <td></td>
                                                         <td></td>
                                                         <td></td>
                                                     </tr>
@@ -606,7 +594,7 @@ $item->status_tukar_faktur == $item->status_tukar_faktur = 'pending' )
                                         <input type="text" value="{{$barang->nama_dokumen}}" required=""
                                             class="form-control id_dokumen-{{ $loop->iteration }} disabled"
                                             placeholder="Nama Dokumen" style="font-size:13px;">
-                                        <input type="hidden" value="{{$barang->id_dokumen}}"
+                                        <input type="hidden" value="{{$barang->id}}"
                                             name="id_dokumen[{{ $loop->iteration }}]" id="id_dokumen" required=""
                                             class="form-control id_dokumen-{{ $loop->iteration }}"
                                             placeholder="Nama Dokumen" style="font-size:13px;">

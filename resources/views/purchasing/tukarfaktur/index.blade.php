@@ -88,9 +88,9 @@
                         <td>Total : </td>
                         <td colspan="5"></td>
                         <td>{{ request('from') && request('to') ? \App\TukarFaktur::whereBetween('tanggal_tukar_faktur', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->where('id_user',auth()->user()->id)->count() : \App\TukarFaktur::where('id_user',auth()->user()->id)->count() }}</td>
-                        @foreach($tukar as $purchase)
+                     
                         <td>@currency( request('from') && request('to') ? \App\TukarFaktur::whereBetween('tanggal_tukar_faktur', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->where('id_user',auth()->user()->id)->sum('nilai_invoice') :   \App\TukarFaktur::where('id_user',auth()->user()->id)->sum('nilai_invoice') )</td>
-                        @endforeach
+                      
                         <td>&nbsp;</td>
                        
                     </tr>

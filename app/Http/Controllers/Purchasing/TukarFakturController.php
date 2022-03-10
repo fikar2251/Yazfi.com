@@ -12,7 +12,9 @@ use App\Purchase;
 use App\Supplier;
 use App\Project;
 use App\TukarFaktur;
+
 use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -144,6 +146,7 @@ class TukarFakturController extends Controller
                 'nama_barang' => $barangs,
                 'nilai_invoice' => $request->nilai_invoice,
                 'id_project' => $request->id_project,
+                'status_pembayaran' => 'pending',
                 'id_user' => Auth::user()->id,
                 'tanggal_tukar_faktur' => $request->tanggal_tukar_faktur,
                 'is_active' =>1,
@@ -170,7 +173,7 @@ class TukarFakturController extends Controller
         }
          }elseif($spk == request('po_spk')){
              
-             foreach ($dokumen as $key => $no) {
+         
                  $attr[] = [
                         'no_faktur' => $request->no_faktur,
                         'id_supplier' => $request->id_supplier,
@@ -186,7 +189,8 @@ class TukarFakturController extends Controller
                         'is_active' =>1,
                         
                     ];
-                     dd($attr);
+                    //  dd($attr);
+                    foreach ($dokumen as $key => $no) {
                  $in[] = [
                         'no_faktur' => $request->no_faktur,
                         'id_dokumen' => $no,
@@ -229,25 +233,20 @@ class TukarFakturController extends Controller
         return $data;
     }
 
-    public function show(TukarFaktur $tukar, Request $request)
+    public function show($id)
     {
-        
-
+      
        
-        $detail = DB::table('tukar_fakturs')
-            ->leftJoin('detail_tukar_fakturs', 'tukar_fakturs.no_faktur', '=', 'detail_tukar_fakturs.no_faktur')
-            ->leftJoin('dokumen_tukar_faktur','detail_tukar_fakturs.id_dokumen','=','dokumen_tukar_faktur.id_dokumen')
-            ->select('tukar_fakturs.no_faktur','tukar_fakturs.id','tukar_fakturs.nilai_invoice','detail_tukar_fakturs.pilihan','dokumen_tukar_faktur.nama_dokumen', 'detail_tukar_fakturs.catatan')
-            ->first();
-            dd($detail);
-            $dokumen = DB::table('dokumen_tukar_faktur')->get();
-
-             $tukars = DB::table('tukar_fakturs')
+            $detail = DB::table('tukar_fakturs')
             ->leftJoin('suppliers', 'tukar_fakturs.id_supplier', '=', 'suppliers.id')
-            ->select('suppliers.nama', 'tukar_fakturs.no_faktur', 'tukar_fakturs.nilai_invoice', 'tukar_fakturs.tanggal_tukar_faktur')
+            ->leftJoin('detail_tukar_fakturs', 'tukar_fakturs.no_faktur', '=', 'detail_tukar_fakturs.no_faktur')
+            ->leftJoin('dokumen_tukar_faktur','detail_tukar_fakturs.id_dokumen','=','dokumen_tukar_faktur.id')
+            ->where('tukar_fakturs.id',$id)
+            ->select('tukar_fakturs.status_pembayaran','suppliers.nama','tukar_fakturs.no_faktur','tukar_fakturs.id','tukar_fakturs.nilai_invoice',
+            'detail_tukar_fakturs.pilihan','dokumen_tukar_faktur.nama_dokumen', 'detail_tukar_fakturs.catatan','tukar_fakturs.tanggal_tukar_faktur')
             ->first();
-            // dd($tukars);
-        return view('purchasing.tukarfaktur.show', compact('tukars','tukar','detail','dokumen'));
+            // dd($detail);
+        return view('purchasing.tukarfaktur.show', compact('detail'));
     }
 
     public function edit(Purchase $purchase)
@@ -345,4 +344,32 @@ class TukarFakturController extends Controller
         return $data;
         dd($data);
     }
+
+
+    public function pdf( $id)
+    {
+     
+       
+        $detail = DB::table('tukar_fakturs')
+        ->leftJoin('suppliers', 'tukar_fakturs.id_supplier', '=', 'suppliers.id')
+        ->leftJoin('detail_tukar_fakturs', 'tukar_fakturs.no_faktur', '=', 'detail_tukar_fakturs.no_faktur')
+        ->leftJoin('dokumen_tukar_faktur','detail_tukar_fakturs.id_dokumen','=','dokumen_tukar_faktur.id')
+        ->where('tukar_fakturs.id',$id)
+        ->select('tukar_fakturs.status_pembayaran','suppliers.nama','tukar_fakturs.no_faktur','tukar_fakturs.id','tukar_fakturs.nilai_invoice',
+        'detail_tukar_fakturs.pilihan','dokumen_tukar_faktur.nama_dokumen', 'detail_tukar_fakturs.catatan','tukar_fakturs.tanggal_tukar_faktur')
+        ->first();
+
+
+        // view()->share('purchasing.tukarfaktur.pdf', $detail);
+        $pdf = PDF::loadView('purchasing.tukarfaktur.pdf', ['detail' => $detail]);
+        return $pdf->stream('Laporan Pengajuan.pdf');
+
+        // $pdf = PDF::setOptions(['defaultFont' => 'dejavu serif'])->loadView('purchasing.tukarfaktur.pdf', compact('detail'));
+        // return $pdf->stream('filename.pdf');
+
+        // $pdf_name = time().'Tukar_Faktur.pdf';
+        // $pdf = PDF::loadView('purchasing.tukarfaktur.pdf', compact('detail'));
+        // $pdf->save(storage_path('/').$pdf_name);
+        // return $pdf->download($pdf_name);
+    }	
 }

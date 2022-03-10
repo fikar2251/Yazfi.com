@@ -1,16 +1,35 @@
-@extends('layouts.master', ['title' => 'Show Pengajuan Dana'])
-@section('content')
+<!doctype html>
+<html lang="en">
+<head>
+	<title>Membuat Laporan PDF Dengan DOMPDF Laravel</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link href="{{ asset("img/favicon.png")}}" rel="shortcut icon">
+    {{-- <title>{{ \App\Setting::find(1)->web_name }} - {{ $title }}</title> --}}
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/font-awesome.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/select2.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap-datetimepicker.min.css') }}">
+
+	<link rel="stylesheet"href="{{asset('https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.0.18/sweetalert2.min.css')}}" integrity="sha512-riZwnB8ebhwOVAUlYoILfran/fH0deyunXyJZ+yJGDyU0Y8gsDGtPHn1eh276aNADKgFERecHecJgkzcE9J3Lg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Select2 -->
+    <link href="{{asset('https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet')}}" />
+    <!-- Datatables -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{asset('https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{asset('https://cdn.datatables.net/responsive/2.2.6/css/responsive.bootstrap4.min.css')}}">
+    <link rel="stylesheet" href="{{asset('https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css')}}">
+    <link rel="stylesheet" href="{{asset('https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css')}}" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+ 
 <div class="row">
     <div class="col-sm-5 col-4">
         <h4 class="page-title">Show Tukar Faktur</h4>
     </div>
-    <div class="col-sm-7 col-8 text-right m-b-30">
-        <div class="btn-group btn-group-sm ">
-           
-            <a href="{{ route('tukarfaktur.pdf') }}" class="btn btn-success btn-sm">Export to PDF</a>
-            
-        </div>
-    </div>
+   
 </div>
 <div class="container">
     <div class="row">
@@ -29,7 +48,7 @@
                             </div>
                         </div><br>
                         <br />
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-sm-6 col-sg-4 m-b-4">
                                 <ul class="list-unstyled">
                                     <li>
@@ -68,7 +87,7 @@
                                     </li>
                                 </ul>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="row">
                             <div class="col-md-12">
@@ -147,164 +166,30 @@
         </div>
     </div>
 </div>
+<script src="{{ asset('/') }}js/jquery-3.2.1.min.js"></script>
+    <script src="{{ asset('/') }}js/popper.min.js"></script>
+    <script src="{{ asset('/') }}js/bootstrap.min.js"></script>
+    <script src="{{ asset('/') }}js/jquery.slimscroll.js"></script>
+    <script src="{{ asset('/') }}js/app.js"></script>
+    <script src="{{ asset('/') }}js/select2.min.js"></script>
+    <script src="{{ asset('/') }}js/moment.min.js"></script>
+    <script src="{{ asset('/') }}js/bootstrap-datetimepicker.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
+    <!-- Sweetalert -->
+    <script src="{{ asset('https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.0.18/sweetalert2.min.js')}}" integrity="sha512-mBSqtiBr4vcvTb6BCuIAgVx4uF3EVlVvJ2j+Z9USL0VwgL9liZ638rTANn5m1br7iupcjjg/LIl5cCYcNae7Yg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Select2 -->
+    <script src="{{ asset('https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js')}}"></script>
+    <!-- Datatables -->
+    <script src="{{ asset('/') }}js/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('/') }}js/dataTables.bootstrap4.min.js"></script>
+    <script src="{{ asset('https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js')}}"></script>
+    <script src="{{ asset('https://cdn.datatables.net/responsive/2.2.6/js/dataTables.responsive.min.js')}}"></script>
+    <script src="{{ asset('https://cdn.datatables.net/responsive/2.2.6/js/responsive.bootstrap.min.js')}}"></script>
+    <script src="{{ asset('https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js')}}"></script>
+    <script src="{{ asset('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js')}}"></script>
+    <script src="{{ asset('https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js')}}"></script>
+    <script src="{{ asset('https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js')}}"></script>
+    <script src="{{ asset('https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js')}}"></script>
+</body>
 </html>
-<script>
-    function myFunction() {
-        document.getElementById(" demo").innerHTML = "YOU CLICKED ME!";
-    }
-    $('.report').DataTable({
-        dom: 'Bfrtip',
-        buttons: [{
-            extend: 'copy',
-            className: 'btn-default',
-            exportOptions: {
-                columns: ':visible'
-            }
-        }, {
-            extend: 'excel',
-            className: 'btn-default',
-            title: 'Laporan Pembelian ',
-            messageTop: 'Tanggal  {{ request("from") }} - {{ request("to") }}',
-            footer: true,
-            exportOptions: {
-                columns: ':visible'
-            }
-        }, {
-            extend: 'pdf',
-            className: 'btn-default',
-            title: 'Laporan Pembelian ',
-            messageTop: 'Tanggal {{ request("from") }} - {{ request("to") }}',
-            footer: true,
-            exportOptions: {
-                columns: ':visible'
-            }
-        }, ]
-    });
-</script>
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script>
-    var formatter = function(num) {
-        var str = num.toString().replace("", ""),
-            parts = false,
-            output = [],
-            i = 13,
-            formatted = null;
-        if (str.indexOf(".") > 0) {
-            parts = str.split(".");
-            str = parts[0];
-        }
-        str = str.split("").reverse();
-        for (var j = 0, len = str.length; j < len; j++) {
-            if (str[j] != ",") {
-                output.push(str[j]);
-                if (i % 3 == 0 && j < (len - 1)) {
-                    output.push(",");
-                }
-                i++;
-            }
-        }
-        formatted = output.reverse().join("");
-        return ("" + formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
-    };
-    // document.getElementById('submit').disabled = true
-    function form_dinamic() {
-        let index = $('#dynamic_field tr').length + 1
-        document.getElementById('counter').innerHTML = index
-        let template = `
-        <tr class="rowComponent">
-                    <td hidden>
-                        <input type="hidden" name="barang_id[${index}]" class="barang_id-${index}">
-                    </td>
-                    <td>
-                        <select required name="barang_id[${index}]" id="${index}" class="form-control select-${index}"></select>
-                    </td>
-                    <td>
-                        <input type="number" name="qty[${index}]"  class="form-control qty-${index}" placeholder="0">
-                    </td>
-                    <td>
-                        <input type="number" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), HowAboutIt(this)">
-                    </td>
-                    <td>
-                        <input type="number" name="total[${index}]" disabled class="form-control total-${index} total-form"  placeholder="0">
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-danger btn-sm" onclick="remove(this)">Delete</button>
-                    </td>
-                </tr>
-        `
-        $('#dynamic_field').append(template)
-        $(`.select-${index}`).select2({
-            placeholder: 'Select Product',
-            ajax: {
-                url: `/admin/where/product`,
-                processResults: function(data) {
-                    console.log(data)
-                    return {
-                        results: data
-                    };
-                },
-                cache: true
-            }
-        });
-    }
-
-    function remove(q) {
-        $(q).parent().parent().remove()
-    }
-    $('.remove').on('click', function() {
-        $(this).parent().parent().remove()
-    })
-
-    function hitung(e) {
-        let harga = e.value
-        let attr = $(e).attr('data')
-        let qty = $(`.qty-${attr}`).val()
-        let total = parseInt(harga * qty)
-        $(`.total-${attr}`).val(total)
-    }
-
-    function HowAboutIt(e) {
-        let sub_total = document.getElementById('sub_total')
-        let total = 0;
-        let coll = document.querySelectorAll('.total-form')
-        for (let i = 0; i < coll.length; i++) {
-            let ele = coll[i]
-            total += parseInt(ele.value)
-        }
-        sub_total.value = total
-        let tax = (10 / 100) * sub_total.value;
-        let total_all = parseInt(tax);
-        // rupiah()
-        document.getElementById('PPN').value = total_all;
-    }
-    $(document).ready(function() {
-        $('#add').on('click', function() {
-            form_dinamic()
-        })
-    })
-    $(document).ready(function() {
-        $('.dynamic').change(function() {
-            var id = $(this).val();
-            var div = $(this).parent();
-            var op = " ";
-            $.ajax({
-                url: `/logistik/where/project`,
-                method: "get",
-                data: {
-                    'id': id
-                },
-                success: function(data) {
-                    console.log(data);
-                    op += '<option value="0" selected disabled> Lokasi</option>';
-                    for (var i = 0; i < data.length; i++) {
-                        op += '<option value="' + data[i].alamat_project + '">' + data[i].alamat_project + '</option>'
-                    };
-                    $('.root3').html(op);
-                },
-                error: function() {}
-            })
-        })
-    })
-</script>
-@stop
