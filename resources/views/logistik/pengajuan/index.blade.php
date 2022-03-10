@@ -94,6 +94,7 @@
                         </td>
                         <td>@currency( request('from') && request('to') ?  $coba :   DB::table('rincian_pengajuans')->leftjoin('pengajuans','rincian_pengajuans.nomor_pengajuan','=','pengajuans.nomor_pengajuan')->where('pengajuans.id_user',auth()->user()->id)->sum('rincian_pengajuans.grandtotal')  )</td>
                         <td>&nbsp;</td>
+                        <td>&nbsp;</td>
                     </tr>
                 </tfoot>
             </table>

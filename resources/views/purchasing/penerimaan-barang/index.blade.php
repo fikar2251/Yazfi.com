@@ -41,12 +41,12 @@
         <div class="table-responsive">
             <table class="table table-bordered table-striped custom-table report">
                 <thead>
-                    <tr>
+                    <tr style="font-size:13px;">
                         <th>No</th>
                         <th>Number PN</th>
                         <th>Di Ajukan</th>
                         <th>Tanggal</th>
-                        <th>Total Item</th>
+                        <th style="width: 10px">Total Item</th>
                         <th>Total Pembelian</th>
                         {{-- <th>Status Barang</th>
                         <th>Status Tukar Faktur</th> --}}
@@ -56,27 +56,27 @@
 
                 <tbody>
                     @foreach($penerimaans as $penerimaan)
-                    <tr>
+                    <tr style="font-size:13px;">
                         <td>{{ $loop->iteration }}</td>
                         <td>
-                            {{ $penerimaan->no_penerimaan_barang }}
+                            <a href="{{ route('purchasing.penerimaan-barang.show', $penerimaan->id) }}">{{ $penerimaan->no_penerimaan_barang }}
                         </td>
                         <td>{{ $penerimaan->admin->name }}</td>
                         <td>{{ Carbon\Carbon::parse($penerimaan->tanggal_penerimaan)->format("d/m/Y H:i:s") }}</td>
                         <td>{{ \App\PenerimaanBarang::where('no_penerimaan_barang', $penerimaan->no_penerimaan_barang)->count() }}</td> 
-                        <td>@currency(\App\PenerimaanBarang::where('no_penerimaan_barang', $penerimaan->no_penerimaan_barang)->sum('total'))</td>
+                        <td>@currency(\App\PenerimaanBarang::where('no_penerimaan_barang',
+                            $penerimaan->no_penerimaan_barang)->sum('grandtotal'))</td>
                         {{-- <td>{{ $penerimaan->purchase->status_barang }}</td>
                         <td>{{ $penerimaan->status_tukar_faktur }}</td> --}}
-                        <td>
-
-                            <a href="{{ route('purchasing.penerimaan-barang.edit', $penerimaan->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
+                        <td> 
+                            {{-- <a href="{{ route('purchasing.penerimaan-barang.edit', $penerimaan->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a> --}}
 
                             <form action="{{ route('purchasing.penerimaan-barang.destroy', $penerimaan->id) }}" method="post" style="display: inline;">
                                 @method('delete')
                                 @csrf
                                 <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
-                            </form>
-                        </td>
+                            </form></td>
+                  
                     </tr>
                     @endforeach
                 </tbody>
@@ -85,7 +85,9 @@
                         <td>Total : </td>
                         <td colspan="3"></td>
                         <td>{{ request('from') && request('to') ? \App\PenerimaanBarang::whereBetween('tanggal_penerimaan', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->where('id_user',auth()->user()->id)->count() : \App\PenerimaanBarang::where('id_user',auth()->user()->id)->count() }}</td>
-                        <td>@currency( request('from') && request('to') ? \App\PenerimaanBarang::whereBetween('tanggal_penerimaan', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->where('id_user',auth()->user()->id)->sum('total') : \App\PenerimaanBarang::where('id_user',auth()->user()->id)->sum('total') )</td>
+                        
+                        <td>@currency( request('from') && request('to') ? \App\PenerimaanBarang::whereBetween('tanggal_penerimaan', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->where('id_user',auth()->user()->id)->sum('grandtotal') : \App\PenerimaanBarang::where('id_user',auth()->user()->id)->sum('grandtotal') )</td>
+                        
                         <td>&nbsp;</td>
                     </tr>
                 </tfoot>

@@ -24,20 +24,34 @@ class TukarFakturController extends Controller
         if (request('from') && request('to')) {
             $from = Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s');
             $to = Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s');
-            $purchases = TukarFaktur::groupBy('no_faktur')->whereBetween('tanggal_tukar_faktur', [$from, $to])->where('id_user'.auth()->user()->id)->get();
+            $tukar = DB::table('tukar_fakturs')
+            ->leftJoin('suppliers','tukar_fakturs.id_supplier','=','suppliers.id')
+            ->leftJoin('purchases','tukar_fakturs.no_po_vendor','=','purchases.invoice')
+            ->select('purchases.barang_id','purchases.status_pembayaran','tukar_fakturs.no_invoice','tukar_fakturs.no_faktur','tukar_fakturs.id','tukar_fakturs.tanggal_tukar_faktur','tukar_fakturs.no_po_vendor','tukar_fakturs.nilai_invoice','suppliers.nama')
+            ->where('id_user',auth()->user()->id)
+            ->groupBy('tukar_fakturs.no_faktur')
+            ->orderBy('tukar_fakturs.id','desc')
+            ->get();    
+            // $tukar = DB::TukarFaktur::groupBy('no_faktur')->whereBetween('tanggal_tukar_faktur', [$from, $to])->where('id_user',auth()->user()->id)->get();
+            // dd($purchases);
         } else {
 
             $tukar = DB::table('tukar_fakturs')
             ->leftJoin('suppliers','tukar_fakturs.id_supplier','=','suppliers.id')
             ->leftJoin('purchases','tukar_fakturs.no_po_vendor','=','purchases.invoice')
             ->select('purchases.barang_id','purchases.status_pembayaran','tukar_fakturs.no_invoice','tukar_fakturs.no_faktur','tukar_fakturs.id','tukar_fakturs.tanggal_tukar_faktur','tukar_fakturs.no_po_vendor','tukar_fakturs.nilai_invoice','suppliers.nama')
-           ->groupBy('tukar_fakturs.no_faktur')
+            ->groupBy('tukar_fakturs.no_faktur')
             ->orderBy('tukar_fakturs.id','desc')
-            ->get();        
+            ->get();    
+
+          
+            
+            $tukars = TukarFaktur::groupBy('no_faktur')->where('no_faktur',$request->no_faktur)
+            ->where('id_user',auth()->user()->id)->get();
+                
         }
-
-
-        return view('purchasing.tukarfaktur.index', compact('purchases','tukar'));
+        // dd($tukars);
+        return view('purchasing.tukarfaktur.index', compact('purchases','tukar','tukars'));
     }
     
 
@@ -51,10 +65,8 @@ class TukarFakturController extends Controller
         ->leftJoin('barangs','penerimaan_barangs.barang_id','=','barangs.id')
         ->leftJoin('users','users.id','=','penerimaan_barangs.id_user')
         ->select('penerimaan_barangs.status_tukar_faktur','purchases.status_barang','purchases.project_id','purchases.invoice','penerimaan_barangs.total','penerimaan_barangs.id','purchases.supplier_id','barangs.nama_barang','penerimaan_barangs.id_purchase','penerimaan_barangs.qty',
-        'penerimaan_barangs.harga_beli','users.name','suppliers.nama','penerimaan_barangs.no_penerimaan_barang')
+        'penerimaan_barangs.harga_beli','penerimaan_barangs.barang_id','penerimaan_barangs.qty_received','users.name','suppliers.nama','penerimaan_barangs.no_penerimaan_barang')
         ->where('penerimaan_barangs.no_penerimaan_barang', $request->no_penerimaan_barang)
-        ->where('purchases.status_barang','completed')
-  
         ->get();
         // dd($purchases);
         // $purchases = Purchase::where('status_barang', 'pending')->where('invoice',$request->invoice)->get();
@@ -74,11 +86,23 @@ class TukarFakturController extends Controller
         $nourutTF = $tukarfaktur . '/' .  sprintf("%02s", abs($noUrutAkhirTF + 1)) . '/' . sprintf("%05s", abs($noUrutAkhirTF + 1));
 
         // dd($purchases);
-   
+        $penerimaans = DB::table('penerimaan_barangs')
+        ->leftJoin('purchases','penerimaan_barangs.id_purchase','=','purchases.id')
+        ->leftJoin('suppliers','purchases.supplier_id','=','suppliers.id')
+        ->leftJoin('barangs','penerimaan_barangs.barang_id','=','barangs.id')
+        ->leftJoin('users','users.id','=','penerimaan_barangs.id_user')
+        ->select('purchases.status_pembayaran','penerimaan_barangs.status_tukar_faktur','purchases.status_barang','purchases.project_id','purchases.invoice','penerimaan_barangs.total','penerimaan_barangs.id','purchases.supplier_id','barangs.nama_barang','penerimaan_barangs.id_purchase','penerimaan_barangs.qty',
+        'penerimaan_barangs.harga_beli','penerimaan_barangs.barang_id','penerimaan_barangs.qty_received','users.name','suppliers.nama','penerimaan_barangs.no_penerimaan_barang')
+        ->where('penerimaan_barangs.no_penerimaan_barang', $request->no_penerimaan_barang)
+        ->first();
+
+        // dd($penerimaans);
  
         $purchase = DB::table('penerimaan_barangs')->groupBy('no_penerimaan_barang')->get();
+
+    
         
-        return view('purchasing.tukarfaktur.create', compact('purchasing','purchase','purchases','suppliers', 'barangs', 'project', 'nourutPO','nourutTF'));
+        return view('purchasing.tukarfaktur.create', compact('purchasing','penerimaans','purchase','purchases','suppliers', 'barangs', 'project', 'nourutPO','nourutTF'));
     }
 
     public function store(Request $request)
@@ -97,29 +121,38 @@ class TukarFakturController extends Controller
         ]);
 
         $dokumen = $request->input('id_dokumen', []);
+        // dd($dokumen);
         $barang = $request->input('nama_barang', []);
+        // dd($barang);
+       
         $attr = [];
         $in = [];
         // dd($request->all());
         DB::beginTransaction();
-    
-        $attr[] = [
-            'no_faktur' => $request->no_faktur,
-            'id_supplier' => $request->id_supplier,
-            'po_spk' => $request->po_spk,
-            'no_po_vendor' => $request->no_po_vendor,
-            'no_invoice' => $request->no_invoice,
-            'nama_barang' => $request->nama_barang,
-            'nilai_invoice' => $request->nilai_invoice,
-            'id_project' => $request->id_project,
-            'id_user' => Auth::user()->id,
-            'tanggal_tukar_faktur' => $request->tanggal_tukar_faktur,
-            'is_active' =>1,
-            
-        ];
-        // dd($attr);
-      
+
+        $tukar_faktur = 1; 
+        $spk = 2 ;
+    if($tukar_faktur == request('po_spk')){
+
+        foreach($barang as $bar => $barangs){
+            $attr[] = [
+                'no_faktur' => $request->no_faktur,
+                'id_supplier' => $request->id_supplier,
+                'po_spk' => $request->po_spk,
+                'no_po_vendor' => $request->no_po_vendor,
+                'no_invoice' => $request->no_invoice,
+                'nama_barang' => $barangs,
+                'nilai_invoice' => $request->nilai_invoice,
+                'id_project' => $request->id_project,
+                'id_user' => Auth::user()->id,
+                'tanggal_tukar_faktur' => $request->tanggal_tukar_faktur,
+                'is_active' =>1,
+                
+            ];
+            // dd($attr);
+        }
         foreach ($dokumen as $key => $no) {
+          
             $in[] = [
                 'no_faktur' => $request->no_faktur,
                 'id_dokumen' => $no,
@@ -129,74 +162,50 @@ class TukarFakturController extends Controller
             ];
             // dd($in);
 
-            $penerimaan = PenerimaanBarang::where('no_po', $request->no_po_vendor)->first();
+            $penerimaan = PenerimaanBarang::select('id')->where('no_po', $request->no_po_vendor)->get();
             //  dd($penerimaan);
-            $array =  DB::table('penerimaan_barangs')->whereIn('id', $penerimaan)->update(array( 
+            DB::table('penerimaan_barangs')->whereIn('id', $penerimaan)->update(array( 
             'status_tukar_faktur' => 'completed'));
-            // dd($array);
-            
+     
         }
-        
-       
+         }elseif($spk == request('po_spk')){
+             
+             foreach ($dokumen as $key => $no) {
+                 $attr[] = [
+                        'no_faktur' => $request->no_faktur,
+                        'id_supplier' => $request->id_supplier,
+                        'id_project' => $request->id_project,
+                        'po_spk' => $request->po_spk,
+                        'no_po_vendor' => $request->no_po_vendor,
+                        'no_invoice' => $request->no_invoice,
+                        'nilai_invoice' => $request->nilai_invoice,
+                        'nama_barang' => $request->nama_barang,
+                        'id_user' => auth()->user()->id,
+                        'tanggal_tukar_faktur' => $request->tanggal_tukar_faktur,
+                        'status_pembayaran' => 'pending',
+                        'is_active' =>1,
+                        
+                    ];
+                     dd($attr);
+                 $in[] = [
+                        'no_faktur' => $request->no_faktur,
+                        'id_dokumen' => $no,
+                        'catatan' => $request->catatan[$key] ,
+                        'pilihan' => $request->pilihan[$key],
+                        'is_active' => 1,
+                    ];
+                    // dd($in);
+                   
+                }
 
-        DB::table('tukar_fakturs')->insert($attr);
-        DB::table('detail_tukar_fakturs')->insert($in);
+    }
+    DB::table('tukar_fakturs')->insert($attr);
+    DB::table('detail_tukar_fakturs')->insert($in);
 
-        DB::commit();
+    DB::commit();
 
         return redirect()->route('purchasing.tukarfaktur.index')->with('success', 'Tukar Faktur barang berhasil');
     }
-    // public function spk(Request $request)
-    // {
-    //     $request->validate([
-    //         'no_faktur' => 'required',
-    //         'id_supplier' => 'required',
-    //         'no_po_vendor' => 'required',
-    //         'no_invoice' => 'required',
-    //         'nilai_invoice' => 'required',
-    //         'nama_barang' => 'required',
-    //         'tanggal_tukar_faktur' => 'required',
-    //         'id_dokumen' => 'required',
-    //         'pilihan' => 'required',
-    //     ]);
-
-    //     $dokumen = $request->input('id_dokumen', []);
-    //     $attr = [];
-    //     $in = [];
-    //     // dd($request->all());
-    //     DB::beginTransaction();
-    //     $attr[] = [
-    //         'no_faktur' => $request->no_faktur,
-    //         'id_supplier' => $request->id_supplier,
-    //         'po_spk' => $request->po_spk,
-    //         'no_po_vendor' => $request->no_po_vendor,
-    //         'no_invoice' => $request->no_invoice,
-    //         'nilai_invoice' => $request->nilai_invoice,
-    //         'nama_barang' => $request->nama_barang,
-    //         'id_user' => auth()->user()->id,
-    //         'tanggal_tukar_faktur' => $request->tanggal_tukar_faktur,
-    //         'is_active' =>1,
-            
-    //     ];
-    //     foreach ($dokumen as $key => $no) {
-    //         $in[] = [
-    //             'no_faktur' => $request->no_faktur,
-    //             'id_dokumen' => $no,
-    //             'catatan' => $request->catatan[$key] ,
-    //             'pilihan' => $request->pilihan[$key],
-    //             'is_active' => 1,
-    //         ];
-    //         // dd($in);
-    //         // dd($attr);
-    //     }
-
-    //     DB::table('tukar_fakturs')->insert($attr);
-    //     DB::table('detail_tukar_fakturs')->insert($in);
-
-    //     DB::commit();
-
-    //     return redirect()->route('purchasing.tukarfaktur.index')->with('success', 'Tukar Faktur barang berhasil');
-    // }
     public function search(Request $request)
     {
         $data = [];
@@ -298,7 +307,16 @@ class TukarFakturController extends Controller
 
     public function destroy($id)
     {
-        $purchases = TukarFaktur::where('id', $id)->delete();
+        $tukar_fakturs = TukarFaktur::where('id', $id)->get();
+
+        foreach ($tukar_fakturs as $tukar) {
+            DetailTukarFaktur::where('no_faktur', $tukar->no_faktur)->delete();
+            // dd($purchase);
+            // DB::table('purchases')->whereIn('id', $purchase)->update(array( 
+            //     'status_barang' => 'pending'));
+        
+            $tukar->delete();
+        }
         // dd($purchases);
     
 

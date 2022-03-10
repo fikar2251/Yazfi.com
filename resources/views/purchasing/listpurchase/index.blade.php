@@ -7,6 +7,30 @@
     </div>
 </div>
 <x-alert></x-alert>
+<form action="{{ route('purchasing.listpurchase.index') }}" method="get">
+    <div class="row filter-row">
+        <div class="col-sm-6 col-md-3">
+            <div class="form-group form-focus">
+                <label class="focus-label">From</label>
+                <div class="cal-icon">
+                    <input class="form-control floating datetimepicker" type="text" name="from" required>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3">
+            <div class="form-group form-focus">
+                <label class="focus-label">To</label>
+                <div class="cal-icon">
+                    <input class="form-control floating datetimepicker" type="text" name="to" required>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+            <button type="submit" class="btn btn-success btn-block">Search</button>
+        </div>
+    </div>
+</form>
 <div class="row">
     <div class="col-sm-12">
         <div class="table-responsive">
@@ -19,8 +43,8 @@
                         <th>Tanggal</th>
                         <th>Total Item</th>
                         <th>Jumlah</th>
-                        <th>Status Barang</th>
-                        <th>Status Pembayaran</th>
+                        {{-- <th>Status Barang</th>
+                        <th>Status Pembayaran</th> --}}
                     </tr>
                 </thead>
 
@@ -35,8 +59,8 @@
                         <td>{{ Carbon\Carbon::parse($purchase->created_at)->format("d/m/Y H:i:s") }}</td>
                         <td>{{ \App\Purchase::where('invoice', $purchase->invoice)->count() }}</td> 
                         <td>@currency(\App\Purchase::where('invoice', $purchase->invoice)->sum('total'))</td>
-                        <td>{{ $purchase->status_barang }}</td>
-                        <td>{{ $purchase->status_pembayaran }}</td>
+                        {{-- <td>{{ $purchase->status_barang }}</td>
+                        <td>{{ $purchase->status_pembayaran }}</td> --}}
                     </tr>
                     @endforeach
                 </tbody>

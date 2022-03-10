@@ -13,13 +13,22 @@ use App\Http\Requests\StoreBarangRequest;
 use App\Http\Requests\UpdateBarangRequest;
 use App\Project;
 use App\Purchase;
+use Carbon\Carbon;
 
 class ListPurchsaController extends Controller
 {
     public function index(Request $request)
     {
-        $purchases = Purchase::groupBy('invoice')
-        ->orderBy('id','desc')->get();
+        if (request('from') && request('to')) {
+            $from = Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s');
+            $to = Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s');
+            $purchases = Purchase::groupBy('invoice')->whereBetween('created_at', [$from, $to])->get();
+        } else {
+            $purchases = Purchase::groupBy('invoice')
+            ->orderBy('id','desc')->get();
+        }
+        // $purchases = Purchase::groupBy('invoice')
+        // ->orderBy('id','desc')->get();
         return view('purchasing.listpurchase.index', compact('purchases'));
     }
 

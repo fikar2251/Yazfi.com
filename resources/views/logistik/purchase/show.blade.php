@@ -114,7 +114,9 @@
                                                 </td>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $barang->barang->nama_barang }}</td>
-                                                <td>{{ $barang->qty }}</td>
+                                               
+                                                <td>{{ $inout->in }}</td>
+                                            
                                                 <td>{{ $barang->unit }}</td>
                                                 <td>@currency($barang->harga_beli)</td>
                                                 <td>@currency($barang->total)</td>

@@ -108,8 +108,10 @@ class PurchaseController extends Controller
     public function show(Purchase $purchase)
     {
         $purchase = Purchase::where('invoice', $purchase->invoice)->first();
+        $inout = InOut::where('invoice', $purchase->invoice)->first();
+        // dd($inout);
 
-        return view('logistik.purchase.show', compact('purchase'));
+        return view('logistik.purchase.show', compact('purchase','inout'));
     }
 
     public function edit(Purchase $purchase)

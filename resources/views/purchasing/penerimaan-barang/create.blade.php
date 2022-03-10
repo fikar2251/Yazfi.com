@@ -58,7 +58,7 @@
                                             data-dependent="barang_id" class="form-control dynamic_function">
 
                                     </div>
-                                    
+
                                 </li>
                             </ul>
                         </div>
@@ -76,8 +76,8 @@
 
                 @foreach($purchase as $item)
 
-                @if (request()->get('invoice') == $item->invoice && $item->status_barang == $item->status_barang =
-                'pending'  )
+                @if (request()->get('invoice') == $item->invoice && $item->qty >= $item->qty_received &&
+                $item->barang_id)
                 <div class="row">
                     <div class="col-sm-6 col-sg-4 m-b-4">
                         <ul class="list-unstyled">
@@ -125,7 +125,7 @@
 
                 </div>
 
-                <form action="{{ route('purchasing.penerimaan-barang.store') }}" method="post">
+                <form action="{{ route('purchasing.penerimaan-barang.store') }}" method="post" onload="qtyText(this)">
                     @csrf
                     <div class="row">
                         <div class="col-sm-6 col-sg-4 m-b-4">
@@ -144,7 +144,7 @@
                                 <li>
                                     <div class="form-group">
                                         <label for="tanggal">Di ajukan <span style="color: red">*</span></label>
-                                        <input type="text"readonly class="form-control"
+                                        <input type="text" readonly class="form-control"
                                             value="{{$item ? $item->admin->name : ''}}">
                                     </div>
                                 </li>
@@ -154,7 +154,7 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <div class="form-group">
-                                        <input type="hidden"readonly name="id_user" id="id_user"class="form-control"
+                                        <input type="hidden" readonly name="id_user" id="id_user" class="form-control"
                                             value="{{auth()->user()->id}}">
                                     </div>
                                 </li>
@@ -240,18 +240,21 @@
                                             <td>
                                                 <input type="number" name="qty_received[{{ $loop->iteration }}]"
                                                     class="form-control qty_received-{{ $loop->iteration }}"
-                                                    data="{{ $loop->iteration }}" required="" onkeyup="testNum(this)"
+                                                    data="{{ $loop->iteration }}"
+                                                    onkeyup="testNum(this),hitung(this), HowAboutIt(this),qtyText(this)"
                                                     id="qty_received" placeholder=" 0">
-
-                                                @error('qty_received')
-                                                <small class="text-danger">{{ $message }}</small>
-                                                @enderror
                                             </td>
                                             <td>
                                                 <input type="number" value="{{ $purchase->qty }}"
-                                                    name="qty[{{ $loop->iteration }}]" data="{{ $loop->iteration }}"
+                                                data="{{ $loop->iteration }}"
+                                                id="qty_sisa" class="form-control qty_sisa-{{ $loop->iteration }}"
+                                                    class="form-control"
+                                                    placeholder="0" required="" readonly>
+                                                    
+                                                <input type="hidden" value="{{ $purchase->qty }}"
+                                                    data="{{ $loop->iteration }}" name="qty[{{ $loop->iteration }}]"
                                                     id="qty" class="form-control qty-{{ $loop->iteration }}"
-                                                    placeholder="0" required="">
+                                                    placeholder="0" required="" readonly>
 
                                                 @error('qty')
                                                 <small class="text-danger">{{ $message }}</small>
@@ -259,20 +262,19 @@
 
                                             </td>
                                             <td>
-                                                <input type="number" value="{{$purchase->harga_beli}}"
+                                                <input type="number" value="{{ $purchase->harga_beli }}"
                                                     name="harga_beli[{{ $loop->iteration }}]"
                                                     class="form-control harga_beli-{{ $loop->iteration }}"
-                                                    data="{{ $loop->iteration }}"
-                                                    onkeyup="hitung(this), HowAboutIt(this)" placeholder="0"
-                                                    id="harga_beli" required="">
+                                                    data="{{ $loop->iteration }}" placeholder="0" id="harga_beli"
+                                                    required="" readonly>
 
                                                 @error('harga_beli')
                                                 <small class="text-danger">{{ $message }}</small>
                                                 @enderror
                                             </td>
                                             <td>
-                                                <input type="number" value="{{$purchase->total}}"
-                                                    name="total[{{ $loop->iteration }}]" disabled
+                                                <input type="number" value="" name="total[{{ $loop->iteration }}]"
+                                                    readonly
                                                     class="form-control total-{{ $loop->iteration }} total-form"
                                                     placeholder="0" required="">
 
@@ -284,42 +286,73 @@
                                                 <input type="text" value="{{$purchase->status_barang}}"
                                                     name="status_barang[{{ $loop->iteration }}]" id="status_barang"
                                                     class="form-control status_barang-{{ $loop->iteration }} status-form"
-                                                    placeholder="Status Barang" required="">
+                                                    readonly placeholder="Status Barang" required="">
                                                 @error('status_barang')
                                                 <small class="text-danger">{{ $message }}</small>
                                                 @enderror
+
                                             </td>
+
 
                                         </tr>
                                         @endforeach
                                     </tbody>
 
                                 </table>
-                                <div class="row invoice-payment">
+                               
                                     <div class="col-sm-4 offset-sm-8">
-
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label>Total</label>
-                                                    <input type="text" id="sub_total" name="total" readonly
-                                                        class="form-control"
-                                                        value="{{ $purchases->sum('total') }}">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Total</label>
+                                                <input type="text" id="sub_total" name="total" readonly
+                                                    class="form-control" value="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label for="PPN">Include PPN</label>
+                                            <div class="input-group">
+                                                <input type="type" readonly id="PPN" value="{{ $ppn ? $ppn->PPN : '' }}"
+                                                    name="ppn" onchange="HowAboutIt()" class="form-control"
+                                                    aria-label="Amount (to the nearest dollar)">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">%</span>
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Grand Total</label>
+                                                <input type="text" id="grandtotal" name="grandtotal" readonly
+                                                    class="form-control" value="">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-sm-1 offset-sm-8">
+                                            <button type="submit" class="btn btn-primary" id="submit">Submit</button>
+                                        </div>
                                     </div>
-                                </div>
+                               
                                 <script>
                                     function hitung(e) {
-                                        let harga = e.value
+                                        let attr = $(e).attr('data')
+                                        // let qty = $(`.qty-${attr}`).val()
+                                        let harga = $(`.harga_beli-${attr}`).val()
+                                        let qty_received = $(`.qty_received-${attr}`).val()
+                                        // console.log(qty_received);
+                                        let total_qty = parseInt(qty_received * harga)
+                                        // let total = parseInt(harga * qty) + total_qty
+                                        $(`.total-${attr}`).val(total_qty)
+
+                                    }
+                                    function qtyText(e) {
                                         let attr = $(e).attr('data')
                                         let qty = $(`.qty-${attr}`).val()
-                                        let qty_received = $(`.qty_received-${attr}`).val()
-                                        console.log(qty);
-                                        let total_qty = parseInt(harga * qty_received)
-                                        let total = parseInt(harga * qty) + total_qty
-                                        $(`.total-${attr}`).val(total)
+                                        let qty_update = $(`.qty_received-${attr}`).val()
+                                        // console.log(qty_received);
+                                        let updated_qty = parseInt(qty - qty_update)
+                                        // let total = parseInt(harga * qty) + total_qty
+                                        $(`.qty-${attr}`).val(updated_qty)
+
 
                                     }
 
@@ -345,22 +378,20 @@
                                             total += parseInt(ele.value)
                                         }
                                         sub_total.value = total
-                                        // let SUB = document.getElementById('sub_total').value;
-                                        // let PPN = document.getElementById('PPN').value;
-                                        // console.log(PPN);
-                                        // let tax = PPN / 100 * sub_total.value;
-                                        // console.log(tax);
-                                        // console.log(SUB);
-                                        // let grand_total = parseInt(SUB) + parseInt(tax);
-                                        // document.getElementById('grandtotal').value = grand_total;
-                                        // console.log(grand_total);
+                                        let SUB = document.getElementById('sub_total').value;
+                                        let PPN = document.getElementById('PPN').value;
+                                        console.log(PPN);
+                                        let tax = PPN / 100 * sub_total.value;
+                                        console.log(tax);
+                                        console.log(SUB);
+                                        let grand_total = parseInt(SUB) + parseInt(tax);
+                                        document.getElementById('grandtotal').value = grand_total;
+                                        console.log(grand_total);
                                     }
 
                                 </script>
 
-                                <div class="col-sm-1 offset-sm-8">
-                                    <button type="submit" class="btn btn-primary" id="submit">Submit</button>
-                                </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -368,11 +399,11 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="table-responsive">
-                            <div class="row">
+                           
                                 <div class="col-sm-5 col-4">
                                     <h4 class="page-title">Riwayat Purchasing Order</h4>
                                 </div>
-                            </div>
+                          
                             <table class="table table-bordered  report">
                                 <tr style="font-size:12px;" class="bg-success">
                                     <th class=" text-light">No.</th>
@@ -410,15 +441,24 @@
                         </div>
                     </div>
                 </div>
-                @elseif(request()->get('invoice') == $item->invoice && $item->status_barang == $item->status_barang =
-                'pending' && $item->qty = $item->qty_received  )
+                @elseif(request()->get('invoice') == $item->invoice && $item->qty == $item->qty_received &&
+                $item->status_barang != 1)
+                {{-- <div class="row">
+                    <div class="col-sm-6 col-sg-4 m-b-4">
+                        <div class="alert alert-success alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                              Data Not Found
+                        </div>
+                    </div>
 
+                </div> --}}
                 @elseif ($item->invoice <= request()->get('invoice'))
                     <div class="row">
                         <div class="col-sm-6 col-sg-4 m-b-4">
                             <div class="alert alert-success alert-dismissible" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                  Data Not Found
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                                Data Not Found
                             </div>
                         </div>
 
@@ -573,50 +613,22 @@
         let result = 0;
         let attr = $(e).attr('data')
         let qty_received = $(`.qty_received-${attr}`).val()
-        console.log(qty_received)
-        let qty = $(`.qty-${attr}`).val()
-        console.log(qty)
+        // console.log(qty_received)
+        let qty = $(`.qty_sisa-${attr}`).val()
+        // console.log(qty)
 
 
         if (qty != qty_received) {
-            result = 'partial';
-        }else {
+            result = 'pending';
+        } else {
             result = 'completed';
-        }if (qty > qty_received) { 
-            result = 'partial';
-        }else{
-            result = 'Barang Lebih';
-        }
-      
 
+        }
 
         $(`.status_barang-${attr}`).val(result)
 
-        // console.log(status_barang);
-        // let coll = document.querySelectorAll('.status-form')
-        // for (let i = 0; i < coll.length; i++) {
-        //     let ele = coll[i]
-        //     status_barang += parseInt(ele.value)
-        // }
-        // document.getElementById("status_barang").value = result;
-
-        // console.log(status_barang)
-
 
     }
-
-    // function tesNumIT(e) {
-
-
-    //     let status_barang = 0;
-    //     let coll = document.querySelectorAll('.status-form')
-    //     for (let i = 0; i < coll.length; i++) {
-    //         let ele = coll[i]
-    //         status_barang += parseInt(ele.value)
-    //     }
-    //     let SUB = document.getElementById(status_barang);
-
-    // }
 
 </script>
 @stop
