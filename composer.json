@@ -19,6 +19,7 @@
         "laravelcollective/html": "^6.2",
         "maatwebsite/excel": "^3.1",
         "mike42/escpos-php": "2.*",
+        "nicolaslopezj/searchable": "^1.13",
         "spatie/laravel-permission": "^4.2",
         "yajra/laravel-datatables-oracle": "^9.18"
     },

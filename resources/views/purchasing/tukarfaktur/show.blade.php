@@ -7,7 +7,7 @@
     <div class="col-sm-7 col-8 text-right m-b-30">
         <div class="btn-group btn-group-sm ">
            
-            <a href="{{ route('purchasing.tukarfaktur.pdf',$detail->id) }}" class="btn btn-success btn-sm">Export to PDF</a>
+            <a href="tukarfaktur/pdf" class="btn btn-primary" target="_blank">CETAK PDF</a>
             
         </div>
     </div>
@@ -29,6 +29,8 @@
                             </div>
                         </div><br>
                         <br />
+                        @foreach($detail as $tur)
+                        @endforeach
                         <div class="row">
                             <div class="col-sm-6 col-sg-4 m-b-4">
                                 <ul class="list-unstyled">
@@ -36,17 +38,17 @@
                                         <div class="form-group">
                                             <p style="font-size: 12px">Nama Vendor :
                                                 <a>
-                                                    <td>{{ $detail->nama }}</td>
+                                                    <td>{{ $tur->nama }}</td>
                                                 </a>
                                             </p style="font-size: 12px">
                                             <p style="font-size: 12px">Nilai Invoice :
                                                 <a style="font-size: 12px">
-                                                    @currency($detail->nilai_invoice)
+                                                    @currency($tur->nilai_invoice)
                                                 </a>
                                             </p>
                                             <p style="font-size: 12px">Keterangan Pembayaran :
                                                 <a style="font-size: 12px">
-                                                    <td>{{$detail->status_pembayaran}}</td>
+                                                    <td>{{$tur->status_pembayaran}}</td>
                                                 </a>
                                             </p>
                                         </div>
@@ -59,10 +61,10 @@
                                         <div class="form-group">
                                             <p style="font-size: 12px">No Faktur :
                                                 <a style="font-size: 12px">
-                                                    <td>{{$detail->no_faktur}}</td>
+                                                    <td>{{$tur->no_faktur}}</td>
                                                 </a>
                                             </p>
-                                            <p style="font-size: 12px">Tanggal Tukar Faktur : <a style="font-size: 12px">{{ Carbon\Carbon::parse($detail->tanggal_tukar_faktur)->format('d/m/Y H:i:s') }}
+                                            <p style="font-size: 12px">Tanggal Tukar Faktur : <a style="font-size: 12px">{{ Carbon\Carbon::parse($tur->tanggal_tukar_faktur)->format('d/m/Y H:i:s') }}
                                                 </a></p>
                                         </div>
                                     </li>
@@ -82,10 +84,10 @@
                                             <th class="text-light"> Catatan</th>
                                         </tr>
                                         <tbody>
-                                            @foreach(App\DetailTukarFaktur::where('no_faktur', $detail->no_faktur)->get() as $dokumens)
+                                            @foreach($detail as $dokumens)
                                             <tr style="font-size:12px;">
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $dokumens->data->nama_dokumen }}</td>
+                                                <td>{{ $dokumens->nama_dokumen }}</td>
                                                 <td>{{ $dokumens->pilihan == 'Y'}}</td>
                                                 <td>{{ $dokumens->pilihan == 'T'}}</td>
                                                 <td>{{ $dokumens->catatan }}</td>

@@ -331,8 +331,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/where/product', 'TukarFakturController@WhereProduct');
             Route::get('/where/project', 'TukarFakturController@whereProject');
             Route::get('/where/tukar/search', 'TukarFakturController@search');
-         
-            Route::get('/pdf/{id}', 'TukarFakturController@pdf')->name('purchasing.tukarfaktur.pdf');
+            Route::get('/where/unit', 'TukarFakturController@WhereUnit');
+            Route::get('/tukarfaktur/pdf/{id}', 'TukarFakturController@pdf');
             Route::resource('tukarfaktur', 'TukarFakturController');
 
 

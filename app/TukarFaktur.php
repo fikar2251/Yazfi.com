@@ -4,8 +4,28 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+use Illuminate\Notifications\Notifiable;
+
+use Nicolaslopezj\Searchable\SearchableTrait;
+
+
 class TukarFaktur extends Model
 {
+    use Notifiable;
+    use SearchableTrait;
+
+
+     /**
+     * Searchable rules.
+     *
+     * @var array
+     */
+    protected $searchable = [
+        'columns' => [
+            'tukar_fakturs.no_penerimaan_barang' => 20,
+       
+        ]
+    ];
     protected $guarded = ['id'];
     protected $table = 'tukar_fakturs';
 

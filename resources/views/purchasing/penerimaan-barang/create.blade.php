@@ -54,23 +54,20 @@
                                         <option value="{{ $item->invoice }}">{{ $item->invoice }}</option>
                                         @endif
                                         @endforeach
-                                        </select> --}} <input type="text" id="invoice" name="invoice"
+                                        </select> --}} 
+                                        <div class="input-group mb-3">
+                                            <input type="text" id="invoice" name="invoice"
                                             data-dependent="barang_id" class="form-control dynamic_function">
+                                            <button type="search" name="search" class="btn btn-primary"><i
+                                                    class="fa fa-search" aria-hidden="true"></i></button>
+                                        </div>
 
                                     </div>
 
                                 </li>
                             </ul>
                         </div>
-                        <div class="col-sm-6 col-sg-4" style="margin-top: 32px">
-                            <ul class="list-unstyled">
-                                <li>
-                                    <div class="form-group">
-                                        <button type="submit" name="submit" class="btn btn-primary">Cari</button>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
+                       
                     </div>
                 </form>
 
@@ -453,7 +450,7 @@
 
                 </div> --}}
                 @elseif ($item->invoice <= request()->get('invoice'))
-                    <div class="row">
+                    {{-- <div class="row">
                         <div class="col-sm-6 col-sg-4 m-b-4">
                             <div class="alert alert-success alert-dismissible" role="alert">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
@@ -462,7 +459,7 @@
                             </div>
                         </div>
 
-                    </div>
+                    </div> --}}
 
                     @else
 

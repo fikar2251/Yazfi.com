@@ -25,6 +25,7 @@ class PenerimaanBarangController extends Controller
             $from = Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s');
             $to = Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s');
             $penerimaans = PenerimaanBarang::groupBy('no_penerimaan_barang')->whereBetween('tanggal_penerimaan', [$from, $to])->where('id_user',auth()->user()->id)->get();
+            $status = PenerimaanBarang::where('status_tukar_faktur', 'completed')->get();
         } else {
             $penerimaans = PenerimaanBarang::groupBy('no_penerimaan_barang')
             ->where('id_user',auth()->user()->id)
@@ -34,12 +35,12 @@ class PenerimaanBarangController extends Controller
             ->where('id_user',auth()->user()->id)
             ->orderBy('tanggal_penerimaan', 'desc')->first();
 
-            $penerimaan = PenerimaanBarang::where('status_tukar_faktur', 'completed')->get();
+            $status = PenerimaanBarang::where('status_tukar_faktur', 'completed')->get();
             // dd($penerimaan);
             
         }
 
-        return view('purchasing.penerimaan-barang.index', compact('penerimaans','total','penerimaan'));
+        return view('purchasing.penerimaan-barang.index', compact('penerimaans','total','status'));
     }
     public function show(TukarFaktur $tukar, Request $request)
     {

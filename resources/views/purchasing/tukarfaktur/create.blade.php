@@ -41,11 +41,15 @@
                                 <div class="form-group">
 
                                     <label for="no_po">Berdasarkan Pilihan : </label>
-                                    <input style="width:15px;" type="radio" name="pilihan" value="1"
-                                        @if(old('pilihan'))@endif class="detail" id="inlineCheckbox1">
+
+                                
+                                    <input style="width:15px;" id="radioButton" type="radio" name="pilihan[1]" value="1"
+                                        {{old('pilihan.1') =="1" ? 'checked='.'"'.'checked'.'"' : ''}} class="detail"
+                                        id="inlineCheckbox1">
                                     <label class="form-check-label" for="inlineCheckbox1">No Penerimaan Barang</label>
-                                    <input style="width:15px;" type="radio" name="pilihan" value="2"
-                                        @if(old('pilihan'))@endif class="detail" id="inlineCheckbox2">
+                                    <input style="width:15px;" id="radioButton" type="radio" name="pilihan[1]" value="2"
+                                        {{old('pilihan.1') =="2" ? 'checked='.'"'.'checked'.'"' : ''}} class="detail"
+                                        id="inlineCheckbox2">
                                     <label class="form-check-label" for="inlineCheckbox2">SPK</label>
 
                                 </div>
@@ -64,22 +68,21 @@
                                         <div class="form-group">
                                             <label for="no_po">No Penerimaan Barang <span
                                                     style="color: red">*</span></label>
-                                            <input type="text" name="no_penerimaan_barang" id="no_penerimaan_barang"
-                                                data-dependent="barang_id"
-                                                class="form-control dynamic_function">{{Request::old('no_penerimaan_barang')}}
+
+                                            <div class="input-group mb-3">
+                                                <input type="text" name="no_penerimaan_barang" id="no_penerimaan_barang"
+                                                    data-dependent="barang_id"
+                                                    class="form-control dynamic_function" value="{{old('no_penerimaan_barang')}}">
+                                                <button type="search" name="search" class="btn btn-primary"><i
+                                                        class="fa fa-search" aria-hidden="true"></i></button>
+                                            </div>
 
                                         </div>
+                                      
 
                                     </li>
                                 </ul>
 
-                                <ul class="list-unstyled">
-                                    <li>
-                                        <div class="form-group">
-                                            <button type="submit" name="submit" class="btn btn-primary">Cari</button>
-                                        </div>
-                                    </li>
-                                </ul>
                             </div>
 
                         </div>
@@ -323,7 +326,7 @@ $item->status_tukar_faktur == $item->status_tukar_faktur = 'pending' )
                                                     <th class="text-light"> Total</th>
                                                     <th class="text-light"> Diajukan</th>
                                                     <th class="text-light"> Status Barang</th>
-                                              
+
                                                 </tr>
                                                 <tbody id="dynamic_field">
                                                     @foreach($purchases as $purchase)
@@ -334,9 +337,10 @@ $item->status_tukar_faktur == $item->status_tukar_faktur = 'pending' )
 
                                                         <td>
                                                             <input type="text" value="{{$purchase->nama_barang}}"
-                                                            name="nama_barang[{{ $loop->iteration }}]" id="nama_barang" required=""
-                                                            class="form-control nama_barang-{{ $loop->iteration }}"
-                                                            style="font-size:13px;">
+                                                                name="nama_barang[{{ $loop->iteration }}]"
+                                                                id="nama_barang" required=""
+                                                                class="form-control nama_barang-{{ $loop->iteration }}"
+                                                                style="font-size:13px;">
                                                         </td>
                                                         <td>
                                                             {{$purchase->qty_received}}
@@ -352,7 +356,7 @@ $item->status_tukar_faktur == $item->status_tukar_faktur = 'pending' )
                                                             {{$purchase->name}}
                                                         </td>
                                                         <td>
-                                                            {{$purchase->status_pemabyaran}}
+                                                            {{$purchase->status_barang}}
                                                         </td>
                                                     </tr>
                                                     @endforeach
@@ -517,7 +521,7 @@ $item->status_tukar_faktur == $item->status_tukar_faktur = 'pending' )
                         </li>
                     </ul>
                 </div>
-                <div class="col-sm-6 col-sg-4 m-b-4">
+                {{-- <div class="col-sm-6 col-sg-4 m-b-4">
                     <ul class="list-unstyled">
                         <li>
                             <div class="form-group">
@@ -526,177 +530,176 @@ $item->status_tukar_faktur == $item->status_tukar_faktur = 'pending' )
 
                                 @error('nama_barang')
                                 <small class="text-danger">{{ $message }}</small>
-                                @enderror
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-sm-6 col-sg-4 m-b-4">
-                    <ul class="list-unstyled">
-                        <li>
-                            <div class="form-group">
-                                <label for="nilai_invoice">Nilai Invoice <span style="color: red">*</span></label>
-                                <input type="text" name="nilai_invoice" class="form-control">
-
-                                @error('nilai_invoice')
-                                <small class="text-danger">{{ $message }}</small>
-                                @enderror
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-sm-6 col-sg-4 m-b-4">
-                    <ul class="list-unstyled">
-                        <li>
-                            <div class="form-group">
-
-                                <input type="hidden" value="{{auth()->user()->id}}" name="id_user" id="id_user" readonly
-                                    class="form-control">
-
-                                @error('nama')
-                                <small class="text-danger">{{ $message }}</small>
-                                @enderror
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-sm-6 col-sg-4 m-b-4">
-                    <ul class="list-unstyled">
-                        <li>
-                            <div class="form-group">
-                                <input type="hidden" name="po_spk" value="2" class="form-control">
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+                @enderror
             </div>
+            </li>
+            </ul>
+    </div>
+    <div class="col-sm-6 col-sg-4 m-b-4">
+        <ul class="list-unstyled">
+            <li>
+                <div class="form-group">
+                    <label for="nilai_invoice">Nilai Invoice <span style="color: red">*</span></label>
+                    <input type="text" name="nilai_invoice" class="form-control">
+
+                    @error('nilai_invoice')
+                    <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+            </li>
+        </ul>
+    </div> --}}
+    <div class="col-sm-6 col-sg-4 m-b-4">
+        <ul class="list-unstyled">
+            <li>
+                <div class="form-group">
+
+                    <input type="hidden" value="{{auth()->user()->id}}" name="id_user" id="id_user" readonly
+                        class="form-control">
+
+                    @error('nama')
+                    <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="col-sm-6 col-sg-4 m-b-4">
+        <ul class="list-unstyled">
+            <li>
+                <div class="form-group">
+                    <input type="hidden" name="po_spk" value="2" class="form-control">
+                </div>
+            </li>
+        </ul>
+    </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-bordered  report">
+                    <tr style="font-size:12px;" class="bg-success">
+                        <th style="text-align:center;" class=" text-light">No.</th>
+                        <th style="text-align:center;" class="text-light">Kelengkapan
+                            Dokumen
+                        </th>
+                        <th style="width:10px; text-align:center;" class="text-light">Ada
+                        </th>
+                        <th style="width:60px;text-align:center;" class="text-light">Tidak
+                            Ada
+                        </th>
+                        <th style="text-align:center;" class="text-light"> Catatan</th>
+                    </tr>
+                    <tbody>
+                        @foreach($purchasing as $barang)
+                        <tr style="font-size:12px;">
+                            <td>{{ $loop->iteration }}</td>
+                            <td>
+                                <input type="text" value="{{$barang->nama_dokumen}}" required=""
+                                    class="form-control id_dokumen-{{ $loop->iteration }} disabled"
+                                    placeholder="Nama Dokumen" style="font-size:13px;">
+                                <input type="hidden" value="{{$barang->id}}" name="id_dokumen[{{ $loop->iteration }}]"
+                                    id="id_dokumen" required="" class="form-control id_dokumen-{{ $loop->iteration }}"
+                                    placeholder="Nama Dokumen" style="font-size:13px;">
+
+                                @error('id_dokumen')
+                                <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </td>
+                            <td>
+                                <input type="radio" name="pilihan[{{ $loop->iteration }}]"
+                                    class="form-control pilihan-{{ $loop->iteration }}" data="{{ $loop->iteration }}"
+                                    required="" id="pilihan" value="Y" data-binding-checked=""
+                                    style=" width:1.2em; text-align:center;">
+
+                                @error('pilihan')
+                                <small class="text-danger">{{ $message }}</small>
+                                @enderror
+
+                            </td>
+                            <td>
+                                <input type="radio" name="pilihan[{{ $loop->iteration }}]"
+                                    class="form-control pilihan-{{ $loop->iteration }} text-center"
+                                    data="{{ $loop->iteration }}" required="" id="pilihan" value="T"
+                                    data-binding-checked="" style="width:1.2em;   padding: 0.25em 0.5em;">
+
+                                @error('pilihan')
+                                <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </td>
+                            <td>
+                                <input type="text" name="keterangan[{{ $loop->iteration }}]" id="keterangan"
+                                    class="form-control keterangan-{{ $loop->iteration }}" placeholder="Catatan"
+                                    style="font-size:13px;">
+
+                                {{-- @error('keterangan')
+                                                        <small class="text-danger">{{ $message }}</small>
+                                @enderror --}}
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <button type="button" id="add" class="btn btn-primary mb-2">Tambah Row Baru</button>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-hover border" id="table-show">
+                    <tr class="bg-success">
+                        <th class="text-light" style="width: 30%;">Nama Barang</th>
+                        <th class="text-light" style="width: 10%;">QTY</th>
+                        <th class="text-light" style="width: 10%;">UNIT</th>
+                        <th class="text-light">HARGA BELI</th>
+                        <th class="text-light">TOTAL</th>
+                        <th class="text-light">#</th>
+                    </tr>
+                    <tbody id="dynamic_field">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <p class="text-info">*Mohon Untuk Input Dengan Benar dan Berurut : <span class="badge badge-primary"
+            id="counter"></span></p>
+    <div class="row invoice-payment">
+        <div class="col-sm-4 offset-sm-8">
+            <h6>Total due</h6>
             <div class="row">
                 <div class="col-md-12">
-                    <div class="table-responsive">
-                        <table class="table table-bordered  report">
-                            <tr style="font-size:12px;" class="bg-success">
-                                <th style="text-align:center;" class=" text-light">No.</th>
-                                <th style="text-align:center;" class="text-light">Kelengkapan
-                                    Dokumen
-                                </th>
-                                <th style="width:10px; text-align:center;" class="text-light">Ada
-                                </th>
-                                <th style="width:60px;text-align:center;" class="text-light">Tidak
-                                    Ada
-                                </th>
-                                <th style="text-align:center;" class="text-light"> Catatan</th>
-                            </tr>
-                            <tbody>
-                                @foreach($purchasing as $barang)
-                                <tr style="font-size:12px;">
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>
-                                        <input type="text" value="{{$barang->nama_dokumen}}" required=""
-                                            class="form-control id_dokumen-{{ $loop->iteration }} disabled"
-                                            placeholder="Nama Dokumen" style="font-size:13px;">
-                                        <input type="hidden" value="{{$barang->id}}"
-                                            name="id_dokumen[{{ $loop->iteration }}]" id="id_dokumen" required=""
-                                            class="form-control id_dokumen-{{ $loop->iteration }}"
-                                            placeholder="Nama Dokumen" style="font-size:13px;">
-
-                                        @error('id_dokumen')
-                                        <small class="text-danger">{{ $message }}</small>
-                                        @enderror
-                                    </td>
-                                    <td>
-                                        <input type="radio" name="pilihan[{{ $loop->iteration }}]"
-                                            class="form-control pilihan-{{ $loop->iteration }}"
-                                            data="{{ $loop->iteration }}" required="" id="pilihan" value="Y"
-                                            data-binding-checked="" style=" width:1.2em; text-align:center;">
-
-                                        @error('pilihan')
-                                        <small class="text-danger">{{ $message }}</small>
-                                        @enderror
-
-                                    </td>
-                                    <td>
-                                        <input type="radio" name="pilihan[{{ $loop->iteration }}]"
-                                            class="form-control pilihan-{{ $loop->iteration }} text-center"
-                                            data="{{ $loop->iteration }}" required="" id="pilihan" value="T"
-                                            data-binding-checked="" style="width:1.2em;   padding: 0.25em 0.5em;">
-
-                                        @error('pilihan')
-                                        <small class="text-danger">{{ $message }}</small>
-                                        @enderror
-                                    </td>
-                                    <td>
-                                        <input type="text" name="keterangan[{{ $loop->iteration }}]" id="keterangan"
-                                            class="form-control keterangan-{{ $loop->iteration }}" placeholder="Catatan"
-                                            style="font-size:13px;">
-
-                                        {{-- @error('keterangan')
-                                                        <small class="text-danger">{{ $message }}</small>
-                                        @enderror --}}
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                    <div class="form-group">
+                        <label>Total</label>
+                        <input type="text" id="sub_total" value="" readonly class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <label>Include PPN</label>
+                    <div class="input-group">
+                        <input type="type" id="PPN" onchange="HowAboutIt()" class="form-control"
+                            aria-label="Amount (to the nearest dollar)">
+                        <div class="input-group-append">
+                            <span class="input-group-text">%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <input type="hidden" id="tax" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Grand Total</label>
+                        <input type="text" id="grandtotal" readonly class="form-control">
                     </div>
                 </div>
             </div>
-            {{-- <button type="button" id="add" class="btn btn-primary mb-2">Tambah Row Baru</button>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="table-responsive">
-                                    <table class="table table-hover border" id="table-show">
-                                        <tr class="bg-success">
-                                            <th class="text-light" style="width: 30%;">Nama Barang</th>
-                                            <th class="text-light" style="width: 10%;">QTY</th>
-                                            <th class="text-light" style="width: 10%;">UNIT</th>
-                                            <th class="text-light">HARGA BELI</th>
-                                            <th class="text-light">TOTAL</th>
-                                            <th class="text-light">#</th>
-                                        </tr>
-                                        <tbody id="dynamic_field">
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <p class="text-info">*Mohon Untuk Input Dengan Benar dan Berurut : <span
-                                class="badge badge-primary" id="counter"></span></p>
-                        <div class="row invoice-payment">
-                            <div class="col-sm-4 offset-sm-8">
-                                <h6>Total due</h6>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label>Total</label>
-                                            <input type="text" id="sub_total" value="" readonly class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <label>Include PPN</label>
-                                        <div class="input-group">
-                                            <input type="type" id="PPN" onchange="HowAboutIt()" class="form-control"
-                                                aria-label="Amount (to the nearest dollar)">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text">%</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <input type="hidden" id="tax" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label>Grand Total</label>
-                                            <input type="text" id="grandtotal" readonly class="form-control">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> --}}
-            <div class="col-sm-12 col-sg-4 m-b-4">
-                <button type="submit" class="btn btn-primary" id="submit">Submit</button>
-            </div>
+        </div>
+        <div class="col-sm-12 col-sg-4 m-b-4">
+            <button type="submit" class="btn btn-primary" id="submit">Submit</button>
+        </div>
         </form>
     </div>
     </div>
@@ -718,14 +721,14 @@ $item->status_tukar_faktur == $item->status_tukar_faktur = 'pending' )
             $("#form-spk").css("display", "none"); //Menghilangkan form-input ketika pertama kali dijalankan
             $(".detail").click(
                 function () { //Memberikan even ketika class detail di klik (class detail ialah class radio button)
-                    if ($("input[name='pilihan']:checked").val() ==
+                    if ($("input[name='pilihan[1]']:checked").val() ==
                         "1") { //Jika radio button "berbeda" dipilih maka tampilkan form-inputan
                         $("#form-input").slideDown("fast"); //Efek Slide Down (Menampilkan Form Input)
                     } else {
                         $("#form-input").slideUp("fast"); //Efek Slide Down (Menampilkan Form Input)
                         //Efek Slide Down (Menampilkan Form Input)
                     }
-                    if ($("input[name='pilihan']:checked").val() ==
+                    if ($("input[name='pilihan[1]']:checked").val() ==
                         "2") { //Jika radio button "berbeda" dipilih maka tampilkan form-inputan
                         $("#form-spk").slideDown("fast"); //Efek Slide Down (Menampilkan Form Input)
                     } else {
@@ -764,16 +767,16 @@ $item->status_tukar_faktur == $item->status_tukar_faktur = 'pending' )
             let template = `
             <tr class="rowComponent">
                         <td hidden>
-                            <input type="hidden" name="barang_id[${index}]" class="barang_id-${index}">
+                            // <input type="hidden" name="barang_id[${index}]" class="barang_id-${index}">
                         </td>
                         <td>
-                            <select required name="barang_id[${index}]" id="${index}" class="form-control select-${index}"></select>
+                            <input type="text" name="nama_barang[${index}]"  class="form-control nama_barang-${index}" placeholder="Nama Barang">
                         </td>
                         <td>
                             <input type="number" name="qty[${index}]"  class="form-control qty-${index}" placeholder="0">
                         </td>
                         <td>
-                            <input type="text" name="unit[${index}]" class="form-control unit-${index}" placeholder="Unit">
+                            <select required name="unit[${index}]" id="${index}" class="form-control select-${index}"></select>
                         </td>
                         <td>
                             <input type="text" id="rupiah" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), HowAboutIt(this)">
@@ -788,9 +791,9 @@ $item->status_tukar_faktur == $item->status_tukar_faktur = 'pending' )
             `
             $('#dynamic_field').append(template)
             $(`.select-${index}`).select2({
-                placeholder: 'Select Product',
+                placeholder: 'Select Unit',
                 ajax: {
-                    url: `/admin/where/product`,
+                    url: `/purchasing/where/unit`,
                     processResults: function (data) {
                         console.log(data)
                         return {

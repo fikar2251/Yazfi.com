@@ -34,6 +34,8 @@ class TukarFakturController extends Controller
             ->groupBy('tukar_fakturs.no_faktur')
             ->orderBy('tukar_fakturs.id','desc')
             ->get();    
+
+            $status = Purchase::where('status_pembayaran', 'completed')->get();
             // $tukar = DB::TukarFaktur::groupBy('no_faktur')->whereBetween('tanggal_tukar_faktur', [$from, $to])->where('id_user',auth()->user()->id)->get();
             // dd($purchases);
         } else {
@@ -46,14 +48,15 @@ class TukarFakturController extends Controller
             ->orderBy('tukar_fakturs.id','desc')
             ->get();    
 
-          
+            $status = Purchase::where('status_pembayaran', 'completed')->get();
+            // dd($status);
             
             $tukars = TukarFaktur::groupBy('no_faktur')->where('no_faktur',$request->no_faktur)
             ->where('id_user',auth()->user()->id)->get();
                 
         }
         // dd($tukars);
-        return view('purchasing.tukarfaktur.index', compact('purchases','tukar','tukars'));
+        return view('purchasing.tukarfaktur.index', compact('purchases','tukar','tukars','status'));
     }
     
 
@@ -66,7 +69,7 @@ class TukarFakturController extends Controller
         ->leftJoin('suppliers','purchases.supplier_id','=','suppliers.id')
         ->leftJoin('barangs','penerimaan_barangs.barang_id','=','barangs.id')
         ->leftJoin('users','users.id','=','penerimaan_barangs.id_user')
-        ->select('penerimaan_barangs.status_tukar_faktur','purchases.status_barang','purchases.project_id','purchases.invoice','penerimaan_barangs.total','penerimaan_barangs.id','purchases.supplier_id','barangs.nama_barang','penerimaan_barangs.id_purchase','penerimaan_barangs.qty',
+        ->select('purchases.status_pembayaran','penerimaan_barangs.status_tukar_faktur','purchases.status_barang','purchases.project_id','purchases.invoice','penerimaan_barangs.total','penerimaan_barangs.id','purchases.supplier_id','barangs.nama_barang','penerimaan_barangs.id_purchase','penerimaan_barangs.qty',
         'penerimaan_barangs.harga_beli','penerimaan_barangs.barang_id','penerimaan_barangs.qty_received','users.name','suppliers.nama','penerimaan_barangs.no_penerimaan_barang')
         ->where('penerimaan_barangs.no_penerimaan_barang', $request->no_penerimaan_barang)
         ->get();
@@ -99,8 +102,17 @@ class TukarFakturController extends Controller
         ->first();
 
         // dd($penerimaans);
+        if($request->has('no_penerimaan_barang')){
+        
+           
+            $purchase = PenerimaanBarang::where('no_penerimaan_barang',$request->get('no_penerimaan_barang'))->groupBy('no_penerimaan_barang')->get();
+
+    	}else{
+            $purchase = PenerimaanBarang::get();
+
+    	}
  
-        $purchase = DB::table('penerimaan_barangs')->groupBy('no_penerimaan_barang')->get();
+        
 
     
         
@@ -241,10 +253,11 @@ class TukarFakturController extends Controller
             ->leftJoin('suppliers', 'tukar_fakturs.id_supplier', '=', 'suppliers.id')
             ->leftJoin('detail_tukar_fakturs', 'tukar_fakturs.no_faktur', '=', 'detail_tukar_fakturs.no_faktur')
             ->leftJoin('dokumen_tukar_faktur','detail_tukar_fakturs.id_dokumen','=','dokumen_tukar_faktur.id')
-            ->where('tukar_fakturs.id',$id)
-            ->select('tukar_fakturs.status_pembayaran','suppliers.nama','tukar_fakturs.no_faktur','tukar_fakturs.id','tukar_fakturs.nilai_invoice',
+            ->select('tukar_fakturs.no_faktur','tukar_fakturs.status_pembayaran','suppliers.nama','tukar_fakturs.no_faktur','tukar_fakturs.id','tukar_fakturs.nilai_invoice',
             'detail_tukar_fakturs.pilihan','dokumen_tukar_faktur.nama_dokumen', 'detail_tukar_fakturs.catatan','tukar_fakturs.tanggal_tukar_faktur')
-            ->first();
+            ->where('tukar_fakturs.id',$id)
+            ->groupBy('detail_tukar_fakturs.id_dokumen')
+            ->get();
             // dd($detail);
         return view('purchasing.tukarfaktur.show', compact('detail'));
     }
@@ -360,12 +373,14 @@ class TukarFakturController extends Controller
         ->first();
 
 
-        // view()->share('purchasing.tukarfaktur.pdf', $detail);
-        // $pdf = PDF::loadView('purchasing.tukarfaktur.pdf', compact('detail'));
+        view()->share('pdf', $detail);
+        // $pdf = PDF::loadView('pdf', compact('detail'));
         // return $pdf->stream('Laporan Pengajuan.pdf');
-
-        $pdf = PDF::loadview('purchasing.tukarfaktur.pdf',['detail'=>$detail]);
+        $pdf = PDF::loadview('pdf',['detail'=>$detail]);
         return $pdf->stream();
+
+        // $pdf = PDF::loadview('purchasing.tukarfaktur.pdf',['detail'=>$detail]);
+        // return $pdf->stream();
         // $pdf = PDF::setOptions(['defaultFont' => 'dejavu serif'])->loadView('purchasing.tukarfaktur.pdf', compact('detail'));
         // return $pdf->stream('filename.pdf');
 
@@ -373,5 +388,17 @@ class TukarFakturController extends Controller
         // $pdf = PDF::loadView('purchasing.tukarfaktur.pdf', compact('detail'));
         // $pdf->save(storage_path('/').$pdf_name);
         // return $pdf->download($pdf_name);
+    }
+    public function WhereUnit(Request $request)
+    {
+        $data = [];
+        $unit =  DB::table('units')
+            ->where('nama', 'like', '%' . $request->q . '%')
+            ->get();
+        foreach ($unit as $row) {
+            $data[] = ['id' => $row->id,  'text' => $row->nama];
+        }
+
+        return response()->json($data);
     }	
 }
