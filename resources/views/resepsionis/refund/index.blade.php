@@ -128,8 +128,8 @@ $nourut = $AWAL . '/' . sprintf('%02s', abs(1)) . '/' . sprintf('%05s', abs($noU
                                     <td style="width: 200px">Total yang sudah dibayar</td>
                                     <td style="width: 20px">:</td>
                                     <td>
-                                        @currency($singlebayar->nominal) <input type="hidden"
-                                            value="{{ $singlebayar->nominal }}" name="nominal" id="nominal">
+                                        @currency($totalbayar) <input type="hidden"
+                                            value="{{ $totalbayar }}" name="nominal" id="nominal">
                                     </td>
                                 </tr>
                                 <tr>

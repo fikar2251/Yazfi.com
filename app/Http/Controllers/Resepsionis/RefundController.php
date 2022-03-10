@@ -25,6 +25,12 @@ class RefundController extends Controller
             $getrincianid = $rincianid->id_rincian;
 
             $singlebayar = Pembayaran::where('rincian_id', $getrincianid)->first();
+            $notrs = $singlebatal->spr->no_transaksi;
+
+            $totalbayar = Pembayaran::where('no_detail_transaksi', $notrs)->sum('nominal');
+           
+            
+            // dd($nominal);
             
             $idbatal = $singlebatal->no_pembatalan;
             
@@ -32,10 +38,10 @@ class RefundController extends Controller
             if ($refund) {
                 $idbatal1 = $refund->no_pembatalan;
 
-                return view('resepsionis.refund.index', compact('batal', 'singlebatal', 'singlebayar', 'idbatal1'));
+                return view('resepsionis.refund.index', compact('batal', 'singlebatal', 'singlebayar', 'idbatal1' ,'totalbayar'));
             }else {
                $idbatal1 = '';
-               return view('resepsionis.refund.index', compact('batal', 'singlebatal', 'singlebayar', 'idbatal1'));
+               return view('resepsionis.refund.index', compact('batal', 'singlebatal', 'singlebayar', 'idbatal1', 'totalbayar'));
             }
             
 
@@ -64,6 +70,12 @@ class RefundController extends Controller
         $refund = Refund::find($id);
         $refund->status = 'paid';
         $refund->save();
+
+        $idbatal = $refund->pembatalan_id;
+
+        $batal = Pembatalan::where('id', $idbatal)->first();
+        $batal->refund = 'paid';
+        $batal->save();
 
         return redirect()->back();
     }

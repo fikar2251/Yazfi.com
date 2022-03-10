@@ -109,15 +109,14 @@
                                                             <option hidden value="{{ $item->id_rincian }}">Downpayment
                                                             </option>
                                                         @elseif ($item->tipe == 3 && $item->status_pembayaran == 'unpaid')
-                                                            <option value="{{ $item->id_rincian }}">Cicilan tahap
-                                                                {{ $loop->iteration - 2 }}</option>
+                                                            <option value="{{ $item->id_rincian }}">{{$item->keterangan}}</option>
                                                             </option>
                                                         @elseif ($item->tipe == 3 && $item->status_pembayaran == 'partial')
-                                                            <option value="{{ $item->id_rincian }}">Cicilan tahap
-                                                                {{ $loop->iteration - 2 }}</option>
+                                                            <option value="{{ $item->id_rincian }}">
+                                                                {{ $item->keterangan }}</option>
                                                         @elseif ($item->tipe == 3 && $item->status_pembayaran == 'paid')
-                                                            <option hidden value="{{ $item->id_rincian }}">Cicilan tahap
-                                                                {{ $loop->iteration - 2 }}
+                                                            <option hidden value="{{ $item->id_rincian }}">
+                                                                {{ $item->keterangan }}
                                                             </option>
                                                         @endif
                                                         {{-- </option> --}}
@@ -178,19 +177,16 @@
                                                 <td>{{ $item->jatuh_tempo }}</td>
                                                 <td>@currency($item->jumlah_tagihan)</td>
                                                 <td>
-                                                    @if ($item->tipe == 1)
-                                                        Booking fee
-                                                    @elseif ($item->tipe == 2)
-                                                        Downpayment
-                                                    @else
-                                                        Pembayaran cicilan tahap {{ $loop->iteration - 2 }}
-                                                    @endif
+                                                   {{$item->keterangan}}
                                                 </td>
                                                 <td>
                                                     @if ($item->status_pembayaran == 'partial')
-                                                        unpaid
-                                                    @else
-                                                        {{ $item->status_pembayaran }}
+                                                        <span class="btn-danger">unpaid</span>
+                                                    @elseif($item->status_pembayaran == 'unpaid')
+                                                        <span class="btn-danger">unpaid</span>
+                                                    @elseif($item->status_pembayaran == 'paid')
+                                                        <span
+                                                            class="btn-success">{{ $item->status_pembayaran }}</span>
                                                     @endif
                                                 </td>
                                             </tr>
@@ -239,13 +235,7 @@
                                                 <td>{{ $item->no_detail_transaksi }}</td>
                                                 <td>{{ $item->tanggal_transaksi }}</td>
                                                 <td>
-                                                    @if ($item->rincian->tipe == 1)
-                                                        Booking fee
-                                                    @elseif ($item->rincian->tipe == 2)
-                                                        Downpayment
-                                                    @else
-                                                        Cicilan tahap {{ $loop->iteration - 2 }}
-                                                    @endif
+                                                   {{$item->rincian->keterangan}}
                                                 </td>
                                                 <td>
                                                     @currency($item->nominal)
@@ -309,31 +299,31 @@
 
                     success: function(data) {
                         // if (data) {
-                            console.log(data);
-                            
-                            for (var i = 0; i < data.length; i++) {
-                                if (data[i].jumlah_tagihan) {
-                                    var nominal = data[i].jumlah_tagihan;                                  
-                                }else {
+                        console.log(data);
 
-                                    var nominal = data;
-                                }
-                                document.getElementById('nominal').value = nominal;
-                            };
+                        for (var i = 0; i < data.length; i++) {
+                            if (data[i].jumlah_tagihan) {
+                                var nominal = data[i].jumlah_tagihan;
+                            } else {
+
+                                var nominal = data;
+                            }
+                            document.getElementById('nominal').value = nominal;
+                        };
                         // } 
-                            // else if(data2) {
-                            //     console.log(data2);
-                                
-                            //     for (var i = 0; i < data2.length; i++) {
-        
-                            //         // var nominal = data2[i].jumlah_tagihan;
-                            //         var nominal = data2;
-                            //         document.getElementById('nominal').value = nominal;
-                            //     };  
-                            // }  
-                            // else {
-                            //     console.log('halo');    
-                            // }                      
+                        // else if(data2) {
+                        //     console.log(data2);
+
+                        //     for (var i = 0; i < data2.length; i++) {
+
+                        //         // var nominal = data2[i].jumlah_tagihan;
+                        //         var nominal = data2;
+                        //         document.getElementById('nominal').value = nominal;
+                        //     };  
+                        // }  
+                        // else {
+                        //     console.log('halo');    
+                        // }                      
                     },
                     error: function() {
 

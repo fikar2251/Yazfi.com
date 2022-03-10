@@ -77,7 +77,7 @@
                                         <td> {{ auth()->user()->name }} </td>
                                         <td> {{ $item->status }} </td>
                                         <td>
-                                            {{ $rf1->status }}
+                                            {{ $item->refund }}
                                         </td>
                                     </tr>
                                 @endforeach

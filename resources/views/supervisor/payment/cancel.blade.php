@@ -144,20 +144,7 @@ $nourut = $AWAL . '/' . sprintf('%02s', abs(1)) . '/' . sprintf('%05s', abs($noU
                                     <td style="width: 200px">Alasan pembatalan</td>
                                     <td style="width: 20px">:</td>
                                     <td>
-                                        <select name="alasan" id="alasan" class="form-control" style="width: 200px">
-                                            <option value="">-- Pilih alasan --</option>
-                                            @foreach ($alasan as $item)
-                                            <option value="{{ $item->id }}">{{ $item->alasan }}
-                                            </option>
-                                            @endforeach
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="width: 200px">Keterangan</td>
-                                    <td style="width: 20px">:</td>
-                                    <td>
-                                        <textarea name="keterangan" id="keterangan" cols="30" rows="5"></textarea>
+                                        <textarea name="alasan" id="alasan" cols="30" rows="5"></textarea>
                                     </td>
                                 </tr>
                             </tbody>

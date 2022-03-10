@@ -200,6 +200,7 @@ class PricelistController extends Controller
                 'no_transaksi' => $request->no_transaksi,
                 'id_spr' => $spr->id_transaksi,
                 'jatuh_tempo' => $tempo,
+                'keterangan' => 'Booking Fee'
             ],
             ['tipe' => 2,
                 'jumlah_tagihan' => $request->downpayment,
@@ -207,6 +208,7 @@ class PricelistController extends Controller
                 'no_transaksi' => $request->no_transaksi,
                 'id_spr' => $spr->id_transaksi,
                 'jatuh_tempo' => $tempo,
+                'keterangan' => 'Downpayment'
             ],
         ];
 
@@ -215,7 +217,7 @@ class PricelistController extends Controller
         $date5 = date('d-m-Y', strtotime('+' . $int5 . 'days', strtotime($date)));
 
         Tagihan::insert($data);
-
+        $a = 1;
         while (strtotime($tempo) <= strtotime($date5)) {
             $tipe3 = [
                 ['tipe' => 3,
@@ -224,10 +226,11 @@ class PricelistController extends Controller
                     'no_transaksi' => $request->no_transaksi,
                     'id_spr' => $spr->id_transaksi,
                     'jatuh_tempo' => $tempo,
+                    'keterangan' => 'Cicilan Tahap '. $a
                 ],
             ];
             Tagihan::insert($tipe3);
-
+            $a++;
             $tempo = date("d-m-Y", strtotime("+30 day", strtotime($tempo)));
         }
 
@@ -248,6 +251,7 @@ class PricelistController extends Controller
             ->groupBy('type')
             ->get();
 
+           
 
         return view('marketing.pricelist.create', compact('blok', 'id', 'skema'));
     }

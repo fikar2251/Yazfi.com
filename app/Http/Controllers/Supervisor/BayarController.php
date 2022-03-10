@@ -53,18 +53,11 @@
                 $user = User::where('id_roles', 4)->get();
 
                 $batal = Pembatalan::orderBy('no_pembatalan', 'desc')->get();
-                $refund = Refund::all();
-                foreach ($refund as $rf) {
-
-                }
-                $nobatal = $rf->no_pembatalan;
-                $refund1 = Refund::where('no_pembatalan', $nobatal)->orderBy('no_refund', 'desc')->get();
-                foreach ($refund1 as $rf1) {
-
-                }
-                return view('supervisor.payment.index', compact('user', 'batal', 'rf1'));
+                        
+                return view('supervisor.payment.index', compact('user', 'batal'));
+                    
             }
-
+            
         }
 
         public function cancel($id)
@@ -123,9 +116,10 @@
                 'tanggal' => $tgl,
                 'no_pembatalan' => $nourut,
                 'spr_id' => $request->id_spr,
-                'alasan_id' => $request->alasan,
+                'alasan_pembatalan' => $request->alasan,
                 'diajukan' => $spv,
                 'status' => 'pending',
+                'refund' => 'unpaid'    
             ]);
 
             return redirect()->route('supervisor.payment.index');

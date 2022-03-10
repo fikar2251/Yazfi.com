@@ -29,13 +29,7 @@
                                         <td>{{ $item->no_detail_transaksi }}</td>
                                         <td>{{ Carbon\Carbon::now()->format('d-m-Y') }}</td>
                                         <td>
-                                            @if ($item->rincian->tipe == 1)
-                                                Booking fee
-                                            @elseif ($item->rincian->tipe == 2)
-                                                Downpayment
-                                            @else
-                                                Cicilan tahap {{ $loop->iteration - 2 }}
-                                            @endif
+                                           {{$item->rincian->keterangan}}
                                         </td>
                                         <td>
                                             @currency($item->nominal)
