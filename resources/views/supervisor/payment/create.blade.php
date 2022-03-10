@@ -111,6 +111,10 @@
                                                         @elseif ($item->tipe == 3 && $item->status_pembayaran == 'unpaid')
                                                             <option value="{{ $item->id_rincian }}">Cicilan tahap
                                                                 {{ $loop->iteration - 2 }}</option>
+                                                            </option>
+                                                        @elseif ($item->tipe == 3 && $item->status_pembayaran == 'partial')
+                                                            <option value="{{ $item->id_rincian }}">Cicilan tahap
+                                                                {{ $loop->iteration - 2 }}</option>
                                                         @elseif ($item->tipe == 3 && $item->status_pembayaran == 'paid')
                                                             <option hidden value="{{ $item->id_rincian }}">Cicilan tahap
                                                                 {{ $loop->iteration - 2 }}
@@ -233,7 +237,7 @@
                                         @foreach ($bayar as $item)
                                             <tr>
                                                 <td>{{ $item->no_detail_transaksi }}</td>
-                                                <td>{{ Carbon\Carbon::now()->format('d-m-Y') }}</td>
+                                                <td>{{ $item->tanggal_transaksi }}</td>
                                                 <td>
                                                     @if ($item->rincian->tipe == 1)
                                                         Booking fee
@@ -302,18 +306,52 @@
                         'rincian_id': rincian_id,
                         'nominal': nominal,
                     },
+
                     success: function(data) {
-                        console.log(data);
+                        // if (data) {
+                            console.log(data);
+                            
+                            for (var i = 0; i < data.length; i++) {
+                                if (data[i].jumlah_tagihan) {
+                                    var nominal = data[i].jumlah_tagihan;                                  
+                                }else {
 
-                        for (var i = 0; i < data.length; i++) {
-
-                            var nominal = data[i].jumlah_tagihan;
-                            document.getElementById('nominal').value = nominal;
-                        };
+                                    var nominal = data;
+                                }
+                                document.getElementById('nominal').value = nominal;
+                            };
+                        // } 
+                            // else if(data2) {
+                            //     console.log(data2);
+                                
+                            //     for (var i = 0; i < data2.length; i++) {
+        
+                            //         // var nominal = data2[i].jumlah_tagihan;
+                            //         var nominal = data2;
+                            //         document.getElementById('nominal').value = nominal;
+                            //     };  
+                            // }  
+                            // else {
+                            //     console.log('halo');    
+                            // }                      
                     },
                     error: function() {
 
                     },
+
+                    // success: function(data) {
+                    //     console.log(data);
+
+                    //     for (var i = 0; i < data.length; i++) {
+
+                    //         var nominal = data[i].jumlah_tagihan;
+                    //         // var nominal = data;
+                    //         document.getElementById('nominal').value = nominal;
+                    //     };
+                    // },
+                    // error: function() {
+
+                    // },
 
                 })
             })

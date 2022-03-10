@@ -142,9 +142,22 @@
             $data = DB::table('rincian_tagihan_spr')
                 ->select('rincian_tagihan_spr.id_rincian', 'rincian_tagihan_spr.jumlah_tagihan')
                 ->groupBy('rincian_tagihan_spr.jumlah_tagihan', 'rincian_tagihan_spr.id_rincian')
-                ->where($where)->get();
+                ->where($where)->get(); 
 
-            return $data;
+            $data1 = Pembayaran::where('rincian_id', $where)->first();
+            
+            if ($data1) {
+                # code...
+                $nominal = $data1->nominal;
+                $jumlah_tagihan = $data1->rincian->jumlah_tagihan;
+                $data2 = $jumlah_tagihan - $nominal;
+                
+                return $data2;
+            }elseif($data){
+
+                return $data;
+            }
+
         }
 
         public function storeBayar(Request $request)

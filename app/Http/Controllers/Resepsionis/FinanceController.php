@@ -39,12 +39,28 @@ class FinanceController extends Controller
 
         $tagihan = Tagihan::where($where)->first();
 
+        $rincianid = $bayar->rincian_id;
+        $nominal = $bayar->nominal;
+        $bayar1 = Pembayaran::where('rincian_id', $rincianid)->sum('nominal');
+        $sum = (int)$bayar1;
+
         if ($bayar->nominal == $tagihan->jumlah_tagihan) {
             $tagihan->status_pembayaran = 'paid';
-        } else {
+        }elseif ($bayar->nominal < $tagihan->jumlah_tagihan && $sum < $tagihan->jumlah_tagihan) {
             $tagihan->status_pembayaran = 'partial';
+        }elseif($sum == $tagihan->jumlah_tagihan) {
+            $tagihan->status_pembayaran = 'paid';
         }
         $tagihan->save();
+
+        // dd($sum);
+
+        // if ($bayar->nominal == $tagihan->jumlah_tagihan) {
+        //     $tagihan->status_pembayaran = 'paid';
+        // } else {
+        //     $tagihan->status_pembayaran = 'partial';
+        // }
+        // $tagihan->save();
 
         $spr = $tagihan->id_spr;
         $spr1 = Spr::where('id_transaksi', $spr)->first();
