@@ -361,9 +361,11 @@ class TukarFakturController extends Controller
 
 
         // view()->share('purchasing.tukarfaktur.pdf', $detail);
-        $pdf = PDF::loadView('purchasing.tukarfaktur.pdf', ['detail' => $detail]);
-        return $pdf->stream('Laporan Pengajuan.pdf');
+        // $pdf = PDF::loadView('purchasing.tukarfaktur.pdf', compact('detail'));
+        // return $pdf->stream('Laporan Pengajuan.pdf');
 
+        $pdf = PDF::loadview('purchasing.tukarfaktur.pdf',['detail'=>$detail]);
+        return $pdf->stream();
         // $pdf = PDF::setOptions(['defaultFont' => 'dejavu serif'])->loadView('purchasing.tukarfaktur.pdf', compact('detail'));
         // return $pdf->stream('filename.pdf');
 

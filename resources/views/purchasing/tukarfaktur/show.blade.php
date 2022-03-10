@@ -7,7 +7,7 @@
     <div class="col-sm-7 col-8 text-right m-b-30">
         <div class="btn-group btn-group-sm ">
            
-            <a href="{{ route('tukarfaktur.pdf') }}" class="btn btn-success btn-sm">Export to PDF</a>
+            <a href="{{ route('purchasing.tukarfaktur.pdf',$detail->id) }}" class="btn btn-success btn-sm">Export to PDF</a>
             
         </div>
     </div>
