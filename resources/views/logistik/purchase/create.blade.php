@@ -50,7 +50,8 @@
                                 <li>
                                     <div class="form-group">
                                         <label for="invoice">Number PO <span style="color: red">*</span></label>
-                                        <input type="text" name="invoice" value="{{$nourut}}" id="invoice" class="form-control" readonly>
+                                        <input type="text" name="invoice" value="{{$nourut}}" id="invoice"
+                                            class="form-control" readonly>
                                     </div>
                                 </li>
                             </ul>
@@ -60,7 +61,8 @@
                                 <li>
                                     <div class="form-group">
                                         <label for="nama">Nama <span style="color: red">*</span></label>
-                                        <input type="text" value="{{auth()->user()->name}}" readonly class="form-control">
+                                        <input type="text" value="{{auth()->user()->name}}" readonly
+                                            class="form-control">
                                     </div>
                                 </li>
                             </ul>
@@ -85,7 +87,9 @@
                                 <li>
                                     <div class="form-group">
                                         <label for="cabang">Project <span style="color: red">*</span></label>
-                                        <select name="project_id" id="nama_project" class="form-control input-lg dynamic" data-dependent="alamat_project" required="">
+                                        <select name="project_id" id="nama_project"
+                                            class="form-control input-lg dynamic" data-dependent="alamat_project"
+                                            required="">
                                             <option disabled selected>-- Select Project --</option>
                                             @foreach($project as $projects)
                                             <option value="{{ $projects->id }}">{{ $projects->nama_project }}</option>
@@ -137,7 +141,8 @@
                             </div>
                         </div>
                     </div>
-                    <p class="text-info">*Mohon Untuk Input Dengan Benar dan Berurut : <span class="badge badge-primary" id="counter"></span></p>
+                    <p class="text-info">*Mohon Untuk Input Dengan Benar dan Berurut : <span class="badge badge-primary"
+                            id="counter"></span></p>
                     <div class="row invoice-payment">
                         <div class="col-sm-4 offset-sm-8">
                             <h6>Total due</h6>
@@ -151,7 +156,8 @@
                                 <div class="col-md-12">
                                     <label>Include PPN</label>
                                     <div class="input-group">
-                                        <input type="type" id="PPN" onchange="HowAboutIt()" class="form-control"  aria-label="Amount (to the nearest dollar)">
+                                        <input type="type" name="PPN" id="PPN" onchange="HowAboutIt()"
+                                            class="form-control" aria-label="Amount (to the nearest dollar)">
                                         <div class="input-group-append">
                                             <span class="input-group-text">%</span>
                                         </div>
@@ -159,13 +165,14 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <input type="hidden" id="tax" name="PPN" class="form-control">
+                                        <input type="hidden" id="tax" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Grand Total</label>
-                                        <input type="text" id="grandtotal" name="grandtotal" readonly class="form-control">
+                                        <input type="text" id="grandtotal" name="grandtotal" readonly
+                                            class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -184,9 +191,7 @@
 </html>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script>
-   
-
-    var formatter = function(num) {
+    var formatter = function (num) {
         var str = num.toString().replace("", ""),
             parts = false,
             output = [],
@@ -222,13 +227,18 @@
                         <input type="hidden" name="barang_id[${index}]" class="barang_id-${index}">
                     </td>
                     <td>
-                        <select required name="barang_id[${index}]" id="${index}" class="form-control select-${index}"></select>
+                        <select required name="barang_id[${index}]" id="${index}" class="form-control selectbarang-${index}"></select>
                     </td>
                     <td>
                         <input type="number" name="qty[${index}]"  class="form-control qty-${index}" placeholder="0">
                     </td>
                     <td>
-                        <input type="text" name="unit[${index}]" class="form-control unit-${index}" placeholder="Unit">
+                        <select name="unit[${index}]" class="form-control unit-${index}" required="">
+                        <option disabled selected>Unit</option>
+                        @foreach($unit as $units)
+                            <option value="{{ $units->nama }}">{{ $units->nama }}</option>
+                        @endforeach
+                        </select>
                     </td>
                     <td>
                         <input type="text" id="rupiah" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), HowAboutIt(this)">
@@ -243,19 +253,34 @@
         `
         $('#dynamic_field').append(template)
 
-        $(`.select-${index}`).select2({
+        $(`.selectbarang-${index}`).select2({
             placeholder: 'Select Product',
             ajax: {
                 url: `/admin/where/product`,
-                processResults: function(data) {
+                processResults: function (data) {
                     console.log(data)
                     return {
                         results: data
                     };
                 },
                 cache: true
-            }
+            },
+
         });
+
+        // $(`.selectunit-${index}`).select2({
+        //     placeholder: 'Select unit',
+        //     ajax: {
+        //         url: `/logistik/where/unit`,
+        //         processResults: function(data) {
+        //             console.log(data)
+        //             return {
+        //                 results: data
+        //             };
+        //         },
+        //         cache: true
+        //     }
+        // });
 
 
     }
@@ -263,7 +288,7 @@
     function remove(q) {
         $(q).parent().parent().remove()
     }
-    $('.remove').on('click', function() {
+    $('.remove').on('click', function () {
         $(this).parent().parent().remove()
     })
 
@@ -312,7 +337,7 @@
 
     var rupiah = document.getElementById('rupiah');
     if (rupiah) {
-        rupiah.addEventListener('keyup', function(e) {
+        rupiah.addEventListener('keyup', function (e) {
             rupiah.value = formatRupiah(this.value, 'Rp. ');
         });
     }
@@ -334,14 +359,14 @@
         return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
     }
 
-    $(document).ready(function() {
-        $('#add').on('click', function() {
+    $(document).ready(function () {
+        $('#add').on('click', function () {
             form_dinamic()
         })
     })
 
-    $(document).ready(function() {
-        $('.dynamic').change(function() {
+    $(document).ready(function () {
+        $('.dynamic').change(function () {
 
             var id = $(this).val();
             var div = $(this).parent();
@@ -356,7 +381,7 @@
 
 
                 },
-                success: function(data) {
+                success: function (data) {
                     console.log(data);
                     op += '<input value="0" disabled>';
                     for (var i = 0; i < data.length; i++) {
@@ -364,11 +389,12 @@
                         document.getElementById('lokasi').value = alamat;
                     };
                 },
-                error: function() {
+                error: function () {
 
                 }
             })
         })
     })
+
 </script>
 @stop

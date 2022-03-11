@@ -5,11 +5,11 @@
     </li>
 
     <li class="{{ request()->is('purchasing/listpruchase*') ? 'active' : '' }}">
-        <a href="{{ route('purchasing.listpurchase.index') }}"><i class="fa fa-calculator"></i> <span>List Purchase</span></a>
+        <a href="{{ route('purchasing.listpurchase.index') }}"><i class="fa-solid fa-list-check"></i><span>List Purchase</span></a>
     </li>
 
     <li class="{{ request()->is('purchasing/inputtukarfaktur*') ? 'active' : '' }}">
-        <a href="{{ route('purchasing.tukarfaktur.index') }}"><i class="fa fa-calculator"></i> <span>List Faktur</span></a>
+        <a href="{{ route('purchasing.tukarfaktur.index') }}"><i class="fa-solid fa-list-check"></i> <span>List Faktur</span></a>
     </li>
     <li class="{{ request()->is('purchasing/penerimaanbarang*') ? 'active' : '' }}">
         <a href="{{ route('purchasing.penerimaan-barang.index') }}"><i class="fa fa-cart-plus" aria-hidden="true"></i> <span>Penerimaan Barang</span></a>

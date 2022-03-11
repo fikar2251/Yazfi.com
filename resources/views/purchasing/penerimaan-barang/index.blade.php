@@ -68,21 +68,21 @@
                             $penerimaan->no_penerimaan_barang)->sum('grandtotal'))</td>
                         {{-- <td>{{ $penerimaan->purchase->status_barang }}</td>
                         <td>{{ $penerimaan->status_tukar_faktur }}</td> --}}
-                        @if($status->count())
-                       
-                         
-                                <td >Result not found.</td>
-                           
-			            @else
-                        <td> 
-                       {{-- <a href="{{ route('purchasing.penerimaan-barang.edit', $penerimaan->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a> --}}
+                        {{-- @if($status->count()) --}}
 
-                       <form action="{{ route('purchasing.penerimaan-barang.destroy', $penerimaan->id) }}" method="post" style="display: inline;">
-                        @method('delete')
-                        @csrf
-                        <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
-                    </form></td>
-                        @endif
+                         {{-- <td>Not Found</td> --}}
+                        
+			            {{-- @else --}}
+                        <td> 
+                            {{-- <a href="{{ route('purchasing.penerimaan-barang.edit', $penerimaan->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a> --}}
+  
+                            <form action="{{ route('purchasing.penerimaan-barang.destroy', $penerimaan->id) }}" method="post" style="display: inline;">
+                              @method('delete')
+                              @csrf
+                              <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
+                          </form></td>
+                    
+                        {{-- @endif --}}
                   
                     </tr>
                     @endforeach

@@ -35,8 +35,8 @@ class PenerimaanBarangController extends Controller
             ->where('id_user',auth()->user()->id)
             ->orderBy('tanggal_penerimaan', 'desc')->first();
 
-            $status = PenerimaanBarang::where('status_tukar_faktur', 'completed')->get();
-            // dd($penerimaan);
+            $status = PenerimaanBarang::where('status_tukar_faktur', 'completed')->where('id', $penerimaan->id)->first();
+            // dd($status);
             
         }
 
@@ -108,6 +108,20 @@ class PenerimaanBarangController extends Controller
 
         
         $purchases = Purchase::where('status_barang', 'pending')->where('invoice',$request->invoice)->get();
+        // dd($purchases);
+
+
+        $penerimaan = DB::table('penerimaan_barangs')
+        ->leftJoin('purchases','penerimaan_barangs.id_purchase','=','purchases.id')
+        ->leftJoin('barangs','barangs.id','=','penerimaan_barangs.barang_id')
+        ->leftJoin('users','users.id','=','purchases.user_id')
+        ->select('purchases.PPN','users.name','purchases.total','purchases.harga_beli','purchases.status_barang','barangs.nama_barang','penerimaan_barangs.qty_partial','penerimaan_barangs.qty_received','purchases.qty','purchases.barang_id','penerimaan_barangs.barang_id')
+        ->where('purchases.status_barang', 'partial')
+        ->where('purchases.invoice',$request->invoice)
+        ->get();
+        // dd($penerimaan);
+
+
         $inout = InOut::where('invoice',$request->invoice)->get();
         // dd($inout);
 
@@ -125,7 +139,7 @@ class PenerimaanBarangController extends Controller
       
       
         // dd($tukar);
-        return view('purchasing.penerimaan-barang.create', compact('ppn','tukar', 'purchases', 'purchase','nourut','status_barang','inout'));
+        return view('purchasing.penerimaan-barang.create', compact('ppn','tukar', 'purchases', 'purchase','nourut','status_barang','inout','penerimaan'));
     }
 
 
@@ -165,6 +179,7 @@ class PenerimaanBarangController extends Controller
                 'barang_id' => $no,
                 'id_purchase' => $purchases,
                 'qty' => $request->qty[$key],
+                'qty_partial' => $request->qty_partial[$key],
                 'qty_received' => $request->qty_received[$key],
                 'harga_beli' => $request->harga_beli[$key],
                 'total' => $request->total,
@@ -177,9 +192,6 @@ class PenerimaanBarangController extends Controller
                 $purchase = Purchase::where('barang_id', $no)->get();
                 //  dd($purchase);
                 DB::table('purchases')->whereIn('id', $purchase)->update(array( 
-                'qty' => $request->qty[$key],
-                // 'harga_beli' =>$request->harga_beli[$key],
-                // 'total' => $request->harga_beli[$key] * $request->qty_received[$key],
                 'status_barang' => $request->status_barang[$key]));
         }
         
@@ -274,10 +286,10 @@ class PenerimaanBarangController extends Controller
         foreach ($penerimaans as $pur) {
             
             $purchase = Purchase::where('barang_id', $pur->barang_id)->get();
-            $inouts = InOut::where('barang_id', $pur->barang_id)->where('invoice', $pur->no_po)->select('in')->get();
+        
             // dd($inouts);
             DB::table('purchases')->whereIn('id', $purchase)->update(array( 
-                'qty' => $inouts,
+         
                 'status_barang' => 'pending'));
         
             $pur->delete();

@@ -7,7 +7,7 @@
     <div class="col-sm-7 col-8 text-right m-b-30">
         <div class="btn-group btn-group-sm ">
            
-            <a href="tukarfaktur/pdf" class="btn btn-primary" target="_blank">CETAK PDF</a>
+            <a href="{{ route('purchasing.tukarfaktur.pdf', $pdf->id) }}" class="btn btn-primary" target="_blank">CETAK PDF</a>
             
         </div>
     </div>
@@ -77,19 +77,19 @@
                                 <div class="table-responsive">
                                     <table class="table table-bordered  report">
                                         <tr style="font-size:12px;" class="bg-success">
-                                            <th class=" text-light">No.</th>
-                                            <th class="text-light">Kelengkapan Dokumen</th>
-                                            <th class="text-light">Ada</th>
-                                            <th class="text-light">Tidak Ada</th>
-                                            <th class="text-light"> Catatan</th>
+                                            <th class=" text-light text-center">No.</th>
+                                            <th class="text-light text-center">Kelengkapan Dokumen</th>
+                                            <th class="text-light text-center">Ada</th>
+                                            <th class="text-light text-center">Tidak Ada</th>
+                                            <th class="text-center text-light" style="width: 210px;"> Catatan</th>
                                         </tr>
                                         <tbody>
                                             @foreach($detail as $dokumens)
                                             <tr style="font-size:12px;">
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $dokumens->nama_dokumen }}</td>
-                                                <td>{{ $dokumens->pilihan == 'Y'}}</td>
-                                                <td>{{ $dokumens->pilihan == 'T'}}</td>
+                                                <td>{{ $dokumens->pilihan == 'Y'? "√" : "" }}</td>
+                                                <td>{{ $dokumens->pilihan == 'T' ? "√" : ""}}</td>
                                                 <td>{{ $dokumens->catatan }}</td>
                                             </tr>
                                             @endforeach

@@ -257,8 +257,7 @@
                         <input type="number" name="qty[${index}]"  class="form-control qty-${index}" placeholder="0">
                     </td>
                     <td>
-                        <input type="text" name="unit[${index}]"  class="form-control unit-${index}" placeholder="Unit">
-                        </td>
+                        <select required name="unit[${index}]" id="${index}" class="form-control selectunit-${index}"></select>
                     <td>
                                 <input type="number" id="rupiah" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), TotalAbout(this)">
                     </td>
@@ -274,19 +273,32 @@
                 </tr>
         `
         $('#dynamic_field').append(template)
-        $(`.select-${index}`).select2({
-            placeholder: 'Select Product',
-            ajax: {
-                url: `/admin/where/service`,
-                processResults: function (data) {
-                    console.log(data)
-                    return {
-                        results: data
-                    };
-                },
-                cache: true
-            }
-        });
+        $(`.selectunit-${index}`).select2({
+                placeholder: 'Select Unit',
+                ajax: {
+                    url: `/logistik/where/unit`,
+                    processResults: function (data) {
+                        console.log(data)
+                        return {
+                            results: data
+                        };
+                    },
+                    cache: true
+                }
+            });
+        // $(`.select-${index}`).select2({
+        //     placeholder: 'Select Product',
+        //     ajax: {
+        //         url: `/admin/where/service`,
+        //         processResults: function (data) {
+        //             console.log(data)
+        //             return {
+        //                 results: data
+        //             };
+        //         },
+        //         cache: true
+        //     }
+        // });
     }
 
     function remove(q) {

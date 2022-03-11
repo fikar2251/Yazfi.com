@@ -308,10 +308,12 @@ Route::middleware('auth')->group(function () {
                 return redirect()->route('dashboard');
             })->name('dashboard');
             //Route Roles
+            Route::get('/where/unit', 'PurchaseController@WhereUnit');
             Route::get('/where/product', 'PurchaseController@WhereProduct');
             Route::get('/where/project', 'PurchaseController@whereProject');
             Route::resource('purchase', 'PurchaseController');
             Route::resource('pengajuan', 'PengajuanController');
+            Route::get('/where/unit', 'PengajuanController@WhereUnit');
             Route::get('pengajuan/pdf/{id}', 'PengajuanController@pdf')->name('pengajuan.pdf');
             Route::resource('product', 'ProductController');
             Route::resource('supplier', 'SupplierController');
@@ -332,7 +334,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/where/project', 'TukarFakturController@whereProject');
             Route::get('/where/tukar/search', 'TukarFakturController@search');
             Route::get('/where/unit', 'TukarFakturController@WhereUnit');
-            Route::get('/tukarfaktur/pdf/{id}', 'TukarFakturController@pdf');
+            Route::get('/tukarfaktur/pdf/{id}', 'TukarFakturController@pdf')->name('tukarfaktur.pdf');
             Route::resource('tukarfaktur', 'TukarFakturController');
 
 

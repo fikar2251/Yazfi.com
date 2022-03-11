@@ -265,4 +265,16 @@ class PengajuanController extends Controller
 
         return redirect()->route('logistik.pengajuan.index')->with('success', 'Pengajuan barang didelete');
     }
+    public function WhereUnit(Request $request)
+    {
+        $data = [];
+        $unit =  DB::table('units')
+            ->where('nama', 'like', '%' . $request->q . '%')
+            ->get();
+        foreach ($unit as $row) {
+            $data[] = ['id' => $row->id,  'text' => $row->nama];
+        }
+
+        return response()->json($data);
+    }	
 }

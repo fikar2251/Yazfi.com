@@ -64,7 +64,7 @@
                         <td>{{ $purchase->admin->name }}</td>
                         <td>{{ Carbon\Carbon::parse($purchase->created_at)->format("d/m/Y H:i:s") }}</td>
                         <td>{{ \App\Purchase::where('invoice', $purchase->invoice)->count() }}</td> 
-                        <td>@currency(\App\Purchase::where('invoice', $purchase->invoice)->sum('total'))</td>
+                        <td>@currency($purchase->grand_total)</td>
                         <td>{{ $purchase->status_barang }}</td>
                         <td>{{ $purchase->status_pembayaran }}</td>
                         <td>
@@ -85,7 +85,7 @@
                         <td>Total : </td>
                         <td colspan="3"></td>
                         <td>{{ request('from') && request('to') ? \App\Purchase::whereBetween('created_at', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->where('user_id',auth()->user()->id)->count() : \App\Purchase::where('user_id',auth()->user()->id)->count() }}</td>
-                        <td>@currency( request('from') && request('to') ? \App\Purchase::whereBetween('created_at', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->where('user_id',auth()->user()->id)->sum('total') : \App\Purchase::where('user_id',auth()->user()->id)->sum('total') )</td>
+                        {{-- <td>@currency( request('from') && request('to') ? \App\Purchase::whereBetween('created_at', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->where('user_id',auth()->user()->id)->sum('total') : \App\Purchase::where('user_id',auth()->user()->id)->where('invoice',$purchases)->sum('grand_total'))</td> --}}
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>

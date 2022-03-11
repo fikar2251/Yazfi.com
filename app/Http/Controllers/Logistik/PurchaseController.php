@@ -27,6 +27,14 @@ class PurchaseController extends Controller
             $purchases = Purchase::where('user_id', Auth::user()->id)
             ->orderBy('id','desc')
             ->groupBy('invoice')->get();
+
+
+          
+
+            // $sum = Purchase::where('user_id', Auth::user()->id)
+            // ->where('invoice',$purchase->invoice)
+            // ->groupBy('invoice')->first();
+            // dd($sum);
         }
 
 
@@ -38,13 +46,16 @@ class PurchaseController extends Controller
         $purchase = new Purchase();
         $suppliers = Supplier::get();
         $project = Project::get();
+        $unit =  DB::table('units')
+        ->get();
+         
         $barangs = Barang::where('id_jenis', '1')->get();
         $AWAL = 'PO';
         $noUrutAkhir = \App\Purchase::max('id');
         // dd($noUrutAkhir);
         $nourut = $AWAL . '/' .  sprintf("%02s", abs($noUrutAkhir + 1)) . '/' . sprintf("%05s", abs($noUrutAkhir + 1));
         // dd($nourut);
-        return view('logistik.purchase.create', compact('purchase', 'suppliers', 'barangs', 'project', 'nourut'));
+        return view('logistik.purchase.create', compact('purchase','unit', 'suppliers', 'barangs', 'project', 'nourut'));
     }
 
     public function store(Request $request)
@@ -214,4 +225,16 @@ class PurchaseController extends Controller
 
         return response()->json($data);
     }
+    public function WhereUnit(Request $request)
+    {
+        $data = [];
+        $unit =  DB::table('units')
+            ->where('nama', 'like', '%' . $request->q . '%')
+            ->get();
+        foreach ($unit as $row) {
+            $data[] = ['id' => $row->id,  'text' => $row->nama];
+        }
+
+        return response()->json($data);
+    }	
 }

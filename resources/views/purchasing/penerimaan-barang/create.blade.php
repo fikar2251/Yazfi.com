@@ -54,10 +54,10 @@
                                         <option value="{{ $item->invoice }}">{{ $item->invoice }}</option>
                                         @endif
                                         @endforeach
-                                        </select> --}} 
+                                        </select> --}}
                                         <div class="input-group mb-3">
-                                            <input type="text" id="invoice" name="invoice"
-                                            data-dependent="barang_id" class="form-control dynamic_function">
+                                            <input type="text" id="invoice" name="invoice" data-dependent="barang_id"
+                                                class="form-control dynamic_function">
                                             <button type="search" name="search" class="btn btn-primary"><i
                                                     class="fa fa-search" aria-hidden="true"></i></button>
                                         </div>
@@ -67,14 +67,13 @@
                                 </li>
                             </ul>
                         </div>
-                       
+
                     </div>
                 </form>
 
                 @foreach($purchase as $item)
 
-                @if (request()->get('invoice') == $item->invoice && $item->qty >= $item->qty_received &&
-                $item->barang_id)
+                @if (request()->get('invoice') == $item->invoice && $item->status_barang == $item->status = 'pending' )
                 <div class="row">
                     <div class="col-sm-6 col-sg-4 m-b-4">
                         <ul class="list-unstyled">
@@ -122,7 +121,7 @@
 
                 </div>
 
-                <form action="{{ route('purchasing.penerimaan-barang.store') }}" method="post" onload="qtyText(this)">
+                <form action="{{ route('purchasing.penerimaan-barang.store') }}" name="form1" method="post">
                     @csrf
                     <div class="row">
                         <div class="col-sm-6 col-sg-4 m-b-4">
@@ -241,17 +240,43 @@
                                                     onkeyup="testNum(this),hitung(this), HowAboutIt(this),qtyText(this)"
                                                     id="qty_received" placeholder=" 0">
                                             </td>
+                                            {{-- @foreach($penerimaan as $per)
+                                                @if( $per->invoice == request()->get('invoice') && $per->qty != $per->qty_received && $per->status_barang == $per->status_barang = 'pending')
+                                                <td>
+                                                    
+                                                    <input type="number" value="{{ $per ? $per->qty_partial : '' }}"
+                                            data="{{ $loop->iteration }}" name="qty[{{ $loop->iteration }}]"
+                                            id="qty" class="form-control qty-{{ $loop->iteration }}"
+                                            class="form-control"
+                                            placeholder="0" required="" readonly>
+
+                                            <input type="text" data="{{ $loop->iteration }}"
+                                                name="qty_partial[{{ $loop->iteration }}]" id="qty_partial"
+                                                class="form-control qty_partial-{{ $loop->iteration }}" placeholder="0"
+                                                value="{{ $per ? $per->qty_partial : '' }}" readonly>
+
+                                            @error('qty')
+                                            <small class="text-danger">{{ $message }}</small>
+                                            @enderror
+
+                                            </td>
+                                            @else
+                                            @endif
+                                            @endforeach --}}
                                             <td>
                                                 <input type="number" value="{{ $purchase->qty }}"
-                                                data="{{ $loop->iteration }}"
-                                                id="qty_sisa" class="form-control qty_sisa-{{ $loop->iteration }}"
-                                                    class="form-control"
-                                                    placeholder="0" required="" readonly>
-                                                    
-                                                <input type="hidden" value="{{ $purchase->qty }}"
                                                     data="{{ $loop->iteration }}" name="qty[{{ $loop->iteration }}]"
                                                     id="qty" class="form-control qty-{{ $loop->iteration }}"
-                                                    placeholder="0" required="" readonly>
+                                                    class="form-control" placeholder="0" required="" readonly>
+
+
+                                                @error('qty')
+                                                <small class="text-danger">{{ $message }}</small>
+                                                @enderror
+                                                <input type="text" data="{{ $loop->iteration }}"
+                                                    name="qty_partial[{{ $loop->iteration }}]" id="qty_partial"
+                                                    class="form-control qty_partial-{{ $loop->iteration }}"
+                                                    placeholder="0" readonly>
 
                                                 @error('qty')
                                                 <small class="text-danger">{{ $message }}</small>
@@ -296,39 +321,39 @@
                                     </tbody>
 
                                 </table>
-                               
-                                    <div class="col-sm-4 offset-sm-8">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label>Total</label>
-                                                <input type="text" id="sub_total" name="total" readonly
-                                                    class="form-control" value="">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <label for="PPN">Include PPN</label>
-                                            <div class="input-group">
-                                                <input type="type" readonly id="PPN" value="{{ $ppn ? $ppn->PPN : '' }}"
-                                                    name="ppn" onchange="HowAboutIt()" class="form-control"
-                                                    aria-label="Amount (to the nearest dollar)">
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text">%</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label>Grand Total</label>
-                                                <input type="text" id="grandtotal" name="grandtotal" readonly
-                                                    class="form-control" value="">
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="col-sm-1 offset-sm-8">
-                                            <button type="submit" class="btn btn-primary" id="submit">Submit</button>
+
+                                <div class="col-sm-4 offset-sm-8">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Total</label>
+                                            <input type="text" id="sub_total" name="total" readonly class="form-control"
+                                                value="">
                                         </div>
                                     </div>
-                               
+                                    <div class="col-md-12">
+                                        <label for="PPN">Include PPN</label>
+                                        <div class="input-group">
+                                            <input type="type" readonly id="PPN" value="{{ $ppn ? $ppn->PPN : '' }}"
+                                                name="ppn" onchange="HowAboutIt()" class="form-control"
+                                                aria-label="Amount (to the nearest dollar)">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Grand Total</label>
+                                            <input type="text" id="grandtotal" name="grandtotal" readonly
+                                                class="form-control" value="">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-1 offset-sm-8">
+                                        <button type="submit" class="btn btn-primary" id="submit">Submit</button>
+                                    </div>
+                                </div>
+
                                 <script>
                                     function hitung(e) {
                                         let attr = $(e).attr('data')
@@ -341,17 +366,18 @@
                                         $(`.total-${attr}`).val(total_qty)
 
                                     }
+
                                     function qtyText(e) {
                                         let attr = $(e).attr('data')
                                         let qty = $(`.qty-${attr}`).val()
                                         let qty_update = $(`.qty_received-${attr}`).val()
-                                        // console.log(qty_received);
+
                                         let updated_qty = parseInt(qty - qty_update)
-                                        // let total = parseInt(harga * qty) + total_qty
-                                        $(`.qty-${attr}`).val(updated_qty)
+                                        $(`.qty_partial-${attr}`).val(updated_qty)
 
 
                                     }
+
 
 
                                     // function TotalAbout(e) {
@@ -388,7 +414,7 @@
 
                                 </script>
 
-                                
+
                             </div>
                         </div>
                     </div>
@@ -396,11 +422,11 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="table-responsive">
-                           
-                                <div class="col-sm-5 col-4">
-                                    <h4 class="page-title">Riwayat Purchasing Order</h4>
-                                </div>
-                          
+
+                            <div class="col-sm-5 col-4">
+                                <h4 class="page-title">Riwayat Purchasing Order</h4>
+                            </div>
+
                             <table class="table table-bordered  report">
                                 <tr style="font-size:12px;" class="bg-success">
                                     <th class=" text-light">No.</th>
@@ -438,33 +464,390 @@
                         </div>
                     </div>
                 </div>
-                @elseif(request()->get('invoice') == $item->invoice && $item->qty == $item->qty_received &&
-                $item->status_barang != 1)
-                {{-- <div class="row">
+                @elseif (request()->get('invoice') == $item->invoice && $item->status_barang == $item->status_barang =
+                'partial')
+                <div class="row">
+                    <div class="col-sm-6 col-sg-4 m-b-4">
+                        <ul class="list-unstyled">
+                            <li>
+                                <div class="form-group">
+                                    <label for="supplier">Supplier <span style="color: red">*</span></label>
+                                    <input type="text" readonly class="form-control"
+                                        value="{{ $item->supplier->nama }}">
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-6 col-sg-4 m-b-4">
+                        <ul class="list-unstyled">
+                            <li>
+                                <div class="form-group">
+                                    <label for="project">Project <span style="color: red">*</span></label>
+                                    <input type="text" value="{{$item->project->nama_project  }} " class="form-control"
+                                        readonly>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-6 col-sg-4 m-b-4">
+                        <ul class="list-unstyled">
+                            <li>
+                                <div class="form-group">
+                                    <label for="lokasi">Lokasi <span style="color: red">*</span></label>
+                                    <input type="text" value="{{ $item->lokasi }}" class="form-control" readonly>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-6 col-sg-4 m-b-4">
+                        <ul class="list-unstyled">
+                            <li>
+                                <div class="form-group">
+                                    <label for="tanggal">Tanggal <span style="color: red">*</span></label>
+                                    <input type="text" value="{{ $item->created_at }}" class="form-control" readonly>
+
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <form action="{{ route('purchasing.penerimaan-barang.store') }}" name="form1" method="post">
+                    @csrf
+                    <div class="row">
+                        <div class="col-sm-6 col-sg-4 m-b-4">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="form-group">
+                                        <label for="tanggal">No Purchase Order <span style="color: red">*</span></label>
+                                        <input type="text" readonly id="no_po" name="no_po" class="form-control"
+                                            value="{{ $item ? $item->invoice : '' }}">
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 col-sg-4 m-b-4">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="form-group">
+                                        <label for="tanggal">Di ajukan <span style="color: red">*</span></label>
+                                        <input type="text" readonly class="form-control"
+                                            value="{{$item ? $item->admin->name : ''}}">
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 col-sg-4 m-b-4">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="form-group">
+                                        <input type="hidden" readonly name="id_user" id="id_user" class="form-control"
+                                            value="{{auth()->user()->id}}">
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <br>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-sm-6 col-sg-4 m-b-4">
+                                    <ul class="list-unstyled">
+                                        <li>
+                                            <div class="form-group">
+                                                <h4 class="page-title">Insert Penerimaan Barang</h4>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6 col-sg-4 m-b-4">
+                                    <ul class="list-unstyled">
+                                        <li>
+                                            <div class="form-group">
+                                                <label for="tanggal">No Penerimaan Barang <span
+                                                        style="color: red">*</span></label>
+                                                <input type="text" id="no_penerimaan_barang" name="no_penerimaan_barang"
+                                                    readonly class="form-control" value="{{ $nourut}}">
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-sm-6 col-sg-4 m-b-4">
+                                    <ul class="list-unstyled">
+                                        <li>
+                                            <div class="form-group">
+                                                <label for="tanggal_penerimaan">Tanggal Penerimaan Barang<span
+                                                        style="color: red">*</span></label>
+                                                <input type="datetime-local" id="tanggal_penerimaan"
+                                                    name="tanggal_penerimaan" class="form-control" required="" value="">
+                                                @error('tanggal_penerimaan')
+                                                <small class="text-danger">{{ $message }}</small>
+                                                @enderror
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-bordered  report">
+                                    <tr style="font-size:12px;" class="bg-success">
+                                        <th class=" text-light">No.</th>
+                                        <th class="text-light">Nama Barang</th>
+                                        <th class="text-light">Qty Received</th>
+                                        <th class="text-light">Qty Partial</th>
+                                        <th class="text-light">Harga Satuan</th>
+                                        <th class="text-light"> Total</th>
+                                        <th class="text-light"> Status Barang</th>
+                                    </tr>
+                                    <br>
+                                    <br>
+                                    <tbody id="dynamic_field">
+                                        <script src="{{ asset('/') }}js/jquery-3.2.1.min.js"></script>
+                                        <script src="{{ asset('/') }}js/select2.min.js"></script>
+
+                                        @foreach($penerimaan as $purchase)
+                                        <tr class="rowComponent">
+                                            <td>
+                                                {{ $loop->iteration }}
+                                            </td>
+                                            <td>
+
+                                                <input type="text" value="{{$purchase->nama_barang}}"
+                                                    class="form-control" disabled>
+                                                <input type="hidden" name="barang_id[{{ $loop->iteration }}]"
+                                                    data="{{ $loop->iteration }}" id="barang_id"
+                                                    value="{{ $purchase->barang_id }}"
+                                                    class="form-control barang_id-{{ $loop->iteration }}">
+
+                                                @error('barang_id')
+                                                <small class="text-danger">{{ $message }}</small>
+                                                @enderror
+                                            </td>
+                                            <td>
+                                                <input type="number" name="qty_received[{{ $loop->iteration }}]"
+                                                    class="form-control qty_received-{{ $loop->iteration }}"
+                                                    data="{{ $loop->iteration }}"
+                                                    onkeyup="testNum(this),hitung(this), HowAboutIt(this),qtyText(this)"
+                                                    id="qty_received" placeholder=" 0">
+                                            </td>
+
+                                            <td>
+
+                                                <input type="number" value="{{ $purchase->qty_partial }}"
+                                                    data="{{ $loop->iteration }}" name="qty[{{ $loop->iteration }}]"
+                                                    id="qty" class="form-control qty-{{ $loop->iteration }}"
+                                                    class="form-control" placeholder="0" required="" readonly>
+
+                                                <input type="text" data="{{ $loop->iteration }}"
+                                                    name="qty_partial[{{ $loop->iteration }}]" id="qty_partial"
+                                                    class="form-control qty_partial-{{ $loop->iteration }}"
+                                                    placeholder="0" value="{{ $purchase->qty_partial }}"
+                                                    readonly>
+
+                                                @error('qty')
+                                                <small class="text-danger">{{ $message }}</small>
+                                                @enderror
+
+                                            </td>
+
+
+                                            <td>
+                                                <input type="number" value="{{ $purchase->harga_beli }}"
+                                                    name="harga_beli[{{ $loop->iteration }}]"
+                                                    class="form-control harga_beli-{{ $loop->iteration }}"
+                                                    data="{{ $loop->iteration }}" placeholder="0" id="harga_beli"
+                                                    required="" readonly>
+
+                                                @error('harga_beli')
+                                                <small class="text-danger">{{ $message }}</small>
+                                                @enderror
+                                            </td>
+                                            <td>
+                                                <input type="number" value="" name="total[{{ $loop->iteration }}]"
+                                                    readonly
+                                                    class="form-control total-{{ $loop->iteration }} total-form"
+                                                    placeholder="0" required="">
+
+                                                @error('total')
+                                                <small class="text-danger">{{ $message }}</small>
+                                                @enderror
+                                            </td>
+                                            <td>
+                                                <input type="text" value="{{$purchase->status_barang}}"
+                                                    name="status_barang[{{ $loop->iteration }}]" id="status_barang"
+                                                    class="form-control status_barang-{{ $loop->iteration }} status-form"
+                                                    readonly placeholder="Status Barang" required="">
+                                                @error('status_barang')
+                                                <small class="text-danger">{{ $message }}</small>
+                                                @enderror
+
+                                            </td>
+
+
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+
+                                </table>
+
+                                <div class="col-sm-4 offset-sm-8">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Total</label>
+                                            <input type="text" id="sub_total" name="total" readonly class="form-control"
+                                                value="">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label for="PPN">Include PPN</label>
+                                        <div class="input-group">
+                                            <input type="type" readonly id="PPN" value="{{ $ppn ? $ppn->PPN : '' }}"
+                                                name="ppn" onchange="HowAboutIt()" class="form-control"
+                                                aria-label="Amount (to the nearest dollar)">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Grand Total</label>
+                                            <input type="text" id="grandtotal" name="grandtotal" readonly
+                                                class="form-control" value="">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-1 offset-sm-8">
+                                        <button type="submit" class="btn btn-primary" id="submit">Submit</button>
+                                    </div>
+                                </div>
+
+                                <script>
+                                    function hitung(e) {
+                                        let attr = $(e).attr('data')
+                                        // let qty = $(`.qty-${attr}`).val()
+                                        let harga = $(`.harga_beli-${attr}`).val()
+                                        let qty_received = $(`.qty_received-${attr}`).val()
+                                        // console.log(qty_received);
+                                        let total_qty = parseInt(qty_received * harga)
+                                        // let total = parseInt(harga * qty) + total_qty
+                                        $(`.total-${attr}`).val(total_qty)
+
+                                    }
+
+                                    function qtyText(e) {
+                                        let attr = $(e).attr('data')
+                                        let qty = $(`.qty-${attr}`).val()
+                                        let qty_update = $(`.qty_received-${attr}`).val()
+
+                                        let updated_qty = parseInt(qty - qty_update)
+                                        $(`.qty_partial-${attr}`).val(updated_qty)
+
+
+                                    }
+
+
+
+                                    // function TotalAbout(e) {
+                                    //     let sub_total = document.getElementById('sub_total')
+                                    //     let total = 0;
+                                    //     let coll = document.querySelectorAll('.total-form')
+                                    //     for (let i = 0; i < coll.length; i++) {
+                                    //         let ele = coll[i]
+                                    //         total += parseInt(ele.value)
+                                    //     }
+                                    //     sub_total.value = total
+                                    //     document.getElementById('grandtotal').value = total;
+                                    // }
+
+                                    function HowAboutIt(e) {
+                                        let sub_total = document.getElementById('sub_total')
+                                        let total = 0;
+                                        let coll = document.querySelectorAll('.total-form')
+                                        for (let i = 0; i < coll.length; i++) {
+                                            let ele = coll[i]
+                                            total += parseInt(ele.value)
+                                        }
+                                        sub_total.value = total
+                                        let SUB = document.getElementById('sub_total').value;
+                                        let PPN = document.getElementById('PPN').value;
+                                        console.log(PPN);
+                                        let tax = PPN / 100 * sub_total.value;
+                                        console.log(tax);
+                                        console.log(SUB);
+                                        let grand_total = parseInt(SUB) + parseInt(tax);
+                                        document.getElementById('grandtotal').value = grand_total;
+                                        console.log(grand_total);
+                                    }
+
+                                </script>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+
+                            <div class="col-sm-5 col-4">
+                                <h4 class="page-title">Riwayat Purchasing Order</h4>
+                            </div>
+
+                            <table class="table table-bordered  report">
+                                <tr style="font-size:12px;" class="bg-success">
+                                    <th class=" text-light">No.</th>
+                                    <th class="text-light">Nama Barang</th>
+                                    <th class="text-light">Qty</th>
+                                    <th class="text-light">Harga</th>
+                                    <th class="text-light"> Total</th>
+                                    <th class="text-light"> Diajukan</th>
+                                </tr>
+                                <tbody id="dynamic_field">
+                                    @foreach($penerimaan as $purchase)
+                                    <tr class="rowComponent">
+                                        <td>
+                                            {{$loop->iteration}}
+                                        </td>
+                                        <td>
+                                            {{$purchase->nama_barang}}
+                                        </td>
+                                        <td>
+                                            {{$purchase->qty_partial}}
+                                        </td>
+                                        <td>
+                                            @currency($purchase->harga_beli)
+                                        </td>
+                                        <td>
+                                            @currency($purchase->total)
+                                        </td>
+                                        <td>
+                                            {{$purchase->name}}
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                @elseif ($item->invoice == request()->get('invoice') && $item->status_barang == 'completed')
+                <div class="row">
                     <div class="col-sm-6 col-sg-4 m-b-4">
                         <div class="alert alert-success alert-dismissible" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                              Data Not Found
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                            Data Sudah Completed
                         </div>
                     </div>
 
-                </div> --}}
-                @elseif ($item->invoice <= request()->get('invoice'))
-                    {{-- <div class="row">
-                        <div class="col-sm-6 col-sg-4 m-b-4">
-                            <div class="alert alert-success alert-dismissible" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                                        aria-hidden="true">&times;</span></button>
-                                Data Not Found
-                            </div>
-                        </div>
-
-                    </div> --}}
-
-                    @else
-
-                    @endif
-                    @endforeach
+                </div>
+                @else
+                @endif
+                @endforeach
             </div>
         </div>
     </div>
@@ -545,6 +928,11 @@
 
     }
 
+    function submit_form() {
+        document.form1.submit();
+        document.form2.submit();
+    }
+
     function remove(q) {
         $(q).parent().parent().remove()
     }
@@ -611,12 +999,12 @@
         let attr = $(e).attr('data')
         let qty_received = $(`.qty_received-${attr}`).val()
         // console.log(qty_received)
-        let qty = $(`.qty_sisa-${attr}`).val()
+        let qty = $(`.qty-${attr}`).val()
         // console.log(qty)
 
 
         if (qty != qty_received) {
-            result = 'pending';
+            result = 'partial';
         } else {
             result = 'completed';
 

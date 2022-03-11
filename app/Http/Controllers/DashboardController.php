@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use App\Booking;
 use App\Customer;
 use App\Holidays;
+use App\Pengajuan;
 use App\Purchase;
 use App\Reinburst;
 use App\Tindakan;
@@ -82,11 +83,24 @@ class DashboardController extends Controller
             $now = Carbon::now()->format('Y-m-d');
             $tukar_faktur_count = TukarFaktur::where('id_user', auth()->user()->id)->get()->count();
             $reinburst_pending = Reinburst::where('id_user', auth()->user()->id)->whereDate('tanggal_reinburst', $now)->where('status_pembayaran','=','pending')->get()->count();
-            $received_pending = Purchase::whereDate('created_at', $now)->where('status_barang','=','pending')->get()->count();
+            $received_pending = Purchase::where('status_barang','=','pending')->get()->count();
             return view('dashboard.index', [
                 'received_pending' => $received_pending,
                 'tukar_faktur_count' => $tukar_faktur_count,
                 'reinburst_pending' => $reinburst_pending,
+                
+            ]);
+        }
+        if (auth()->user()->hasRole('logistik')) {
+
+            $now = Carbon::now()->format('Y-m-d');
+            $barang = DB::table('barangs')->count();
+            $pengajuan_pending = Pengajuan::where('id_user', auth()->user()->id)->where('status_approval','=','pending')->get()->count();
+            $received_pending = Purchase::where('status_barang','=','pending')->where('user_id',auth()->user()->id)->get()->count();
+            return view('dashboard.index', [
+                'received_pending' => $received_pending,
+                'barang' => $barang,
+                'pengajuan_pending' => $pengajuan_pending,
                 
             ]);
         }

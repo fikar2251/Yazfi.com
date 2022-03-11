@@ -42,7 +42,7 @@
 
                                     <label for="no_po">Berdasarkan Pilihan : </label>
 
-                                
+
                                     <input style="width:15px;" id="radioButton" type="radio" name="pilihan[1]" value="1"
                                         {{old('pilihan.1') =="1" ? 'checked='.'"'.'checked'.'"' : ''}} class="detail"
                                         id="inlineCheckbox1">
@@ -71,14 +71,14 @@
 
                                             <div class="input-group mb-3">
                                                 <input type="text" name="no_penerimaan_barang" id="no_penerimaan_barang"
-                                                    data-dependent="barang_id"
-                                                    class="form-control dynamic_function" value="{{old('no_penerimaan_barang')}}">
+                                                    data-dependent="barang_id" class="form-control dynamic_function"
+                                                    value="{{old('no_penerimaan_barang')}}">
                                                 <button type="search" name="search" class="btn btn-primary"><i
                                                         class="fa fa-search" aria-hidden="true"></i></button>
                                             </div>
 
                                         </div>
-                                      
+
 
                                     </li>
                                 </ul>
@@ -164,7 +164,7 @@ $item->status_tukar_faktur == $item->status_tukar_faktur = 'pending' )
                                         <div class="form-group">
                                             <label for="nilai_invoice">Nilai Invoice <span
                                                     style="color: red">*</span></label>
-                                            <input type="text" name="nilai_invoice" value="{{ $penerimaans->total }}"
+                                            <input type="text" readonly required="" name="nilai_invoice" value="{{ $penerimaans->total }}"
                                                 class="form-control">
 
                                             @error('nilai_invoice')
@@ -181,7 +181,7 @@ $item->status_tukar_faktur == $item->status_tukar_faktur = 'pending' )
                                             <label for="tanggal_tukar_faktur">Tanggal Tukar Faktur <span
                                                     style="color: red">*</span></label>
                                             <input type="datetime-local" name="tanggal_tukar_faktur"
-                                                id="tanggal_tukar_faktur" class="form-control">
+                                                id="tanggal_tukar_faktur" required="" class="form-control">
 
                                             @error('tanggal_tukar_faktur')
                                             <small class="text-danger">{{ $message }}</small>
@@ -197,7 +197,7 @@ $item->status_tukar_faktur == $item->status_tukar_faktur = 'pending' )
                                             <label for="no_invoice">Number Invoice <span
                                                     style="color: red">*</span></label>
                                             <input type="text" name="no_invoice" value="" id="no_invoice"
-                                                class="form-control">
+                                                class="form-control" required="">
 
                                             @error('no_invoice')
                                             <small class="text-danger">{{ $message }}</small>
@@ -363,15 +363,17 @@ $item->status_tukar_faktur == $item->status_tukar_faktur = 'pending' )
                                                 </tbody>
                                                 <tfoot>
                                                     <tr>
-                                                        <td colspan="2"><b>Total Pembelian : </b>
+                                                        <td colspan="4"><b>Total Pembelian : </b>
+                                                            
                                                         </td>
                                                         {{-- <td><b>{{ \App\PenerimaanBarang::where('qty_received',$purchase->qty_received)->sum('qty_received')}}</b>
-                                                        </td> --}}
-                                                        <td> {{$purchase->qty_received}}</td>
+                                                            </td> --}}
+                                                        {{-- <td> {{$purchase->qty_received}}</td> --}}
+                                                        {{-- <td> {{$purchase->qty_received}}</td> --}}
                                                         <td><b>@currency($purchase->total)</b></td>
                                                         <td></td>
                                                         <td></td>
-                                                        <td></td>
+                                               
                                                     </tr>
                                                 </tfoot>
                                             </table>
@@ -497,7 +499,7 @@ $item->status_tukar_faktur == $item->status_tukar_faktur = 'pending' )
                         <li>
                             <div class="form-group">
                                 <label for="tanggal_tukar_faktur">Tanggal<span style="color: red">*</span></label>
-                                <input type="datetime-local" name="tanggal_tukar_faktur" id="tanggal_tukar_faktur"
+                                <input type="datetime-local" required="" name="tanggal_tukar_faktur" id="tanggal_tukar_faktur"
                                     class="form-control">
 
                                 @error('tanggal_tukar_faktur')
@@ -512,7 +514,7 @@ $item->status_tukar_faktur == $item->status_tukar_faktur = 'pending' )
                         <li>
                             <div class="form-group">
                                 <label for="no_invoice">No Invoice<span style="color: red">*</span></label>
-                                <input type="text" name="no_invoice" id="no_invoice" class="form-control">
+                                <input type="text" required="" name="no_invoice" id="no_invoice" class="form-control">
 
                                 @error('no_invoice')
                                 <small class="text-danger">{{ $message }}</small>
@@ -521,7 +523,7 @@ $item->status_tukar_faktur == $item->status_tukar_faktur = 'pending' )
                         </li>
                     </ul>
                 </div>
-                {{-- <div class="col-sm-6 col-sg-4 m-b-4">
+                <div class="col-sm-6 col-sg-4 m-b-4">
                     <ul class="list-unstyled">
                         <li>
                             <div class="form-group">
@@ -530,139 +532,140 @@ $item->status_tukar_faktur == $item->status_tukar_faktur = 'pending' )
 
                                 @error('nama_barang')
                                 <small class="text-danger">{{ $message }}</small>
-                @enderror
+                                @enderror
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-sm-6 col-sg-4 m-b-4">
+                    <ul class="list-unstyled">
+                        <li>
+                            <div class="form-group">
+                                <label for="nilai_invoice">Nilai Invoice <span style="color: red">*</span></label>
+                                <input type="text" name="nilai_invoice" required=""class="form-control">
+
+                                @error('nilai_invoice')
+                                <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-sm-6 col-sg-4 m-b-4">
+                    <ul class="list-unstyled">
+                        <li>
+                            <div class="form-group">
+
+                                <input type="hidden" value="{{auth()->user()->id}}" name="id_user" id="id_user" readonly
+                                    class="form-control">
+
+                                @error('nama')
+                                <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-sm-6 col-sg-4 m-b-4">
+                    <ul class="list-unstyled">
+                        <li>
+                            <div class="form-group">
+                                <input type="hidden" name="po_spk" value="2" class="form-control">
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            </li>
-            </ul>
-    </div>
-    <div class="col-sm-6 col-sg-4 m-b-4">
-        <ul class="list-unstyled">
-            <li>
-                <div class="form-group">
-                    <label for="nilai_invoice">Nilai Invoice <span style="color: red">*</span></label>
-                    <input type="text" name="nilai_invoice" class="form-control">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered  report">
+                            <tr style="font-size:12px;" class="bg-success">
+                                <th style="text-align:center;" class=" text-light">No.</th>
+                                <th style="text-align:center;" class="text-light">Kelengkapan
+                                    Dokumen
+                                </th>
+                                <th style="width:10px; text-align:center;" class="text-light">Ada
+                                </th>
+                                <th style="width:60px;text-align:center;" class="text-light">Tidak
+                                    Ada
+                                </th>
+                                <th style="text-align:center;" class="text-light"> Catatan</th>
+                            </tr>
+                            <tbody>
+                                @foreach($purchasing as $barang)
+                                <tr style="font-size:12px;">
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>
+                                        <input type="text" value="{{$barang->nama_dokumen}}" required=""
+                                            class="form-control id_dokumen-{{ $loop->iteration }} disabled"
+                                            placeholder="Nama Dokumen" style="font-size:13px;">
+                                        <input type="hidden" value="{{$barang->id}}"
+                                            name="id_dokumen[{{ $loop->iteration }}]" id="id_dokumen" required=""
+                                            class="form-control id_dokumen-{{ $loop->iteration }}"
+                                            placeholder="Nama Dokumen" style="font-size:13px;">
 
-                    @error('nilai_invoice')
-                    <small class="text-danger">{{ $message }}</small>
-                    @enderror
-                </div>
-            </li>
-        </ul>
-    </div> --}}
-    <div class="col-sm-6 col-sg-4 m-b-4">
-        <ul class="list-unstyled">
-            <li>
-                <div class="form-group">
+                                        @error('id_dokumen')
+                                        <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </td>
+                                    <td>
+                                        <input type="radio" name="pilihan[{{ $loop->iteration }}]"
+                                            class="form-control pilihan-{{ $loop->iteration }}"
+                                            data="{{ $loop->iteration }}" required="" id="pilihan" value="Y"
+                                            data-binding-checked="" style=" width:1.2em; text-align:center;">
 
-                    <input type="hidden" value="{{auth()->user()->id}}" name="id_user" id="id_user" readonly
-                        class="form-control">
+                                        @error('pilihan')
+                                        <small class="text-danger">{{ $message }}</small>
+                                        @enderror
 
-                    @error('nama')
-                    <small class="text-danger">{{ $message }}</small>
-                    @enderror
-                </div>
-            </li>
-        </ul>
-    </div>
-    <div class="col-sm-6 col-sg-4 m-b-4">
-        <ul class="list-unstyled">
-            <li>
-                <div class="form-group">
-                    <input type="hidden" name="po_spk" value="2" class="form-control">
-                </div>
-            </li>
-        </ul>
-    </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="table-responsive">
-                <table class="table table-bordered  report">
-                    <tr style="font-size:12px;" class="bg-success">
-                        <th style="text-align:center;" class=" text-light">No.</th>
-                        <th style="text-align:center;" class="text-light">Kelengkapan
-                            Dokumen
-                        </th>
-                        <th style="width:10px; text-align:center;" class="text-light">Ada
-                        </th>
-                        <th style="width:60px;text-align:center;" class="text-light">Tidak
-                            Ada
-                        </th>
-                        <th style="text-align:center;" class="text-light"> Catatan</th>
-                    </tr>
-                    <tbody>
-                        @foreach($purchasing as $barang)
-                        <tr style="font-size:12px;">
-                            <td>{{ $loop->iteration }}</td>
-                            <td>
-                                <input type="text" value="{{$barang->nama_dokumen}}" required=""
-                                    class="form-control id_dokumen-{{ $loop->iteration }} disabled"
-                                    placeholder="Nama Dokumen" style="font-size:13px;">
-                                <input type="hidden" value="{{$barang->id}}" name="id_dokumen[{{ $loop->iteration }}]"
-                                    id="id_dokumen" required="" class="form-control id_dokumen-{{ $loop->iteration }}"
-                                    placeholder="Nama Dokumen" style="font-size:13px;">
+                                    </td>
+                                    <td>
+                                        <input type="radio" name="pilihan[{{ $loop->iteration }}]"
+                                            class="form-control pilihan-{{ $loop->iteration }} text-center"
+                                            data="{{ $loop->iteration }}" required="" id="pilihan" value="T"
+                                            data-binding-checked="" style="width:1.2em;   padding: 0.25em 0.5em;">
 
-                                @error('id_dokumen')
-                                <small class="text-danger">{{ $message }}</small>
-                                @enderror
-                            </td>
-                            <td>
-                                <input type="radio" name="pilihan[{{ $loop->iteration }}]"
-                                    class="form-control pilihan-{{ $loop->iteration }}" data="{{ $loop->iteration }}"
-                                    required="" id="pilihan" value="Y" data-binding-checked=""
-                                    style=" width:1.2em; text-align:center;">
+                                        @error('pilihan')
+                                        <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </td>
+                                    <td>
+                                        <input type="text" name="keterangan[{{ $loop->iteration }}]" id="keterangan"
+                                            class="form-control keterangan-{{ $loop->iteration }}" placeholder="Catatan"
+                                            style="font-size:13px;">
 
-                                @error('pilihan')
-                                <small class="text-danger">{{ $message }}</small>
-                                @enderror
-
-                            </td>
-                            <td>
-                                <input type="radio" name="pilihan[{{ $loop->iteration }}]"
-                                    class="form-control pilihan-{{ $loop->iteration }} text-center"
-                                    data="{{ $loop->iteration }}" required="" id="pilihan" value="T"
-                                    data-binding-checked="" style="width:1.2em;   padding: 0.25em 0.5em;">
-
-                                @error('pilihan')
-                                <small class="text-danger">{{ $message }}</small>
-                                @enderror
-                            </td>
-                            <td>
-                                <input type="text" name="keterangan[{{ $loop->iteration }}]" id="keterangan"
-                                    class="form-control keterangan-{{ $loop->iteration }}" placeholder="Catatan"
-                                    style="font-size:13px;">
-
-                                {{-- @error('keterangan')
+                                        {{-- @error('keterangan')
                                                         <small class="text-danger">{{ $message }}</small>
-                                @enderror --}}
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                                        @enderror --}}
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    <button type="button" id="add" class="btn btn-primary mb-2">Tambah Row Baru</button>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="table-responsive">
-                <table class="table table-hover border" id="table-show">
-                    <tr class="bg-success">
-                        <th class="text-light" style="width: 30%;">Nama Barang</th>
-                        <th class="text-light" style="width: 10%;">QTY</th>
-                        <th class="text-light" style="width: 10%;">UNIT</th>
-                        <th class="text-light">HARGA BELI</th>
-                        <th class="text-light">TOTAL</th>
-                        <th class="text-light">#</th>
-                    </tr>
-                    <tbody id="dynamic_field">
-                    </tbody>
-                </table>
+            <button type="button" id="add" class="btn btn-primary mb-2">Tambah Row Baru</button>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table table-hover border" id="table-show">
+                            <tr class="bg-success">
+                                <th class="text-light" style="width: 30%;">Nama Barang</th>
+                                <th class="text-light" style="width: 10%;">QTY</th>
+                                <th class="text-light" style="width: 10%;">UNIT</th>
+                                <th class="text-light">HARGA BELI</th>
+                                <th class="text-light">TOTAL</th>
+                                <th class="text-light">#</th>
+                            </tr>
+                            <tbody id="dynamic_field">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    <p class="text-info">*Mohon Untuk Input Dengan Benar dan Berurut : <span class="badge badge-primary"
+            {{-- <p class="text-info">*Mohon Untuk Input Dengan Benar dan Berurut : <span class="badge badge-primary"
             id="counter"></span></p>
     <div class="row invoice-payment">
         <div class="col-sm-4 offset-sm-8">
@@ -696,10 +699,10 @@ $item->status_tukar_faktur == $item->status_tukar_faktur = 'pending' )
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-sm-12 col-sg-4 m-b-4">
-            <button type="submit" class="btn btn-primary" id="submit">Submit</button>
-        </div>
+        </div> --}}
+            <div class="col-sm-12 col-sg-4 m-b-4">
+                <button type="submit" class="btn btn-primary" id="submit">Submit</button>
+            </div>
         </form>
     </div>
     </div>
