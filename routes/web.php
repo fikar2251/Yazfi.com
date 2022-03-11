@@ -182,6 +182,8 @@ Route::middleware('auth')->group(function () {
             Route::get('doctor/json', 'DoctorController@json');
             Route::resource('/doctor', 'DoctorController');
             Route::post('/pricelist/{id}', 'PricelistController@storeSpr')->name('storespr');
+            Route::get('/pricelist/show/{id}', 'PricelistController@create')->name('pricelist.detail');
+            Route::get('/pricelist/cetakspr/{id}', 'PricelistController@cetakSPR')->name('pricelist.cetakspr');
             Route::resource('/pricelist', 'PricelistController');
             Route::get('/blok', 'PricelistController@blok');
             Route::get('/no', 'PricelistController@no');

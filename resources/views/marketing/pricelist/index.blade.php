@@ -15,7 +15,6 @@
                         <table class="table table-bordered custom-table table-striped">
                             <thead>
                                 <tr>
-                                    <th>NO</th>
                                     <th>No Pesanan</th>
                                     <th>Konsumen</th>
                                     <th>No.KTP</th>
@@ -31,19 +30,21 @@
                             <tbody>
                                 @foreach ($spr as $item)
                                     <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $item->no_transaksi }}</td>
+                                        <td>
+                                            <a href="{{ route('marketing.pricelist.detail', $item->id_transaksi) }}">{{ $item->no_transaksi }}
+                                            </a>
+                                        </td>
                                         <td>{{ $item->nama }}</td>
                                         <td>{{ $item->no_ktp }}</td>
                                         <td>@currency($item->harga_jual)</td>
                                         <td>{{ $item->unit->type }}</td>
                                         <td>{{ $item->unit->total }}/{{ $item->unit->lb }}</td>
                                         {{-- @foreach ($bf as $bfs) --}}
-                                            <td>{{ $item->status_booking}}</td>
+                                        <td>{{ $item->status_booking }}</td>
                                         {{-- @endforeach --}}
 
                                         {{-- @foreach ($dp as $dps) --}}
-                                            <td>{{ $item->status_dp }}</td>
+                                        <td>{{ $item->status_dp }}</td>
                                         {{-- @endforeach --}}
                                         <td>{{ $item->skema_pembayaran->nama_skema }}</td>
                                         <td> @currency($item->harga_jual)</td>
@@ -56,5 +57,4 @@
             </div>
         </div>
     </div>
-
 @stop

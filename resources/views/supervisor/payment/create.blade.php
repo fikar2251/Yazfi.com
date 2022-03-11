@@ -5,13 +5,6 @@
         <div class=" col text-center">
             <h4 style="font-size: 30px; font-weight: 500;" class="page-title mb-3">INPUT PEMBAYARAN KONSUMEN</h4>
             <div class="text-center">
-                {{-- <div class="form-group row d-flex justify-content-center">
-                    <label for="no_transaksi" class="col-sm-1">No <span>:</span></label>
-                    <div class="col-sm-2">
-                        <input style="text-decoration: none; border-style: none; background-color: #FAFAFA" type="text"
-                            name="no_transaksi" id="tanggal" value="{{ $nourut }}">
-                    </div>
-                </div> --}}
                 <div class="form-group row d-flex justify-content-center">
                     <label for=" tanggal" class="col-sm-1">Tanggal <span>:</span></label>
                     <div class="col-sm-2">
@@ -109,7 +102,8 @@
                                                             <option hidden value="{{ $item->id_rincian }}">Downpayment
                                                             </option>
                                                         @elseif ($item->tipe == 3 && $item->status_pembayaran == 'unpaid')
-                                                            <option value="{{ $item->id_rincian }}">{{$item->keterangan}}</option>
+                                                            <option value="{{ $item->id_rincian }}">
+                                                                {{ $item->keterangan }}</option>
                                                             </option>
                                                         @elseif ($item->tipe == 3 && $item->status_pembayaran == 'partial')
                                                             <option value="{{ $item->id_rincian }}">
@@ -160,13 +154,11 @@
                                 <table class="table table-bordered custom-table table-striped">
                                     <thead>
                                         <tr>
-
                                             <th>NO</th>
                                             <th>Tanggal Jatuh tempo</th>
                                             <th>Nominal</th>
                                             <th>Tipe</th>
                                             <th>Status</th>
-
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -177,7 +169,7 @@
                                                 <td>{{ $item->jatuh_tempo }}</td>
                                                 <td>@currency($item->jumlah_tagihan)</td>
                                                 <td>
-                                                   {{$item->keterangan}}
+                                                    {{ $item->keterangan }}
                                                 </td>
                                                 <td>
                                                     @if ($item->status_pembayaran == 'partial')
@@ -199,12 +191,10 @@
                     </div>
                 </div>
             </div>
-
         </form>
 
 
         @foreach ($bayar as $item)
-            {{-- {{$item->id}} --}}
         @endforeach
         @if ($item->id)
             <div class="row mt-5">
@@ -235,7 +225,7 @@
                                                 <td>{{ $item->no_detail_transaksi }}</td>
                                                 <td>{{ $item->tanggal_transaksi }}</td>
                                                 <td>
-                                                   {{$item->rincian->keterangan}}
+                                                    {{ $item->rincian->keterangan }}
                                                 </td>
                                                 <td>
                                                     @currency($item->nominal)
@@ -266,7 +256,6 @@
                                                 </td>
                                             </tr>
                                         @endforeach
-
                                     </tbody>
                                 </table>
                             </div>

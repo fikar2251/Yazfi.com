@@ -23,14 +23,6 @@
         <div class="row">
             <div class=" col text-center">
                 <h4 style="font-size: 30px; font-weight: 500;" class="page-title mb-3">SURAT PEMESANAN RUMAH</h4>
-                {{-- <div class="form-group">
-                    <input type="number" name="id_spr" id="id_spr" class="form-control" value="{{ $id }}"
-                        readonly hidden>
-
-                    @error('phone_number')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
-                </div> --}}
                 <div class="text-center">
                     <div class="form-group row d-flex justify-content-center">
                         <label for="no_transaksi" class="col-sm-1">No <span>:</span></label>

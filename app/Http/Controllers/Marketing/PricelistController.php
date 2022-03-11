@@ -11,7 +11,7 @@ use App\Tagihan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Laravolt\Indonesia\Models\Province;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PricelistController extends Controller
 {
@@ -28,35 +28,6 @@ class PricelistController extends Controller
 
         $spr = Spr::orderBy('id_transaksi', 'desc')->get();
 
-        // foreach ($spr as $sp) {
-        //     $sp->no_transaksi;
-        // }
-
-        // $tipe1 = [
-        //     'tipe' => 1,
-        //     'no_transaksi' => $sp->no_transaksi,
-
-        // ];
-        // $bf = Tagihan::select('tipe', 'no_transaksi', 'status_pembayaran')
-        //     ->where($tipe1)
-        //     ->get();
-
-        // $tipe2 = [
-        //     'tipe' => 2,
-        //     'no_transaksi' => $sp->no_transaksi,
-
-        // ];
-        // $dp = Tagihan::select('tipe', 'no_transaksi', 'status_pembayaran')
-        //     ->where($tipe2)
-        //     ->get();
-
-        // foreach ($spr as $sp) {
-        //     $sp->tagihan->no_transaksi;
-        // }
-
-        // dd($dp);
-
-        // $tagihan = Tagihan::with('spr')->paginate(100);
         return view('marketing.pricelist.index', compact('blok', 'spr'));
     }
 
@@ -126,11 +97,17 @@ class PricelistController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id)
     {
-        // return view('marketing.pricelist.create', [
-        //     'data' => Price
-        // ])
+        $spr = Spr::find($id);
+        return view('marketing.pricelist.show', compact('spr'));
+    }
+
+    public function cetakSPR($id)
+    {
+        $spr = Spr::find($id);
+        $pdf = PDF::loadview('marketing.pricelist.cetakspr',['spr'=>$spr]);
+	    return $pdf->download('Data-SPR');
     }
 
     /**
