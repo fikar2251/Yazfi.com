@@ -27,10 +27,19 @@ class RefundController extends Controller
             $singlebayar = Pembayaran::where('rincian_id', $getrincianid)->first();
             $notrs = $singlebatal->spr->no_transaksi;
 
-            $totalbayar = Pembayaran::where('no_detail_transaksi', $notrs)->sum('nominal');
            
             
-            // dd($nominal);
+            $totalbayar = Pembayaran::whereHas('rincian', function($r){
+                $getno = request()->get('no_pembatalan');
+                $singlebatal = Pembatalan::where('no_pembatalan', $getno)->first();
+                $notrs = $singlebatal->spr->no_transaksi;
+                
+                $r->where('no_transaksi', $notrs);
+                $r->whereIn('tipe', [2,3]);
+            })->sum('nominal');
+            
+                
+            // dd($contoh);
             
             $idbatal = $singlebatal->no_pembatalan;
             

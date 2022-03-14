@@ -47,6 +47,7 @@
                         <th>Komisi Manager</th>
                         <th>Diajukan</th>
                         <th>Status</th>
+                        <th>Tanggal Pembayaran</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -61,6 +62,7 @@
                         <td>@currency($km->nominal_manager)</td>
                         <td>{{$km->spv}}</td>
                         <td>{{$km->status_pembayaran}}</td>
+                        <td>{{$km->tanggal_pembayaran}}</td>
                     </tr>
                     @endforeach
                 </tbody>

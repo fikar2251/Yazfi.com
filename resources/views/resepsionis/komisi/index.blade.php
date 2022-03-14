@@ -14,13 +14,14 @@
                     <tr>
                         <th>No</th>
                         <th>No Komisi</th>
-                        <th>Tanggal</th>
+                        <th>Tanggal Pengajuan</th>
                         <th>No SPR</th>
                         <th>Komisi Sales</th>
                         <th>Komisi SPV</th>
                         <th>Komisi Manager</th>
                         <th>Diajukan</th>
                         <th>Status</th>
+                        <th>Tanggal Pembayaran</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -29,16 +30,23 @@
                     <tr>
                         <td>{{$loop->iteration}}</td>
                         <td>{{$km->no_komisi}}</td>
-                        <td>{{$km->tanggal_komisi}}</td>
+                        <td style="width: 100px">{{$km->tanggal_komisi}}</td>
                         <td>{{$km->no_spr}}</td>
                         <td>@currency($km->nominal_sales)</td>
-                        <td>@currency($km->nominal_spv)</td>
+                        <td style="width: 100px">@currency($km->nominal_spv)</td>
                         <td>@currency($km->nominal_manager)</td>
                         <td>{{$km->spv}}</td>
                         <td>{{$km->status_pembayaran}}</td>
+                        <td style="width: 80px">
+                            @if ($km->tanggal_pembayaran)
+                                {{$km->tanggal_pembayaran}}
+                            @else
+                                {{Carbon\Carbon::now()->format('d-m-Y')}}
+                            @endif
+                        </td>
                         <td>
                             <div class="text-center">
-                                <a href="#">
+                                <a href="{{route('resepsionis.updatekomisi', $km->id)}}">
                                     <button type="submit" class="btn btn-success"><i
                                             class="fa-solid fa-check"></i></button>
                                 </a>

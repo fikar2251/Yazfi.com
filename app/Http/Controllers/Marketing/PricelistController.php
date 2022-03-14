@@ -106,7 +106,7 @@ class PricelistController extends Controller
     public function cetakSPR($id)
     {
         $spr = Spr::find($id);
-        $pdf = PDF::loadview('marketing.pricelist.cetakspr',['spr'=>$spr])->setPaper('a4', 'potrait')->setOptions(['defaultFont' => 'sans-serif']);
+        $pdf = PDF::loadview('marketing.pricelist.cetakspr',['spr'=>$spr])->setPaper('A4', 'potrait')->setOptions(['defaultFont' => 'sans-serif']);
         return $pdf->stream();
         // $pdf = PDF::loadview('marketing.pricelist.cetakspr',['spr'=>$spr])->setOptions(['defaultFont' => 'sans-serif']);
         // return $pdf->stream();

@@ -236,6 +236,7 @@ Route::middleware('auth')->group(function () {
 
             //Route Komisi
             Route::get('/komisi', 'FinanceController@komisiFinance')->name('komisi');
+            Route::get('/komisi/update/{id}', 'FinanceController@updateKomisi')->name('updatekomisi');
 
             // Route Dokter
             Route::resource('dokter', 'DokterController');

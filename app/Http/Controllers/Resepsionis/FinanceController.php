@@ -7,6 +7,7 @@ use App\Pembayaran;
 use App\Rumah;
 use App\Spr;
 use App\Tagihan;
+use Carbon\Carbon;
 
 class FinanceController extends Controller
 {
@@ -53,15 +54,6 @@ class FinanceController extends Controller
         }
         $tagihan->save();
 
-        // dd($sum);
-
-        // if ($bayar->nominal == $tagihan->jumlah_tagihan) {
-        //     $tagihan->status_pembayaran = 'paid';
-        // } else {
-        //     $tagihan->status_pembayaran = 'partial';
-        // }
-        // $tagihan->save();
-
         $spr = $tagihan->id_spr;
         $spr1 = Spr::where('id_transaksi', $spr)->first();
         if ($tagihan->tipe == 1) {
@@ -76,7 +68,17 @@ class FinanceController extends Controller
         $rumah->status_penjualan = 'Sold';
         $rumah->save();
 
-        // return $bayar->nominal;
+    
+        return redirect()->back();
+    }
+
+    public function updateKomisi($id)
+    {
+        $tglBayar = Carbon::now()->format('d-m-Y');
+        $komisi = Komisi::find($id);
+        $komisi->status_pembayaran = 'paid';
+        $komisi->tanggal_pembayaran = $tglBayar; 
+        $komisi->save();
 
         return redirect()->back();
     }
