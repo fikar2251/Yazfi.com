@@ -93,7 +93,7 @@
                         <td colspan="3"></td>
                         <td>{{ request('from') && request('to') ? \App\PenerimaanBarang::whereBetween('tanggal_penerimaan', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->where('id_user',auth()->user()->id)->count() : \App\PenerimaanBarang::where('id_user',auth()->user()->id)->count() }}</td>
                         
-                        <td>@currency( request('from') && request('to') ? \App\PenerimaanBarang::whereBetween('tanggal_penerimaan', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->where('id_user',auth()->user()->id)->sum('grandtotal') : \App\PenerimaanBarang::where('id_user',auth()->user()->id)->sum('grandtotal') )</td>
+                        {{-- <td>@currency( request('from') && request('to') ? \App\PenerimaanBarang::whereBetween('tanggal_penerimaan', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->where('id_user',auth()->user()->id)->sum('grandtotal') : \App\PenerimaanBarang::where('id_user',auth()->user()->id)->sum('grandtotal') )</td> --}}
                         
                         <td>&nbsp;</td>
                     </tr>

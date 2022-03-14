@@ -69,7 +69,7 @@ class TukarFakturController extends Controller
         ->leftJoin('suppliers','purchases.supplier_id','=','suppliers.id')
         ->leftJoin('barangs','penerimaan_barangs.barang_id','=','barangs.id')
         ->leftJoin('users','users.id','=','penerimaan_barangs.id_user')
-        ->select('purchases.status_pembayaran','penerimaan_barangs.status_tukar_faktur','purchases.status_barang','purchases.project_id','purchases.invoice','penerimaan_barangs.total','penerimaan_barangs.id','purchases.supplier_id','barangs.nama_barang','penerimaan_barangs.id_purchase','penerimaan_barangs.qty',
+        ->select('purchases.PPN','purchases.status_pembayaran','penerimaan_barangs.status_tukar_faktur','purchases.status_barang','purchases.project_id','purchases.invoice','penerimaan_barangs.total','penerimaan_barangs.id','purchases.supplier_id','barangs.nama_barang','penerimaan_barangs.id_purchase','penerimaan_barangs.qty',
         'penerimaan_barangs.harga_beli','penerimaan_barangs.barang_id','penerimaan_barangs.qty_received','users.name','suppliers.nama','penerimaan_barangs.no_penerimaan_barang')
         ->where('penerimaan_barangs.no_penerimaan_barang', $request->no_penerimaan_barang)
         ->get();
@@ -96,7 +96,7 @@ class TukarFakturController extends Controller
         ->leftJoin('suppliers','purchases.supplier_id','=','suppliers.id')
         ->leftJoin('barangs','penerimaan_barangs.barang_id','=','barangs.id')
         ->leftJoin('users','users.id','=','penerimaan_barangs.id_user')
-        ->select('purchases.status_pembayaran','penerimaan_barangs.status_tukar_faktur','purchases.status_barang','purchases.project_id','purchases.invoice','penerimaan_barangs.total','penerimaan_barangs.id','purchases.supplier_id','barangs.nama_barang','penerimaan_barangs.id_purchase','penerimaan_barangs.qty',
+        ->select('purchases.PPN','purchases.status_pembayaran','penerimaan_barangs.status_tukar_faktur','purchases.status_barang','purchases.project_id','purchases.invoice','penerimaan_barangs.total','penerimaan_barangs.id','purchases.supplier_id','barangs.nama_barang','penerimaan_barangs.id_purchase','penerimaan_barangs.qty',
         'penerimaan_barangs.harga_beli','penerimaan_barangs.barang_id','penerimaan_barangs.qty_received','users.name','suppliers.nama','penerimaan_barangs.no_penerimaan_barang')
         ->where('penerimaan_barangs.no_penerimaan_barang', $request->no_penerimaan_barang)
         ->first();
@@ -155,6 +155,7 @@ class TukarFakturController extends Controller
                 'po_spk' => $request->po_spk,
                 'no_po_vendor' => $request->no_po_vendor,
                 'no_invoice' => $request->no_invoice,
+                'no_pn' => $request->no_pn,
                 'nama_barang' => $barangs,
                 'nilai_invoice' => $request->nilai_invoice,
                 'id_project' => $request->id_project,
@@ -177,7 +178,7 @@ class TukarFakturController extends Controller
             ];
             // dd($in);
 
-            $penerimaan = PenerimaanBarang::select('id')->where('no_po', $request->no_po_vendor)->get();
+            $penerimaan = PenerimaanBarang::select('id')->where('no_penerimaan_barang', $request->no_pn)->get();
             //  dd($penerimaan);
             DB::table('penerimaan_barangs')->whereIn('id', $penerimaan)->update(array( 
             'status_tukar_faktur' => 'completed'));

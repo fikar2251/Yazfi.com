@@ -43,8 +43,8 @@
                         <th>Tanggal</th>
                         <th>Total Item</th>
                         <th>Jumlah</th>
-                        {{-- <th>Status Barang</th>
-                        <th>Status Pembayaran</th> --}}
+                        <th>Jumlah Bayar</th>
+                        <th>Status Pembayaran</th>
                     </tr>
                 </thead>
 
@@ -55,10 +55,22 @@
                         <td>
                             <a href="{{ route('purchasing.listpurchase.show', $purchase->id) }}">{{ $purchase->invoice }}</a>
                         </td>
-                        <td>{{ $purchase->admin->name }}</td>
+                        <td>{{ $purchase->name }}</td>
                         <td>{{ Carbon\Carbon::parse($purchase->created_at)->format("d/m/Y H:i:s") }}</td>
                         <td>{{ \App\Purchase::where('invoice', $purchase->invoice)->count() }}</td> 
-                        <td>@currency(\App\Purchase::where('invoice', $purchase->invoice)->sum('total'))</td>
+                        <td>@currency ($purchase->grand_total)</td>
+                        <td>@currency ($purchase->grandtotal)</td>
+{{--                   
+                        <td>@currency(\App\PenerimaanBarang::where('no_po', $purchase->no_po)->sum('grandtotal'))</td> --}}
+                        <td> <div class="d-flex justify-content-center mt-2">
+                            @if(\App\Purchase::where('invoice', $purchase->invoice)->sum('grand_total') != \App\PenerimaanBarang::where('no_po', $purchase->no_po)->sum('grandtotal'))
+                            <span class="custom-badge status-orange">Belum Lunas</span>
+                            @endif
+                            @if(\App\Purchase::where('invoice', $purchase->invoice)->sum('grand_total')  == \App\PenerimaanBarang::where('no_po', $purchase->no_po)->sum('grandtotal'))
+                            <span class="custom-badge status-green">Lunas</span>
+                            @endif
+                        </div>
+                        </td>
                         {{-- <td>{{ $purchase->status_barang }}</td>
                         <td>{{ $purchase->status_pembayaran }}</td> --}}
                     </tr>

@@ -865,6 +865,8 @@
                                     <tr>
                                         <td colspan="3" rowspan="3"><b>Total Pembelian : </b></td>
                                         <td><b>Total: </b></td>
+
+                                    {{-- error --}}
                                         <td>
                                             @currency($purchase->harga_beli * $purchase->qty_partial)
                                         </td>

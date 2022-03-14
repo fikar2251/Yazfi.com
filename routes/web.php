@@ -275,6 +275,10 @@ Route::middleware('auth')->group(function () {
             Route::resource('reinburst', 'ReinburstController');
 
 
+            Route::resource('tim-sales', 'SalesController');
+            Route::patch('hrd/tim-sales/{tim-sales:id}', 'SalesController@update')->name('tim-sales.update');
+        
+
             Route::resource('penerimaan', 'PenerimaanController');
 
             Route::patch('hrd/penerimaan/{penerimaan}', 'PenerimaanController@edit')->name('penerimaan.edit');

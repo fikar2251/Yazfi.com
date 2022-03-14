@@ -171,14 +171,14 @@ class PenerimaanBarangController extends Controller
         }else{
 
         foreach ($barang as $key => $no) {
-            // $purchases = Purchase::select('invoice','id','status_barang','barang_id')->where('barang_id', $no)->where('id',$request->id)->first();
+            $purchases = Purchase::select('invoice','id','status_barang','barang_id')->where('barang_id', $barang)->where('invoice',$request->no_po)->get();
             // dd($purchases);
             $attr []= [
                 'id_user' => $request->id_user,
                 'no_po' => $request->no_po,
                 'no_penerimaan_barang' => $request->no_penerimaan_barang,
                 'barang_id' => $no,
-                'id_purchase' => 3,
+                'id_purchase' => $purchases->id,
                 'qty' => $request->qty[$key],
                 'qty_partial' => $request->qty_partial[$key],
                 'qty_received' => $request->qty_received[$key],

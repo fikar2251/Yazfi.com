@@ -157,6 +157,22 @@ $item->status_tukar_faktur == $item->status_tukar_faktur = 'pending' )
                                     </li>
                                 </ul>
                             </div>
+                            <div class="col-sm-6 col-sg-4 m-b-4">
+                                <ul class="list-unstyled">
+                                    <li>
+                                        <div class="form-group">
+                                            <label for="no_po_vendor">Number Penerimaan Barang <span
+                                                    style="color: red">*</span></label>
+                                            <input type="text" name="no_pn" required="" value="{{ $penerimaans->no_penerimaan_barang}}"
+                                                id="no_pn" class="form-control">
+
+                                            @error('no_pn')
+                                            <small class="text-danger">{{ $message }}</small>
+                                            @enderror
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
 
                             <div class="col-sm-6 col-sg-4 m-b-4">
                                 <ul class="list-unstyled">
@@ -164,7 +180,7 @@ $item->status_tukar_faktur == $item->status_tukar_faktur = 'pending' )
                                         <div class="form-group">
                                             <label for="nilai_invoice">Nilai Invoice <span
                                                     style="color: red">*</span></label>
-                                            <input type="text" readonly required="" name="nilai_invoice" value="{{ $penerimaans->total }}"
+                                            <input type="text" readonly required="" name="nilai_invoice" value="{{ $penerimaans->total / 100 *   $penerimaans->PPN + $penerimaans->total }}"
                                                 class="form-control">
 
                                             @error('nilai_invoice')
@@ -366,6 +382,7 @@ $item->status_tukar_faktur == $item->status_tukar_faktur = 'pending' )
                                                             <span class="custom-badge status-green">completed</span>
                                                             @endif
                                                         </div>
+                                                        </td>
                                                     </tr>
                                                     @endforeach
                                                 </tbody>
@@ -383,8 +400,8 @@ $item->status_tukar_faktur == $item->status_tukar_faktur = 'pending' )
                                                         <td><b> PPN: </b></td>
                                                         <td colspan="3">
                                                             <div class="input-group-append">
-                                                                {{-- <span class="input-group-text" style="background: white; border:0px;">
-                                                                    {{ $ppn_partial ? $ppn_partial->PPN : '' }}%</span> --}}
+                                                                <span class="input-group-text" style="background: white; border:0px;">
+                                                                    {{ $penerimaans ? $penerimaans->PPN : '' }}%</span>
                                                             </div>
                                                         </td>
                                                      
@@ -393,7 +410,7 @@ $item->status_tukar_faktur == $item->status_tukar_faktur = 'pending' )
                                                         <td><b>Grand Total: </b></td>
                 
                                                         <td colspan="3">
-                                                            {{-- @currency($purchase->harga_beli * $purchase->qty_partial  / 100 *  $ppn_partial->PPN  + $purchase->harga_beli * $purchase->qty_partial    ) --}}
+                                                            @currency($purchase->total / 100 *   $penerimaans->PPN + $purchase->total   )
                                                         </td>
                 
                                                         
@@ -438,7 +455,7 @@ $item->status_tukar_faktur == $item->status_tukar_faktur = 'pending' )
                     <ul class="list-unstyled">
                         <li>
                             <div class="form-group">
-                                <label for="no_po_vendor">Number PO <span style="color: red">*</span></label>
+                                <label for="no_po_vendor">Number Bukti <span style="color: red">*</span></label>
                                 <input type="text" name="no_po_vendor" value="{{$nourutPO}}" id="no_po_vendor"
                                     class="form-control" readonly>
 

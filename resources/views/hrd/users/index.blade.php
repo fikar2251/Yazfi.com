@@ -14,7 +14,7 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="table-responsive">
-            <table class="table table-bordered table-striped custom-table datatable">
+            <table class="table table-bordered table-striped custom-table report">
                 <thead>
                     <tr>
                         <th class="text-center">No</th>
@@ -23,7 +23,6 @@
                         <th>Role</th>
                         <th>Jabatan</th>
                         <th>Perusahaan</th>
-                        <th>Project</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -41,7 +40,6 @@
                         </td>
                         <td>{{ $user->jabatan->nama }}</td>
                         <td>{{ $user->perusahaan->nama_perusahaan }}</td>
-                        <td>{{ $user->project->nama_project }}</td>
                         <td>
                             <a href="{{ route('hrd.users.edit', $user->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
                             <form action="{{ route('hrd.users.destroy', $user->id) }}" method="post" style="display: inline;" class="delete-form">
@@ -58,4 +56,41 @@
     </div>
 </div>
 
+@stop
+
+
+@section('footer')
+<script>
+    $('.report').DataTable({
+        dom: 'Bfrtip',
+        buttons: [{
+                extend: 'copy',
+                className: 'btn-default',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            {
+                extend: 'excel',
+                className: 'btn-default',
+                title: 'Laporan Users ',
+                messageTop: 'Tanggal  {{ request("from") }} - {{ request("to") }}',
+                footer: true,
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            {
+                extend: 'pdf',
+                className: 'btn-default',
+                title: 'Laporan Users ',
+                messageTop: 'Tanggal {{ request("from") }} - {{ request("to") }}',
+                footer: true,
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+        ]
+    });
+</script>
 @stop

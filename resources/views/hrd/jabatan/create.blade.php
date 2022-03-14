@@ -1,8 +1,8 @@
 @extends('layouts.master', ['title' => 'Add Jabatan'])
 
 @section('content')
-<div class="row">
-    <div class="col-lg-8">
+<div class="row justify-content-center text-center">
+    <div class="col-md-6">
         <h4 class="page-title">Add Jabatan</h4>
     </div>
 </div>
