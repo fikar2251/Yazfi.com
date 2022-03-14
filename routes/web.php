@@ -190,6 +190,9 @@ Route::middleware('auth')->group(function () {
             Route::get('/no', 'PricelistController@no');
             Route::get('/lt', 'PricelistController@lt');
             Route::get('/hj', 'PricelistController@hj');
+            Route::get('/kota', 'PricelistController@kota');
+            Route::get('/kecamatan', 'PricelistController@kecamatan');
+            Route::get('/desa', 'PricelistController@desa');
             Route::post('/fetch', 'PricelistController@fetch')->name('pricelist.fetch');
             Route::get('/pricelist/findBlokName', 'PricelistController@findBlokName');
             Route::resource('/profile', 'ProfileController');

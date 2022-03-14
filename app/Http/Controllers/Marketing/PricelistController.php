@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Marketing;
 
+use App\City;
+use App\District;
 use App\Http\Controllers\Controller;
 use App\Marketing;
 use App\Project;
+use App\Provinces;
 use App\Skema;
 use App\Spr;
+use App\Subdistrict;
 use App\Tagihan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -228,17 +232,41 @@ class PricelistController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id, Project $project)
+    public function show($id)
     {
         $skema = Skema::all();
 
         $blok = DB::table('unit_rumah')
             ->groupBy('type')
             ->get();
+            
+       
+        
+        $provinces = Provinces::all();
+    
+      
+        return view('marketing.pricelist.create', compact('blok', 'id', 'skema', 'provinces'));
+    }
 
-           
+    public function kota(Request $request)
+    {
+        $city = City::where('prov_id', $request->provinsi)->get();
 
-        return view('marketing.pricelist.create', compact('blok', 'id', 'skema'));
+        return $city;    
+    }
+
+    public function kecamatan(Request $request)
+    {
+        $district = District::where('city_id', $request->kota)->get();
+
+        return $district;    
+    }
+
+    public function desa(Request $request)
+    {
+        $subdistrict = Subdistrict::where('dis_id', $request->kecamatan)->get();
+
+        return $subdistrict;    
     }
 
     /**

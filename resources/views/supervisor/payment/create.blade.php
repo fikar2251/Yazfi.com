@@ -173,12 +173,12 @@
                                                 </td>
                                                 <td>
                                                     @if ($item->status_pembayaran == 'partial')
-                                                        <span class="btn-danger">unpaid</span>
+                                                        <span class="custom-badge status-red">unpaid</span>
                                                     @elseif($item->status_pembayaran == 'unpaid')
-                                                        <span class="btn-danger">unpaid</span>
+                                                        <span class="custom-badge status-red">unpaid</span>
                                                     @elseif($item->status_pembayaran == 'paid')
                                                         <span
-                                                            class="btn-success">{{ $item->status_pembayaran }}</span>
+                                                            class="custom-badge status-green">{{ $item->status_pembayaran }}</span>
                                                     @endif
                                                 </td>
                                             </tr>
@@ -214,8 +214,8 @@
                                             <th>Tanggal transaksi</th>
                                             <th>Tipe</th>
                                             <th>Nominal</th>
+                                            <th>Bank Tujuan</th>
                                             <th>Status</th>
-                                            <th>Bank tujuan</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -223,7 +223,7 @@
                                         @foreach ($bayar as $item)
                                             <tr>
                                                 <td>{{ $item->no_detail_transaksi }}</td>
-                                                <td>{{ $item->tanggal_transaksi }}</td>
+                                                <td style="width: 100px">{{ $item->tanggal_transaksi }}</td>
                                                 <td>
                                                     {{ $item->rincian->keterangan }}
                                                 </td>
@@ -241,9 +241,11 @@
                                                 </td>
                                                 <td>
                                                     @if ($item->status_approval == 'pending')
-                                                        <span class="btn-danger">{{ $item->status_approval }}</span>
+                                                        <span
+                                                            class="custom-badge status-red">{{ $item->status_approval }}</span>
                                                     @elseif ($item->status_approval == 'paid')
-                                                        <span class="btn-success">{{ $item->status_approval }}</span>
+                                                        <span
+                                                            class="custom-badge status-green">{{ $item->status_approval }}</span>
                                                     @endif
                                                 </td>
                                                 <td>

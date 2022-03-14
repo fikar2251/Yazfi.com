@@ -41,16 +41,16 @@
                                     {{$item->pembatalan->spr->nama}}
                                 </td>
                                 <td>
-                                    {{$batal->spr->user->name}}
+                                    {{$item->pembatalan->spr->user->name}}
                                 </td>
                                 <td>
                                     {{$item->total_refund}}
                                 </td>
                                 <td>
                                     @if ($item->status == 'unpaid')
-                                    <span class="btn-danger">{{ $item->status }}</span>
+                                    <span class="custom-badge status-red">{{ $item->status }}</span>
                                     @elseif ($item->status == 'paid')
-                                    <span class="btn-success">{{ $item->status }}</span>
+                                    <span class="custom-badge status-green">{{ $item->status }}</span>
                                     @endif
                                 </td>
                                 <td>

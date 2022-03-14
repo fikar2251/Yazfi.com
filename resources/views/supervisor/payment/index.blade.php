@@ -1,9 +1,9 @@
 @extends('layouts.master', ['title' => 'Pembatalan'])
 
 @section('content')
-<div class="text-center">
-    <h4 style="font-size: 30px; font-weight: 500;" class="page-title mb-3">PEMBATALAN UNIT</h4>
-</div>
+    <div class="text-center">
+        <h4 style="font-size: 30px; font-weight: 500;" class="page-title mb-3">PEMBATALAN UNIT</h4>
+    </div>
     <div class="row">
         <div class="col-sm-4 col-3">
             <h4 class="page-title">List Sales</h4>
@@ -59,7 +59,7 @@
                                 @foreach ($batal as $item)
                                     <tr>
                                         <td> {{ $loop->iteration }} </td>
-                                        <td>{{ Carbon\Carbon::now()->format('d-m-Y') }}</td>
+                                        <td style="width: 100px">{{ Carbon\Carbon::now()->format('d-m-Y') }}</td>
                                         <td> {{ $item->no_pembatalan }} </td>
                                         <td>
                                             {{ $item->spr->unit->type }}
@@ -77,7 +77,11 @@
                                         <td> {{ auth()->user()->name }} </td>
                                         <td> {{ $item->status }} </td>
                                         <td>
-                                            {{ $item->refund }}
+                                            @if ($item->refund == 'unpaid')
+                                                <span class="custom-badge status-red">{{ $item->refund }}</span>
+                                            @elseif ($item->refund == 'paid')
+                                                <span class="custom-badge status-green">{{ $item->refund }}</span>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach

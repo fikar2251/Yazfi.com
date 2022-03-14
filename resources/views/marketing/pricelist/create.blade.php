@@ -78,16 +78,48 @@
                     @enderror
                 </div>
                 <div class="form-group">
-                    <label for="address">Alamat</label>
-                    <textarea name="alamat" id="alamat" rows="3" class="form-control"></textarea>
-                    {{-- <select class="form-control" name="alamat" id="alamat">
+                    <label for="address">Provinsi</label>
+                    <select class="form-control provinsi" name="provinsi" id="provinsi">
                         <option value="">-- Select Provinsi --</option>
-                        @foreach ($provinsi as $id => $name)
-                            <option value="{{ $id }}">{{ $name }}</option>
+                        @foreach ($provinces as $pv)
+                            <option value="{{ $pv->prov_id }}">{{ $pv->prov_name }}</option>
                         @endforeach
-                    </select> --}}
-
+                    </select>
+                    {{-- <textarea name="alamat" id="alamat" rows="3" class="form-control"></textarea> --}}
                     @error('address')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label for="phone_number">Kota/Kabupaten</label>
+                    <select name="kota" id="kota" class="form-control kota kota1" data-dependent="lt">
+                        <option value=""></option>
+                    </select>
+
+                    @error('phone_number')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label for="phone_number">Kecamatan</label>
+                    <select name="kecamatan" id="kecamatan" class="form-control kecamatan kecamatan1" data-dependent="lt">
+                        <option value=""></option>
+                    </select>
+
+                    @error('phone_number')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label for="phone_number">Desa</label>
+                    <select name="desa" id="desa" class="form-control desa1" data-dependent="lt">
+                        <option value=""></option>
+                    </select>
+
+                    @error('phone_number')
                         <small class="text-danger">{{ $message }}</small>
                     @enderror
                 </div>
@@ -445,6 +477,93 @@
 
                     },
 
+                })
+            })
+        })
+
+        $(document).ready(function() {
+            $('.provinsi').change(function() {
+
+                var provinsi = $(this).val();
+                var kota = $(this).val();
+                var op = " ";
+                $.ajax({
+                    url: `/marketing/kota`,
+                    method: "get",
+                    data: {
+                        'provinsi': provinsi,
+                        'kota': kota,
+                    },
+                    success: function(city) {
+                        console.log(city);
+                        op += '<option value="0">--Select Kota--</option>';
+                        for (var i = 0; i < city.length; i++) {
+                            op += '<option value="' + city[i].city_id + '">' + city[i].city_name +
+                                '</option>'
+                        };
+                        $('.kota1').html(op);
+                    },
+                    error: function() {
+
+                    }
+                })
+            })
+        })
+
+        $(document).ready(function() {
+            $('.kota').change(function() {
+
+                var kota = $(this).val();
+                var kecamatan = $(this).val();
+                var op = " ";
+                $.ajax({
+                    url: `/marketing/kecamatan`,
+                    method: "get",
+                    data: {
+                        'kota': kota,
+                        'kecamatan': kecamatan,
+                    },
+                    success: function(district) {
+                        console.log(district);
+                        op += '<option value="0">--Select Kecamatan--</option>';
+                        for (var i = 0; i < district.length; i++) {
+                            op += '<option value="' + district[i].dis_id + '">' + district[i].dis_name +
+                                '</option>'
+                        };
+                        $('.kecamatan1').html(op);
+                    },
+                    error: function() {
+
+                    }
+                })
+            })
+        })
+
+        $(document).ready(function() {
+            $('.kecamatan').change(function() {
+
+                var kecamatan = $(this).val();
+                var desa = $(this).val();
+                var op = " ";
+                $.ajax({
+                    url: `/marketing/desa`,
+                    method: "get",
+                    data: {
+                        'kecamatan': kecamatan,
+                        'desa': desa,
+                    },
+                    success: function(subdistrict) {
+                        console.log(subdistrict);
+                        op += '<option value="0">--Select Desa--</option>';
+                        for (var i = 0; i < subdistrict.length; i++) {
+                            op += '<option value="' + subdistrict[i].subdis_id + '">' + subdistrict[i].subdis_name +
+                                '</option>'
+                        };
+                        $('.desa1').html(op);
+                    },
+                    error: function() {
+
+                    }
                 })
             })
         })

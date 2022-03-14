@@ -36,9 +36,9 @@
                                         </td>
                                         <td>
                                             @if ($item->status_approval == 'pending')
-                                                <span class="btn-danger">{{ $item->status_approval }}</span>
+                                                <span class="custom-badge status-red">{{ $item->status_approval }}</span>
                                             @elseif ($item->status_approval == 'paid')
-                                                <span class="btn-success">{{ $item->status_approval }}</span>
+                                                <span class="custom-badge status-green">{{ $item->status_approval }}</span>
                                             @endif
                                         </td>
                                         <td style="width: 110px" class="text-center">

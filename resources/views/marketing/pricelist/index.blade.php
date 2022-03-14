@@ -36,18 +36,27 @@
                                         </td>
                                         <td>{{ $item->nama }}</td>
                                         <td>{{ $item->no_ktp }}</td>
-                                        <td>@currency($item->harga_jual)</td>
+                                        <td style="width: 130px">@currency($item->harga_jual)</td>
                                         <td>{{ $item->unit->type }}</td>
                                         <td>{{ $item->unit->total }}/{{ $item->unit->lb }}</td>
-                                        {{-- @foreach ($bf as $bfs) --}}
-                                        <td>{{ $item->status_booking }}</td>
-                                        {{-- @endforeach --}}
+                                        <td>
+                                            @if ($item->status_booking == 'unpaid')
+                                                <span class="custom-badge status-red">{{ $item->status_booking }}</span>
+                                            @elseif ($item->status_booking == 'paid')
+                                                <span class="custom-badge status-green">{{ $item->status_booking }}</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($item->status_dp == 'unpaid')
+                                                <span class="custom-badge status-red">{{ $item->status_dp }}</span>
+                                            @elseif ($item->status_dp == 'paid')
+                                                <span
+                                                    class="custom-badge status-green">{{ $item->status_dp }}</span>
+                                            @endif
+                                        </td>
 
-                                        {{-- @foreach ($dp as $dps) --}}
-                                        <td>{{ $item->status_dp }}</td>
-                                        {{-- @endforeach --}}
                                         <td>{{ $item->skema_pembayaran->nama_skema }}</td>
-                                        <td> @currency($item->harga_jual)</td>
+                                        <td style="width: 120px"> @currency($item->harga_net)</td>
                                     </tr>
                                 @endforeach
                             </tbody>

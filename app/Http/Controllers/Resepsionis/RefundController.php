@@ -66,12 +66,12 @@ class RefundController extends Controller
     function list() {
         $refund = Refund::orderBy('no_refund', 'desc')->get();
 
-        foreach ($refund as $rf) {
-            $no = $rf->no_pembatalan;
-        }
-        $batal = Pembatalan::where('no_pembatalan', $no)->orderBy('no_pembatalan', 'desc')->first();
+        // foreach ($refund as $rf) {
+        //     $no = $rf->no_pembatalan;
+        // }
+        // $batal = Pembatalan::where('no_pembatalan', $no)->orderBy('no_pembatalan', 'desc')->first();
 
-        return view('resepsionis.refund.list', compact('refund', 'batal',));
+        return view('resepsionis.refund.list', compact('refund'));
     }
 
     public function updateStatus($id)
