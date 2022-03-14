@@ -1,9 +1,9 @@
-@extends('layouts.master', ['title' => 'Unit'])
+@extends('layouts.master', ['title' => 'Unit Rumah'])
 
 @section('content')
 <div class="row">
     <div class="col-sm-4 col-3">
-        <h4 class="page-title">Master Unit</h4>
+        <h4 class="page-title">Master Unit Rumah</h4>
     </div>
     <div class="col-sm-8 text-right m-b-20">
         @can('product-create')
@@ -17,13 +17,19 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="table-responsive">
-            <table class="table table-bordered table-striped custom-table datatable">
+            <table class="table table-bordered table-striped custom-table report">
                 <thead>
                     <tr>
                         <th class="text-center">No</th>
-                        <th>Nama</th>
-                        <th>Nama Perusahaan</th>
+                        <th>Type</th>
+                        <th>Blok</th>
+                        <th>No</th>
+                        <th>Lb</th>
+                        <th>Lt</th>
+                        <th>nstd</th>
                         <th>Total</th>
+                        <th>Hagra Jual</th>
+                        <th>Status Jual</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -32,9 +38,15 @@
                     @foreach($units as $unit)
                     <tr>
                         <td class="text-center">{{ $loop->iteration }}</td>
-                        <td>{{ $unit->nama }}</td>
-                        <td>{{ $unit->perusahaan->nama_perusahaan }}</td>
-                        <td>{{ $unit->pegawais->count() }}</td>
+                        <td>{{ $unit->type }}</td>
+                        <td>{{ $unit->blok }}</td>
+                        <td>{{ $unit->no }}</td>
+                        <td>{{ $unit->lb }}</td>
+                        <td>{{ $unit->lt }}</td>
+                        <td>{{ $unit->nstd }}</td>
+                        <td>{{ $unit->total }}</td>
+                        <td>{{ $unit->harga_jual }}</td>
+                        <td>{{ $unit->status_penjualan }}</td>
                         <td>
                             @can('product-edit')
                             <a href="{{ route('admin.unit.edit', $unit->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
@@ -55,4 +67,40 @@
     </div>
 </div>
 
+@stop
+
+@section('footer')
+<script>
+    $('.report').DataTable({
+        dom: 'Bfrtip',
+        buttons: [{
+                extend: 'copy',
+                className: 'btn-default',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            {
+                extend: 'excel',
+                className: 'btn-default',
+                title: 'Laporan Pembelian ',
+                messageTop: 'Tanggal  {{ request("from") }} - {{ request("to") }}',
+                footer: true,
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            {
+                extend: 'pdf',
+                className: 'btn-default',
+                title: 'Laporan Pembelian ',
+                messageTop: 'Tanggal {{ request("from") }} - {{ request("to") }}',
+                footer: true,
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+        ]
+    });
+</script>
 @stop

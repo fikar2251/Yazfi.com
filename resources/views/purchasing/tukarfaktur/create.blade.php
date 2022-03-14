@@ -355,25 +355,48 @@ $item->status_tukar_faktur == $item->status_tukar_faktur = 'pending' )
                                                         <td>
                                                             {{$purchase->name}}
                                                         </td>
-                                                        <td>
+                                                        {{-- <td>
                                                             {{$purchase->status_barang}}
-                                                        </td>
+                                                        </td> --}}
+                                                        <td> <div class="d-flex justify-content-center mt-2">
+                                                            @if($purchase->qty_received != $purchase->qty)
+                                                            <span class="custom-badge status-orange">partial</span>
+                                                            @endif
+                                                            @if($purchase->qty_received == $purchase->qty)
+                                                            <span class="custom-badge status-green">completed</span>
+                                                            @endif
+                                                        </div>
                                                     </tr>
                                                     @endforeach
                                                 </tbody>
                                                 <tfoot>
                                                     <tr>
-                                                        <td colspan="4"><b>Total Pembelian : </b>
-                                                            
-                                                        </td>
+                                                        <td colspan="3" rowspan="3"><b>Total Pembelian : </b></td>
                                                         {{-- <td><b>{{ \App\PenerimaanBarang::where('qty_received',$purchase->qty_received)->sum('qty_received')}}</b>
                                                             </td> --}}
                                                         {{-- <td> {{$purchase->qty_received}}</td> --}}
                                                         {{-- <td> {{$purchase->qty_received}}</td> --}}
-                                                        <td><b>@currency($purchase->total)</b></td>
-                                                        <td></td>
-                                                        <td></td>
-                                               
+                                                        <td><b>Total: </b></td>
+                                                        <td colspan="3"><b>@currency($purchase->total)</b></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b> PPN: </b></td>
+                                                        <td colspan="3">
+                                                            <div class="input-group-append">
+                                                                {{-- <span class="input-group-text" style="background: white; border:0px;">
+                                                                    {{ $ppn_partial ? $ppn_partial->PPN : '' }}%</span> --}}
+                                                            </div>
+                                                        </td>
+                                                     
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Grand Total: </b></td>
+                
+                                                        <td colspan="3">
+                                                            {{-- @currency($purchase->harga_beli * $purchase->qty_partial  / 100 *  $ppn_partial->PPN  + $purchase->harga_beli * $purchase->qty_partial    ) --}}
+                                                        </td>
+                
+                                                        
                                                     </tr>
                                                 </tfoot>
                                             </table>

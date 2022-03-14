@@ -12,14 +12,30 @@
     <li class="submenu">
         <a href="#" class=""><i class="fa fa-cog"></i> <span> Master </span> <span class="menu-arrow"></span></a>
         <ul style="display: none;">
-            @can('product-access')
-            <li class="{{ request()->is('admin/product*') ? 'active' : '' }}">
-                <a href="{{ route('admin.product.index') }}"><i class="fa fa-shopping-bag"></i> <span>Barang</span></a>
+            <li class="submenu">
+                <a href="#" class=""><i class="fa fa-shopping-bag"></i> <span> Master Barang </span> <span class="menu-arrow"></span></a>
+                <ul style="display: none;">
+                    @can('product-access')
+                    <li class="{{ request()->is('admin/product*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.product.index') }}"><span>Barang</span></a>
+                    </li>
+                    @endcan
+                    @can('product-access')
+                    <li class="{{ request()->is('admin/kategori*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.kategori.index') }}"><span>Kategori Barang</span></a>
+                    </li>
+                    @endcan
+                    @can('product-access')
+                    <li class="{{ request()->is('admin/satuan*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.satuan.index') }}"><span>Satuan Barang</span></a>
+                    </li>
+                    @endcan
+
+                </ul>
             </li>
-            @endcan
             @can('product-access')
             <li class="{{ request()->is('admin/unit*') ? 'active' : '' }}">
-                <a href="{{ route('admin.unit.index') }}"><i class="fa fa-building"></i> <span>Unit</span></a>
+                <a href="{{ route('admin.unit.index') }}"><i class="fa fa-building"></i> <span>Unit Rumah</span></a>
             </li>
             @endcan
             @can('supplier-access')
@@ -27,19 +43,15 @@
                 <a href="{{ route('admin.supplier.index') }}"><i class="fa fa-user-o"></i> <span>Vendor</span></a>
             </li>
             @endcan
-            @can('product-access')
-            <li class="{{ request()->is('admin/kategori*') ? 'active' : '' }}">
-                <a href="{{ route('admin.kategori.index') }}"><i class="fa fa-shopping-bag"></i> <span>Kategori Barang</span></a>
-            </li>
-            @endcan
-            @can('product-access')
+          
+            {{-- @can('product-access')
             <li class="{{ request()->is('admin/product*') ? 'active' : '' }}">
                 <a href="{{ route('admin.product.index') }}"><i class="fa fa-archive"></i> <span>Warehouse</span></a>
             </li>
-            @endcan
+            @endcan --}}
             @can('product-access')
             <li class="{{ request()->is('admin/reinburst*') ? 'active' : '' }}">
-                <a href="{{ route('admin.reinburst.index') }}"><i class="fa fa-money"></i> <span>Reinburst</span></a>
+                <a href="{{ route('admin.reinburst.index') }}"><i class="fa-solid fa-hand-holding-dollar"></i> <span>Reinburst</span></a>
             </li>
             @endcan
             @can('product-access')

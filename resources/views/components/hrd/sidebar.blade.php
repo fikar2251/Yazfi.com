@@ -3,32 +3,40 @@
     <li class="{{ request()->is('dashboard*') ? 'active' : '' }}">
         <a href="/dashboard"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
     </li>
-    <li class="{{ request()->is('hrd/users*') ? 'active' : '' }}">
-        <a href="{{ route('hrd.users.index') }}"><i class="fa fa-users"></i> <span>Master User</span></a>
-    </li>
-    <li class="{{ request()->is('hrd/roles*') ? 'active' : '' }}"> <a href="{{ route('hrd.roles.index') }}"><i class="fa fa-user"></i><span>Master Roles</span></a></li>
+    
     <li class="submenu">
-        <a href="#"><i class="fa fa-flag-o"></i> <span> Master Penggajuan & Reports </span> <span class="menu-arrow"></span></a>
+        <a href="#"><i class="fa fa-users"></i> <span> Master</span> <span class="menu-arrow"></span></a>
         <ul style="display: none;">
-            <li><a href="{{ route('admin.report.appoinment') }}"> Laporan Appointment </a></li>
-            <li><a href="{{ route('admin.report.payment') }}"> Laporan Metode Pembayaran </a></li>
-            <li><a href="{{ route('admin.report.komisi') }}"> Laporan Komisi </a></li>
-            <li><a href="{{ route('admin.report.pasien') }}"> Laporan Pasien </a></li>
-            <li><a href="{{ route('admin.report.perpindahan.pasien')  }}"> Laporan Perpindahan Pasien </a></li>
-            <li><a href="{{ route('admin.report.barang')  }}"> Laporan Barang</a></li>
+            <li class="{{ request()->is('hrd/users*') ? 'active' : '' }}">
+                <a href="{{ route('hrd.users.index') }}"><span>User</span></a>
+            </li>
+            <li class="{{ request()->is('hrd/permission*') ? 'active' : '' }}"> 
+                <a href="{{ route('hrd.permission.index') }}">
+                <span>Roles</span></a></li>
+            <li class="{{ request()->is('hrd/jabatan*') ? 'active' : '' }}">
+                <a href="{{ route('hrd.jabatan.index') }}"><span>Jabatan</span></a>
+            </li>
+            <li class="{{ request()->is('hrd/roles*') ? 'active' : '' }}"> <a href="{{ route('hrd.roles.index') }}">
+            <span>Divisi</span></a></li>
+            {{-- <li><a href="{{ route('admin.report.barang')  }}"> Laporan Barang</a></li> --}}
         </ul>
     </li>
-    <li class="{{ request()->is('admin/cabang*') ? 'active' : '' }}">
-        <a href="{{ route('admin.cabang.index') }}"><i class="fa fa-building"></i> <span>Master Divisi</span></a>
+   
+    <li class="{{ request()->is('hrd/reinburst*') ? 'active' : '' }}">
+        <a href="{{ route('hrd.reinburst.index') }}"><i class="fa-solid fa-hand-holding-dollar"></i> <span>Reinburst</span></a>
     </li>
-    <li class="{{ request()->is('hrd/jabatan*') ? 'active' : '' }}">
-        <a href="{{ route('hrd.jabatan.index') }}"><i class="fa fa-calculator"></i> <span>Master Jabatan</span></a>
+  
+    <li class="{{ request()->is('hrd/penerimaan*') ? 'active' : '' }}">
+        <a href="{{ route('hrd.penerimaan.index') }}"><i class="fa fa-list-alt" aria-hidden="true"></i><span>Acc Reinburst</span></a>
+    </li>
+    <li class="{{ request()->is('hrd/pengajuan*') ? 'active' : '' }}">
+        <a href="{{ route('logistik.pengajuan.index') }}"><i class="fa-solid fa-file-invoice"></i><span>Pengajuan dana</span></a>
     </li>
 
-    <li class="submenu">
-        <a href="#"><i class="fa fa-user"></i> <span> Pengajuan Dana </span> <span class="menu-arrow"></span></a>
+    <li class="{{ request()->is('hrd/attendance*') ? 'active' : '' }}">
+        <a href="{{ route('hrd.attendance.index') }}"><i class="fa-solid fa-calendar-check"></i><span>Attandance</span></a>
     </li>
     <li class="{{ request()->is('admin/purchase*') ? 'active' : '' }}">
-        <a href="{{ route('admin.purchase.index') }}"><i class="fa fa-calculator"></i> <span>Absensi</span></a>
+        <a href="{{ route('admin.purchase.index') }}"><i class="fa fa-money" aria-hidden="true"></i> <span>Payroll</span></a>
     </li>
 </ul>

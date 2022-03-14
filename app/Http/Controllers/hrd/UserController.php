@@ -17,7 +17,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::get();
+        $users = User::orderBy('id','desc')->get();
 
         return view('hrd.users.index', compact('users'));
     }
@@ -29,8 +29,10 @@ class UserController extends Controller
         $perusahaans = Perusahaan::get();
         $jabatans = Jabatan::get();
         $projects = Project::get();
+        $perkawinans = DB::table('status_pernikahans')->get();
+        $agamas = DB::table('agamas')->get();
 
-        return view('hrd.users.create', compact('roles', 'user', 'jabatans', 'perusahaans', 'projects'));
+        return view('hrd.users.create', compact('roles', 'user', 'jabatans', 'perusahaans', 'projects','perkawinans','agamas'));
     }
 
     public function store(StoreUserRequest $request)
@@ -56,8 +58,10 @@ class UserController extends Controller
         $perusahaans = Perusahaan::get();
         $jabatans = Jabatan::get();
         $projects = Project::get();
+        $perkawinans = DB::table('status_pernikahans')->get();
+        $agamas = DB::table('agamas')->get();
 
-        return view('hrd.users.edit', compact('user', 'roles', 'perusahaans', 'jabatans', 'projects'));
+        return view('hrd.users.edit', compact('user', 'roles', 'perusahaans', 'jabatans', 'projects','perkawinans','agamas'));
     }
 
     /**

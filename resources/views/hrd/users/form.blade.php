@@ -2,15 +2,23 @@
     <div class="col-md-6">
         <div class="form-group">
             <label for="name">Nama</label>
-            <input type="text" name="name" id="name" class="form-control" value="{{ $user ? $user->name : '' }}">
+            <input type="text" name="name" id="name" class="form-control" required="" value="{{ $user ? $user->name : '' }}">
 
             @error('name')
             <small class="text-danger">{{ $message }}</small>
             @enderror
         </div>
         <div class="form-group">
+            <label for="no">No. KTP</label>
+            <input type="text" name="no_ktp" id="no_ktp" required="" maxlength="16" minlength="16" class="form-control" value="{{ $user ? $user->no_ktp : '' }}">
+
+            @error('no_ktp')
+            <small class="text-danger">{{ $message }}</small>
+            @enderror
+        </div>
+        <div class="form-group">    
             <label for="email">Email</label>
-            <input type="email" name="email" id="email" class="form-control" value="{{ $user ? $user->email : '' }}">
+            <input type="email" name="email"  required="" id="email" class="form-control" value="{{ $user ? $user->email : '' }}">
 
             @error('email')
             <small class="text-danger">{{ $message }}</small>
@@ -18,7 +26,7 @@
         </div>
         <div class="form-group">
             <label for="phone_number">No Telp.</label>
-            <input type="text" name="phone_number" id="phone_number" class="form-control" maxlength="12" minlength="12" value="{{ $user ? $user->phone_number : '' }}">
+            <input type="text" name="phone_number" id="phone_number" required="" class="form-control" maxlength="12" minlength="12" value="{{ $user ? $user->phone_number : '' }}">
 
             @error('phone_number')
             <small class="text-danger">{{ $message }}</small>
@@ -26,15 +34,27 @@
         </div>
         <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" name="password" id="password" class="form-control">
+            <input type="password" name="password" id="password" required="" class="form-control">
         </div>
         <div class="form-group">
             <label for="image">Image Profile</label><br>
             <input type="file" class="form-control" name="image" id="image">
         </div>
     </div>
-
     <div class="col-md-6">
+        <div class="form-group">
+            <label for="jabatan">Agama</label>
+            <select name="id_agamas" required="" id="id_agamas" class="form-control">
+                <option disabled selected>-- Select Agama --</option>
+                @foreach($agamas as $agama)
+                <option {{ $user->id_agamas == $agama->id ? 'selected' : '' }} value="{{ $agama->id }}">{{ $agama->nama }}</option>
+                @endforeach
+            </select>
+    
+            @error('id_agama')
+            <small class="text-danger">{{ $message }}</small>
+            @enderror
+        </div>
         <div class="form-group">
             <label for="role">Divisi </label>
             <select name="role[]" id="roles" class="form-control select2" multiple="multiple">
@@ -64,6 +84,19 @@
             @enderror
         </div>
         <div class="form-group">
+            <label for="jabatan">Status Pribadi</label>
+            <select name="id_pernikahan" required=""id="id_pernikahan" class="form-control">
+                <option disabled selected>-- Select Pribadi --</option>
+                @foreach($perkawinans as $perkawinan)
+                <option {{ $user->id_pernikahan == $perkawinan->id ? 'selected' : '' }} value="{{ $perkawinan->id }}">{{ $perkawinan->nama }}</option>
+                @endforeach
+            </select>
+
+            @error('id_pernikahan')
+            <small class="text-danger">{{ $message }}</small>
+            @enderror
+        </div>
+        <div class="form-group">
             <label for="perusahaan">Perusahaan</label>
             <select name="id_perusahaan" id="perusahaan" class="form-control input-lg dynamic" data-dependent="nama_project">
                 <option disabled selected>-- Select Perusahaan --</option>
@@ -79,10 +112,10 @@
         <div class="form-group">
             <label for="cabang">Project</label>
             <!-- <input type="text" name="cabang_id" id="nama_project" class="form-control" readonly> -->
-            <select name="id_projects" id="nama_project" class="form-control root1">
+            <select name="cabang_id" id="nama_project" class="form-control root1">
                 <option disabled selected>-- Select Projects --</option>
                 @foreach($projects as $project)
-                <option {{ $user->id_projects == $project->id ? 'selected' : '' }} value="" </option>
+                <option required="" {{ $user->cabang_id == $project->id_perusahaan ? 'selected' : '' }} value="{{ $project->id_perusahaan }}">{{ $project->nama_project }} </option>
                     @endforeach
             </select>
             @error('cabang_id')

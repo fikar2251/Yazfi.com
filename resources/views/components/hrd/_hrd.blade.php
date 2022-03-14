@@ -3,7 +3,7 @@
         <div class="dash-widget">
             <span class="dash-widget-bg2"><i class="fa fa-user-o"></i></span>
             <div class="dash-widget-info text-right">
-                <h3>{{ $pasien }}</h3>
+                {{-- <h3>{{ $pasien }}</h3> --}}
                 <span class="widget-title2">Patients <i class="fa fa-check" aria-hidden="true"></i></span>
             </div>
         </div>
@@ -12,7 +12,7 @@
         <div class="dash-widget">
             <span class="dash-widget-bg3"><i class="fa fa-user-md" aria-hidden="true"></i></span>
             <div class="dash-widget-info text-right">
-                <h3>{{ $appointments }}</h3>
+                {{-- <h3>{{ $appointments }}</h3> --}}
                 <span class="widget-title3">Appointment<i class="fa fa-check" aria-hidden="true"></i></span>
             </div>
         </div>
@@ -21,7 +21,7 @@
         <div class="dash-widget">
             <span class="dash-widget-bg4"><i class="fa fa-heartbeat" aria-hidden="true"></i></span>
             <div class="dash-widget-info text-right">
-                <h4 class="p-1">{{ $tindakan }} </h4>
+                {{-- <h4 class="p-1">{{ $tindakan }} </h4> --}}
                 <span class="widget-title4">Tindakan<i class="fa fa-check" aria-hidden="true"></i></span>
             </div>
         </div>

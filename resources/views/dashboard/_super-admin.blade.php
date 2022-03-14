@@ -1,1 +1,1 @@
-@include('dashboard._card-info', ['customer' => $customer, 'reinburst' => $reinburst, 'warehouse' => $warehouse])
+@include('dashboard._card-info', ['customer' => $customer, 'reinburst_pending' => $reinburst_pending, 'warehouse' => $warehouse])

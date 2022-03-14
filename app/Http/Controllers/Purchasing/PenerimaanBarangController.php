@@ -128,6 +128,7 @@ class PenerimaanBarangController extends Controller
         $status_barang = PenerimaanBarang::where('no_po',$request->invoice)->first();
         // dd( $status_barang );
         $ppn = Purchase::where('status_barang', 'pending')->where('invoice',$request->invoice)->first();
+        $ppn_partial= Purchase::where('status_barang', 'partial')->where('invoice',$request->invoice)->first();
 
         $AWAL = 'PN';
         $noUrutAkhir = \App\PenerimaanBarang::max('id');
@@ -139,11 +140,11 @@ class PenerimaanBarangController extends Controller
       
       
         // dd($tukar);
-        return view('purchasing.penerimaan-barang.create', compact('ppn','tukar', 'purchases', 'purchase','nourut','status_barang','inout','penerimaan'));
+        return view('purchasing.penerimaan-barang.create', compact('ppn','tukar', 'purchases', 'purchase','nourut','status_barang','inout','penerimaan','ppn_partial'));
     }
 
 
-    public function store(StorePenerimaanRequest $request,Purchase $purchase)
+    public function store(StorePenerimaanRequest $request)
     {
         $request->validate([
             'id_user' => 'required',
@@ -156,8 +157,8 @@ class PenerimaanBarangController extends Controller
 
         $barang = $request->input('barang_id', []);
         // dd($barang);
+    
         $attr = [];
-
         // $purchases = Purchase::where('barang_id', $barang)->first()->id;
         // dd($purchases);
       
@@ -170,14 +171,14 @@ class PenerimaanBarangController extends Controller
         }else{
 
         foreach ($barang as $key => $no) {
-            $purchases = Purchase::select('id','status_barang','barang_id')->where('barang_id', $no)->first()->id;
+            // $purchases = Purchase::select('invoice','id','status_barang','barang_id')->where('barang_id', $no)->where('id',$request->id)->first();
             // dd($purchases);
             $attr []= [
                 'id_user' => $request->id_user,
                 'no_po' => $request->no_po,
                 'no_penerimaan_barang' => $request->no_penerimaan_barang,
                 'barang_id' => $no,
-                'id_purchase' => $purchases,
+                'id_purchase' => 3,
                 'qty' => $request->qty[$key],
                 'qty_partial' => $request->qty_partial[$key],
                 'qty_received' => $request->qty_received[$key],

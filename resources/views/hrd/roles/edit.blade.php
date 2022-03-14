@@ -1,9 +1,9 @@
-@extends('layouts.master', ['title' => 'Roles'])
+@extends('layouts.master', ['title' => 'Divisi'])
 
 @section('content')
 <div class="row justify-content-center text-center">
     <div class="col-md-6">
-        <h1 class="page-title">Edit Roles</h1>
+        <h1 class="page-title">Edit Divisi</h1>
     </div>
 </div>
 

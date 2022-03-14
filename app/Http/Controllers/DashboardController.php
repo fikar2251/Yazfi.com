@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Barang;
 use Illuminate\Support\Facades\DB;
 use App\Booking;
 use App\Customer;
@@ -51,12 +52,13 @@ class DashboardController extends Controller
         if (auth()->user()->hasRole('super-admin')) {
             $now = Carbon::now()->format('Y-m-d');
             $customer = Spr::count();
-            $reinburst_pending = Reinburst::where('id_user', auth()->user()->id)->whereDate('tanggal_reinburst', $now)->where('status_pembayaran','!=','pending')->get()->count();;
-            $warehouse =  Booking::count();
+            // $reinburst_pending = Reinburst::where('id_user', auth()->user()->id)->where('status_pembayaran','pending')->get()->count();
+             $reinburst_pending = Reinburst::where('id_user', auth()->user()->id)->get()->count();
+            $warehouse =  Barang::count();
 
             return view('dashboard.index', [
                 'customer' => $customer,
-                'reinburst' => $reinburst_pending,
+                'reinburst_pending' => $reinburst_pending,
                 'warehouse' => $warehouse,
             ]);
         }
@@ -130,17 +132,20 @@ class DashboardController extends Controller
         }
 
         if (auth()->user()->hasRole('hrd')) {
-            $doctor = User::whereHas('roles', function ($data) {
-                return $data->where('name', 'dokter');
+            $hrd = User::whereHas('roles', function ($data) {
+                return $data->where('name', 'hrd');
             })->where('is_active', 1)->get()->count();
 
-            $appointment = Booking::where('status_kedatangan_id', '!=', 4)->get()->count();
+            $pengajuan_dana = Pengajuan::where('status_approval', '==', 'pending')->where('id_user',auth()->user()->id)->get()->count();
+            $reinburst = Reinburst::where('id_user',auth()->user()->id)->get()->count();
+            $reinburs_acc = Reinburst::where('status_hrd', 'completed')->get()->count();
 
-            $tindakan = Tindakan::where('status', 0)->get()->count();
+           
             return view('dashboard.index', [
-                'doctor' => $doctor,
-                'appointment' => $appointment,
-                'tindakan' => $tindakan
+                'hrd' => $hrd,
+                'pengajuan_dana' => $pengajuan_dana,
+                'reinburst' => $reinburst,
+                'reinburs_acc' => $reinburs_acc
             ]);
         }
 

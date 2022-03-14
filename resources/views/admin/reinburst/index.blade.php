@@ -106,7 +106,7 @@
             {
                 extend: 'excel',
                 className: 'btn-default',
-                title: 'Laporan Pembelian ',
+                title: 'Laporan Reinburst ',
                 messageTop: 'Tanggal  {{ request("from") }} - {{ request("to") }}',
                 footer: true,
                 exportOptions: {
@@ -116,7 +116,7 @@
             {
                 extend: 'pdf',
                 className: 'btn-default',
-                title: 'Laporan Pembelian ',
+                title: 'Laporan Reinburst',
                 messageTop: 'Tanggal {{ request("from") }} - {{ request("to") }}',
                 footer: true,
                 exportOptions: {

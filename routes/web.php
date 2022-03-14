@@ -47,10 +47,15 @@ Route::middleware('auth')->group(function () {
             // Route Master User
             Route::resource('users', 'UserController');
 
-            // Route Master Cabang
+            // Route Master satuan
 
-         
+            Route::resource('satuan', 'SatuanController');
+            Route::patch('admin/satuan/{satuan:id}', 'SatuanController@update')->name('satuan.update');
+            // Route::patch('satuan/{satuan}/update', 'SatuanController@update');
+
+         // Route satuan Unit
             Route::resource('unit', 'UnitController');
+            Route::patch('admin/unit/{unit:id}', 'UnitController@update')->name('unit.update');
          
             Route::get('pembatalans/ajax', 'PembatalanUnitController@ajax');
             Route::patch('pembatalans/{id}/update', 'PembatalanUnitController@update');
@@ -261,6 +266,23 @@ Route::middleware('auth')->group(function () {
         Route::prefix('hrd')->namespace('hrd')->as('hrd.')->group(function () {
             //Route Roles
             Route::resource('roles', 'RolesController');
+
+            Route::resource('permission', 'PermissionController');
+
+            Route::resource('pengajuan', 'PengajuanController');
+            
+            
+            Route::resource('reinburst', 'ReinburstController');
+
+
+            Route::resource('penerimaan', 'PenerimaanController');
+
+            Route::patch('hrd/penerimaan/{penerimaan}', 'PenerimaanController@edit')->name('penerimaan.edit');
+            Route::patch('hrd/penerimaan/{penerimaan}', 'PenerimaanController@statuscompleted')->name('penerimaan.statuscompleted');
+        
+
+            Route::resource('attendance', 'AttendanceController');
+
 
             // Route Master User
             Route::resource('users', 'UserController');

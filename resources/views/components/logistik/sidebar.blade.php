@@ -12,7 +12,7 @@
         <a href="{{ route('logistik.purchase.index') }}"><i class="fa-solid fa-cart-shopping"></i><span>Order</span></a>
     </li>
     <li class="{{ request()->is('logistik/pengajuan*') ? 'active' : '' }}">
-        <a href="{{ route('logistik.pengajuan.index') }}"><i class="fa-solid fa-hand-holding-dollar"></i><span>Pengajuan dana</span></a>
+        <a href="{{ route('logistik.pengajuan.index') }}"><i class="fa-solid fa-file-invoice"></i><span>Pengajuan dana</span></a>
     </li>
 
 </ul>

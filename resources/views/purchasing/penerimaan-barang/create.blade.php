@@ -460,12 +460,43 @@
                                     </tr>
                                     @endforeach
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="3" rowspan="3"><b>Total Pembelian : </b></td>
+                                        <td><b> PPN: </b></td>
+                                        <td>
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" style="background: white; border:0px;">
+                                                    {{ $ppn ? $ppn->PPN : '' }}%</span>
+                                            </div>
+                                        </td>
+
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+
+                                        <td><b>Total: </b></td>
+
+                                        <td>@currency( \App\purchase::where('invoice',$purchase->invoice)->sum('total')
+                                            )</td>
+
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+
+                                        <td><b>Grand Total: </b></td>
+
+                                        <td>@currency( $purchase->grand_total )</td>
+
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>
                 </div>
                 @elseif (request()->get('invoice') == $item->invoice && $item->status_barang == $item->status_barang =
-                'partial')
+                'partial' && $item->barang_id)
                 <div class="row">
                     <div class="col-sm-6 col-sg-4 m-b-4">
                         <ul class="list-unstyled">
@@ -643,8 +674,7 @@
                                                 <input type="text" data="{{ $loop->iteration }}"
                                                     name="qty_partial[{{ $loop->iteration }}]" id="qty_partial"
                                                     class="form-control qty_partial-{{ $loop->iteration }}"
-                                                    placeholder="0" value="{{ $purchase->qty_partial }}"
-                                                    readonly>
+                                                    placeholder="0" value="{{ $purchase->qty_partial }}" readonly>
 
                                                 @error('qty')
                                                 <small class="text-danger">{{ $message }}</small>
@@ -703,8 +733,9 @@
                                     <div class="col-md-12">
                                         <label for="PPN">Include PPN</label>
                                         <div class="input-group">
-                                            <input type="type" readonly id="PPN" value="{{ $ppn ? $ppn->PPN : '' }}"
-                                                name="ppn" onchange="HowAboutIt()" class="form-control"
+                                            <input type="type" readonly id="PPN"
+                                                value="{{ $ppn_partial ? $ppn_partial->PPN : '' }}" name="ppn"
+                                                onchange="HowAboutIt()" class="form-control"
                                                 aria-label="Amount (to the nearest dollar)">
                                             <div class="input-group-append">
                                                 <span class="input-group-text">%</span>
@@ -822,7 +853,7 @@
                                             @currency($purchase->harga_beli)
                                         </td>
                                         <td>
-                                            @currency($purchase->total)
+                                            @currency($purchase->harga_beli * $purchase->qty_partial)
                                         </td>
                                         <td>
                                             {{$purchase->name}}
@@ -830,6 +861,43 @@
                                     </tr>
                                     @endforeach
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="3" rowspan="3"><b>Total Pembelian : </b></td>
+                                        <td><b>Total: </b></td>
+                                        <td>
+                                            @currency($purchase->harga_beli * $purchase->qty_partial)
+                                        </td>
+
+
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+
+
+
+                                        <td><b> PPN: </b></td>
+
+                                        <td>
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" style="background: white; border:0px;">
+                                                    {{ $ppn_partial ? $ppn_partial->PPN : '' }}%</span>
+                                            </div>
+                                        </td>
+
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+
+                                        <td><b>Grand Total: </b></td>
+
+                                        <td>
+                                            @currency($purchase->harga_beli * $purchase->qty_partial  / 100 *  $ppn_partial->PPN  + $purchase->harga_beli * $purchase->qty_partial    )
+                                        </td>
+
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>

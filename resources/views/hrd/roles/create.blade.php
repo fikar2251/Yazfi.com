@@ -3,7 +3,7 @@
 @section('content')
 <div class="row justify-content-center text-center">
     <div class="col-md-6">
-        <h1 class="page-title">Add Roles</h1>
+        <h1 class="page-title">Add Divisi</h1>
     </div>
 </div>
 <div class="row justify-content-center">

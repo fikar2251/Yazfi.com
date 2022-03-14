@@ -3,10 +3,10 @@
 @section('content')
 <div class="row">
     <div class="col-md-6">
-        <h1 class="page-title">Show Roles</h1>
+        <h1 class="page-title">Show Divisi</h1>
         <div class="card">
             <div class="card-header">
-                <h5 class="text-bold card-title">Show Role</h5>
+                <h5 class="text-bold card-title">Show Divisi</h5>
             </div>
 
             <div class="card-body">
