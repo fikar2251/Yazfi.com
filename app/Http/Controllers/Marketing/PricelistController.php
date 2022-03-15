@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Marketing;
 
+use App\Alamat;
 use App\City;
 use App\District;
 use App\Http\Controllers\Controller;
@@ -104,13 +105,16 @@ class PricelistController extends Controller
     public function create($id)
     {
         $spr = Spr::find($id);
-        return view('marketing.pricelist.show', compact('spr'));
+        $add = Alamat::find($id);
+        
+        return view('marketing.pricelist.show', compact('spr','add'));
     }
 
     public function cetakSPR($id)
     {
         $spr = Spr::find($id);
-        $pdf = PDF::loadview('marketing.pricelist.cetakspr',['spr'=>$spr])->setPaper('A4', 'potrait')->setOptions(['defaultFont' => 'sans-serif']);
+        $add = Alamat::find($id);
+        $pdf = PDF::loadview('marketing.pricelist.cetakspr',['spr'=>$spr, 'add'=>$add]);
         return $pdf->stream();
         // $pdf = PDF::loadview('marketing.pricelist.cetakspr',['spr'=>$spr])->setOptions(['defaultFont' => 'sans-serif']);
         // return $pdf->stream();
@@ -119,7 +123,8 @@ class PricelistController extends Controller
     public function showSPR($id)
     {
         $spr = Spr::find($id);
-        return view('marketing.pricelist.cetakspr', compact('spr'));
+        $add = Alamat::find($id);
+        return view('marketing.pricelist.cetakspr', compact('spr', 'add'));
     }
 
     /**
@@ -135,12 +140,20 @@ class PricelistController extends Controller
 
     public function storeSpr(Request $request, $id)
     {
+        $alamat = Alamat::create([
+            'alamat' => $request->alamat,
+            'provinsi' => $request->provinsi,
+            'kota' => $request->kota,
+            'kecamatan' => $request->kecamatan,
+            'desa' => $request->desa,
+        ]);
 
         $spr = Spr::create([
             'no_transaksi' => $request->no_transaksi,
             'id_sales' => auth()->user()->id,
             'id_project' => $id,
             'id_unit' => $request->id_unit,
+            'alamat_id' => $alamat->id,
             'id_perusahaan' => '1',
             'tanggal_transaksi' => $request->tanggal_transaksi,
             'skema' => $request->skema,
@@ -240,8 +253,6 @@ class PricelistController extends Controller
             ->groupBy('type')
             ->get();
             
-       
-        
         $provinces = Provinces::all();
     
       

@@ -40,5 +40,10 @@ class Spr extends Model
     {
         return $this->belongsTo(Project::class, 'id_project');
     }
+
+    public function alamat()
+    {
+        return $this->belongsTo(Alamat::class);
+    }
 }
 

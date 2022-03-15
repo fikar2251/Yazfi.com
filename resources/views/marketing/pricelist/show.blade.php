@@ -75,7 +75,8 @@
                                     <td style="width: 200px">Alamat</td>
                                     <td style="width: 20px">:</td>
                                     <td>
-                                        {{ $spr->alamat }}
+                                        {{ $add->alamat }}, <br>
+                                        {{$add->desa->subdis_name}}, {{$add->kecamatan->dis_name}}, {{$add->kota->city_name}}, {{$add->provinsi->prov_name}}
                                     </td>
                                 </tr>
                                 <tr>

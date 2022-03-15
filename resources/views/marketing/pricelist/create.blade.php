@@ -78,6 +78,14 @@
                     @enderror
                 </div>
                 <div class="form-group">
+                    <label for="email">Alamat</label>
+                    <textarea name="alamat" id="alamat"  rows="3" class="form-control"></textarea>
+
+                    @error('email')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+                <div class="form-group">
                     <label for="address">Provinsi</label>
                     <select class="form-control provinsi" name="provinsi" id="provinsi">
                         <option value="">-- Select Provinsi --</option>
@@ -94,7 +102,7 @@
                 <div class="form-group">
                     <label for="phone_number">Kota/Kabupaten</label>
                     <select name="kota" id="kota" class="form-control kota kota1" data-dependent="lt">
-                        <option value=""></option>
+                        <option value="">-- Select Kota/Kabupaten --</option>
                     </select>
 
                     @error('phone_number')
@@ -105,7 +113,7 @@
                 <div class="form-group">
                     <label for="phone_number">Kecamatan</label>
                     <select name="kecamatan" id="kecamatan" class="form-control kecamatan kecamatan1" data-dependent="lt">
-                        <option value=""></option>
+                        <option value="">-- Select Kecamatan --</option>
                     </select>
 
                     @error('phone_number')
@@ -116,7 +124,7 @@
                 <div class="form-group">
                     <label for="phone_number">Desa</label>
                     <select name="desa" id="desa" class="form-control desa1" data-dependent="lt">
-                        <option value=""></option>
+                        <option value="">-- Select Desa --</option>
                     </select>
 
                     @error('phone_number')
