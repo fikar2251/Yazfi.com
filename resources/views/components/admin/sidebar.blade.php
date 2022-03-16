@@ -43,12 +43,13 @@
                 <a href="{{ route('admin.supplier.index') }}"><i class="fa fa-user-o"></i> <span>Vendor</span></a>
             </li>
             @endcan
+            
           
-            {{-- @can('product-access')
-            <li class="{{ request()->is('admin/product*') ? 'active' : '' }}">
-                <a href="{{ route('admin.product.index') }}"><i class="fa fa-archive"></i> <span>Warehouse</span></a>
+            @can('product-access')
+            <li class="{{ request()->is('admin/report*') ? 'active' : '' }}">
+                <a href="{{ route('admin.report.barang') }}"><i class="fa fa-archive"></i> <span>Warehouse</span></a>
             </li>
-            @endcan --}}
+            @endcan
             @can('product-access')
             <li class="{{ request()->is('admin/reinburst*') ? 'active' : '' }}">
                 <a href="{{ route('admin.reinburst.index') }}"><i class="fa-solid fa-hand-holding-dollar"></i> <span>Reinburst</span></a>

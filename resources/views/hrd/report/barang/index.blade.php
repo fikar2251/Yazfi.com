@@ -7,7 +7,7 @@
     </div>
 </div>
 
-<form action="{{ route('admin.report.barang') }}" method="post">
+<form action="{{ route('hrd.report.barang') }}" method="post">
     @csrf
     <div class="row filter-row">
         <div class="col-sm-6 col-md-3">
@@ -34,7 +34,7 @@
     </div>
 </form>
 
-@include('admin.report.barang.table')
+@include('hrd.report.barang.table')
 
 @stop
 

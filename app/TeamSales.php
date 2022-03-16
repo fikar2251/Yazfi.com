@@ -1,9 +1,12 @@
 <?php
 
 namespace App;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 class TeamSales extends Model
 {
+    
 
     protected $guarded = ['id_sales'];
     protected $table = 'team_sales';

@@ -30,6 +30,6 @@ class InOut extends Model
 
     public function cabang()
     {
-        return $this->belongsTo(Cabang::class, 'cabang_id');
+        return $this->belongsTo(Project::class, 'project_id');
     }
 }

@@ -27,9 +27,7 @@ class TukarFakturController extends Controller
             $from = Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d');
             $to = Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d');
             $tukar = DB::table('tukar_fakturs')
-            ->leftJoin('suppliers','tukar_fakturs.id_supplier','=','suppliers.id')
-            ->leftJoin('purchases','tukar_fakturs.no_po_vendor','=','purchases.invoice')
-            ->select('purchases.barang_id','tukar_fakturs.status_pembayaran','tukar_fakturs.no_invoice','tukar_fakturs.no_faktur','tukar_fakturs.id','tukar_fakturs.tanggal_tukar_faktur','tukar_fakturs.no_po_vendor','tukar_fakturs.nilai_invoice','suppliers.nama')
+            ->whereBetween('tanggal_tukar_faktur', [$from, $to])
             ->where('id_user',auth()->user()->id)
             ->groupBy('tukar_fakturs.no_faktur')
             ->orderBy('tukar_fakturs.id','desc')
@@ -41,9 +39,7 @@ class TukarFakturController extends Controller
         } else {
 
             $tukar = DB::table('tukar_fakturs')
-            ->leftJoin('suppliers','tukar_fakturs.id_supplier','=','suppliers.id')
-            ->leftJoin('purchases','tukar_fakturs.no_po_vendor','=','purchases.invoice')
-            ->select('purchases.barang_id','tukar_fakturs.status_pembayaran','tukar_fakturs.no_invoice','tukar_fakturs.no_faktur','tukar_fakturs.id','tukar_fakturs.tanggal_tukar_faktur','tukar_fakturs.no_po_vendor','tukar_fakturs.nilai_invoice','suppliers.nama')
+            ->where('id_user',auth()->user()->id)
             ->groupBy('tukar_fakturs.no_faktur')
             ->orderBy('tukar_fakturs.id','desc')
             ->get();    
@@ -177,7 +173,7 @@ class TukarFakturController extends Controller
                 'no_invoice' => $request->no_invoice,
                 'total' => $request->total[$bar],
                 // 'total_all' => $request->total_all[$key],
-                'nama_barang' => $barangs,
+                'nama_barang' => $request->nama_barang[$bar],
                 'nilai_invoice' => $request->nilai_invoice,
                 'status_pembayaran' => 'pending',
                 'id_user' => Auth::user()->id,
@@ -356,8 +352,8 @@ class TukarFakturController extends Controller
 
         foreach ($tukar_fakturs as $tukar) {
 
-            $penerimaan= PenerimaanBarang::where('no_penerimaan_barang', $tukar->no_pn)->get();
-            // dd($purchase);
+            $penerimaan= PenerimaanBarang::where('no_po', $tukar->no_po_vendor)->get();
+            // dd($penerimaan);
             DB::table('penerimaan_barangs')->whereIn('id', $penerimaan)->update(array( 
                 'status_tukar_faktur' => 'pending'));
         

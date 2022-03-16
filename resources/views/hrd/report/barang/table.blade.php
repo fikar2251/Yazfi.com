@@ -8,7 +8,7 @@
                         <th>Nama Item</th>
                         <th>Supllier</th>
                         <th>Customer</th>
-                        <th>Before</th>
+                        {{-- <th>Before</th> --}}
                         <th>In</th>
                         <th>Out</th>
                         <th>Last Stok</th>
@@ -30,7 +30,7 @@
                             {{ $barang->cabang->nama }}
                             @endif
                         </td>
-                        <td>{{ $barang->in ? $barang->last_stok - $barang->in : $barang->last_stok - $barang->out }}</td>
+                        {{-- <td>{{ $barang->in ? $barang->last_stok - $barang->in : $barang->last_stok - $barang->out }}</td> --}}
                         <td>{{ $barang->in ?? '-' }}</td>
                         <td>{{ $barang->out ?? '-' }}</td>
                         <td>{{ $barang->last_stok ?? '-' }}</td>

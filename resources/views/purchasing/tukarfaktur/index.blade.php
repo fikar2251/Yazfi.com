@@ -44,6 +44,7 @@
                     <tr style="font-size:12px;">
                         <th>No</th>
                         <th>No Tukar Faktur</th>
+                        <th>Po / Spk</th>
                         <th>Tanggal Tukar Faktur</th>
                         <th>No Po</th>
                         <th>No Invoice</th>
@@ -62,8 +63,17 @@
                         <td>
                             <a href="{{ route('purchasing.tukarfaktur.show', $purchase->id) }}">{{$purchase->no_faktur }}</a>
                         </td>
+                        <td> <div class="d-flex justify-content-center mt-2">
+                            @if($purchase->po_spk == '1')
+                            <span class="custom-badge status-orange">PO</span>
+                            @endif
+                            @if($purchase->po_spk == '2')
+                            <span class="custom-badge status-green">SPK</span>
+                            @endif
+                        </div></td>
                         <td>{{ Carbon\Carbon::parse($purchase->tanggal_tukar_faktur)->format("d/m/Y") }}</td>
-                        <td>{{ $purchase->no_po_vendor }}</td>
+                        <td>{{ $purchase->no_po_vendor ?? '-' }}</td>
+                        
                         <td>{{ $purchase->no_invoice }}</td>
                         {{-- <td>{{ $purchase->nama }}</td> --}}
                         <td>{{ \App\TukarFaktur::where('no_faktur', $purchase->no_faktur)->count() }}</td> 
@@ -98,13 +108,14 @@
                     @endforeach
                 </tbody>
                 <tfoot>
-                    <tr>
+                    <tr style="font-size:12px;">
                         <td>Total : </td>
                         <td colspan="5"></td>
-                        <td>{{ request('from') && request('to') ? \App\TukarFaktur::whereBetween('tanggal_tukar_faktur', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->where('id_user',auth()->user()->id)->count() : \App\TukarFaktur::where('id_user',auth()->user()->id)->count() }}</td>
+                        <td>{{ request('from') && request('to') ? \App\TukarFaktur::whereBetween('tanggal_tukar_faktur', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->where('id_user',auth()->user()->id)->count() : \App\TukarFaktur::where('id_user',auth()->user()->id)->count() }}</td>
                      
-                        {{-- <td>@currency( request('from') && request('to') ? \App\TukarFaktur::whereBetween('tanggal_tukar_faktur', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->where('id_user',auth()->user()->id)->groupBy('no_faktur')->sum('nilai_invoice') :   \App\TukarFaktur::where('id_user',auth()->user()->id)->groupBy('nilai_invoice')->sum('nilai_invoice') )</td> --}}
+                        <td>@currency( request('from') && request('to') ? \App\TukarFaktur::whereBetween('tanggal_tukar_faktur', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d')])->where('id_user',auth()->user()->id)->sum('nilai_invoice') :   \App\TukarFaktur::where('id_user',auth()->user()->id)->sum('nilai_invoice') )</td>
                       
+                        <td>&nbsp;</td>
                         <td>&nbsp;</td>
                        
                     </tr>

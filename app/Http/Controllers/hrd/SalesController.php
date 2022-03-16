@@ -17,8 +17,12 @@ class SalesController extends Controller
 {
     public function index()
     {
-        $sales = TeamSales::orderBy('id','desc')->get();
-        // dd($users);
+        $sales = TeamSales::join('users','users.id','=','team_sales.id_sales')
+        ->select('users.name','team_sales.id','team_sales.id_manager','team_sales.id_spv')
+        ->groupBy('team_sales.id_manager')
+        ->get();
+
+        // dd($sales);
 
         return view('hrd.sales.index', compact('sales'));
     }

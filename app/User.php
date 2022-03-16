@@ -77,7 +77,7 @@ class User extends Authenticatable
 
     public function sales()
     {
-        return $this->hasMany(TeamSales::class,'id_sales');
+        return $this->belongsTo(TeamSales::class,'id_manager');
     }
 
 }

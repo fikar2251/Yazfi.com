@@ -35,6 +35,8 @@ class PenerimaanBarangController extends Controller
             ->where('id_user',auth()->user()->id)
             ->orderBy('tanggal_penerimaan', 'desc')->first();
 
+            // $total_all = PenerimaanBarang::where('id_user',auth()->user()->id)->groupBy('no_penerimaan_barang')->get()->sum('grandtotal');
+            // dd($total_all);
             $status = PenerimaanBarang::where('status_tukar_faktur', 'completed')->where('id', $penerimaan->id)->first();
             // dd($status);
             

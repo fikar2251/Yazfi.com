@@ -7,8 +7,8 @@
                         <th style="text-align: center;">No</th>
                         <th>Nama Item</th>
                         <th>Supllier</th>
-                        <th>Customer</th>
-                        <th>Before</th>
+                        <th>Project</th>
+                        {{-- <th>Before</th> --}}
                         <th>In</th>
                         <th>Out</th>
                         <th>Last Stok</th>
@@ -23,32 +23,28 @@
                         <td>{{ $barang->barang->nama_barang }}</td>
                         <td>{{ $barang->supplier->nama ?? '-' }}</td>
                         <td>
-                            @if($barang->customer_id)
-                            {{ $barang->customer->nama }}
+                            @if($barang->project_id)
+                            {{ $barang->cabang->nama_project }}
                             @endif
-                            @if($barang->cabang_id)
-                            {{ $barang->cabang->nama }}
-                            @endif
-                        </td>
-                        <td>{{ $barang->in ? $barang->last_stok - $barang->in : $barang->last_stok - $barang->out }}</td>
+                        </td>   
+                        {{-- <td>{{ $barang->in ? $barang->last_stok - $barang->in : $barang->last_stok - $barang->out }}</td> --}}
                         <td>{{ $barang->in ?? '-' }}</td>
                         <td>{{ $barang->out ?? '-' }}</td>
-                        <td>{{ $barang->last_stok ?? '-' }}</td>
-                        <td>{{ Carbon\Carbon::parse($barang->created_at)->format('d/m/Y H:i:s') }}</td>
+                       <td>{{ $barang->in - $barang->out }}</td>
+                        <td>{{ Carbon\Carbon::parse($barang->created_at)->format('d/m/Y') }}</td>
                         <td>{{ $barang->admin->name }}</td>
                     </tr>
                     @endforeach
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td>Total : </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>{{ $barangs->sum('last_stok') - ($barang->sum('out') + $barangs->sum('in')) ?? 0 }}</td>
+                        <td colspan="4">Total : </td>
+                       
+                     
+                        {{-- <td>{{ $barangs->sum('last_stok') - ($barang->sum('out') + $barangs->sum('in')) ?? 0 }}</td> --}}
                         <td>{{ $barangs->sum('in') ?? 0 }}</td>
                         <td>{{ $barangs->sum('out') ?? 0 }}</td>
-                        <td>{{ $barangs->sum('last_stok') ?? 0 }}</td>
+                        <td>{{$barang->sum('in') - $barangs->sum('out') ?? 0 }}</td>
                         <td></td>
                         <td></td>
                     </tr>

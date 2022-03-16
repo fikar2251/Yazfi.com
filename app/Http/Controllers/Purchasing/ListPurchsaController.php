@@ -44,8 +44,9 @@ class ListPurchsaController extends Controller
         return view('purchasing.listpurchase.index', compact('purchases'));
     }
 
-    public function show(Barang $product)
+    public function show($id)
     {
-        return view('purchasing.listpurchase.show', compact('product'));
+        $purchase = Purchase::where('id', $id)->first();
+        return view('purchasing.listpurchase.show', compact('purchase'));
     }
 }

@@ -6,7 +6,8 @@
         <h4 class="page-title">Team Sales</h4>
     </div>
     <div class="col-sm-8 col-9 text-right m-b-20">
-        <a href="{{ route('hrd.sales.create') }}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Team Sales</a>
+        <a href="{{ route('hrd.sales.create') }}" class="btn btn btn-primary btn-rounded float-right"><i
+                class="fa fa-plus"></i> Add Team Sales</a>
 
     </div>
 </div>
@@ -30,17 +31,24 @@
                     <tr>
                         <td class="text-center">{{ $loop->iteration }}</td>
                         <td>{{ $sale->spv->name }}</td>
-                        <td><span class="custom-badge status-blue">{{ $sale->sales }}</span></td>
-  
-                        {{-- <td>
-                            @foreach($sale->sales->name)
-                            <span class="custom-badge status-blue">{{ $role }}</span>
+                        {{-- <td>{{ $sale->name }}</td> --}}
+                        <td>
+                            @if($sale->user)
+                            @foreach($sale->user as $sal)
+
+                            <span class="custom-badge status-blue">{{ $sal }}</span>
+
                             @endforeach
-                        </td> --}}
+                            @else
+                            <span class="custom-badge status-blue">{{ $sale->name }}</span>
+                            @endif
+                        </td>
                         <td>{{ $sale->manager->name }}</td>
                         <td>
-                            <a href="{{ route('hrd.sales.edit', $sale->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
-                            <form action="{{ route('hrd.sales.destroy', $sale->id) }}" method="post" style="display: inline;" class="delete-form">
+                            <a href="{{ route('hrd.sales.edit', $sale->id) }}" class="btn btn-sm btn-info"><i
+                                    class="fa fa-edit"></i></a>
+                            <form action="{{ route('hrd.sales.destroy', $sale->id) }}" method="post"
+                                style="display: inline;" class="delete-form">
                                 @method('DELETE')
                                 @csrf
                                 <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
@@ -89,5 +97,6 @@
             },
         ]
     });
+
 </script>
 @stop

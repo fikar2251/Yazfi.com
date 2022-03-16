@@ -515,7 +515,8 @@
                         <li>
                             <div class="form-group">
                                 <label for="nilai_invoice">Nilai Invoice <span style="color: red">*</span></label>
-                                <input type="text" id="rupiah" name="nilai_invoice" required="" class="form-control">
+                                <input type="text" id="nilai_invoice" name="nilai_invoice" required="" class="form-control">
+                        
 
                                 @error('nilai_invoice')
                                 <small class="text-danger">{{ $message }}</small>
