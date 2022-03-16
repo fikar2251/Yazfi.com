@@ -5,17 +5,20 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link href="{{ asset("img/favicon.png")}}" rel="shortcut icon">
+    <link href="{{ asset('img/favicon.png') }}" rel="shortcut icon">
     <title>{{ \App\Setting::find(1)->web_name }} - {{ $title }}</title>
     <link rel="stylesheet" type="text/css" href="{{ asset('/') }}css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('/') }}css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('/') }}css/style.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('/') }}css/select2.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('/') }}css/bootstrap-datetimepicker.min.css">
+
     <script src="https://kit.fontawesome.com/d64a16c1a6.js" crossorigin="anonymous"></script>
 
     <!-- Sweetalert -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.0.18/sweetalert2.min.css" integrity="sha512-riZwnB8ebhwOVAUlYoILfran/fH0deyunXyJZ+yJGDyU0Y8gsDGtPHn1eh276aNADKgFERecHecJgkzcE9J3Lg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.0.18/sweetalert2.min.css"
+        integrity="sha512-riZwnB8ebhwOVAUlYoILfran/fH0deyunXyJZ+yJGDyU0Y8gsDGtPHn1eh276aNADKgFERecHecJgkzcE9J3Lg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Select2 -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <!-- Datatables -->
@@ -24,7 +27,9 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.6/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
 
-
+    <script type="text/javascript" src="http://www.position-absolute.com/creation/print/jquery.printPage.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <style>
         .select2-container {
             width: 100% !important;
@@ -37,6 +42,7 @@
         th {
             color: #565656 !important;
         }
+
     </style>
 </head>
 
@@ -53,7 +59,8 @@
             <ul class="nav user-menu float-right">
                 <li class="nav-item dropdown has-arrow">
                     <a href="#" class="dropdown-toggle nav-link user-link" data-toggle="dropdown">
-                        <span class="user-img"><img class="rounded-circle" src="{{ asset('/storage/' . auth()->user()->image ) }}" width="40">
+                        <span class="user-img"><img class="rounded-circle"
+                                src="{{ asset('/storage/' . auth()->user()->image) }}" width="40">
                             <span class="status online"></span></span>
                         <span>{{ auth()->user()->name }}</span>
                     </a>
@@ -71,7 +78,8 @@
                 </li>
             </ul>
             <div class="dropdown mobile-user-menu float-right">
-                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i
+                        class="fa fa-ellipsis-v"></i></a>
                 <div class="dropdown-menu dropdown-menu-right">
                     <a class="dropdown-item" href="{{ route('profile') }}">My Profile</a>
                     <a class="dropdown-item" href="{{ route('edit.profile') }}">Edit Profile</a>
@@ -89,28 +97,28 @@
             <div class="sidebar-inner slimscroll">
                 <div id="sidebar-menu" class="sidebar-menu">
                     @role('super-admin')
-                    <x-admin.sidebar></x-admin.sidebar>
+                        <x-admin.sidebar></x-admin.sidebar>
                     @endrole
                     @role('dokter')
-                    <x-dokter.sidebar></x-dokter.sidebar>
+                        <x-dokter.sidebar></x-dokter.sidebar>
                     @endrole
                     @role('marketing')
-                    <x-marketing.sidebar></x-marketing.sidebar>
+                        <x-marketing.sidebar></x-marketing.sidebar>
                     @endrole
                     @role('resepsionis')
-                    <x-resepsionis.sidebar></x-resepsionis.sidebar>
+                        <x-resepsionis.sidebar></x-resepsionis.sidebar>
                     @endrole
                     @role('supervisor')
-                    <x-supervisor.sidebar></x-supervisor.sidebar>
+                        <x-supervisor.sidebar></x-supervisor.sidebar>
                     @endrole
                     @role('hrd')
-                    <x-hrd.sidebar></x-hrd.sidebar>
+                        <x-hrd.sidebar></x-hrd.sidebar>
                     @endrole
                     @role('logistik')
-                    <x-logistik.sidebar></x-logistik.sidebar>
+                        <x-logistik.sidebar></x-logistik.sidebar>
                     @endrole
                     @role('purchasing')
-                    <x-purchasing.sidebar></x-purchasing.sidebar>
+                        <x-purchasing.sidebar></x-purchasing.sidebar>
                     @endrole
                 </div>
             </div>
@@ -123,6 +131,7 @@
     </div>
     <div class="sidebar-overlay" data-reff=""></div>
     <script src="{{ asset('/') }}js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="{{ asset('/') }}js/jquery.printPage.js"></script>
     <script src="{{ asset('/') }}js/popper.min.js"></script>
     <script src="{{ asset('/') }}js/bootstrap.min.js"></script>
     <script src="{{ asset('/') }}js/jquery.slimscroll.js"></script>
@@ -130,10 +139,13 @@
     <script src="{{ asset('/') }}js/select2.min.js"></script>
     <script src="{{ asset('/') }}js/moment.min.js"></script>
     <script src="{{ asset('/') }}js/bootstrap-datetimepicker.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
     <!-- Sweetalert -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.0.18/sweetalert2.min.js" integrity="sha512-mBSqtiBr4vcvTb6BCuIAgVx4uF3EVlVvJ2j+Z9USL0VwgL9liZ638rTANn5m1br7iupcjjg/LIl5cCYcNae7Yg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.0.18/sweetalert2.min.js"
+        integrity="sha512-mBSqtiBr4vcvTb6BCuIAgVx4uF3EVlVvJ2j+Z9USL0VwgL9liZ638rTANn5m1br7iupcjjg/LIl5cCYcNae7Yg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- Select2 -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <!-- Datatables -->
@@ -167,6 +179,11 @@
                     return form.submit();
                 }
             })
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.btnprn').printPage();
         });
     </script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>

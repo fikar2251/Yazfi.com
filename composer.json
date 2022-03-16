@@ -11,6 +11,7 @@
         "php": "^7.2.5|^8.0",
         "azishapidin/indoregion": "^3.0",
         "barryvdh/laravel-dompdf": "^1.0",
+        "carlos-meneses/laravel-mpdf": "^2.1",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^6.3.1|^7.0.1",
@@ -21,6 +22,7 @@
         "laravolt/indonesia": "v0.26",
         "maatwebsite/excel": "^3.1",
         "mike42/escpos-php": "2.*",
+        "mpdf/mpdf": "^8.0",
         "spatie/laravel-permission": "^4.2",
         "yajra/laravel-datatables-oracle": "^9.18"
     },

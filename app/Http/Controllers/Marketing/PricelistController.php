@@ -16,7 +16,9 @@ use App\Tagihan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\View as FacadesView;
+use Illuminate\View\View;
+Use PDF;
 
 class PricelistController extends Controller
 {
@@ -114,10 +116,23 @@ class PricelistController extends Controller
     {
         $spr = Spr::find($id);
         $add = Alamat::find($id);
-        $pdf = PDF::loadview('marketing.pricelist.cetakspr',['spr'=>$spr, 'add'=>$add]);
-        return $pdf->stream();
-        // $pdf = PDF::loadview('marketing.pricelist.cetakspr',['spr'=>$spr])->setOptions(['defaultFont' => 'sans-serif']);
+        $idspr = $spr->no_transaksi;
+        $bf = Tagihan::where(['no_transaksi' => $idspr, 'tipe' => 1])->first();
+        $dp = Tagihan::where(['no_transaksi' => $idspr, 'tipe' => 2])->first();
+
+        // $pdf = PDF::loadview('marketing.pricelist.cetakspr',['spr'=>$spr, 'add'=>$add]);
         // return $pdf->stream();
+        // $pdf = PDF::loadView('marketing.pricelist.cetakspr', $spr);
+		// return $pdf->stream('document.pdf');
+        $filename = 'test.pdf';
+        $mpdf = new \Mpdf\Mpdf();
+        $html = FacadesView::make('marketing.pricelist.cetakspr')->with(['spr'=>$spr, 'add'=>$add, 'bf'=>$bf, 'dp'=>$dp]);
+        $html->render();
+        // $stylesheet = file_get_contents(url('/css/style.css'));
+        // $mpdf->WriteHTML($stylesheet, 1);
+
+        $mpdf->WriteHTML($html);
+        $mpdf->output($filename, 'I');
     }
 
     public function showSPR($id)

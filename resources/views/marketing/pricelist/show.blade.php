@@ -76,7 +76,8 @@
                                     <td style="width: 20px">:</td>
                                     <td>
                                         {{ $add->alamat }}, <br>
-                                        {{$add->desa->subdis_name}}, {{$add->kecamatan->dis_name}}, {{$add->kota->city_name}}, {{$add->provinsi->prov_name}}
+                                        {{ $add->desa->subdis_name }}, {{ $add->kecamatan->dis_name }},
+                                        {{ $add->kota->city_name }}, {{ $add->provinsi->prov_name }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -134,9 +135,9 @@
                                     <td style="width: 20px">:</td>
                                     <td>
                                         @if ($spr->unit->nstd = '-')
-                                           -
+                                            -
                                         @else
-                                            {{$spr->unit->nstd}} M<sup>2</sup>
+                                            {{ $spr->unit->nstd }} M<sup>2</sup>
                                         @endif
 
                                     <td style="width: 200px">Total</td>
@@ -169,7 +170,8 @@
         </div>
     </div>
     <div class="m-t-20 text-center">
-        <a href="{{route('marketing.pricelist.cetakspr', $spr->id_transaksi)}}" class="btn btn-primary submit-btn"><i class="fa fa-save"></i> Cetak
+        <a href="{{ route('marketing.pricelist.cetakspr', $spr->id_transaksi) }}"
+            class="btn btn-primary submit-btn btnprn"><i class="fa fa-save"></i> Cetak
         </a>
     </div>
 @stop
