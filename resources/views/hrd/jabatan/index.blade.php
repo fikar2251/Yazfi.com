@@ -15,7 +15,7 @@
 
 <x-alert></x-alert>
 
-<form action="{{ route('hrd.jabatan.index') }}" method="get">
+{{-- <form action="{{ route('hrd.jabatan.index') }}" method="get">
     <div class="row filter-row">
         <div class="col-sm-6 col-md-3">
             <div class="form-group form-focus">
@@ -39,7 +39,7 @@
             <button type="submit" class="btn btn-success btn-block">Search</button>
         </div>
     </div>
-</form>
+</form> --}}
 <div class="row">
     <div class="col-sm-12">
         <div class="table-responsive">
@@ -94,7 +94,7 @@
             {
                 extend: 'excel',
                 className: 'btn-default',
-                title: 'Laporan Pembelian ',
+                title: 'Laporan Jabatan ',
                 messageTop: 'Tanggal  {{ request("from") }} - {{ request("to") }}',
                 footer: true,
                 exportOptions: {
@@ -104,7 +104,7 @@
             {
                 extend: 'pdf',
                 className: 'btn-default',
-                title: 'Laporan Pembelian ',
+                title: 'Laporan Jabatan ',
                 messageTop: 'Tanggal {{ request("from") }} - {{ request("to") }}',
                 footer: true,
                 exportOptions: {

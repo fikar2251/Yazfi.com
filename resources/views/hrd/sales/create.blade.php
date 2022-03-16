@@ -7,9 +7,9 @@
     </div>
 </div>
 
-<form action="{{ route('hrd.tim-sales.store') }}" method="post" enctype="multipart/form-data">
+<form action="{{ route('hrd.sales.store') }}" method="post" enctype="multipart/form-data">
     @csrf
-    @include('hrd.tim-sales.form')
+    @include('hrd.sales.form')
 
 </form>
 @stop

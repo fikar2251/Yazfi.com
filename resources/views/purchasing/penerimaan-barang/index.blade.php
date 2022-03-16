@@ -7,7 +7,8 @@
     </div>
 
     <div class="col-sm-8 text-right m-b-20">
-        <a href="{{ route('purchasing.penerimaan-barang.create') }}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Penerimaan Barang</a>
+        <a href="{{ route('purchasing.penerimaan-barang.create') }}"
+            class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Penerimaan Barang</a>
     </div>
 </div>
 <x-alert></x-alert>
@@ -48,8 +49,7 @@
                         <th>Tanggal</th>
                         <th style="width: 10px">Total Item</th>
                         <th>Total Pembelian</th>
-                        {{-- <th>Status Barang</th>
-                        <th>Status Tukar Faktur</th> --}}
+                        <th>Status Tukar Faktur</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -62,28 +62,35 @@
                             <a href="{{ route('purchasing.penerimaan-barang.show', $penerimaan->id) }}">{{ $penerimaan->no_penerimaan_barang }}
                         </td>
                         <td>{{ $penerimaan->admin->name }}</td>
-                        <td>{{ Carbon\Carbon::parse($penerimaan->tanggal_penerimaan)->format("d/m/Y H:i:s") }}</td>
-                        <td>{{ \App\PenerimaanBarang::where('no_penerimaan_barang', $penerimaan->no_penerimaan_barang)->count() }}</td> 
-                        <td>@currency(\App\PenerimaanBarang::where('no_penerimaan_barang',
-                            $penerimaan->no_penerimaan_barang)->sum('grandtotal'))</td>
-                        {{-- <td>{{ $penerimaan->purchase->status_barang }}</td>
-                        <td>{{ $penerimaan->status_tukar_faktur }}</td> --}}
-                        {{-- @if($status->count()) --}}
+                        <td>{{ Carbon\Carbon::parse($penerimaan->tanggal_penerimaan)->format("d/m/Y") }}</td>
+                        <td>{{ \App\PenerimaanBarang::where('no_penerimaan_barang', $penerimaan->no_penerimaan_barang)->count() }}
+                        </td>
+                        <td>@currency($penerimaan->grandtotal)</td>
+                        {{-- <td>{{ $penerimaan->purchase->status_barang }}</td> --}}
+                        <td>
+                            <div class="d-flex justify-content-center mt-2">
+                                @if($penerimaan->status_tukar_faktur == 'pending')
+                                <span class="custom-badge status-orange">pending</span>
+                                @endif
+                                @if($penerimaan->status_tukar_faktur == 'completed')
+                                <span class="custom-badge status-green">completed</span>
+                                @endif
+                            </div>
+                        </td>
+                        <td>
+                            {{-- <a href="{{ route('purchasing.penerimaan-barang.edit', $penerimaan->id) }}" class="btn
+                            btn-sm btn-info"><i class="fa fa-edit"></i></a> --}}
 
-                         {{-- <td>Not Found</td> --}}
-                        
-			            {{-- @else --}}
-                        <td> 
-                            {{-- <a href="{{ route('purchasing.penerimaan-barang.edit', $penerimaan->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a> --}}
-  
-                            <form action="{{ route('purchasing.penerimaan-barang.destroy', $penerimaan->id) }}" method="post" style="display: inline;">
-                              @method('delete')
-                              @csrf
-                              <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
-                          </form></td>
-                    
+                            <form action="{{ route('purchasing.penerimaan-barang.destroy', $penerimaan->id) }}"
+                                method="post" class="delete-form" style="display: inline;">
+                                @method('delete')
+                                @csrf
+                                <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
+                            </form>
+                        </td>
+
                         {{-- @endif --}}
-                  
+
                     </tr>
                     @endforeach
                 </tbody>
@@ -91,10 +98,11 @@
                     <tr>
                         <td>Total : </td>
                         <td colspan="3"></td>
-                        <td>{{ request('from') && request('to') ? \App\PenerimaanBarang::whereBetween('tanggal_penerimaan', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->where('id_user',auth()->user()->id)->count() : \App\PenerimaanBarang::where('id_user',auth()->user()->id)->count() }}</td>
-                        
+                        <td>{{ request('from') && request('to') ? \App\PenerimaanBarang::whereBetween('tanggal_penerimaan', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->where('id_user',auth()->user()->id)->count() : \App\PenerimaanBarang::where('id_user',auth()->user()->id)->count() }}
+                        </td>
+
                         {{-- <td>@currency( request('from') && request('to') ? \App\PenerimaanBarang::whereBetween('tanggal_penerimaan', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->where('id_user',auth()->user()->id)->sum('grandtotal') : \App\PenerimaanBarang::where('id_user',auth()->user()->id)->sum('grandtotal') )</td> --}}
-                        
+
                         <td>&nbsp;</td>
                     </tr>
                 </tfoot>
@@ -137,5 +145,6 @@
             },
         ]
     });
+
 </script>
 @stop

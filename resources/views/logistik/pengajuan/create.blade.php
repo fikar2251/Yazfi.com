@@ -66,7 +66,7 @@
                                 <li>
                                     <div class="form-group">
                                         <label for="perusahaan">Perusahaan <span style="color: red">*</span></label>
-                                        <select required name="id_perusahaan" id="id_perusahaan"
+                                        <select required="" name="id_perusahaan" id="id_perusahaan"
                                             class="form-control select2" required="">
                                             <option disabled selected>-- Select Perusahaan --</option>
                                             @foreach($perusahaans as $perusahaan)
@@ -86,7 +86,7 @@
                                 <li>
                                     <div class="form-group">
                                         <label for="tanggal">Tanggal <span style="color: red">*</span></label>
-                                        <input type="datetime-local" name="tanggal" id="tanggal"
+                                        <input required="" type="date" name="tanggal_pengajuan" id="tanggal_pengajuan"
                                             class="form-control">
                                         @error('tanggal')
                                         <small class="text-danger">{{ $message }}</small>
@@ -113,7 +113,7 @@
                                 <li>
                                     <div class="form-group">
                                         <label for="lampiran">Lampiran <span style="color: red">*</span></label>
-                                        <input type="file" name="file[]" multiple="true" class="form-control">
+                                        <input required="" type="file" name="file[]" multiple="true" class="form-control">
                                         <label for=" lampiran">only pdf and doc</label>
                                         @error('lampiran')
                                         <small class="text-danger">{{ $message }}</small>
@@ -167,7 +167,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="total">Total</label>
-                                        <input type="text" id="sub_total" name="total" readonly class="form-control">
+                                        <input required="" type="text" id="sub_total" name="total" readonly class="form-control">
                                     
                                         @error('total')
                                         <small class="text-danger">{{ $message }}</small>
@@ -177,7 +177,7 @@
                                 <div class="col-md-12">
                                     <label for="PPN">Include PPN</label>
                                     <div class="input-group">
-                                        <input type="type" id="PPN" name="PPN"  onchange="HowAboutIt()" class="form-control"
+                                        <input type="text" id="PPN" name="PPN"  onchange="HowAboutIt()" class="form-control"
                                             aria-label="Amount (to the nearest dollar)">
                                         <div class="input-group-append">
                                             <span class="input-group-text">%</span>
@@ -194,7 +194,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="grandtotal">Grand Total</label>
-                                        <input type="text" id="grandtotal" name="grandtotal" readonly
+                                        <input type="text" required="" id="grandtotal" name="grandtotal" readonly
                                             class="form-control">
 
                                             @error('grandtotal')
@@ -251,21 +251,21 @@
                         <input type="hidden" name="barang_id[${index}]" class="barang_id-${index}">
                     </td>
                     <td>
-                        <input  type="text" name="barang_id[${index}]"  class="form-control barang_id-${index}" placeholder="Tulis Produk">
+                        <input required="" type="text" name="barang_id[${index}]"  class="form-control barang_id-${index}" placeholder="Tulis Produk">
                     </td>
                     <td>
-                        <input type="number" name="qty[${index}]"  class="form-control qty-${index}" placeholder="0">
+                        <input required="" type="number" name="qty[${index}]"  class="form-control qty-${index}" placeholder="0">
                     </td>
                     <td>
-                        <select required name="unit[${index}]" id="${index}" class="form-control selectunit-${index}"></select>
+                        <select required="" name="unit[${index}]" id="${index}" class="form-control selectunit-${index}"></select>
                     <td>
-                                <input type="number" id="rupiah" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), TotalAbout(this)">
+                    <input required="" type="number" id="rupiah" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), TotalAbout(this)">
                     </td>
                     <td>
-                        <input type="number" name="total[${index}]" disabled class="form-control total-${index} total-form"  placeholder="0">
+                        <input required="" type="number" name="total[${index}]" disabled class="form-control total-${index} total-form"  placeholder="0">
                     </td>
                     <td>
-                        <input type="text" name="keterangan[${index}]"  class="form-control keterangan-${index}" placeholder="Keterangan">
+                        <input required="" type="text" name="keterangan[${index}]"  class="form-control keterangan-${index}" placeholder="Keterangan">
                     </td>
                     <td>
                         <button type="button" class="btn btn-danger btn-sm" onclick="remove(this)">Delete</button>

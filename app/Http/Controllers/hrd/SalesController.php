@@ -17,16 +17,16 @@ class SalesController extends Controller
 {
     public function index()
     {
-        $users = TeamSales::orderBy('id','desc')->get();
+        $sales = TeamSales::orderBy('id','desc')->get();
         // dd($users);
 
-        return view('hrd.tim-sales.index', compact('users'));
+        return view('hrd.sales.index', compact('sales'));
     }
 
-    public function create()
+    public function create(TeamSales $sale)
     {
 
-        $user = TeamSales::get(); 
+
         $roles = Role::get();
 
         $manager_marketing = User::role('marketing')->where('id_jabatans','1')->get();
@@ -36,33 +36,49 @@ class SalesController extends Controller
         // dd($staff_marketing);
 
         $spv = User::role('supervisor')->get();
-        dd($spv);
+        // dd($spv);
 
-        return view('hrd.tim-sales.create', compact('roles','user', 'manager_marketing', 'staff_marketing', 'spv'));
+        return view('hrd.sales.create', compact('roles','sale', 'manager_marketing', 'staff_marketing', 'spv'));
     }
 
-    public function store(StoreUserRequest $request)
+    public function store(Request $request)
     {
-        $attr = $request->all();
-        dd($attr);
-        $user = TeamSales::create($attr);
+        $sales = $request->input('id_sales', []);
+        // dd($sales);
+        // $attr = $request->all();
+        $attr= [];
+        DB::beginTransaction();
+        foreach( $sales as $tim){
+            $attr[]=[
+                'id_sales' => $tim,
+                'id_manager' => $request->id_manager,
+                'id_spv' => $request-> id_spv
+            ];
+            // dd($attr);
 
+        }
+        
+        TeamSales::insert($attr);
+        DB::commit();
 
-
-        return redirect()->route('hrd.tim-sales.index')->with('success', 'User has been added');
+        return redirect()->route('hrd.sales.index')->with('success', 'Team Sales has been added');
     }
 
 
-    public function edit(User $user)
+    public function edit(TeamSales $sale)
     {
         $roles = Role::get();
-        $perusahaans = Perusahaan::get();
-        $jabatans = Jabatan::get();
-        $projects = Project::get();
-        $perkawinans = DB::table('status_pernikahans')->get();
-        $agamas = DB::table('agamas')->get();
+        
+        $manager_marketing = User::role('marketing')->where('id_jabatans','1')->get();
+        // dd($manager_marketing);
 
-        return view('hrd.tim-sales.edit', compact('user', 'roles', 'perusahaans', 'jabatans', 'projects','perkawinans','agamas'));
+        $staff_marketing = User::role('marketing')->where('id_jabatans','2')->get();
+        // dd($staff_marketing);
+
+        $spv = User::role('supervisor')->get();
+        
+
+        return view('hrd.sales.edit', compact('spv', 'staff_marketing', 'manager_marketing', 'jabatans','sale'));
     }
 
     /**
@@ -72,35 +88,41 @@ class SalesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(Request $request, TeamSales $sale)
     {
-        $attr = $request->all();
-        if ($request->input('password') == null) {
-            $attr['password'] = $user->password;
-        } else {
-            $attr['password'] =  Hash::make($request->password);
+        $sales = $request->input('id_sales', []);
+        // dd($sales);
+        // $attr = $request->all();
+        $attr= [];
+        DB::beginTransaction();
+        foreach( $sales as $key => $tim){
+            $attr[]=[
+                'id_sales' => $tim,
+                'id_manager' => $request->id_manager,
+                'id_spv' => $request-> id_spv
+            ];
+            // dd($attr);
+            // $temSales = TeamSales::where('id_sales', $tim)->get();
+            // dd($temSales);
+
+            DB::table('team_sales')->whereIn('id_sales', $attr)->update(array( 
+                'id_sales' => $tim,
+                'id_manager' => $request->id_manager,
+                'id_spv' => $request-> id_spv));
+            // $sale->update($attr);
+           
         }
 
-        $image = $request->file('image');
+        DB::commit();
+  
 
-        if ($request->file('image')) {
-            Storage::delete($user->image);
-            $imageUrl = $image->storeAs('images/users', \Str::random(15) . '.' . $image->extension());
-            $attr['image'] = $imageUrl;
-        } else {
-            $attr['image'] = $user->image;
-        }
-
-        $user->update($attr);
-        $user->syncRoles($request->input('role'));
-
-        return redirect()->route('hrd.tim-sales.index')->with('success', 'User has been updated');
+        return redirect()->route('hrd.sales.index')->with('success', 'Team Sales has been updated');
     }
 
-    public function destroy(User $user)
+    public function destroy( $id)
     {
-        $user->delete();
-        return redirect()->route('hrd.tim-sales.index')->with('success', 'User has been deleted');
+        $user = TeamSales::where('id',$id)->delete();
+        return redirect()->route('hrd.sales.index')->with('success', 'Team Sales has been deleted');
     }
     public function whereProject(Request $request)
     {

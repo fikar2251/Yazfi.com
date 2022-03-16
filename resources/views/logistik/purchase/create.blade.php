@@ -4,13 +4,7 @@
     <div class="col-sm-5 col-4">
         <h4 class="page-title">Purchase</h4>
     </div>
-    <div class="col-sm-7 col-8 text-right m-b-30">
-        <div class="btn-group btn-group-sm">
-            <button class="btn btn-white">CSV</button>
-            <button class="btn btn-white">PDF</button>
-            <button class="btn btn-white"><i class="fa fa-print fa-lg"></i> Print</button>
-        </div>
-    </div>
+    
 </div>
 
 <div class="row">
@@ -114,7 +108,7 @@
                                 <li>
                                     <div class="form-group">
                                         <label for="tanggal">Tanggal <span style="color: red">*</span></label>
-                                        <input type="datetime-local" name="tanggal" id="tanggal" class="form-control">
+                                        <input type="date" name="tanggal" id="tanggal" class="form-control">
                                     </div>
                                 </li>
                             </ul>

@@ -25,8 +25,8 @@
     <li class="{{ request()->is('hrd/reinburst*') ? 'active' : '' }}">
         <a href="{{ route('hrd.reinburst.index') }}"><i class="fa-solid fa-hand-holding-dollar"></i> <span>Reinburst</span></a>
     </li>
-    <li class="{{ request()->is('hrd/tim-sales*') ? 'active' : '' }}">
-        <a href="{{ route('hrd.tim-sales.index') }}"><i class="fa fa-user-plus" aria-hidden="true"></i> <span>Team Sales</span></a>
+    <li class="{{ request()->is('hrd/sales*') ? 'active' : '' }}">
+        <a href="{{ route('hrd.sales.index') }}"><i class="fa fa-user-plus" aria-hidden="true"></i> <span>Team Sales</span></a>
     </li>
   
     <li class="{{ request()->is('hrd/penerimaan*') ? 'active' : '' }}">

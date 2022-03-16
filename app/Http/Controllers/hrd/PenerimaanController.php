@@ -21,9 +21,9 @@ class PenerimaanController extends Controller
     {
         abort_unless(\Gate::allows('reinburst-access'), 403);
         if (request('from') && request('to')) {
-            $from = Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s');
-            $to = Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s');
-            $reinbursts = Reinburst::groupBy('nomor_reinburst')->whereBetween('tanggal_reinburst', [$from, $to])->where('id_user',auth()->user()->id)->get();
+            $from = Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d');
+            $to = Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d');
+            $reinbursts = Reinburst::groupBy('nomor_reinburst')->whereBetween('tanggal_reinburst', [$from, $to])->get();
             $coba = DB::table('rincian_reinbursts')->leftjoin('reinbursts','rincian_reinbursts.nomor_reinburst','=','reinbursts.nomor_reinburst')->whereBetween('rincian_reinbursts.created_at', [$from, $to])->sum('rincian_reinbursts.total') ;
             // dd($coba);
         } else {

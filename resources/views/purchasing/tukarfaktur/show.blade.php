@@ -64,7 +64,7 @@
                                                     <td>{{$tur->no_faktur}}</td>
                                                 </a>
                                             </p>
-                                            <p style="font-size: 12px">Tanggal Tukar Faktur : <a style="font-size: 12px">{{ Carbon\Carbon::parse($tur->tanggal_tukar_faktur)->format('d/m/Y H:i:s') }}
+                                            <p style="font-size: 12px">Tanggal Tukar Faktur : <a style="font-size: 12px">{{ Carbon\Carbon::parse($tur->tanggal_tukar_faktur)->format('d/m/Y') }}
                                                 </a></p>
                                         </div>
                                     </li>

@@ -31,7 +31,7 @@ class TukarFaktur extends Model
 
     public function barang()
     {
-        return $this->belongsTo(Barang::class, 'id');
+        return $this->belongsTo(Barang::class, 'barang_id');
     }
     public function supplier()
     {

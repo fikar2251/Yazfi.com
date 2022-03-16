@@ -1,23 +1,14 @@
 <?php
 
 namespace App;
-
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Spatie\Permission\Traits\HasRoles;
-
-class TeamSales extends Authenticatable
+use Illuminate\Database\Eloquent\Model;
+class TeamSales extends Model
 {
-    use Notifiable;
-    use HasRoles;
 
-    protected $guarded = ['id'];
+    protected $guarded = ['id_sales'];
     protected $table = 'team_sales';
 
- 
-
-    public function admin()
+    public function user()
     {
         return $this->belongsTo(User::class,'id_sales');
     }

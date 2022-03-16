@@ -58,7 +58,7 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td><a href="{{ route('purchasing.reinburst.show', $reinburst->id) }}">{{ $reinburst->nomor_reinburst }}</a></td>
-                        <td>{{ Carbon\Carbon::parse($reinburst->tanggal_reinburst)->format("d/m/Y H:i:s") }}</td>
+                        <td>{{ Carbon\Carbon::parse($reinburst->tanggal_reinburst)->format("d/m/Y") }}</td>
                         <td>{{ \App\Reinburst::where('nomor_reinburst', $reinburst->nomor_reinburst)->count() }}</td>
                         <td>@currency(\App\RincianReinburst::where('nomor_reinburst',
                             $reinburst->nomor_reinburst)->sum('total'))</td>
@@ -81,7 +81,7 @@
                     <tr>
                         <td>Total : </td>
                         <td colspan="2"></td>
-                        <td>{{ request('from') && request('to') ? \App\Reinburst::whereBetween('tanggal_reinburst', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->where('id_user',auth()->user()->id)->count() : \App\Reinburst::where('id_user', auth()->user()->id)->get()->count() }}</td>
+                        <td>{{ request('from') && request('to') ? \App\Reinburst::whereBetween('tanggal_reinburst', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d')])->where('id_user',auth()->user()->id)->count() : \App\Reinburst::where('id_user', auth()->user()->id)->get()->count() }}</td>
                         <td>@currency( request('from') && request('to') ? $coba :  DB::table('rincian_reinbursts')->leftjoin('reinbursts','rincian_reinbursts.nomor_reinburst','=','reinbursts.nomor_reinburst')->where('reinbursts.id_user',auth()->user()->id)->sum('rincian_reinbursts.total')  )</td>
                         <td>&nbsp;</td>
                     </tr>

@@ -229,6 +229,11 @@
                                                     value="{{ $purchase->barang_id }}"
                                                     class="form-control barang_id-{{ $loop->iteration }}">
 
+                                                <input type="hidden" name="id_purchase[{{ $loop->iteration }}]"
+                                                    data="{{ $loop->iteration }}" id="id_purchase"
+                                                    value="{{ $purchase->id }}"
+                                                    class="form-control id_purchase-{{ $loop->iteration }}">
+
                                                 @error('barang_id')
                                                 <small class="text-danger">{{ $message }}</small>
                                                 @enderror
@@ -240,29 +245,7 @@
                                                     onkeyup="testNum(this),hitung(this), HowAboutIt(this),qtyText(this)"
                                                     id="qty_received" placeholder=" 0">
                                             </td>
-                                            {{-- @foreach($penerimaan as $per)
-                                                @if( $per->invoice == request()->get('invoice') && $per->qty != $per->qty_received && $per->status_barang == $per->status_barang = 'pending')
-                                                <td>
-                                                    
-                                                    <input type="number" value="{{ $per ? $per->qty_partial : '' }}"
-                                            data="{{ $loop->iteration }}" name="qty[{{ $loop->iteration }}]"
-                                            id="qty" class="form-control qty-{{ $loop->iteration }}"
-                                            class="form-control"
-                                            placeholder="0" required="" readonly>
-
-                                            <input type="text" data="{{ $loop->iteration }}"
-                                                name="qty_partial[{{ $loop->iteration }}]" id="qty_partial"
-                                                class="form-control qty_partial-{{ $loop->iteration }}" placeholder="0"
-                                                value="{{ $per ? $per->qty_partial : '' }}" readonly>
-
-                                            @error('qty')
-                                            <small class="text-danger">{{ $message }}</small>
-                                            @enderror
-
-                                            </td>
-                                            @else
-                                            @endif
-                                            @endforeach --}}
+                                          
                                             <td>
                                                 <input type="number" value="{{ $purchase->qty }}"
                                                     data="{{ $loop->iteration }}" name="qty[{{ $loop->iteration }}]"
@@ -273,7 +256,7 @@
                                                 @error('qty')
                                                 <small class="text-danger">{{ $message }}</small>
                                                 @enderror
-                                                <input type="text" data="{{ $loop->iteration }}"
+                                                <input type="hidden" data="{{ $loop->iteration }}"
                                                     name="qty_partial[{{ $loop->iteration }}]" id="qty_partial"
                                                     class="form-control qty_partial-{{ $loop->iteration }}"
                                                     placeholder="0" readonly>
@@ -650,7 +633,13 @@
                                                 <input type="hidden" name="barang_id[{{ $loop->iteration }}]"
                                                     data="{{ $loop->iteration }}" id="barang_id"
                                                     value="{{ $purchase->barang_id }}"
+
                                                     class="form-control barang_id-{{ $loop->iteration }}">
+                                                    <input type="hidden" name="id_purchase[{{ $loop->iteration }}]"
+                                                    data="{{ $loop->iteration }}" id="id_purchase"
+                                                    value="{{ $purchase->id }}"
+                                                    class="form-control id_purchase-{{ $loop->iteration }}">
+
 
                                                 @error('barang_id')
                                                 <small class="text-danger">{{ $message }}</small>
@@ -671,7 +660,7 @@
                                                     id="qty" class="form-control qty-{{ $loop->iteration }}"
                                                     class="form-control" placeholder="0" required="" readonly>
 
-                                                <input type="text" data="{{ $loop->iteration }}"
+                                                <input type="hidden" data="{{ $loop->iteration }}"
                                                     name="qty_partial[{{ $loop->iteration }}]" id="qty_partial"
                                                     class="form-control qty_partial-{{ $loop->iteration }}"
                                                     placeholder="0" value="{{ $purchase->qty_partial }}" readonly>
@@ -862,6 +851,7 @@
                                     @endforeach
                                 </tbody>
                                 <tfoot>
+                                    @foreach($penerimaan as $purchase)
                                     <tr>
                                         <td colspan="3" rowspan="3"><b>Total Pembelian : </b></td>
                                         <td><b>Total: </b></td>
@@ -899,12 +889,14 @@
 
                                         <td></td>
                                     </tr>
+                                    @endforeach
                                 </tfoot>
                             </table>
                         </div>
                     </div>
                 </div>
-                @elseif ($item->invoice == request()->get('invoice') && $item->status_barang == 'completed')
+                @elseif (request()->get('invoice') == $item->invoice && $item->status_barang == $item->status_barang =
+                'completed' && $item->barang_id)
                 <div class="row">
                     <div class="col-sm-6 col-sg-4 m-b-4">
                         <div class="alert alert-success alert-dismissible" role="alert">

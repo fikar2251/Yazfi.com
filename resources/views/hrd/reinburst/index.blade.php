@@ -108,7 +108,7 @@
                     <tr>
                         <td>Total : </td>
                         <td colspan="2"></td>
-                        <td>{{ request('from') && request('to') ? \App\Reinburst::whereBetween('tanggal_reinburst', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->where('id_user',auth()->user()->id)->count() : \App\Reinburst::where('id_user', auth()->user()->id)->get()->count() }}</td>
+                        <td>{{ request('from') && request('to') ? \App\Reinburst::whereBetween('tanggal_reinburst', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d')])->where('id_user',auth()->user()->id)->count() : \App\Reinburst::where('id_user', auth()->user()->id)->get()->count() }}</td>
                         <td>@currency( request('from') && request('to') ? $coba :  DB::table('rincian_reinbursts')->leftjoin('reinbursts','rincian_reinbursts.nomor_reinburst','=','reinbursts.nomor_reinburst')->where('reinbursts.id_user',auth()->user()->id)->sum('rincian_reinbursts.total')  )</td>
                         <td>&nbsp;</td>
                     </tr>
@@ -133,7 +133,7 @@
             {
                 extend: 'excel',
                 className: 'btn-default',
-                title: 'Laporan Pembelian ',
+                title: 'Laporan Reinburst ',
                 messageTop: 'Tanggal  {{ request("from") }} - {{ request("to") }}',
                 footer: true,
                 exportOptions: {
@@ -143,7 +143,7 @@
             {
                 extend: 'pdf',
                 className: 'btn-default',
-                title: 'Laporan Pembelian ',
+                title: 'Laporan Reinburst ',
                 messageTop: 'Tanggal {{ request("from") }} - {{ request("to") }}',
                 footer: true,
                 exportOptions: {

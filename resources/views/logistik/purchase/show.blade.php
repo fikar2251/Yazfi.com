@@ -64,7 +64,7 @@
                                     <div class="form-group">
                                         <p style="font-size: 12px">Date :
                                             <a style="font-size: 12px">
-                                                {{ Carbon\Carbon::parse($purchase->created_at)->format('d/m/Y H:i:s') }}
+                                                {{ Carbon\Carbon::parse($purchase->created_at)->format('d/m/Y') }}
                                             </a>
                                         </p>
                                         <p style="font-size: 12px">Contact Penerimaan:

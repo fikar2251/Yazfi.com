@@ -7,10 +7,10 @@
     </div>
 </div>
 
-<form action="{{ route('hrd.tim-sales.update', $user->id) }}" method="post" enctype="multipart/form-data">
+<form action="{{ route('hrd.sales.update', $sale->id) }}" method="post" enctype="multipart/form-data">
     @method('PATCH')
     @csrf
-    @include('hrd.tim-sales.form')
+    @include('hrd.sales.form')
 </form>
 @stop
 

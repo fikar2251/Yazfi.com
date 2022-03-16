@@ -47,10 +47,10 @@
                         <th>Tanggal Tukar Faktur</th>
                         <th>No Po</th>
                         <th>No Invoice</th>
-                        <th>Vendor</th>
+                        {{-- <th>Vendor</th> --}}
                         <th>Total Item</th>
                         <th>Total Pembelian</th>
-                        {{-- <th>Status Pembayaran</th> --}}
+                        <th>Status Pembayaran</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -62,17 +62,26 @@
                         <td>
                             <a href="{{ route('purchasing.tukarfaktur.show', $purchase->id) }}">{{$purchase->no_faktur }}</a>
                         </td>
-                        <td>{{ Carbon\Carbon::parse($purchase->tanggal_tukar_faktur)->format("d/m/Y H:i:s") }}</td>
+                        <td>{{ Carbon\Carbon::parse($purchase->tanggal_tukar_faktur)->format("d/m/Y") }}</td>
                         <td>{{ $purchase->no_po_vendor }}</td>
                         <td>{{ $purchase->no_invoice }}</td>
-                        <td>{{ $purchase->nama }}</td>
+                        {{-- <td>{{ $purchase->nama }}</td> --}}
                         <td>{{ \App\TukarFaktur::where('no_faktur', $purchase->no_faktur)->count() }}</td> 
                         <td>@currency($purchase->nilai_invoice)</td>
-                        {{-- <td>{{ $purchase->status_pembayaran }}</td> --}}
-                       @if($status->count())
+                        <td>
+                            <div class="d-flex justify-content-center mt-2">
+                                @if($purchase->status_pembayaran == 'pending')
+                                <span class="custom-badge status-orange">pending</span>
+                                @endif
+                                @if($purchase->status_pembayaran == 'completed')
+                                <span class="custom-badge status-green">completed</span>
+                                @endif
+                            </div>
+                        </td>
+                       {{-- @if($status->count())
 
                              <td> Result Not Found</td>
-                       @else
+                       @else --}}
                        
                        <td>
 
@@ -84,7 +93,7 @@
                                 <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
                             </form>
                         </td>
-                        @endif
+                        {{-- @endif --}}
                     </tr>
                     @endforeach
                 </tbody>

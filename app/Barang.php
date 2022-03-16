@@ -40,6 +40,10 @@ class Barang extends Model
     {
         return $this->hasMany(KategoriBarang::class,'id');
     }
+    public function tukarfaktur()
+    {
+        return $this->belongsTo(PenerimaanBarang::class,'barang_id');
+    }
  
 
 

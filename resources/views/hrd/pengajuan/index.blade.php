@@ -14,7 +14,7 @@
 </div>
 <x-alert></x-alert>
 
-<form action="{{ route('logistik.pengajuan.index') }}" method="get">
+<form action="{{ route('hrd.pengajuan.index') }}" method="get">
     <div class="row filter-row">
         <div class="col-sm-6 col-md-3">
             <div class="form-group form-focus">

@@ -73,7 +73,7 @@
                                 <li>
                                     <div class="form-group">
                                         <label for="tanggal">Tanggal Reinburst <span style="color: red">*</span></label>
-                                        <input type="datetime-local" name="tanggal_reinburst" id="tanggal_reinburst" class="form-control">
+                                        <input type="date" name="tanggal_reinburst" id="tanggal_reinburst" class="form-control">
                                     </div>
                                 </li>
                             </ul>

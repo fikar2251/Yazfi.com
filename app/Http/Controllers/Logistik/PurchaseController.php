@@ -20,8 +20,8 @@ class PurchaseController extends Controller
     public function index(Purchase $purchase)
     {
         if (request('from') && request('to')) {
-            $from = Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s');
-            $to = Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s');
+            $from = Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d');
+            $to = Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d');
             $purchases = Purchase::groupBy('invoice')->whereBetween('created_at', [$from, $to])->get();
         } else {
             $purchases = Purchase::where('user_id', Auth::user()->id)
@@ -88,7 +88,6 @@ class PurchaseController extends Controller
                 'user_id' => auth()->user()->id,
                 'created_at' => $request->tanggal,
                 'grand_total' => $request->grandtotal,
-                'status_pembayaran' => 'pending',
                 'status_barang' => 'pending'
             ];
 
@@ -164,7 +163,6 @@ class PurchaseController extends Controller
                 'user_id' => auth()->user()->id,
                 'created_at' => $request->tanggal,
                 'grand_total' => $request->grandtotal,
-                'status_pembayaran' => 'pending',
                 'status_barang' => 'pending'
             ]);
      

@@ -21,8 +21,8 @@ class PengajuanController extends Controller
     public function index(Pengajuan $pengajuan, Request $request)
     {
         if (request('from') && request('to')) {
-            $from = Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s');
-            $to = Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s');
+            $from = Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d');
+            $to = Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d');
             $pengajuans = Pengajuan::groupBy('nomor_pengajuan')->whereBetween('tanggal_pengajuan', [$from, $to])->get();
             // $purchases = Purchase::groupBy('invoice')->whereBetween('created_at', [$from, $to])->get();
             // dd($pengajuans);
@@ -83,7 +83,7 @@ class PengajuanController extends Controller
                     'file' => $name,
                     'id_user' => auth()->user()->id,
                     'id_perusahaan' =>  $request->id_perusahaan,
-                    'tanggal_pengajuan' => $request->tanggal,
+                    'tanggal_pengajuan' => $request->tanggal_pengajuan,
                     'approval_time' => $request->tanggal,
                     'status_approval' => 'pending',
                     'approval_by' => 'pending',
@@ -103,7 +103,7 @@ class PengajuanController extends Controller
                         'grandtotal' => $request->grandtotal,
                         'unit' => $request->unit[$key],
                         'no_kwitansi' => $request->no_kwitansi,
-                        'tanggal_pengajuan' => $request->tanggal,
+                        'tanggal_pengajuan' => $request->tanggal_pengajuan,
                     ];
                     // dd($in);
                 }

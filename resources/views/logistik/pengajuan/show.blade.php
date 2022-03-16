@@ -54,7 +54,7 @@
                                 </div>
                                 <div class="col-sm-6 tex-right">
                                     <div class="form-group">
-                                        <p style="font-size: 12px">Tanggal : <a style="font-size: 12px">{{ Carbon\Carbon::parse($pengajuan->tanggal_pengajuan)->format('d/m/Y H:i:s') }}
+                                        <p style="font-size: 12px">Tanggal : <a style="font-size: 12px">{{ Carbon\Carbon::parse($pengajuan->tanggal_pengajuan)->format('d/m/Y') }}
                                             </a></p>
                                     </div>
                                     <div class="form-group">

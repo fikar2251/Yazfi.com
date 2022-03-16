@@ -71,7 +71,7 @@
             {
                 extend: 'excel',
                 className: 'btn-default',
-                title: 'Laporan Roles ',
+                title: 'Laporan Divisi ',
                 messageTop: 'Tanggal  {{ request("from") }} - {{ request("to") }}',
                 footer: true,
                 exportOptions: {
@@ -81,7 +81,7 @@
             {
                 extend: 'pdf',
                 className: 'btn-default',
-                title: 'Laporan Roles ',
+                title: 'Laporan Divisi ',
                 messageTop: 'Tanggal {{ request("from") }} - {{ request("to") }}',
                 footer: true,
                 exportOptions: {

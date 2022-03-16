@@ -56,18 +56,19 @@
                             <a href="{{ route('purchasing.listpurchase.show', $purchase->id) }}">{{ $purchase->invoice }}</a>
                         </td>
                         <td>{{ $purchase->name }}</td>
-                        <td>{{ Carbon\Carbon::parse($purchase->created_at)->format("d/m/Y H:i:s") }}</td>
+                        <td>{{ Carbon\Carbon::parse($purchase->created_at)->format("d/m/Y") }}</td>
                         <td>{{ \App\Purchase::where('invoice', $purchase->invoice)->count() }}</td> 
                         <td>@currency ($purchase->grand_total)</td>
-                        <td>@currency ($purchase->grandtotal)</td>
+                        
+                        <td>@currency (\App\TukarFaktur::where('no_po_vendor', $purchase->no_po_vendor)->where('status_pembayaran','completed')->sum('nilai_invoice'))</td>
 {{--                   
                         <td>@currency(\App\PenerimaanBarang::where('no_po', $purchase->no_po)->sum('grandtotal'))</td> --}}
                         <td> <div class="d-flex justify-content-center mt-2">
-                            @if(\App\Purchase::where('invoice', $purchase->invoice)->sum('grand_total') != \App\PenerimaanBarang::where('no_po', $purchase->no_po)->sum('grandtotal'))
+                            @if($purchase->grand_total != \App\TukarFaktur::where('no_po_vendor', $purchase->no_po_vendor)->where('status_pembayaran','completed')->sum('total'))
                             <span class="custom-badge status-orange">Belum Lunas</span>
                             @endif
-                            @if(\App\Purchase::where('invoice', $purchase->invoice)->sum('grand_total')  == \App\PenerimaanBarang::where('no_po', $purchase->no_po)->sum('grandtotal'))
-                            <span class="custom-badge status-green">Lunas</span>
+                            @if($purchase->grand_total  == \App\TukarFaktur::where('no_po_vendor', $purchase->no_po_vendor)->where('status_pembayaran','completed')->sum('total'))
+                            <span class="custom-badge status-green">Sudah Lunas</span>
                             @endif
                         </div>
                         </td>

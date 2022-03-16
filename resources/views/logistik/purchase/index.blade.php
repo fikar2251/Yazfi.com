@@ -49,7 +49,7 @@
                         <th>Total Item</th>
                         <th>Jumlah</th>
                         <th>Status Barang</th>
-                        <th>Status Pembayaran</th>
+                        {{-- <th>Status Pembayaran</th> --}}
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -62,11 +62,11 @@
                             <a href="{{ route('logistik.purchase.show', $purchase->id) }}">{{ $purchase->invoice }}</a>
                         </td>
                         <td>{{ $purchase->admin->name }}</td>
-                        <td>{{ Carbon\Carbon::parse($purchase->created_at)->format("d/m/Y H:i:s") }}</td>
+                        <td>{{ Carbon\Carbon::parse($purchase->created_at)->format("d/m/Y") }}</td>
                         <td>{{ \App\Purchase::where('invoice', $purchase->invoice)->count() }}</td> 
                         <td>@currency($purchase->grand_total)</td>
                         <td>{{ $purchase->status_barang }}</td>
-                        <td>{{ $purchase->status_pembayaran }}</td>
+                        {{-- <td>{{ $purchase->status_pembayaran }}</td> --}}
                         <td>
 
                             <a href="{{ route('logistik.purchase.edit', $purchase->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a> 
@@ -84,8 +84,8 @@
                     <tr>
                         <td>Total : </td>
                         <td colspan="3"></td>
-                        <td>{{ request('from') && request('to') ? \App\Purchase::whereBetween('created_at', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->where('user_id',auth()->user()->id)->count() : \App\Purchase::where('user_id',auth()->user()->id)->count() }}</td>
-                        {{-- <td>@currency( request('from') && request('to') ? \App\Purchase::whereBetween('created_at', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->where('user_id',auth()->user()->id)->sum('total') : \App\Purchase::where('user_id',auth()->user()->id)->where('invoice',$purchases)->sum('grand_total'))</td> --}}
+                        <td>{{ request('from') && request('to') ? \App\Purchase::whereBetween('created_at', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d')])->where('user_id',auth()->user()->id)->count() : \App\Purchase::where('user_id',auth()->user()->id)->count() }}</td>
+                        {{-- <td>@currency( request('from') && request('to') ? \App\Purchase::whereBetween('created_at', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d')])->where('user_id',auth()->user()->id)->sum('total') : \App\Purchase::where('user_id',auth()->user()->id)->sum('grand_total'))</td> --}}
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
@@ -111,7 +111,7 @@
             {
                 extend: 'excel',
                 className: 'btn-default',
-                title: 'Laporan Pembelian ',
+                title: 'Laporan Purchase Order ',
                 messageTop: 'Tanggal  {{ request("from") }} - {{ request("to") }}',
                 footer: true,
                 exportOptions: {
@@ -121,7 +121,7 @@
             {
                 extend: 'pdf',
                 className: 'btn-default',
-                title: 'Laporan Pembelian ',
+                title: 'Laporan Purchase Order ',
                 messageTop: 'Tanggal {{ request("from") }} - {{ request("to") }}',
                 footer: true,
                 exportOptions: {

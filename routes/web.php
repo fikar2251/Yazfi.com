@@ -275,14 +275,17 @@ Route::middleware('auth')->group(function () {
             Route::resource('reinburst', 'ReinburstController');
 
 
-            Route::resource('tim-sales', 'SalesController');
-            Route::patch('hrd/tim-sales/{tim-sales:id}', 'SalesController@update')->name('tim-sales.update');
+            Route::resource('sales', 'SalesController');
+            Route::patch('hrd/sales/{sales:id}', 'SalesController@update')->name('sales.update');
         
 
             Route::resource('penerimaan', 'PenerimaanController');
 
             Route::patch('hrd/penerimaan/{penerimaan}', 'PenerimaanController@edit')->name('penerimaan.edit');
             Route::patch('hrd/penerimaan/{penerimaan}', 'PenerimaanController@statuscompleted')->name('penerimaan.statuscompleted');
+
+
+           
         
 
             Route::resource('attendance', 'AttendanceController');
@@ -362,6 +365,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/where/unit', 'TukarFakturController@WhereUnit');
             Route::get('/tukarfaktur/pdf/{id}', 'TukarFakturController@pdf')->name('tukarfaktur.pdf');
             Route::resource('tukarfaktur', 'TukarFakturController');
+
+            Route::post('tukarfaktur/create/store', 'TukarFakturController@store')->name('tukarfaktur.create.store');
 
 
             Route::resource('reinburst', 'ReinburstController');
