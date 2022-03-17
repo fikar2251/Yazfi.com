@@ -76,8 +76,8 @@
                                     <td style="width: 20px">:</td>
                                     <td>
                                         {{ $add->alamat }}, <br>
-                                        {{ $add->desa->subdis_name }}, {{ $add->kecamatan->dis_name }},
-                                        {{ $add->kota->city_name }}, {{ $add->provinsi->prov_name }}
+                                        {{ $add->desa->name }}, {{ $add->kecamatan->name }},
+                                        {{ $add->kota->name }}, {{ $add->provinsi->name }}
                                     </td>
                                 </tr>
                                 <tr>

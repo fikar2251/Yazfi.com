@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View as FacadesView;
 use Illuminate\View\View;
 Use PDF;
+use Yajra\DataTables\Facades\DataTables;
 
 class PricelistController extends Controller
 {
@@ -36,6 +37,43 @@ class PricelistController extends Controller
         $spr = Spr::orderBy('id_transaksi', 'desc')->get();
 
         return view('marketing.pricelist.index', compact('blok', 'spr'));
+    }
+
+    public function mrkJson()
+    {   
+        $spr = Spr::orderBy('id_transaksi', 'desc')->get();
+
+        return DataTables::of($spr)
+                ->editColumn('no_transaksi', function($spr){
+                   return '<a href="'.route('marketing.pricelist.detail', $spr->id_transaksi) .'">' . $spr->no_transaksi .
+                   '</a>';
+                })
+                ->editColumn('status_booking', function($spr){
+                    if ($spr->status_booking == 'unpaid'){
+                    return '<span class="badge badge-danger">'. $spr->status_booking . '</span>';
+                    }elseif ($spr->status_booking == 'paid'){
+                    return '<span class="badge status-green">'. $spr->status_booking . '</span>';
+                    }
+                })
+                ->editColumn('status_dp', function($spr){
+                    if ($spr->status_dp == 'unpaid'){
+                    return '<span class="badge badge-danger">' . $spr->status_booking . '</span>';
+                    }elseif ($spr->status_dp == 'paid'){
+                    return '<span class="badge status-green">' . $spr->status_booking. '</span>';
+                    }
+                })
+                ->editColumn('type', function($spr){
+                    return $spr->unit->type;
+                })
+                ->editColumn('total', function($spr){
+                    return $spr->unit->total . '/' . $spr->unit->lb;
+                })
+                ->editColumn('skema', function($spr){
+                    return $spr->skema_pembayaran->nama_skema;
+                })
+                ->addIndexColumn()
+                ->rawColumns(['no_transaksi', 'status_booking', 'status_dp'])
+                ->make(true);
     }
 
     public function blok(Request $request)
@@ -117,6 +155,7 @@ class PricelistController extends Controller
         $spr = Spr::find($id);
         $add = Alamat::find($id);
         $idspr = $spr->no_transaksi;
+      
         $bf = Tagihan::where(['no_transaksi' => $idspr, 'tipe' => 1])->first();
         $dp = Tagihan::where(['no_transaksi' => $idspr, 'tipe' => 2])->first();
 
@@ -124,7 +163,7 @@ class PricelistController extends Controller
         // return $pdf->stream();
         // $pdf = PDF::loadView('marketing.pricelist.cetakspr', $spr);
 		// return $pdf->stream('document.pdf');
-        $filename = 'test.pdf';
+        $filename = $idspr.'.pdf';
         $mpdf = new \Mpdf\Mpdf();
         $html = FacadesView::make('marketing.pricelist.cetakspr')->with(['spr'=>$spr, 'add'=>$add, 'bf'=>$bf, 'dp'=>$dp]);
         $html->render();
@@ -155,6 +194,7 @@ class PricelistController extends Controller
 
     public function storeSpr(Request $request, $id)
     {
+       
         $alamat = Alamat::create([
             'alamat' => $request->alamat,
             'provinsi' => $request->provinsi,
@@ -189,6 +229,8 @@ class PricelistController extends Controller
             'total_luas_tanah' => $request->tlt,
             'sumber_informasi' =>$request->sumber_informasi
         ]);
+
+       
 
         $skema = Skema::select('jumlah_skema')
             ->where('id_skema', $request->skema)
@@ -276,21 +318,21 @@ class PricelistController extends Controller
 
     public function kota(Request $request)
     {
-        $city = City::where('prov_id', $request->provinsi)->get();
+        $city = City::where('id_prov', $request->provinsi)->get();
 
         return $city;    
     }
 
     public function kecamatan(Request $request)
     {
-        $district = District::where('city_id', $request->kota)->get();
+        $district = District::where('id_kab', $request->kota)->get();
 
         return $district;    
     }
 
     public function desa(Request $request)
     {
-        $subdistrict = Subdistrict::where('dis_id', $request->kecamatan)->get();
+        $subdistrict = Subdistrict::where('id_kec', $request->kecamatan)->get();
 
         return $subdistrict;    
     }

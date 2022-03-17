@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Subdistrict extends Model
 {
-    protected $table = 'subdistricts';
+    protected $table = 'kelurahans';
     protected $guarded = [];
-    protected $primaryKey = 'subdis_id';
+    protected $primaryKey = 'id_kel';
 
     public function alamat ()
     {

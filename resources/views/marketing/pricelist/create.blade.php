@@ -90,7 +90,7 @@
                     <select class="form-control provinsi" name="provinsi" id="provinsi">
                         <option value="">-- Select Provinsi --</option>
                         @foreach ($provinces as $pv)
-                            <option value="{{ $pv->prov_id }}">{{ $pv->prov_name }}</option>
+                            <option value="{{ $pv->id_prov }}">{{ $pv->name }}</option>
                         @endforeach
                     </select>
                     {{-- <textarea name="alamat" id="alamat" rows="3" class="form-control"></textarea> --}}
@@ -506,7 +506,7 @@
                         console.log(city);
                         op += '<option value="0">--Select Kota--</option>';
                         for (var i = 0; i < city.length; i++) {
-                            op += '<option value="' + city[i].city_id + '">' + city[i].city_name +
+                            op += '<option value="' + city[i].id_kab + '">' + city[i].name +
                                 '</option>'
                         };
                         $('.kota1').html(op);
@@ -535,7 +535,7 @@
                         console.log(district);
                         op += '<option value="0">--Select Kecamatan--</option>';
                         for (var i = 0; i < district.length; i++) {
-                            op += '<option value="' + district[i].dis_id + '">' + district[i].dis_name +
+                            op += '<option value="' + district[i].id_kec + '">' + district[i].name +
                                 '</option>'
                         };
                         $('.kecamatan1').html(op);
@@ -564,7 +564,7 @@
                         console.log(subdistrict);
                         op += '<option value="0">--Select Desa--</option>';
                         for (var i = 0; i < subdistrict.length; i++) {
-                            op += '<option value="' + subdistrict[i].subdis_id + '">' + subdistrict[i].subdis_name +
+                            op += '<option value="' + subdistrict[i].id_kel + '">' + subdistrict[i].name +
                                 '</option>'
                         };
                         $('.desa1').html(op);

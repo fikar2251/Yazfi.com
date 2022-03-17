@@ -98,7 +98,7 @@ $nourut = $AWAL . '/' . sprintf('%02s', abs(1)) . '/' . sprintf('%05s', abs($noU
                                     <td style="width: 200px">Konsumen</td>
                                     <td style="width: 20px">:</td>
                                     <td>
-                                        {{ $item->spr->nama }}
+                                        {{ $singlebatal->spr->nama }}
                                     </td>
                                 </tr>
                                 {{-- @endforeach --}}

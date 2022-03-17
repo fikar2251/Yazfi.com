@@ -36,7 +36,7 @@ class RefundController extends Controller
                 
                 $r->where('no_transaksi', $notrs);
                 $r->whereIn('tipe', [2,3]);
-            })->sum('nominal');
+            })->where('status_approval', 'paid')->sum('nominal');
             
                 
             // dd($contoh);

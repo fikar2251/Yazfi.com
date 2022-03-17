@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class District extends Model
 {
-    protected $table = 'districts';
+    protected $table = 'kecamatans';
     protected $guarded = [];
-    protected $primaryKey = 'dis_id';
+    protected $primaryKey = 'id_kec';
 
     public function alamat()
     {

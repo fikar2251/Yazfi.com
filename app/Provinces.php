@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Provinces extends Model
 {
-    protected $table = 'provinces';
+    protected $table = 'provinsis';
     protected $guarded = [];
-    protected $primaryKey = 'prov_id';
+    protected $primaryKey = 'id_prov';
 
     public function alamat()
     {

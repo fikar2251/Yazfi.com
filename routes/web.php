@@ -185,6 +185,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/pricelist/show/{id}', 'PricelistController@create')->name('pricelist.detail');
             Route::get('/pricelist/cetakspr/{id}', 'PricelistController@cetakSPR')->name('pricelist.cetakspr');
             Route::get('/pricelist/showcetak/{id}', 'PricelistController@showSPR')->name('pricelist.showspr');
+            Route::get('pricelist/json', 'PricelistController@mrkJson');
             Route::resource('/pricelist', 'PricelistController');
             Route::get('/blok', 'PricelistController@blok');
             Route::get('/no', 'PricelistController@no');
