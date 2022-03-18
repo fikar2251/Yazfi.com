@@ -232,6 +232,9 @@ Route::middleware('auth')->group(function () {
             Route::get('/payment', 'FinanceController@index')->name('payment');
             Route::get('/payment/updatestatus/{id}', 'FinanceController@ubahStatus')->name('payment.status');
 
+            // Route Daftar Pembayaran
+            Route::get('/daftar', 'FinanceController@listPayment')->name('daftar');
+
             // Route Refund
             Route::get('/refund', 'RefundController@index')->name('refund');
             Route::post('refund/store', 'RefundController@storeRefund')->name('refund.store');

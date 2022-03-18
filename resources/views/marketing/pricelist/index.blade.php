@@ -27,7 +27,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($spr as $item)
+                                {{-- @foreach ($spr as $item)
                                     <tr>
                                         <td>
                                             <a href="{{ route('marketing.pricelist.detail', $item->id_transaksi) }}">{{ $item->no_transaksi }}
@@ -56,7 +56,7 @@
                                         <td>{{ $item->skema_pembayaran->nama_skema }}</td>
                                         <td style="width: 120px"> @currency($item->harga_net)</td>
                                     </tr>
-                                @endforeach
+                                @endforeach --}}
                             </tbody>
                         </table>
                     </div>
@@ -65,7 +65,7 @@
         </div>
     </div>
 @stop
-{{-- @section('footer')
+@section('footer')
 <script src="{{ asset('/') }}js/jquery.dataTables.min.js"></script>
 <script src="{{ asset('/') }}js/dataTables.bootstrap4.min.js"></script>
 <script src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js"></script>
@@ -81,7 +81,7 @@
         $('#unit').DataTable({
             processing: true,
             serverSide: true,
-            order: [[0, 'desc']]
+            order: [[0, 'desc']],
             ajax: "/marketing/pricelist/json",
             columns: [{
                     data: 'no_transaksi',
@@ -129,4 +129,4 @@
         });
     });
 </script>
-@stop --}}
+@stop

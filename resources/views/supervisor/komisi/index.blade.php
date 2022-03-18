@@ -42,7 +42,7 @@
                         <tr>
                             <th>No</th>
                             <th>No Komisi</th>
-                            <th>Tanggal</th>
+                            <th>Tanggal Pengajuan</th>
                             <th>No SPR</th>
                             <th>Komisi Sales</th>
                             <th>Komisi SPV</th>

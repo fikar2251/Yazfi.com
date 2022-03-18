@@ -72,7 +72,21 @@
                                         <tr>
                                             <td style="width: 200px">Tanggal Pembayaran</td>
                                             <td style="width: 20px">:</td>
-                                            <td>{{ Carbon\Carbon::now()->format('d-m-Y') }}</td>
+                                            <td>
+                                                <div style="width: 200px" class="input-group date" data-provide="datepicker"  data-date-format="dd/mm/yyyy">
+                                                    <input type="text" class="form-control" name="tanggal_pembayaran">
+                                                    <div class="input-group-addon">
+                                                        <span class="glyphicon glyphicon-th"></span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 200px">Tanggal Konfirmasi</td>
+                                            <td style="width: 20px">:</td>
+                                            <td>
+                                                {{ Carbon\Carbon::now()->format('d-m-Y') }}
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td style="width: 200px">Nominal</td>
@@ -204,14 +218,15 @@
             </div>
             <div class="row">
                 <div class="col-sm-11">
-                    <div class="card shadow" style="margin-left: 180px">
+                    <div class="card shadow" style="margin-left: 90px">
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-bordered custom-table table-striped">
                                     <thead>
                                         <tr>
                                             <th>No Transaksi</th>
-                                            <th>Tanggal transaksi</th>
+                                            <th>Tanggal konfirmasi</th>
+                                            <th>Tanggal pembayaran</th>
                                             <th>Tipe</th>
                                             <th>Nominal</th>
                                             <th>Bank Tujuan</th>
@@ -223,7 +238,8 @@
                                         @foreach ($bayar as $item)
                                             <tr>
                                                 <td>{{ $item->no_detail_transaksi }}</td>
-                                                <td style="width: 100px">{{ $item->tanggal_transaksi }}</td>
+                                                <td style="width: 100px">{{ $item->tanggal_konfirmasi }}</td>
+                                                <td style="width: 100px">{{ $item->tanggal_pembayaran }}</td>
                                                 <td>
                                                     {{ $item->rincian->keterangan }}
                                                 </td>
@@ -338,4 +354,5 @@
             })
         })
     </script>
+
 @stop

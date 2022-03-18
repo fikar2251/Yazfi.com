@@ -160,7 +160,8 @@
             Pembayaran::create([
                 'id_admin' => auth()->user()->id,
                 'no_detail_transaksi' => $request->no_transaksi,
-                'tanggal_transaksi' => $tgl,
+                'tanggal_konfirmasi' => $tgl,
+                'tanggal_pembayaran' => $request->tanggal_pembayaran,
                 'rincian_id' => $request->rincian_id,
                 'nominal' => $request->nominal,
                 'bank_tujuan' => $request->bank_tujuan,

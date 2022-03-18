@@ -41,7 +41,7 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Tanggal transaksi</th>
+                                    <th>Tanggal pengajuan</th>
                                     <th>No pembatalan</th>
                                     <th>Type</th>
                                     <th>Spr</th>

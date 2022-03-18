@@ -30,19 +30,19 @@ class PricelistController extends Controller
      */
     public function index()
     {
-        $blok = DB::table('unit_rumah')
-            ->groupBy('type')
-            ->get();
+        // $blok = DB::table('unit_rumah')
+        //     ->groupBy('type')
+        //     ->get();
 
-        $spr = Spr::orderBy('id_transaksi', 'desc')->get();
+        // $spr = Spr::orderBy('id_transaksi', 'desc')->get();
 
-        return view('marketing.pricelist.index', compact('blok', 'spr'));
+        return view('marketing.pricelist.index');
     }
 
     public function mrkJson()
     {   
         $spr = Spr::orderBy('id_transaksi', 'desc')->get();
-
+        
         return DataTables::of($spr)
                 ->editColumn('no_transaksi', function($spr){
                    return '<a href="'.route('marketing.pricelist.detail', $spr->id_transaksi) .'">' . $spr->no_transaksi .
@@ -197,10 +197,10 @@ class PricelistController extends Controller
        
         $alamat = Alamat::create([
             'alamat' => $request->alamat,
-            'provinsi' => $request->provinsi,
-            'kota' => $request->kota,
-            'kecamatan' => $request->kecamatan,
-            'desa' => $request->desa,
+            'provinsi_id' => $request->provinsi,
+            'kota_id' => $request->kota,
+            'kecamatan_id' => $request->kecamatan,
+            'desa_id' => $request->desa,
         ]);
 
         $spr = Spr::create([

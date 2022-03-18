@@ -8,12 +8,13 @@ use App\Rumah;
 use App\Spr;
 use App\Tagihan;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class FinanceController extends Controller
 {
     public function index()
     {
-        $bayar = Pembayaran::all();
+        $bayar = Pembayaran::where('status_approval', 'paid')->get();
 
         return view('resepsionis.payment.index', compact('bayar'));
     }
@@ -22,6 +23,20 @@ class FinanceController extends Controller
     {
         $komisi =  Komisi::orderBy('id', 'desc')->get();
         return view('resepsionis.komisi.index', compact('komisi'));
+    }
+
+    public function listPayment()
+    {
+        $bayar = Pembayaran::all();
+        return view('resepsionis.payment.daftar', compact('bayar'));
+    }
+
+    public function storePayment(Request $request)
+    {
+        Pembayaran::where('status_approval', 'pending')
+        ->update([
+            'status_approval' => $request->status
+        ]);
     }
 
     public function ubahStatus($id)

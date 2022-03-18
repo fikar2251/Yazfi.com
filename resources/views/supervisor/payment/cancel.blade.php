@@ -91,7 +91,7 @@ $nourut = $AWAL . '/' . sprintf('%02s', abs(1)) . '/' . sprintf('%05s', abs($noU
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td style="width: 200px">Tanggal Pembayaran</td>
+                                    <td style="width: 200px">Tanggal</td>
                                     <td style="width: 20px">:</td>
                                     <td>{{ Carbon\Carbon::now()->format('d-m-Y') }}</td>
                                 </tr>
@@ -116,14 +116,14 @@ $nourut = $AWAL . '/' . sprintf('%02s', abs(1)) . '/' . sprintf('%05s', abs($noU
                                     <td style="width: 200px">LT</td>
                                     <td style="width: 20px">:</td>
                                     <td>
-                                        {{ $item->unit->lt }}
+                                        {{ $item->unit->lt }} M<sup>2</sup>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="width: 200px">LB</td>
                                     <td style="width: 20px">:</td>
                                     <td>
-                                        {{ $item->unit->lb }}
+                                        {{ $item->unit->lb }} M<sup>2</sup>
                                     </td>
                                 </tr>
                                 <tr>
