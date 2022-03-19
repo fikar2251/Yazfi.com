@@ -96,7 +96,7 @@ class DashboardController extends Controller
         if (auth()->user()->hasRole('logistik')) {
 
             $now = Carbon::now()->format('Y-m-d');
-            $barang = DB::table('barangs')->count();
+            $barang = DB::table('in_outs')->where('user_id',auth()->user()->id)->count();
             $pengajuan_pending = Pengajuan::where('id_user', auth()->user()->id)->where('status_approval','=','pending')->get()->count();
             $received_pending = Purchase::where('status_barang','=','pending')->where('user_id',auth()->user()->id)->get()->count();
             return view('dashboard.index', [

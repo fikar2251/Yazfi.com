@@ -50,8 +50,8 @@
                     </tr>
                 </thead>
                 @foreach($reinbursts as $reinburst)
+                @if($reinburst->status_hrd == 'pending' || $reinburst->status_hrd == 'review' )
                 <tbody>
-
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td><a
@@ -115,18 +115,19 @@
                             @endcan --}}
                         </td>
                     </tr>
-                    @endforeach
                 </tbody>
+                @endif
+                @endforeach
                 <tfoot>
                     <tr>
-                        <td>Total : </td>
+                        {{-- <td>Total : </td>
                         <td colspan="2"></td>
                         <td>{{ request('from') && request('to') ? \App\Reinburst::whereBetween('tanggal_reinburst', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d')])->count() : \App\Reinburst::get()->count() }}
                         </td>
                         <td>@currency( request('from') && request('to') ? $coba :
                             DB::table('rincian_reinbursts')->leftjoin('reinbursts','rincian_reinbursts.nomor_reinburst','=','reinbursts.nomor_reinburst')->sum('rincian_reinbursts.total')
                             )</td>
-                        <td>&nbsp;</td>
+                        <td>&nbsp;</td> --}}
                     </tr>
                 </tfoot>
             </table>

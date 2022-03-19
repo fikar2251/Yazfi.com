@@ -19,41 +19,31 @@
                 <thead>
                     <tr>
                         <th class="text-center">No</th>
+                        <th>Manager</th>
                         <th>Supervisor</th>
                         <th>Sales</th>
-                        <th>Manager</th>
                         <th>Action</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    @foreach($sales as $sale)
+                    @foreach($sale as $sales)
                     <tr>
                         <td class="text-center">{{ $loop->iteration }}</td>
-                        <td>{{ $sale->spv->name }}</td>
-                        {{-- <td>{{ $sale->name }}</td> --}}
-                        <td>
-                            @if($sale->user)
-                            @foreach($sale->user as $sal)
-
-                            <span class="custom-badge status-blue">{{ $sal }}</span>
-
-                            @endforeach
-                            @else
-                            <span class="custom-badge status-blue">{{ $sale->name }}</span>
-                            @endif
-                        </td>
-                        <td>{{ $sale->manager->name }}</td>
-                        <td>
-                            <a href="{{ route('hrd.sales.edit', $sale->id) }}" class="btn btn-sm btn-info"><i
+                        <td>{{ $sales->manager->name }}</td>
+                        <td>{{ $sales->spv->name }}</td>
+                  
+                        <td>{{ $sales->teamSales->name }}</td>
+                        {{-- <td>
+                            <a href="{{ route('hrd.sales.edit', $sales->id) }}" class="btn btn-sm btn-info"><i
                                     class="fa fa-edit"></i></a>
-                            <form action="{{ route('hrd.sales.destroy', $sale->id) }}" method="post"
+                            <form action="{{ route('hrd.sales.destroy', $sales->id) }}" method="post"
                                 style="display: inline;" class="delete-form">
                                 @method('DELETE')
                                 @csrf
                                 <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
                             </form>
-                        </td>
+                        </td> --}}
                     </tr>
                     @endforeach
                 </tbody>

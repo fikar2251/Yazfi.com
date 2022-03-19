@@ -47,7 +47,12 @@
           
             @can('product-access')
             <li class="{{ request()->is('admin/report*') ? 'active' : '' }}">
-                <a href="{{ route('admin.report.barang') }}"><i class="fa fa-archive"></i> <span>Warehouse</span></a>
+                <a href="{{ route('admin.report.barang') }}"><i class="fa fa-archive"></i> <span>In Out</span></a>
+            </li>
+            @endcan
+            @can('product-access')
+            <li class="{{ request()->is('admin/warehouse*') ? 'active' : '' }}">
+                <a href="{{ route('admin.warehouse.index') }}"><i class="fa fa-archive"></i> <span>Warehouse</span></a>
             </li>
             @endcan
             @can('product-access')

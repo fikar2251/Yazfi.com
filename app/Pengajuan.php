@@ -5,12 +5,11 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use JetBrains\PhpStorm\Pure;
 use Spatie\Permission\Models\Role;
-use Spatie\Permission\Traits\HasRoles;
+
 
 class Pengajuan extends Model
 {
 
-    use HasRoles;
     protected $table = 'pengajuans';
     protected $guarded = ['id'];
 

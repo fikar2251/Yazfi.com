@@ -7,19 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 class Warehouse extends Model
 {
     protected $guarded = ['id'];
+    protected $table = 'warehouses';
+    public $timestamps = false;
 
-    public function users()
+
+    public function perusahaan()
     {
-        return $this->hasMany(User::class, 'users.cabang_id');
+        return $this->belongsTo(Perusahaan::class, 'id_perusahaan');
+    }
+    public function purchase()
+    {
+        return $this->hasOne(Purchase::class, 'id_warehouse');
     }
 
-    public function harga()
-    {
-        return $this->hasMany(HargaProdukCabang::class, 'cabang_id');
-    }
-
-    public function customer()
-    {
-        return $this->hasMany(Customer::class, 'cabang_id');
-    }
 }

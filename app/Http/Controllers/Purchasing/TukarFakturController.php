@@ -18,6 +18,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Svg\Tag\Rect;
 
 class TukarFakturController extends Controller
 {
@@ -264,19 +265,23 @@ class TukarFakturController extends Controller
         return $data;
     }
 
-    public function show($id)
+    public function show($id, Request $request)
     {
       
        
             $detail = DB::table('tukar_fakturs')
+            ->leftJoin('penerimaan_barangs','penerimaan_barangs.no_po','=','tukar_fakturs.no_po_vendor')
+         
             ->leftJoin('suppliers', 'tukar_fakturs.id_supplier', '=', 'suppliers.id')
             ->leftJoin('detail_tukar_fakturs', 'tukar_fakturs.no_faktur', '=', 'detail_tukar_fakturs.no_faktur')
             ->leftJoin('dokumen_tukar_faktur','detail_tukar_fakturs.id_dokumen','=','dokumen_tukar_faktur.id')
-            ->select('tukar_fakturs.no_faktur','tukar_fakturs.status_pembayaran','suppliers.nama','tukar_fakturs.no_faktur','tukar_fakturs.id','tukar_fakturs.nilai_invoice',
+            ->select('penerimaan_barangs.no_penerimaan_barang','tukar_fakturs.no_faktur','tukar_fakturs.status_pembayaran','suppliers.nama',
+            'tukar_fakturs.no_faktur','tukar_fakturs.id','tukar_fakturs.nilai_invoice',
             'detail_tukar_fakturs.pilihan','dokumen_tukar_faktur.nama_dokumen', 'detail_tukar_fakturs.catatan','tukar_fakturs.tanggal_tukar_faktur')
             ->where('tukar_fakturs.id',$id)
             ->groupBy('detail_tukar_fakturs.id_dokumen')
             ->get();
+            // dd($detail);
 
 
             $pdf = DB::table('tukar_fakturs')
@@ -287,7 +292,17 @@ class TukarFakturController extends Controller
         ->select('tukar_fakturs.status_pembayaran','suppliers.nama','tukar_fakturs.no_faktur','tukar_fakturs.id','tukar_fakturs.nilai_invoice',
         'detail_tukar_fakturs.pilihan','dokumen_tukar_faktur.nama_dokumen', 'detail_tukar_fakturs.catatan','tukar_fakturs.tanggal_tukar_faktur')
         ->first();
-            // dd($detail);
+
+
+        // $purchases = DB::table('penerimaan_barangs')
+        // ->leftJoin('tukar_fakturs','penerimaan_barangs.no_po','=','tukar_fakturs.no_po_vendor')
+        // ->leftJoin('purchases','penerimaan_barangs.id_purchase','=','purchases.id')
+        // ->leftJoin('barangs','penerimaan_barangs.barang_id','=','barangs.id')
+        // // ->where('tukar_fakturs.id',$id)
+        // ->where('tukar_fakturs.no_faktur',$request->no_faktur)
+        // ->select('tukar_fakturs.no_faktur','penerimaan_barangs.ppn','barangs.nama_barang','purchases.harga_beli','purchases.qty','penerimaan_barangs.no_po')
+        //  ->get();
+            // dd($purchases);
         return view('purchasing.tukarfaktur.show', compact('detail','pdf'));
     }
 
@@ -377,10 +392,15 @@ class TukarFakturController extends Controller
     public function WhereProduct(Request $request)
     {
         $data = [];
-        $product =  Barang::where('jenis', 'barang_id')
-            ->where('nama_barang', 'like', '%' . $request->q . '%')
-            ->get();
-        foreach ($product as $row) {
+        $purchases = DB::table('penerimaan_barangs')
+        ->leftJoin('tukar_fakturs','penerimaan_barangs.no_po','=','tukar_fakturs.no_po_vendor')
+        ->leftJoin('purchases','penerimaan_barangs.id_purchase','=','purchases.id')
+        ->leftJoin('barangs','penerimaan_barangs.barang_id','=','barangs.id')
+        // ->where('tukar_fakturs.id',$id)
+        ->where('tukar_fakturs.no_faktur',$request->no_faktur)
+        ->select('penerimaan_barangs.ppn','barangs.nama_barang','purchases.harga_beli','purchases.qty','penerimaan_barangs.no_po')
+         ->get();
+        foreach ($purchases as $row) {
             $data[] = ['id' => $row->id,  'text' => $row->nama_barang];
         }
 

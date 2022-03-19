@@ -25,8 +25,8 @@ class PengajuanController extends Controller
             $to = Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d');
             $pengajuans = Pengajuan::groupBy('nomor_pengajuan')->whereBetween('tanggal_pengajuan', [$from, $to])->get();
             // $purchases = Purchase::groupBy('invoice')->whereBetween('created_at', [$from, $to])->get();
-            // dd($pengajuans);
-            $coba = DB::table('rincian_pengajuans')->leftjoin('pengajuans','rincian_pengajuans.nomor_pengajuan','=','pengajuans.nomor_pengajuan')->whereBetween('rincian_pengajuans.tanggal_pengajuan', [$from, $to])->where('pengajuans.id_user',auth()->user()->id)->sum('rincian_pengajuans.total'); 
+            // dd($pengajuans); 
+        
         } else {
             $pengajuans = Pengajuan::where('id_user', Auth::user()->id)
             ->orderBy('id','desc')

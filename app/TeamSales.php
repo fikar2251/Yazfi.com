@@ -9,13 +9,12 @@ class TeamSales extends Model
     
 
     protected $guarded = ['id_sales'];
-    protected $table = 'team_sales';
+    protected $table = 'team_sales_user';
 
-    public function user()
+    public function teamSales()
     {
         return $this->belongsTo(User::class,'id_sales');
     }
-
     public function manager()
     {
         return $this->belongsTo(User::class,'id_manager');

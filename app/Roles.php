@@ -16,4 +16,5 @@ class Roles extends Model
     {
         return $this->belongsTo(Perusahaan::class, 'id_perusahaan');
     }
+  
 }

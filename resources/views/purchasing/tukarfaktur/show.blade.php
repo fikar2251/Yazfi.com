@@ -1,4 +1,4 @@
-@extends('layouts.master', ['title' => 'Show Pengajuan Dana'])
+@extends('layouts.master', ['title' => 'Show Tukar Faktur'])
 @section('content')
 <div class="row">
     <div class="col-sm-5 col-4">
@@ -6,9 +6,10 @@
     </div>
     <div class="col-sm-7 col-8 text-right m-b-30">
         <div class="btn-group btn-group-sm ">
-           
-            <a href="{{ route('purchasing.tukarfaktur.pdf', $pdf->id) }}" class="btn btn-primary" target="_blank">CETAK PDF</a>
-            
+
+            <a href="{{ route('purchasing.tukarfaktur.pdf', $pdf->id) }}" class="btn btn-primary" target="_blank">CETAK
+                PDF</a>
+
         </div>
     </div>
 </div>
@@ -26,7 +27,7 @@
                                 </div>
                             </div>
                             <div class="col-md-8">
-                               
+
                             </div>
                         </div><br>
                         <br />
@@ -65,7 +66,8 @@
                                                     <td>{{$tur->no_faktur}}</td>
                                                 </a>
                                             </p>
-                                            <p style="font-size: 12px">Tanggal Tukar Faktur : <a style="font-size: 12px">{{ Carbon\Carbon::parse($tur->tanggal_tukar_faktur)->format('d/m/Y') }}
+                                            <p style="font-size: 12px">Tanggal Tukar Faktur : <a
+                                                    style="font-size: 12px">{{ Carbon\Carbon::parse($tur->tanggal_tukar_faktur)->format('d/m/Y') }}
                                                 </a></p>
                                         </div>
                                     </li>
@@ -107,8 +109,10 @@
                                             <p style="margin-top:20px;font-size:12px;" class="text-center">Pengirim,</p>
                                             <br>
                                             <br>
-                                            <p style="margin-top: 40px;font-size:12px;" class="text-center m-b-2">(.......................................)</p>
-                                            <p style="margin-top: -10px;font-size:12px;" class="text-center m-b-2">Nama Jelas</p>
+                                            <p style="margin-top: 40px;font-size:12px;" class="text-center m-b-2">
+                                                (.......................................)</p>
+                                            <p style="margin-top: -10px;font-size:12px;" class="text-center m-b-2">Nama
+                                                Jelas</p>
                                         </div>
                                     </li>
                                 </ul>
@@ -120,8 +124,10 @@
                                             <p style="margin-top:20px;font-size:12px;" class="text-center">Penerima,</p>
                                             <br>
                                             <br>
-                                            <p style="margin-top: 40px;font-size:12px;" class="text-center m-b-2">(.......................................)</p>
-                                            <p style="margin-top: -10px; font-size:12px;" class="text-center m-b-2">Nama Jelas</p>
+                                            <p style="margin-top: 40px;font-size:12px;" class="text-center m-b-2">
+                                                (.......................................)</p>
+                                            <p style="margin-top: -10px; font-size:12px;" class="text-center m-b-2">Nama
+                                                Jelas</p>
                                         </div>
                                     </li>
                                 </ul>
@@ -132,15 +138,78 @@
                             <div class="col-sm-12 col-sg-4 m-b-4">
 
                                 <div class="form-group">
-                                    <p class="text-left" style="text-decoration:underline;font-size:10px;"><strong>Syarat Tukar Faktur</strong></p>
-                                    <ul style="list-style-type: square; margin-top:-15px;margin-left:-15px;font-size:10px;">
-                                        <li>Peneromaan tukar faktur setiap hari Selasa dan Kamis jam 10.00 s/d jam 15.00 WIB</li>
+                                    <p class="text-left" style="text-decoration:underline;font-size:10px;">
+                                        <strong>Syarat Tukar Faktur</strong></p>
+                                    <ul
+                                        style="list-style-type: square; margin-top:-15px;margin-left:-15px;font-size:10px;">
+                                        <li>Peneromaan tukar faktur setiap hari Selasa dan Kamis jam 10.00 s/d jam 15.00
+                                            WIB</li>
                                         <li>Pembayaran direalisasikan setiap hari selasa</li>
                                         <li>Realisasi pembayaran vendor dilakukan melalui transfer</li>
-                                        <li>Divisi keuangan berhak menolak dokumen tagihan jika terdapat kekurangan dokumen dan</li>
+                                        <li>Divisi keuangan berhak menolak dokumen tagihan jika terdapat kekurangan
+                                            dokumen dan</li>
                                         <li>Realisasi pembayaran vendor dilakukan melalui transfer</li>
                                         <li>adanya kesalahan ketik atau perhitungan</li>
                                     </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-8 col-md-offset-10 body-main">
+            <div class="col-md-12">
+                <div class="card shadow" id="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+
+                                    <div class="col-sm-5 col-4">
+                                        <h4 style="font-size:12px;" class="page-title">Riwayat Purchasing Order</h4>
+                                    </div>
+
+                                    <table class="table table-bordered  report">
+                                        <tr style="font-size:12px;" class="bg-success">
+                                            <th class=" text-light">No.</th>
+                                            <th class="text-light">No. PO</th>
+                                            <th class="text-light">No. PN</th>
+                                            <th class="text-light">Total Item</th>
+                                            <th class="text-light">Harga</th>
+                                            <th class="text-light"> Total</th>
+                                        </tr>
+                                        <tbody id="dynamic_field">
+                                            @foreach(App\TukarFaktur::where('no_faktur', $tur->no_faktur)->get() as $purchase)
+                                            <tr style="font-size:12px;" class="rowComponent">
+                                                <td>
+                                                    {{$loop->iteration}}
+                                                </td>
+                                                <td>
+                                                    {{$purchase->no_po_vendor}}
+                                                </td>
+                                                <td>
+                                                    {{$purchase->nama_barang}}
+                                                </td>
+                                                <td>
+                                                    {{$purchase->qty }}
+                                                </td>
+                                                <td>
+                                                    @currency($purchase->nilai_invoice)
+                                                </td>
+                                                <td>
+                                                    @currency($purchase->harga_beli * $purchase->qty)
+                                                </td>
+                                                {{-- <td>
+                                                        {{$purchase->name}}
+                                                </td> --}}
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -184,10 +253,11 @@
             }
         }, ]
     });
+
 </script>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script>
-    var formatter = function(num) {
+    var formatter = function (num) {
         var str = num.toString().replace("", ""),
             parts = false,
             output = [],
@@ -241,7 +311,7 @@
             placeholder: 'Select Product',
             ajax: {
                 url: `/admin/where/product`,
-                processResults: function(data) {
+                processResults: function (data) {
                     console.log(data)
                     return {
                         results: data
@@ -255,7 +325,7 @@
     function remove(q) {
         $(q).parent().parent().remove()
     }
-    $('.remove').on('click', function() {
+    $('.remove').on('click', function () {
         $(this).parent().parent().remove()
     })
 
@@ -281,13 +351,13 @@
         // rupiah()
         document.getElementById('PPN').value = total_all;
     }
-    $(document).ready(function() {
-        $('#add').on('click', function() {
+    $(document).ready(function () {
+        $('#add').on('click', function () {
             form_dinamic()
         })
     })
-    $(document).ready(function() {
-        $('.dynamic').change(function() {
+    $(document).ready(function () {
+        $('.dynamic').change(function () {
             var id = $(this).val();
             var div = $(this).parent();
             var op = " ";
@@ -297,17 +367,19 @@
                 data: {
                     'id': id
                 },
-                success: function(data) {
+                success: function (data) {
                     console.log(data);
                     op += '<option value="0" selected disabled> Lokasi</option>';
                     for (var i = 0; i < data.length; i++) {
-                        op += '<option value="' + data[i].alamat_project + '">' + data[i].alamat_project + '</option>'
+                        op += '<option value="' + data[i].alamat_project + '">' + data[i]
+                            .alamat_project + '</option>'
                     };
                     $('.root3').html(op);
                 },
-                error: function() {}
+                error: function () {}
             })
         })
     })
+
 </script>
 @stop

@@ -12,6 +12,7 @@ use App\Purchase;
 use App\Supplier;
 use App\Project;
 use App\TukarFaktur;
+use App\Warehouse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -47,10 +48,9 @@ class PenerimaanBarangController extends Controller
     public function show($id)
     {
 
-        $penerimaan = DB::table('penerimaan_barangs')
-        ->where('penerimaan_barangs.id',$id)
-        ->first();
-        // dd($purchase);
+        
+        $penerimaan = PenerimaanBarang::where('id', $id)->first();
+  
         // $purchase = DB::table('penerimaan_barangs')
         // ->leftJoin('purchases','penerimaan_barangs.id_purchase','=','purchases.id')
         // ->leftJoin('suppliers','purchases.supplier_id','=','suppliers.id')
@@ -117,6 +117,7 @@ class PenerimaanBarangController extends Controller
         ->where('purchases.invoice',$request->invoice)
         ->get();
         // dd($penerimaan);
+        $warehouses = Warehouse::get();
 
 
         $inout = InOut::where('invoice',$request->invoice)->get();
@@ -137,7 +138,7 @@ class PenerimaanBarangController extends Controller
       
       
         // dd($tukar);
-        return view('purchasing.penerimaan-barang.create', compact('ppn','tukar', 'purchases', 'purchase','nourut','status_barang','inout','penerimaan','ppn_partial'));
+        return view('purchasing.penerimaan-barang.create', compact('ppn','tukar', 'purchases', 'purchase','nourut','status_barang','inout','penerimaan','ppn_partial','warehouses'));
     }
 
 
@@ -189,7 +190,11 @@ class PenerimaanBarangController extends Controller
                 // dd($attr);
            
                 DB::table('purchases')->where('id', $request->id_purchase[$key])->update(array( 
-                'status_barang' => $request->status_barang[$key]));
+                'status_barang' => $request->status_barang[$key],
+                'id_warehouse' => $request->id_warehouse
+            ));
+
+            // dd($request->all());
         }
         
         PenerimaanBarang::insert($attr);
@@ -283,9 +288,9 @@ class PenerimaanBarangController extends Controller
         foreach ($penerimaans as $pur) {
             
             // $purchase = Purchase::where('barang_id', $pur->barang_id)->get();
-             $purchase = Purchase::where('invoice', $pur->no_po)->get();
+             $purchase = Purchase::where('invoice', $pur->no_po)->where('barang_id', $pur->barang_id)->get();
         
-            // dd($inouts);
+            // dd($purchase);
             DB::table('purchases')->whereIn('id', $purchase)->update(array( 
          
                 'status_barang' => 'pending'));

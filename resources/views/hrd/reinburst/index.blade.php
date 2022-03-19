@@ -3,13 +3,13 @@
 @section('content')
 <div class="row">
     <div class="col-md-4">
-        <h1 class="page-title">Reinburst</h1>
+        <h1 class="page-title">Rekap Reinburst </h1>
     </div>
-    @can('reinburst-create')
+    {{-- @can('reinburst-create')
     <div class="col-sm-8 text-right m-b-20">
         <a href="{{ route('hrd.reinburst.create') }}" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Reinburst</a>
     </div>
-    @endcan
+    @endcan --}}
 </div>
 <x-alert></x-alert>
 
@@ -59,7 +59,7 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td><a href="{{ route('purchasing.reinburst.show', $reinburst->id) }}">{{ $reinburst->nomor_reinburst }}</a></td>
-                        <td>{{ Carbon\Carbon::parse($reinburst->tanggal_reinburst)->format("d/m/Y H:i:s") }}</td>
+                        <td>{{ Carbon\Carbon::parse($reinburst->tanggal_reinburst)->format("d/m/Y") }}</td>
                         <td>{{ \App\Reinburst::where('nomor_reinburst', $reinburst->nomor_reinburst)->count() }}</td>
                         <td>@currency(\App\RincianReinburst::where('nomor_reinburst',
                             $reinburst->nomor_reinburst)->sum('total'))</td>
@@ -105,13 +105,16 @@
                     @endforeach
                 </tbody>
                 <tfoot>
-                    <tr>
+                    {{-- <tr>
                         <td>Total : </td>
                         <td colspan="2"></td>
-                        <td>{{ request('from') && request('to') ? \App\Reinburst::whereBetween('tanggal_reinburst', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d')])->where('id_user',auth()->user()->id)->count() : \App\Reinburst::where('id_user', auth()->user()->id)->get()->count() }}</td>
-                        <td>@currency( request('from') && request('to') ? $coba :  DB::table('rincian_reinbursts')->leftjoin('reinbursts','rincian_reinbursts.nomor_reinburst','=','reinbursts.nomor_reinburst')->where('reinbursts.id_user',auth()->user()->id)->sum('rincian_reinbursts.total')  )</td>
+                        <td>{{ request('from') && request('to') ? \App\Reinburst::whereBetween('tanggal_reinburst', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d')])->where('status_hrd','completed')->get()->count() : \App\Reinburst::where('status_hrd','completed')->get()->count() }}
+                        </td>
+                        <td>@currency( request('from') && request('to') ?  DB::table('rincian_reinbursts')->leftjoin('reinbursts','rincian_reinbursts.nomor_reinburst','=','reinbursts.nomor_reinburst')->whereBetween('reinbursts.tanggal_reinburst', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d')])->where('reinbursts.status_hrd','completed')->sum('rincian_reinbursts.total') :
+                            DB::table('rincian_reinbursts')->leftjoin('reinbursts','rincian_reinbursts.nomor_reinburst','=','reinbursts.nomor_reinburst')->where('reinbursts.status_hrd','completed')->sum('rincian_reinbursts.total')
+                            )</td>
                         <td>&nbsp;</td>
-                    </tr>
+                    </tr> --}}
                 </tfoot>
             </table>
         </div>

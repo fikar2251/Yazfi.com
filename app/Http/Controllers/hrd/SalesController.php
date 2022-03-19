@@ -17,14 +17,10 @@ class SalesController extends Controller
 {
     public function index()
     {
-        $sales = TeamSales::join('users','users.id','=','team_sales.id_sales')
-        ->select('users.name','team_sales.id','team_sales.id_manager','team_sales.id_spv')
-        ->groupBy('team_sales.id_manager')
-        ->get();
+        $sale = TeamSales::all();
+        // dd($sale);
 
-        // dd($sales);
-
-        return view('hrd.sales.index', compact('sales'));
+        return view('hrd.sales.index', compact('sale'));
     }
 
     public function create(TeamSales $sale)
@@ -94,38 +90,19 @@ class SalesController extends Controller
      */
     public function update(Request $request, TeamSales $sale)
     {
-        $sales = $request->input('id_sales', []);
-        // dd($sales);
-        // $attr = $request->all();
-        $attr= [];
-        DB::beginTransaction();
-        foreach( $sales as $key => $tim){
-            $attr[]=[
-                'id_sales' => $tim,
-                'id_manager' => $request->id_manager,
-                'id_spv' => $request-> id_spv
-            ];
-            // dd($attr);
-            // $temSales = TeamSales::where('id_sales', $tim)->get();
-            // dd($temSales);
+       
+        $attr = $request->all();
+        // dd($attr);
+      
+        $sale->update($attr);
 
-            DB::table('team_sales')->whereIn('id_sales', $attr)->update(array( 
-                'id_sales' => $tim,
-                'id_manager' => $request->id_manager,
-                'id_spv' => $request-> id_spv));
-            // $sale->update($attr);
-           
-        }
-
-        DB::commit();
-  
 
         return redirect()->route('hrd.sales.index')->with('success', 'Team Sales has been updated');
     }
 
     public function destroy( $id)
     {
-        $user = TeamSales::where('id',$id)->delete();
+      TeamSales::where('id',$id)->delete();
         return redirect()->route('hrd.sales.index')->with('success', 'Team Sales has been deleted');
     }
     public function whereProject(Request $request)

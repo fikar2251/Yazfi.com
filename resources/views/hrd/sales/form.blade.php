@@ -3,55 +3,56 @@
         <div class="card shadow" id="card">
             <div class="card-body">
 
-    
-                        <div class="form-group">
-                            <label for="id_sales">Nama Sales </label>
-                            <select name="id_sales[]" id="id_sales" class="form-control select2" multiple="multiple">
-                                {{-- @foreach($sale->user as $rol)
+                
+                <div class="form-group">
+                    <label for="id_manager">Nama Manager Marketing</label>
+                    <select name="id_manager" required="" id="id_manager" class="form-control">
+                        <option disabled selected>-- Select Nama Manager Marketing --</option>
+                        @foreach($manager_marketing as $manager_marketings)
+                        
+                        <option 
+                            value="{{ $manager_marketings->id }}">{{ $manager_marketings->name }}</option>
+                            @endforeach
+                        </select>
+
+                    @error('id_manager')
+                    <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <label for="id_spv">Nama Spv</label>
+                    <select name="id_spv" id="id_spv" class="form-control">
+                        <option disabled selected>-- Select Nama SPV --</option>
+                        @foreach($spv as $spvs)
+
+                        <option value="{{ $spvs->id }}">
+                            {{ $spvs->name }}</option>
+                        @endforeach
+                    </select>
+
+                    @error('id_jabatan')
+                    <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <label for="id_sales">Nama Sales </label>
+                    <select name="id_sales[]" id="id_sales"  class="form-control select2" multiple="multiple">
+                        {{-- @foreach($sale->user as $rol)
                                 <option selected value="{{ $rol->id_sales }}">{{ $rol->name }}</option>
-                                @endforeach --}}
-                                @foreach($staff_marketing as $staff)
-                                <option  {{ $sale->id_sales == $staff->id ? 'selected' : '' }}  value="{{ $staff->id }}">{{ $staff->name }}</option>
-                                @endforeach
-                            </select>
+                        @endforeach --}}
+                        @foreach($staff_marketing as $staff)
+                        <option  value="{{ $staff->id }}">
+                            {{ $staff->name }}</option>
+                        @endforeach
+                    </select>
 
-                            @error('id_sales')
-                            <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-                        <div class="form-group">
-                            <label for="id_spv">Nama Spv</label>
-                            <select name="id_spv" id="id_spv" class="form-control">
-                                <option disabled selected>-- Select Nama SPV --</option>
-                                @foreach($spv as $spvs)
-                               
-                                <option 
-                                {{ $sale->id_spv == $spvs->id ? 'selected' : '' }} value="{{ $spvs->id }}">{{ $spvs->name }}</option>
-                                @endforeach
-                            </select>
-
-                            @error('id_jabatan')
-                            <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-                        <div class="form-group">
-                            <label for="id_manager">Nama Manager Marketing</label>
-                            <select name="id_manager" required="" id="id_manager" class="form-control">
-                                <option disabled selected>-- Select Nama Manager Marketing --</option>
-                                @foreach($manager_marketing as $manager_marketings)
-                              
-                                <option 
-                                     {{ $sale->id_manager == $manager_marketings->id ? 'selected' : '' }} value="{{ $manager_marketings->id }}">{{ $manager_marketings->name }}</option>
-                                @endforeach
-                            </select>
-
-                            @error('id_manager')
-                            <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-
-               
-
+                    @error('id_sales')
+                    <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+                
+                
+                
                 <div class="m-t-20 text-center">
                     <button type="submit" class="btn btn-primary submit-btn"><i class="fa fa-save"></i> Save</button>
                 </div>

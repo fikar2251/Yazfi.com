@@ -197,6 +197,28 @@
                                         </li>
                                     </ul>
                                 </div>
+                                <div class="col-sm-6 col-sg-4 m-b-4">
+                                    <ul class="list-unstyled">
+                                        <li>
+                                            <div class="form-group">
+                                                <label for="warehouses">Warehouse</label>
+                                                <select name="id_warehouse" id="id_warehouse"
+                                                    class="form-control">
+                                                    <option disabled selected>-- Select Warehouse --</option>
+                                                    @foreach($warehouses as $warehouse)
+                                                    <option value="{{ $warehouse->id }}">
+                                                        {{ $warehouse->nama_warehouse }}</option>
+                                                    @endforeach
+                                                </select>
+
+                                                @error('id_warehouse')
+                                                <small class="text-danger">{{ $message }}</small>
+                                                @enderror
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+
                             </div>
                             <div class="table-responsive">
                                 <table class="table table-bordered  report">

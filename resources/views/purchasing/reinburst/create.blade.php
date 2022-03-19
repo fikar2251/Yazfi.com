@@ -114,8 +114,8 @@
                                 <table class="table table-hover border" id="table-show">
                                     <tr class="bg-success">
                                         <th class="text-light">Nota/Bon/Kwitansi</th>
-                                        <th class="text-light">Harga</th>
                                         <th class="text-light">Catatan</th>
+                                        <th class="text-light">Harga</th>
                                         <th class="text-light">Total</th>
                                         <th class="text-light">#</th>
                                     </tr>
@@ -203,10 +203,10 @@
                         <input  type="text" name="no_kwitansi[${index}]"  class="form-control no_kwitansi-${index}" placeholder="Tulis Kwitansi">
                     </td>
                     <td>
-                         <input type="number" id="rupiah" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), TotalAbout(this)">
+                    <input  type="text" name="catatan[${index}]"  class="form-control catatan-${index}" placeholder="Catatan">
                     </td>
                     <td>
-                    <input  type="text" name="catatan[${index}]"  class="form-control catatan-${index}" placeholder="Catatan">
+                         <input type="number" id="rupiah" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), TotalAbout(this)">
                     </td>
                     <td>
                         <input type="number" name="total[${index}]" disabled class="form-control total-${index} total-form"  placeholder="0">

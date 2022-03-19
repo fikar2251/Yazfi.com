@@ -1,45 +1,41 @@
-@extends('layouts.master', ['title' => 'Product'])
+@extends('layouts.master', ['title' =>'Report Barang'])
 
 @section('content')
 <div class="row">
-    <div class="col-md-4">
-        <h1 class="page-title">Product</h1>
+    <div class="col-sm-12">
+        <h4 class="page-title">Report Barang</h4>
     </div>
 </div>
-<x-alert></x-alert>
 
-<div class="row">
-    <div class="col-sm-12">
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped custom-table report">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Kode Barang</th>
-                        <th>Nama Barang</th>
-                        <th>Project</th>
-                        <th>Qty</th>
+<form action="{{ route('logistik.product.index') }}" method="post">
+    @csrf
+    <div class="row filter-row">
+        <div class="col-sm-6 col-md-3">
+            <div class="form-group form-focus">
+                <label class="focus-label">From</label>
+                <div class="cal-icon">
+                    <input class="form-control floating datetimepicker" type="text" name="from" required>
+                </div>
+            </div>
+        </div>
 
-                    </tr>
-                </thead>
+        <div class="col-sm-6 col-md-3">
+            <div class="form-group form-focus">
+                <label class="focus-label">To</label>
+                <div class="cal-icon">
+                    <input class="form-control floating datetimepicker" type="text" name="to" required>
+                </div>
+            </div>
+        </div>
 
-                <tbody>
-                    @foreach($products as $product)
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td><a href="{{ route('logistik.product.show', $product->id) }}">{{ $product->product->kode_barang }}</a></td>
-                        <td>{{ $product->product->nama_barang }}</td>
-                        <td>{{ $product->project->nama_project }}</td>
-                        <td>{{ $product->qty }}</td>
-
-
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+        <div class="col-sm-6 col-md-3">
+            <button type="submit" class="btn btn-success btn-block">Search</button>
         </div>
     </div>
-</div>
+</form>
+
+@include('logistik.product.table')
+
 @stop
 
 @section('footer')
@@ -56,7 +52,8 @@
             {
                 extend: 'excel',
                 className: 'btn-default',
-                title: 'Laporan Barang ',
+                title: 'Laporan barang ',
+                messageTop: 'Tanggal {{ $from }}  -  {{ $to }}',
                 footer: true,
                 exportOptions: {
                     columns: ':visible'
@@ -65,7 +62,8 @@
             {
                 extend: 'pdf',
                 className: 'btn-default',
-                title: 'Laporan Barang ',
+                title: 'Laporan barang ',
+                messageTop: 'Tanggal {{ $from }}  -  {{ $to }}',
                 footer: true,
                 exportOptions: {
                     columns: ':visible'

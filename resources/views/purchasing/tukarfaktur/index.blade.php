@@ -55,6 +55,10 @@
                         <th>Action</th>
                     </tr>
                 </thead>
+                @php
+             
+                $array_no_po = [];
+                @endphp
 
                 <tbody>
                     @foreach($tukar as $purchase)
@@ -72,7 +76,10 @@
                             @endif
                         </div></td>
                         <td>{{ Carbon\Carbon::parse($purchase->tanggal_tukar_faktur)->format("d/m/Y") }}</td>
-                        <td>{{ $purchase->no_po_vendor ?? '-' }}</td>
+                        <td> @php
+                            array_push($array_no_po,  $purchase->no_po_vendor);
+                            @endphp
+                            </td>
                         
                         <td>{{ $purchase->no_invoice }}</td>
                         {{-- <td>{{ $purchase->nama }}</td> --}}

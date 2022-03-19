@@ -43,15 +43,13 @@
                                     <label for="no_po">Berdasarkan Pilihan : </label>
 
 
-                                    <input style="width:15px;" id="myCheck" type="checkbox" onclick="myFunction()"
-                                        value="1" class="detail">
+                                    <input style="width:15px;" id="myCheck" type="radio" name="myCheck" onclick="myFunction()"
+                                        value="1" class="detail" data-binding-checked="" >
                                     <label class="form-check-label" for="myCheck">No Penerimaan Barang</label>
-                                    {{-- <input style="width:15px;" id="radioButton" type="radio" name="pilihan[1]" value="2"
-                                        {{old('pilihan.1') =="2" ? 'checked='.'"'.'checked'.'"' : ''}} class="detail"
-                                    id="inlineCheckbox2"> --}}
-                                    <input style="width:15px;" id="myCheck2" type="checkbox" onclick="myFunction2()"
-                                        value="1" class="detail">
-                                    <label class="myCheck2" for="inlineCheckbox2">SPK</label>
+                             
+                                    <input style="width:15px;" id="myCheck2" type="radio" name="myCheck" onclick="myFunction()"
+                                        value="1" class="detail" data-binding-checked="" >
+                                    <label class="form-check-label" for="myCheck">SPK</label>
 
                                 </div>
 
@@ -266,7 +264,7 @@
                                                         <td>
                                                             @currency($purchase->total / 100 * $purchase->ppn +
                                                             $purchase->total)
-                                                            <input type="text" value=""
+                                                            <input type="hidden" value="0"
                                                                 class="form-control total_all-{{ $loop->iteration }} total-form"
                                                                 placeholder="0">
                                                         </td>
@@ -293,8 +291,8 @@
                                                         <td></td>
                                                         <td><b>Grand Total: </b></td>
                                                         <td colspan="3">
-                                                            <input type="text" name="nilai_invoice" id="nilai_invoice"
-                                                                class="form-control" placeholder="0">
+                                                            <input type="text" readonly name="nilai_invoice" id="nilai_invoice"
+                                                                class="form-control"  value="0">
                                                         </td>
                                                     </tr>
                                                 </tfoot>
@@ -307,42 +305,61 @@
                                             </div>
                                             <script>
                                                 function totalAll(e) {
+                                                    let nilai_invoice = document
+                                                        .getElementById('nilai_invoice')
+
+                                                    let attr = $(e).attr('data')
+                                                    let total = $(`.total-${attr}`)
+                                                        .val()
+                                                    let updated_total = parseInt(total)
+                                                    $(`.total_all-${attr}`).val(
+                                                        updated_total)
+                                                    nilai_invoice.value = updated_total
+
 
                                                     let total_all = 0;
                                                     let coll = document.querySelectorAll('.total-form')
                                                     for (let i = 0; i < coll.length; i++) {
-                                                        var company = document.getElementById("total");
-                                                        if (company.checked) {
 
-                                                            let nilai_invoice = document.getElementById('nilai_invoice')
+                                                        $(document).ready(function () {
+                                                            $('input[type="checkbox"]').click(function () {
+                                                                if ($(this).is(":checked")) {
+                                                                    // $("#result").html(
+                                                                    //     "Checkbox is checked.");
 
-                                                            let attr = $(e).attr('data')
-                                                            let total = $(`.total-${attr}`).val()
-                                                            let updated_total = parseInt(total)
-                                                            $(`.total_all-${attr}`).val(updated_total)
-                                                            nilai_invoice.value = updated_total
+                                                                    let ele = coll[i]
+                                                                    total_all += parseInt(ele.value)
+                                                                    console.log(total_all);
 
-                                                            let ele = coll[i]
-                                                            total_all += parseInt(ele.value)
-                                                            console.log(total_all);
+                                                                    nilai_invoice.value = total_all
+                                                                } else if ($(this).is(
+                                                                        ":not(:checked)")) {
+                                                                    // $("#result").html(
+                                                                    //     "Checkbox is unchecked.");\
+                                                                    let nilai_invoice = document
+                                                                        .getElementById('nilai_invoice')
 
-                                                            nilai_invoice.value = total_all
-                                                        } else {
-                                                            let nilai_invoice = document.getElementById('nilai_invoice')
+                                                                    let attr = $(e).attr('data')
+                                                                    let total = $(`.total-${attr}`)
+                                                                        .val()
+                                                                    let updated_total = parseInt(total * 0)
+                                                                    $(`.total_all-${attr}`).val(
+                                                                        updated_total)
+                                                                    // nilai_invoice.value = updated_total
 
-                                                            let attr = $(e).attr('data')
-                                                            let total = $(`.total-${attr}`).val()
-                                                            let updated_total = parseInt(total * 0)
-                                                            $(`.total_all-${attr}`).val(updated_total)
-                                                            nilai_invoice.value = updated_total
-
-                                                            let ele = coll[i]
-                                                            total_all += parseInt(ele.value * 0)
-                                                            console.log(total_all);
+                                                                    let ele = coll[i]
+                                                                    total_all += parseInt(ele.value)
+                                                                    console.log(total_all);
 
 
-                                                            nilai_invoice.value = total_all
-                                                        }
+                                                                    nilai_invoice.value = total_all
+                                                                }
+                                                            });
+                                                        });
+
+
+
+
                                                     }
 
                                                 }
@@ -515,8 +532,9 @@
                         <li>
                             <div class="form-group">
                                 <label for="nilai_invoice">Nilai Invoice <span style="color: red">*</span></label>
-                                <input type="text" id="nilai_invoice" name="nilai_invoice" required="" class="form-control">
-                        
+                                <input type="text" id="nilai_invoice" name="nilai_invoice" required=""
+                                    class="form-control">
+
 
                                 @error('nilai_invoice')
                                 <small class="text-danger">{{ $message }}</small>
@@ -643,16 +661,15 @@
     function myFunction() {
         var checkBox = document.getElementById("myCheck");
         var text = document.getElementById("text");
+        var checkBox2 = document.getElementById("myCheck2");
+        var text2 = document.getElementById("text2");
+
         if (checkBox.checked == true) {
             text.style.display = "block";
         } else {
             text.style.display = "none";
         }
-    }
 
-    function myFunction2() {
-        var checkBox2 = document.getElementById("myCheck2");
-        var text2 = document.getElementById("text2");
         if (checkBox2.checked == true) {
             text2.style.display = "block";
         } else {
@@ -660,35 +677,7 @@
         }
     }
 
-    // $(document).ready(function () {
-    //     $("#form-input").css("display",
-    //         "none"); //Menghilangkan form-input ketika pertama kali dijalankan
-    //     $("#form-spk").css("display",
-    //         "none"); //Menghilangkan form-input ketika pertama kali dijalankan
-    //     $(".detail").click(
-    //         function () { //Memberikan even ketika class detail di klik (class detail ialah class radio button)
-    //             if ($("input[name='pilihan[1]']:checked").val() ==
-    //                 "1"
-    //             ) { //Jika radio button "berbeda" dipilih maka tampilkan form-inputan
-    //                 $("#form-input").slideDown(
-    //                     "fast"); //Efek Slide Down (Menampilkan Form Input)
-    //             } else {
-    //                 $("#form-input").slideUp(
-    //                     "fast"); //Efek Slide Down (Menampilkan Form Input)
-    //                 //Efek Slide Down (Menampilkan Form Input)
-    //             }
-    //             if ($("input[name='pilihan[1]']:checked").val() ==
-    //                 "2"
-    //             ) { //Jika radio button "berbeda" dipilih maka tampilkan form-inputan
-    //                 $("#form-spk").slideDown(
-    //                     "fast"); //Efek Slide Down (Menampilkan Form Input)
-    //             } else {
-    //                 $("#form-spk").slideUp(
-    //                     "fast"); //Efek Slide Down (Menampilkan Form Input)
-    //                 //Efek Slide Down (Menampilkan Form Input)
-    //             }
-    //         });
-    // });
+    
     var formatter = function (num) {
         var str = num.toString().replace("", ""),
             parts = false,
@@ -712,101 +701,10 @@
         formatted = output.reverse().join("");
         return ("" + formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
     };
-    // document.getElementById('submit').disabled = true
-    function form_dinamic() {
-        let index = $('#dynamic_field tr').length + 1
-        document.getElementById('counter').innerHTML = index
-        let template = `
-            <tr class="rowComponent">
-                        <td hidden>
-                            // <input type="hidden" name="barang_id[${index}]" class="barang_id-${index}">
-                        </td>
-                        <td>
-                            <input type="text" name="nama_barang[${index}]"  class="form-control nama_barang-${index}" placeholder="Nama Barang">
-                        </td>
-                        <td>
-                            <input type="number" name="qty[${index}]"  class="form-control qty-${index}" placeholder="0">
-                        </td>
-                        <td>
-                            <select required name="unit[${index}]" id="${index}" class="form-control select-${index}"></select>
-                        </td>
-                        <td>
-                            <input type="text" id="rupiah" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), HowAboutIt(this)">
-                        </td>
-                        <td>
-                            <input type="number" name="total[${index}]" disabled class="form-control total-${index} total-form"  placeholder="0">
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-danger btn-sm" onclick="remove(this)">Delete</button>
-                        </td>
-                    </tr>
-            `
-        $('#dynamic_field').append(template)
-        $(`.select-${index}`).select2({
-            placeholder: 'Select Unit',
-            ajax: {
-                url: `/purchasing/where/unit`,
-                processResults: function (data) {
-                    console.log(data)
-                    return {
-                        results: data
-                    };
-                },
-                cache: true
-            }
-        });
-    }
-
-    function remove(q) {
-        $(q).parent().parent().remove()
-    }
-    $('.remove').on('click', function () {
-        $(this).parent().parent().remove()
-    })
-
-    function hitung(e) {
-        let harga = e.value
-        let attr = $(e).attr('data')
-        let qty = $(`.qty-${attr}`).val()
-        let total = parseInt(harga * qty)
-        $(`.total-${attr}`).val(total)
-    }
-
-    function TotalAbout(e) {
-        let sub_total = document.getElementById('sub_total')
-        let total = 0;
-        let coll = document.querySelectorAll('.total-form')
-        for (let i = 0; i < coll.length; i++) {
-            let ele = coll[i]
-            total += parseInt(ele.value)
-        }
-        sub_total.value = total
-        document.getElementById('grandtotal').value = total;
-    }
-
-    function HowAboutIt(e) {
-        let sub_total = document.getElementById('sub_total')
-        let total = 0;
-        let coll = document.querySelectorAll('.total-form')
-        for (let i = 0; i < coll.length; i++) {
-            let ele = coll[i]
-            total += parseInt(ele.value)
-        }
-        sub_total.value = total
-        let SUB = document.getElementById('sub_total').value;
-        let PPN = document.getElementById('PPN').value;
-        console.log(PPN);
-        let tax = PPN / 100 * sub_total.value;
-        console.log(tax);
-        document.getElementById('tax').value = tax;
-        console.log(SUB);
-        let grand_total = parseInt(SUB) + parseInt(tax);
-        document.getElementById('grandtotal').value = grand_total;
-        console.log(grand_total);
-    }
-    var rupiah = document.getElementById('rupiah');
+  
+    var rupiah = document.getElementById('nilai_invoice');
     if (rupiah) {
-        rupiah.addEventListener('keyup', function (e) {
+        rupiah.addEventListener('change', function (e) {
             rupiah.value = formatRupiah(this.value, 'Rp. ');
         });
     }

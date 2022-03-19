@@ -24,7 +24,10 @@ class ReinburstController extends Controller
             $from = Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d');
             $to = Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d');
             $reinbursts = Reinburst::groupBy('nomor_reinburst')->whereBetween('tanggal_reinburst', [$from, $to])->where('id_user',auth()->user()->id)->get();
-            $coba = DB::table('rincian_reinbursts')->leftjoin('reinbursts','rincian_reinbursts.nomor_reinburst','=','reinbursts.nomor_reinburst')->whereBetween('rincian_reinbursts.created_at', [$from, $to])->where('reinbursts.id_user',auth()->user()->id)->sum('rincian_reinbursts.total') ;
+            $coba = DB::table('rincian_reinbursts')->leftjoin('reinbursts','rincian_reinbursts.nomor_reinburst','=','reinbursts.nomor_reinburst')
+            ->select('reinbursts.id_user','reinbursts.id','reinbursts.tanggal_reinburst','reinbursts.nomor_reinburst','reinbursts.status_hrd','rincian_reinbursts.nomor_reinburst','rincian_reinbursts.total','reinbursts.status_pembayaran','reinbursts.id')
+            ->whereBetween('rincian_reinbursts.created_at', [$from, $to])->where('reinbursts.status_hrd','completed')
+            ->groupBy('reinbursts.nomor_reinburst')->sum('rincian_reinbursts.total') ;
             // dd($coba);
         } else {
             $reinbursts = DB::table('reinbursts')
@@ -32,7 +35,7 @@ class ReinburstController extends Controller
             ->select('reinbursts.id_user','reinbursts.id','reinbursts.tanggal_reinburst','reinbursts.nomor_reinburst','reinbursts.status_hrd','rincian_reinbursts.nomor_reinburst','rincian_reinbursts.total','reinbursts.status_pembayaran','reinbursts.id')
             ->orderBy('reinbursts.id','desc')
             ->groupBy('reinbursts.nomor_reinburst')
-            ->where('reinbursts.id_user',auth()->user()->id)
+            ->where('reinbursts.status_hrd','completed')
             ->get();
             
         

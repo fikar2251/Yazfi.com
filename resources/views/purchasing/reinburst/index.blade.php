@@ -62,8 +62,30 @@
                         <td>{{ \App\Reinburst::where('nomor_reinburst', $reinburst->nomor_reinburst)->count() }}</td>
                         <td>@currency(\App\RincianReinburst::where('nomor_reinburst',
                             $reinburst->nomor_reinburst)->sum('total'))</td>
-                        <td>{{ $reinburst->status_hrd }}</td>
-                        <td>{{ $reinburst->status_pembayaran }}</td>
+                       <td> <div class="d-flex justify-content-center mt-2">
+                        @if($reinburst->status_hrd == 'pending')
+                        <span class="custom-badge status-red">pending</span>
+                        @endif
+                        @if($reinburst->status_hrd == 'completed')
+                        <span class="custom-badge status-green">completed</span>
+                        @endif
+                        @if($reinburst->status_hrd == 'review')
+                        <span class="custom-badge status-orange">review</span>
+                        @endif
+                    </div>
+                </td>
+                <td> <div class="d-flex justify-content-center mt-2">
+                    @if($reinburst->status_pembayaran == 'pending')
+                    <span class="custom-badge status-red">pending</span>
+                    @endif
+                    @if($reinburst->status_pembayaran == 'completed')
+                    <span class="custom-badge status-green">completed</span>
+                    @endif
+                    @if($reinburst->status_pembayaran == 'review')
+                    <span class="custom-badge status-orange">review</span>
+                    @endif
+                </div>
+            </td>
                         <td>
 
                             <a href="{{ route('purchasing.reinburst.edit', $reinburst->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>

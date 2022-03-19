@@ -60,6 +60,9 @@ Route::middleware('auth')->group(function () {
             Route::get('pembatalans/ajax', 'PembatalanUnitController@ajax');
             Route::patch('pembatalans/{id}/update', 'PembatalanUnitController@update');
             Route::resource('pembatalans', 'PembatalanUnitController');
+
+
+            Route::resource('warehouse', 'WarehouseController');
          
 
             Route::resource('supplier', 'SupplierController');
@@ -275,7 +278,11 @@ Route::middleware('auth')->group(function () {
             Route::resource('reinburst', 'ReinburstController');
 
 
+            Route::resource('rincianpenggajian', 'RincianGajiController');
+
+
             Route::resource('sales', 'SalesController');
+            // Route::get('/sales/{sales:id}/edit','SalesController@edit')->name('sales.edit');
             Route::patch('hrd/sales/{sales:id}', 'SalesController@update')->name('sales.update');
         
 
@@ -283,6 +290,16 @@ Route::middleware('auth')->group(function () {
 
             Route::patch('hrd/penerimaan/{penerimaan}', 'PenerimaanController@edit')->name('penerimaan.edit');
             Route::patch('hrd/penerimaan/{penerimaan}', 'PenerimaanController@statuscompleted')->name('penerimaan.statuscompleted');
+
+
+            //pengajian
+            Route::resource('penerimaangaji','MstPenerimaanController');
+            Route::resource('potongan','MstPotonganController');
+           
+            Route::get('gaji/print/{id}','GajiController@print')->name('gaji.print');
+            Route::post('gaji/filter','GajiController@filter')->name('gaji.filter');
+            Route::resource('gaji', 'GajiController');
+            Route::get('/where/searchPegawai', 'GajiController@searchPegawai');
 
 
            

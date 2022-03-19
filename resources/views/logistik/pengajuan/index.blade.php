@@ -70,7 +70,18 @@
                         <td>{{ \App\RincianPengajuan::where('nomor_pengajuan', $peng->nomor_pengajuan)->count() }}</td>
                         <td>@currency(\App\RincianPengajuan::where('nomor_pengajuan',
                             $peng->nomor_pengajuan)->sum('total'))</td>
-                        <td>{{ $peng->status_approval }}</td>
+                        <td> <div class="d-flex justify-content-center mt-2">
+                            @if($peng->status_approval == 'pending')
+                            <span class="custom-badge status-red">pending</span>
+                            @endif
+                            @if($peng->status_approval == 'completed')
+                            <span class="custom-badge status-green">completed</span>
+                            @endif
+                            @if($peng->status_approval == 'review')
+                            <span class="custom-badge status-orange">review</span>
+                            @endif
+                        </div>
+                    </td>
 
                         <td>
 
@@ -90,9 +101,8 @@
                     <tr>
                         <td>Total : </td>
                         <td colspan="5"></td>
-                        <td>{{ request('from') && request('to') ? \App\Pengajuan::whereBetween('tanggal_pengajuan', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d')])->where('id_user',auth()->user()->id)->count() : \App\Pengajuan::where('id_user',auth()->user()->id)->count() }}
-                        </td>
-                        <td>@currency( request('from') && request('to') ?  $coba :   DB::table('rincian_pengajuans')->leftjoin('pengajuans','rincian_pengajuans.nomor_pengajuan','=','pengajuans.nomor_pengajuan')->where('pengajuans.id_user',auth()->user()->id)->sum('rincian_pengajuans.grandtotal')  )</td>
+                        <td>{{ request('from') && request('to') ? \App\Pengajuan::whereBetween('tanggal_pengajuan', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d')])->where('id_user',auth()->user()->id)->count() : \App\Pengajuan::where('id_user',auth()->user()->id)->count() }}</td>
+                        <td>@currency( request('from') && request('to') ? \App\RincianPengajuan::whereBetween('tanggal_pengajuan', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d')])->groupBy('nomor_pengajuan')->get()->sum('grandtotal') : \App\RincianPengajuan::groupBy('nomor_pengajuan')->get()->sum('grandtotal'))</td>
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
                     </tr>

@@ -39,6 +39,7 @@
                                             <th class="text-light">Nomor PO</th>
                                             <th class="text-light">Nama Barang</th>
                                             <th class="text-light">Unit</th>
+                                            <th class="text-light">Warehouse</th>
                                             <th class="text-light">Status Barang</th>
                                             <th class="text-light">Qty</th>
                                             <th class="text-light">Qty Received</th>
@@ -57,6 +58,7 @@
                                                 <td>{{ $barang->no_po }}</td>
                                                 <td>{{ $barang->barang->nama_barang }}</td>
                                                 <td>{{ $barang->purchase->unit }}</td>
+                                                <td>{{ $barang->purchase->warehouse->nama_warehouse }}</td>
                                                 <td>
                                                     <div class="d-flex justify-content-center mt-2">
                                                         @if($barang->qty != $barang->qty_received)

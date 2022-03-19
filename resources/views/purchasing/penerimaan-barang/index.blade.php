@@ -115,6 +115,7 @@
 
 @section('footer')
 <script>
+    
     $('.report').DataTable({
         dom: 'Bfrtip',
         buttons: [{

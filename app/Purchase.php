@@ -39,5 +39,13 @@ class Purchase extends Model
     {
         return $this->belongsTo(PenerimaanBarang::class, 'no_po');
     }
+    public function penerimaan()
+    {
+        return $this->HasMany(PenerimaanBarang::class, 'id_purchase');
+    }
+    public function warehouse()
+    {
+        return $this->belongsTo(Warehouse::class, 'id_warehouse');
+    }
 
 }

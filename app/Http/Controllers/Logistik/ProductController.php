@@ -11,15 +11,28 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreBarangRequest;
 use App\Http\Requests\UpdateBarangRequest;
-use App\Project;
+use App\{InOut};
+use Carbon\Carbon;
 
 class ProductController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
+        $barangs = [];
+        $from = '';
+        $to = '';
 
-        $products = HargaProdukCabang::groupBy('id')->get();
-        return view('logistik.product.index', compact('products'));
+        if (request('from') && request('to')) {
+
+            $from = Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s');
+            $to = Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s');
+
+            $barangs = InOut::whereBetween('created_at', [$from, $to])->where('user_id',auth()->user()->id)->get();
+        } else {
+            $barangs = InOut::where('user_id',auth()->user()->id)->get();
+        }
+
+        return view('logistik.product.index', compact('barangs', 'from', 'to'));
     }
     public function cari(Request $request)
     {
@@ -34,12 +47,5 @@ class ProductController extends Controller
         return view('logistik.product.show', compact('product'));
     }
 
-    // public function index()
-    // {
-    //     $products = DB::table('barangs')
-    //         ->leftJoin('harga_produk_cabangs', 'harga_produk_cabangs.barang_id', '=', 'barangs.id')
-    //         ->select('barangs.nama_barang', 'barangs.kode_barang', 'barangs.id', 'harga_produk_cabangs.harga', 'harga_produk_cabangs.barang_id', 'harga_produk_cabangs.qty')
-    //         ->get();
-    //     return view('logistik.product.index', compact('products'));
-    // }
+
 }

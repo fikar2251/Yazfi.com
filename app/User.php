@@ -70,14 +70,15 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Jabatan::class, 'id_jabatans');
     }
+
     public function project()
     {
         return $this->belongsTo(Project::class, 'cabang_id');
     }
 
-    public function sales()
-    {
-        return $this->belongsTo(TeamSales::class,'id_manager');
-    }
+    // public function teamSales()
+    // {
+    //     return $this->hasMany(TeamSales::class,'id_sales');
+    // }
 
 }
