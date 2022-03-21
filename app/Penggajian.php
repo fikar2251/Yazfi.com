@@ -9,7 +9,10 @@ use Spatie\Permission\Contracts\Role;
 class Penggajian extends Model
 {
     // use HasFactory;
-    protected $guarded = [];
+    protected $table = 'penggajians';
+    protected $guarded = ['id'];
+    public $timestamps = false;
+    
     public function penerimaan()
     {
         return $this->hasMany(RincianGaji::class)->where('tipe','penerimaan');

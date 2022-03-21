@@ -25,9 +25,7 @@ class PengajuanController extends Controller
             $from = Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d');
             $to = Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d');
             $pengajuans = Pengajuan::groupBy('nomor_pengajuan')->whereBetween('tanggal_pengajuan', [$from, $to])->get();
-            // $purchases = Purchase::groupBy('invoice')->whereBetween('created_at', [$from, $to])->get();
-            // dd($pengajuans);
-            $coba = DB::table('rincian_pengajuans')->leftjoin('pengajuans','rincian_pengajuans.nomor_pengajuan','=','pengajuans.nomor_pengajuan')->whereBetween('rincian_pengajuans.tanggal_pengajuan', [$from, $to])->where('pengajuans.id_user',auth()->user()->id)->sum('rincian_pengajuans.total'); 
+          
         } else {
             $pengajuans = Pengajuan::where('id_user', Auth::user()->id)
             ->orderBy('id','desc')
@@ -88,7 +86,7 @@ class PengajuanController extends Controller
                     'approval_time' => $request->tanggal,
                     'status_approval' => 'pending',
                     'approval_by' => 'pending',
-                    'id_roles' => auth()->user()->id_roles,
+                    'id_roles' => 8,
 
                 ];
                 // dd($attr);
@@ -105,6 +103,7 @@ class PengajuanController extends Controller
                         'unit' => $request->unit[$key],
                         'no_kwitansi' => $request->no_kwitansi,
                         'tanggal_pengajuan' => $request->tanggal,
+                        'id_user' => auth()->user()->id,
                     ];
                     // dd($in);
                 }

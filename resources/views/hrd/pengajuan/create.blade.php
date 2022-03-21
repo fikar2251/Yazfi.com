@@ -42,7 +42,7 @@
                     </div>
                 </div>
 
-                <form action="{{ route('logistik.pengajuan.store') }}" method="post" class="needs-validation"
+                <form action="{{ route('hrd.pengajuan.store') }}" method="post" class="needs-validation"
                     novalidate="" enctype="multipart/form-data">
                     @csrf
                     <div class="row">

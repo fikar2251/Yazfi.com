@@ -12,6 +12,7 @@ use App\RincianGaji;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 
 class GajiController extends Controller
 {
@@ -22,9 +23,8 @@ class GajiController extends Controller
      */
     public function index()
     {
-        return view('hrd.gaji.index', [
-            'penggajians' => Penggajian::get()
-        ]);
+        $penggajians= Penggajian::orderBy('id','desc')->get();
+        return view('hrd.gaji.index',compact('penggajians'));
     }
 
     /**
@@ -52,9 +52,12 @@ class GajiController extends Controller
         $this->validate($request, [
            
             'tanggal' => 'required|date',
-            // 'pegawai' => 'required|exists:users,id',
+            // 'pegawai_id' => Penggajian::where('pegawai_id',$request->pegawai_id)
+            // ->get(),
+            'pegawai_id' => 'required|exists:users,id',
             'total_potongan' => 'required',
-            'total' => 'required'
+            'total' => 'required',
+      
         ]);
         // $pegawai = User::findOrFail($request->pegawai);
         // dd($request->all());
@@ -239,6 +242,8 @@ class GajiController extends Controller
           
         return response()->json($data);
     }
+
+    
   
 
     

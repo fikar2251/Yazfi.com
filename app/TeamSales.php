@@ -8,7 +8,7 @@ class TeamSales extends Model
 {
     
 
-    protected $guarded = ['id_sales'];
+    protected $guarded = ['id'];
     protected $table = 'team_sales_user';
 
     public function teamSales()

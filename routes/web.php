@@ -57,13 +57,24 @@ Route::middleware('auth')->group(function () {
             Route::resource('unit', 'UnitController');
             Route::patch('admin/unit/{unit:id}', 'UnitController@update')->name('unit.update');
          
-            Route::get('pembatalans/ajax', 'PembatalanUnitController@ajax');
             Route::patch('pembatalans/{id}/update', 'PembatalanUnitController@update');
             Route::resource('pembatalans', 'PembatalanUnitController');
 
 
             Route::resource('warehouse', 'WarehouseController');
          
+
+            //ajaxcontroller
+            Route::get('ajax/ajax_rekap_reinburst', 'AjaxController@ajax_rekap_reinburst');
+            
+            Route::get('ajax/ajax_pembatalan', 'AjaxController@ajax_pembatalan');
+
+            Route::get('ajax/ajax_gaji', 'AjaxController@ajax_gaji');
+       
+            Route::get('ajax/ajax_acc_reinburst', 'AjaxController@ajax_acc_reinburst');
+            
+            
+            Route::get('ajax/ajax_pengajuan', 'AjaxController@ajax_pengajuan');
 
             Route::resource('supplier', 'SupplierController');
             Route::get('/where/product', 'PurchaseController@WhereProduct');
@@ -300,6 +311,7 @@ Route::middleware('auth')->group(function () {
             Route::post('gaji/filter','GajiController@filter')->name('gaji.filter');
             Route::resource('gaji', 'GajiController');
             Route::get('/where/searchPegawai', 'GajiController@searchPegawai');
+            Route::get('gaji/ajax', 'GajiController@ajax')->name('gaji.ajax');
 
 
            

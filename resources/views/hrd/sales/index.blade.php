@@ -32,17 +32,18 @@
                         <td class="text-center">{{ $loop->iteration }}</td>
                         <td>{{ $sales->manager->name }}</td>
                         <td>{{ $sales->spv->name }}</td>
-                  
-                        <td>{{ $sales->teamSales->name }}</td>
+                        @foreach($coba as $cobas)
+                        <td>{{ $cobas->id_sales }}</td>
+                        @endforeach
                         {{-- <td>
                             <a href="{{ route('hrd.sales.edit', $sales->id) }}" class="btn btn-sm btn-info"><i
-                                    class="fa fa-edit"></i></a>
-                            <form action="{{ route('hrd.sales.destroy', $sales->id) }}" method="post"
-                                style="display: inline;" class="delete-form">
-                                @method('DELETE')
-                                @csrf
-                                <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
-                            </form>
+                            class="fa fa-edit"></i></a>
+                        <form action="{{ route('hrd.sales.destroy', $sales->id) }}" method="post"
+                            style="display: inline;" class="delete-form">
+                            @method('DELETE')
+                            @csrf
+                            <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
+                        </form>
                         </td> --}}
                     </tr>
                     @endforeach

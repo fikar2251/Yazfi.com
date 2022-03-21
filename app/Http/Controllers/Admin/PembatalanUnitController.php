@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateBarangRequest;
 use Carbon\Carbon;
 
 use App\PembatalanUnit;
+use App\Penggajian;
 use App\Spr;
 
 class PembatalanUnitController extends Controller
@@ -44,7 +45,7 @@ class PembatalanUnitController extends Controller
     //     $product->delete();
     //     return redirect()->route('admin.product.index')->with('success', 'Product has been deleted');
     // }
- 
+
     public function ajax()
     {
         // $pembatalans = PembatalanUnit::with('no_pembatalan', 'id_spr','alasan_id')->get();

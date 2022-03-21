@@ -38,7 +38,7 @@
     </li>
   
     <li class="{{ request()->is('hrd/pengajuan*') ? 'active' : '' }}">
-        <a href="{{ route('logistik.pengajuan.index') }}"><i class="fa-solid fa-file-invoice"></i><span>Pengajuan dana</span></a>
+        <a href="{{ route('hrd.pengajuan.index') }}"><i class="fa-solid fa-file-invoice"></i><span>Pengajuan dana</span></a>
     </li>
 
     <li class="{{ request()->is('hrd/attendance*') ? 'active' : '' }}">

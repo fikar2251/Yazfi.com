@@ -15,12 +15,15 @@ use Illuminate\Support\Facades\DB;
 
 class SalesController extends Controller
 {
-    public function index()
+    public function index( TeamSales $teamSales)
     {
-        $sale = TeamSales::all();
-        // dd($sale);
+        $sale = TeamSales::groupBy('id_manager')->orderBy('id','desc')->get();
 
-        return view('hrd.sales.index', compact('sale'));
+        $coba = TeamSales::select('id_sales')->where('id_manager', $sale)->get();
+        dd($coba);
+       
+
+        return view('hrd.sales.index', compact('sale','coba'));
     }
 
     public function create(TeamSales $sale)

@@ -25,6 +25,10 @@
                                         <th>
                                             {{-- <select name="pegawai" id="pegawai"
                                                 class="form-control select2-ajax"></select> --}}
+                                                
+                @if($errors->has('title'))
+                <span class="text-danger">{{ $errors->first('title') }}</span>
+              @endif
                                             <select required="" name="pegawai_id" id="id"
                                             class="form-control input-lg dynamic" data-dependent="id_jabatans" required="">
                                                 <option disabled selected>-- Select Pegawai --</option>
