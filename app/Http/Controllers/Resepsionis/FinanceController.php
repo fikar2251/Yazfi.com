@@ -9,6 +9,9 @@ use App\Spr;
 use App\Tagihan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Mpdf\Tag\Input as TagInput;
+use Symfony\Component\Console\Input\Input;
 
 class FinanceController extends Controller
 {
@@ -33,10 +36,24 @@ class FinanceController extends Controller
 
     public function storePayment(Request $request)
     {
-        Pembayaran::where('status_approval', 'pending')
-        ->update([
-            'status_approval' => $request->status
-        ]);
+        
+        $status = $request->get('status');
+        $itemid = $request->get('id');
+        $count_status =count($status);
+
+        for ($i=0; $i <$count_status ; $i++) { 
+            $change = Pembayaran::where('id', $itemid[$i])->first();
+            
+            $change->update([
+                'status_approval' => $status[$i],
+            ]);
+
+            
+        }
+        // dd($change);
+        
+        return redirect()->back();
+    
     }
 
     public function ubahStatus($id)
