@@ -49,12 +49,12 @@
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped custom-table report">
                         <thead>
-                            <tr>
-                                <th>no</th>
+                            <tr style="font-size: 12px">
+                                <th>No</th>
                                 <th>Pegawai</th>
                                 <th>Tanggal</th>
                                 <th>Bulan&Tahun</th>
-                                <th>Gaji pokok</th>
+                                <th>Gaji Pokok</th>
                                 <th>Penerimaan</th>
                                 <th>Potongan</th>
                                 <th>Total</th>
@@ -72,7 +72,7 @@
                         @endphp
                         <tbody>
                             @foreach($penggajians as $data)
-                            <tr>
+                            <tr style="font-size: 12px">
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $data->pegawai->name }}</td>
                                 <td>{{ $data->tanggal }}</td>
@@ -107,7 +107,7 @@
                             @endforeach
                         </tbody>
                         <tfoot>
-                            <tr>
+                            <tr style="font-size: 12px">
                                 <th colspan="4">Total</th>
                                 <th>{{ number_format(array_sum($array_gaji_pokok)) }}</th>
                                 <th>{{ number_format(array_sum($array_penerimaan)) }}</th>

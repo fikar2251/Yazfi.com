@@ -45,14 +45,14 @@
                                         <th>:</th>
                                         <th>
                                             <input name="tanggal" type="date" class="form-control"
-                                                value="{{ Carbon\Carbon::now()->format('Y-m-d') }}">
+                                                value="{{ Carbon\Carbon::parse()->format('Y-m-d') }}">
                                         </th>
                                     </tr>
                                     <tr>
                                         <th>Bulan Tahun</th>
                                         <th>:</th>
                                         <th>
-                                            <input type="month" value="{{ Carbon\Carbon::parse()->format('F') }}"
+                                            <input type="month" value="{{ Carbon\Carbon::parse()->format('Y-m') }}"
                                                 name="bulan_tahun" class="form-control">
                                         </th>
                                     </tr>
@@ -112,7 +112,7 @@
                                         <th>{{ $terima->nama }}</th>
                                         <th>:</th>
                                         <th>
-                                            <input type="text" onkeyup="penerimaan(this)" value="0"
+                                            <input type="text" onkeyup="penerimaan(this)" value="{{ number_format(0)}}"
                                                 name="penerimaan[{{ $terima->nama }}]" id="gajian" class="form-control penerimaan">
                                         </th>
                                     </tr>

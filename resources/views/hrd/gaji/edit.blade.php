@@ -43,11 +43,11 @@
                                         </th>
                                     </tr>
                                     <tr>
-                                        <th>Bulan Tahun</th>
+                                        <th>Bulan dan Tahun</th>
                                         <th>:</th>
                                         <th>
                                             <input type="month"
-                                                value="{{ Carbon\Carbon::parse($penggajian->bulan_tahun)->format('F') }}"
+                                                value="{{ Carbon\Carbon::parse($penggajian->bulan_tahun)->format("F/Y") }}"
                                                 name="bulan_tahun" class="form-control">
                                         </th>
                                     </tr>
