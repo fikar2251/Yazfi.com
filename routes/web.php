@@ -241,6 +241,8 @@ Route::middleware('auth')->group(function () {
             Route::post('refund/store', 'RefundController@storeRefund')->name('refund.store');
             Route::get('refund/list', 'RefundController@list')->name('refund.list');
             Route::get('refund/update/{id}', 'RefundController@updateStatus')->name('refund.update');
+            Route::get('refund/daftar', 'RefundController@listRefund')->name('daftar.refund');
+            Route::post('refund/daftar/store', 'RefundController@storeListRefund')->name('store.list.refund');
 
             //Route Komisi
             Route::get('/komisi', 'FinanceController@komisiFinance')->name('komisi');

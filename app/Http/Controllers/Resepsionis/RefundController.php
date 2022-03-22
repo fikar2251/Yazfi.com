@@ -27,32 +27,28 @@ class RefundController extends Controller
             $singlebayar = Pembayaran::where('rincian_id', $getrincianid)->first();
             $notrs = $singlebatal->spr->no_transaksi;
 
-           
-            
-            $totalbayar = Pembayaran::whereHas('rincian', function($r){
+            $totalbayar = Pembayaran::whereHas('rincian', function ($r) {
                 $getno = request()->get('no_pembatalan');
                 $singlebatal = Pembatalan::where('no_pembatalan', $getno)->first();
                 $notrs = $singlebatal->spr->no_transaksi;
-                
+
                 $r->where('no_transaksi', $notrs);
-                $r->whereIn('tipe', [2,3]);
+                $r->whereIn('tipe', [2, 3]);
             })->where('status_approval', 'paid')->sum('nominal');
-            
-                
+
             // dd($contoh);
-            
+
             $idbatal = $singlebatal->no_pembatalan;
-            
+
             $refund = Refund::where('no_pembatalan', $getno)->first();
             if ($refund) {
                 $idbatal1 = $refund->no_pembatalan;
 
-                return view('resepsionis.refund.index', compact('batal', 'singlebatal', 'singlebayar', 'idbatal1' ,'totalbayar'));
-            }else {
-               $idbatal1 = '';
-               return view('resepsionis.refund.index', compact('batal', 'singlebatal', 'singlebayar', 'idbatal1', 'totalbayar'));
+                return view('resepsionis.refund.index', compact('batal', 'singlebatal', 'singlebayar', 'idbatal1', 'totalbayar'));
+            } else {
+                $idbatal1 = '';
+                return view('resepsionis.refund.index', compact('batal', 'singlebatal', 'singlebayar', 'idbatal1', 'totalbayar'));
             }
-            
 
         } else {
             $batal = Pembatalan::orderBy('id', 'desc')->get();
@@ -63,15 +59,58 @@ class RefundController extends Controller
 
     }
 
-    function list() {
-        $refund = Refund::orderBy('no_refund', 'desc')->get();
+    public function storeRefund(Request $request)
+    {
 
-        // foreach ($refund as $rf) {
-        //     $no = $rf->no_pembatalan;
-        // }
-        // $batal = Pembatalan::where('no_pembatalan', $no)->orderBy('no_pembatalan', 'desc')->first();
+        $tgl = Carbon::now()->format('d-m-Y');
+        Refund::create([
+            'no_refund' => $request->no_refund,
+            'tanggal_refund' => $tgl,
+            'no_pembatalan' => $request->no_pembatalan,
+            'diajukan' => $request->diajukan,
+            'total_refund' => $request->total_refund,
+            'status' => 'unpaid',
+            'pembatalan_id' => $request->pembatalan_id,
+        ]);
+
+        return redirect('resepsionis/refund/list');
+    }
+
+    function list() {
+        $refund = Refund::orderBy('no_refund', 'desc')->where('status', 'paid')->get();
 
         return view('resepsionis.refund.list', compact('refund'));
+    }
+
+    public function listRefund()
+    {
+        $refund = Refund::orderBy('no_refund', 'desc')->get();
+
+        return view('resepsionis.refund.daftar', compact('refund'));
+    }
+
+    public function storeListRefund(Request $request)
+    {
+        $status = $request->get('status');
+        $itemid = $request->get('id');
+        $count_status = count($status);
+
+        for ($i = 0; $i < $count_status; $i++) {
+            $change = Refund::where('id', $itemid[$i])->first();
+
+            $change->update([
+                'status' => $status[$i],
+                'tanggal_pembayaran' => $request->tanggal_pembayaran,
+            ]);
+            $idbatal = $change->pembatalan_id;
+
+            $batal = Pembatalan::where('id', $idbatal)->first();
+            $batal->refund = 'paid';
+            $batal->save();
+
+        }
+
+        return redirect()->back();
     }
 
     public function updateStatus($id)
@@ -89,20 +128,4 @@ class RefundController extends Controller
         return redirect()->back();
     }
 
-    public function storeRefund(Request $request)
-    {
-
-        $tgl = Carbon::now()->format('d-m-Y');
-        Refund::create([
-            'no_refund' => $request->no_refund,
-            'tanggal_refund' => $tgl,
-            'no_pembatalan' => $request->no_pembatalan,
-            'diajukan' => $request->diajukan,
-            'total_refund' => $request->total_refund,
-            'status' => 'unpaid',
-            'pembatalan_id' => $request->pembatalan_id
-        ]);
-
-        return redirect('resepsionis/refund/list');
-    }
 }

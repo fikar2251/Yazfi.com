@@ -16,21 +16,23 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Tanggal</th>
+                                <th>Tanggal Pengajuan</th>
+                                <th>Tanggal Pembayaran</th>
                                 <th>No Refund</th>
                                 <th>No Pembatalan</th>
                                 <th>Konsumen</th>
                                 <th>Sales</th>
                                 <th>Total refund</th>
                                 <th>Pembayaran</th>
-                                <th>Action</th>
+
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($refund as $item)
                             <tr>
                                 <td> {{$loop->iteration}} </td>
-                                <td>{{ Carbon\Carbon::now()->format('d-m-Y') }}</td>
+                                <td>{{ $item->tanggal_refund }}</td>
+                                <td>{{ $item->tanggal_pembayaran }}</td>
                                 <td>
                                     {{$item->no_refund}}
                                 </td>
@@ -53,14 +55,7 @@
                                     <span class="custom-badge status-green">{{ $item->status }}</span>
                                     @endif
                                 </td>
-                                <td>
-                                    <div class="text-center">
-                                        <a href="{{route('resepsionis.refund.update', $item->id)}}">
-                                            <button type="submit" class="btn btn-success"><i
-                                                    class="fa-solid fa-check"></i></button>
-                                        </a>
-                                    </div>
-                                </td>
+
                             </tr>
                             @endforeach
 
