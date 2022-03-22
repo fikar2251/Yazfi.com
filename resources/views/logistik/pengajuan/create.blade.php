@@ -257,7 +257,7 @@
                         <input required="" type="number" name="qty[${index}]"  class="form-control qty-${index}" placeholder="0">
                     </td>
                     <td>
-                        <select required="" name="unit[${index}]" id="${index}" class="form-control selectunit-${index}"></select>
+                        <select required="" name="unit[${index}]" nama="${index}" class="form-control selectunit-${index}"></select>
                     <td>
                     <input required="" type="number" id="rupiah" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), TotalAbout(this)">
                     </td>

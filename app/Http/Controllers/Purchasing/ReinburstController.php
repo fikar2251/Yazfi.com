@@ -83,10 +83,11 @@ class ReinburstController extends Controller
                     'status_hrd' => 'pending',
                     'status_pembayaran' => 'pending',
                     'id_project' => $request->id_project,
-                    'id_roles' => auth()->user()->id_roles
+                    'id_roles' => 10
                 ];
                 foreach ($barang as $key => $no) {
                     $in[] = [
+                        'id_user' => auth()->user()->id,
                         'no_kwitansi' => $request->no_kwitansi[$key],
                         'harga_beli' => $request->harga_beli[$key],
                         'catatan' => $request->catatan[$key],

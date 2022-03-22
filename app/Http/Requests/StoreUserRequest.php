@@ -29,7 +29,6 @@ class StoreUserRequest extends FormRequest
             'phone_number' => 'required',
             'password' => 'required',
             'role' => 'required',
-            'cabang_id' => 'required',
             'address' => 'required',
             'image' => 'required|mimes:jpg,png,jpeg'
         ];
@@ -43,7 +42,6 @@ class StoreUserRequest extends FormRequest
             'phone_number.required' => 'The no telp. field is required.',
             'password.required' => 'The password field is required.',
             'role.required' => 'Please select role.',
-            'cabang_id.required' => 'Please select cabang.',
             'address.required' => 'The alamat field is required.',
             'image.required' => 'The image field is required.',
         ];

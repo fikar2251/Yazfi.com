@@ -18,6 +18,21 @@
                             </li>
                         </ul>
                     </div>
+                    <div class="col-sm-6 col-sg-4 m-b-4">
+                        <ul class="list-unstyled">
+                            <li>
+                                <div class="form-group">
+                                    <label for="nik">Nik Pegawai</label>
+                                    <input type="text" name="nik" id="nik"  value="{{ $nourut }}" required=""
+                                        class="form-control">
+
+                                        @error('nik')
+                                        <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
 
                     <div class="col-sm-6 col-sg-4 m-b-4">
                         <ul class="list-unstyled">
@@ -67,30 +82,6 @@
                             </li>
                         </ul>
                     </div>
-
-                    <div class="col-sm-6 col-sg-4 m-b-4">
-                        <ul class="list-unstyled">
-                            <li>
-                                <div class="form-group">
-                                    <label for="password">Password</label>
-                                    <input type="password" name="password" id="password" required=""
-                                        class="form-control">
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="col-sm-6 col-sg-4 m-b-4">
-                        <ul class="list-unstyled">
-                            <li>
-                                <div class="form-group">
-                                    <label for="image">Image Profile</label><br>
-                                    <input type="file" class="form-control" name="image" id="image">
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-
 
                     <div class="col-sm-6 col-sg-4 m-b-4">
                         <ul class="list-unstyled">
@@ -158,6 +149,8 @@
                             </li>
                         </ul>
                     </div>
+                   
+
                     <div class="col-sm-6 col-sg-4 m-b-4">
                         <ul class="list-unstyled">
                             <li>
@@ -202,6 +195,28 @@
                             </li>
                         </ul>
                     </div>
+                    <div class="col-sm-6 col-sg-4 m-b-4">
+                        <ul class="list-unstyled">
+                            <li>
+                                <div class="form-group">
+                                    <label for="password">Password</label>
+                                    <input type="password" name="password" id="password" required=""
+                                        class="form-control">
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-6 col-sg-4 m-b-4">
+                        <ul class="list-unstyled">
+                            <li>
+                                <div class="form-group">
+                                    <label for="image">Image Profile</label><br>
+                                    <input type="file" class="form-control" name="image" id="image">
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
 
                     <div class="col-sm-6 col-sg-4 m-b-4">
                         <ul class="list-unstyled">
@@ -220,7 +235,7 @@
                         </ul>
                     </div>
 
-                    <div class="col-sm-6 col-sg-4 m-b-4">
+                    {{-- <div class="col-sm-6 col-sg-4 m-b-4">
                         <ul class="list-unstyled">
                             <li>
 
@@ -241,7 +256,7 @@
                                 </div>
                             </li>
                         </ul>
-                    </div>
+                    </div> --}}
 
                     <div class="col-sm-6 col-sg-4 m-b-4">
                         <ul class="list-unstyled">

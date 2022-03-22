@@ -15,15 +15,18 @@ use Illuminate\Support\Facades\DB;
 
 class SalesController extends Controller
 {
-    public function index( TeamSales $teamSales)
+    public function index( TeamSales $sale)
     {
-        $sale = TeamSales::groupBy('id_manager')->orderBy('id','desc')->get();
+        $sales = TeamSales::groupBy('id_spv')->orderBy('id_spv','desc')->get();
 
-        $coba = TeamSales::select('id_sales')->where('id_manager', $sale)->get();
-        dd($coba);
+        foreach ($sales as $tim) {
+            // $coba = TeamSales::whereIn('id_spv',$sales)->get();
+           $coba = TeamSales::where('id_spv',$tim->id_spv)->where('id_sales', $tim->id_sales)->get();
+            // dd($coba);
+        }
        
 
-        return view('hrd.sales.index', compact('sale','coba'));
+        return view('hrd.sales.index', compact('sales','coba'));
     }
 
     public function create(TeamSales $sale)
@@ -70,6 +73,7 @@ class SalesController extends Controller
 
     public function edit(TeamSales $sale)
     {
+    
         $roles = Role::get();
         
         $manager_marketing = User::role('marketing')->where('id_jabatans','1')->get();
@@ -80,8 +84,7 @@ class SalesController extends Controller
 
         $spv = User::role('supervisor')->get();
         
-
-        return view('hrd.sales.edit', compact('spv', 'staff_marketing', 'manager_marketing', 'jabatans','sale'));
+        return view('hrd.sales.edit', compact('spv','staff_marketing', 'manager_marketing', 'jabatans','sale'));
     }
 
     /**
@@ -94,18 +97,37 @@ class SalesController extends Controller
     public function update(Request $request, TeamSales $sale)
     {
        
-        $attr = $request->all();
-        // dd($attr);
-      
-        $sale->update($attr);
+   
+        $sales = $request->input('id_sales', []);
+        // dd($sales);
+        // DB::beginTransaction();
+        foreach( $sales as $tim => $no){
 
-
+            $attr = TeamSales::first()->id;
+            // dd($attr);
+            $attr->update([
+                'id_sales' => $tim,
+                'id_manager' => $request->id_manager,
+                'id_spv' => $request-> id_spv
+            ]);
+            // dd($attr);
+        }
         return redirect()->route('hrd.sales.index')->with('success', 'Team Sales has been updated');
     }
 
-    public function destroy( $id)
+    public function destroy(TeamSales $sale)
     {
-      TeamSales::where('id',$id)->delete();
+        $team = TeamSales::where('id_spv', $sale->id_spv)->get();
+        // dd($team);
+
+        foreach ($team as $tim) {
+            TeamSales::where('id_spv', $tim->id_spv)->delete();
+            // $harga = HargaProdukCabang::where('barang_id', $pur->barang_id)->where('project_id', auth()->user()->project_id)->first();
+
+         
+            $tim->delete();
+        }
+    //   TeamSales::where('id',$id)->delete();
         return redirect()->route('hrd.sales.index')->with('success', 'Team Sales has been deleted');
     }
     public function whereProject(Request $request)

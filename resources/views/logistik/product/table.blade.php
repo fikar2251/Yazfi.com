@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="table-responsive">
-            <table class="table table-striped table-bordered custom-table report" width="100%">
+            <table class="table table-bordered table-striped custom-table report" id="product">
                 <thead>
                     <tr>
                         <th style="text-align: center;">No</th>

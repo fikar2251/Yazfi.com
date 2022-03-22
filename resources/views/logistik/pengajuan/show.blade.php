@@ -90,7 +90,7 @@
                                                 <td>@currency($barang->harga_beli)</td>
                                                 <td>{{$barang->no_kwitansi}}</td>
                                                 <td>{{$barang->qty}}</td>
-                                                <td>{{$barang->unit}}</td>
+                                                <td>{{$barang->units->nama}}</td>
                                                 <td>{{ $barang->keterangan }}</td>
                                                 <td>@currency($barang->total)</td>
                                             </tr>

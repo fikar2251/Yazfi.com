@@ -29,7 +29,6 @@ class UpdateUserRequest extends FormRequest
             'email' => Rule::unique('users')->ignore($this->user),
             'phone_number' => 'required',
             'role' => 'required',
-            'cabang_id' => 'required',
             'address' => 'required',
             'image' => 'mimes:jpg,png,jpeg'
         ];
@@ -42,7 +41,6 @@ class UpdateUserRequest extends FormRequest
             'email.required' => 'The email field is required.',
             'phone_number.required' => 'The no telp field is required.',
             'role.required' => 'Please select role.',
-            'cabang_id.required' => 'Please select warehouse.',
             'address.required' => 'The alamat field is required.',
         ];
     }

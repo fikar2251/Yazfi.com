@@ -15,36 +15,38 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="table-responsive">
-            <table class="table table-bordered table-striped custom-table report">
+            <table class="table custom-table table-striped report" width="100%">
                 <thead>
                     <tr>
                         <th class="text-center">No</th>
                         <th>Manager</th>
                         <th>Supervisor</th>
-                        <th>Sales</th>
+                        <th colspan="2">Sales</th>
+                        <th></th>
                         <th>Action</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    @foreach($sale as $sales)
+                    @foreach($sales as $sale)
                     <tr>
-                        <td class="text-center">{{ $loop->iteration }}</td>
-                        <td>{{ $sales->manager->name }}</td>
-                        <td>{{ $sales->spv->name }}</td>
+                        <th class="text-center">{{ $loop->iteration }}</th>
+                        <th>{{ $sale->manager->name }}</th>
+                        <th>{{ $sale->spv->name }}</th>
                         @foreach($coba as $cobas)
-                        <td>{{ $cobas->id_sales }}</td>
+                        <th> <span class="custom-badge status-blue" >{{ $cobas->teamSales->name }}</span></th>
                         @endforeach
-                        {{-- <td>
-                            <a href="{{ route('hrd.sales.edit', $sales->id) }}" class="btn btn-sm btn-info"><i
+                        <th></th>
+                        <th>
+                            <a href="{{ route('hrd.sales.edit', $sale->id) }}" class="btn btn-sm btn-info"><i
                             class="fa fa-edit"></i></a>
-                        <form action="{{ route('hrd.sales.destroy', $sales->id) }}" method="post"
+                        <form action="{{ route('hrd.sales.destroy', $sale->id) }}" method="post"
                             style="display: inline;" class="delete-form">
                             @method('DELETE')
                             @csrf
                             <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
                         </form>
-                        </td> --}}
+                        </th>
                     </tr>
                     @endforeach
                 </tbody>
@@ -56,6 +58,7 @@
 @stop
 
 @section('footer')
+
 <script>
     $('.report').DataTable({
         dom: 'Bfrtip',

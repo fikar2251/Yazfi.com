@@ -40,7 +40,7 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="table-responsive">
-            <table class="table table-bordered table-striped custom-table report">
+            <table class="table table-bordered table-striped custom-table report" id="pengajuan">
                 <thead>
                     <tr>
                         <th>No</th>
@@ -57,52 +57,17 @@
                 </thead>
 
                 <tbody>
-                    @foreach($pengajuans as $peng)
-                    <tr style="font-size:13px;">
-                        <td>{{ $loop->iteration }}</td>
-                        <td><a href="{{ route('logistik.pengajuan.show', $peng->id) }}">{{ $peng->nomor_pengajuan }}</a>
-                        </td>
-
-                        <td>{{$peng->perusahaan->nama_perusahaan }}</td>
-                        <td>{{ Carbon\Carbon::parse($peng->tanggal_pengajuan)->format("d/m/Y") }}</td>
-                        <td>{{ $peng->roles->name }}</td>
-                        <td>{{ $peng->admin->name }}</td>
-                        <td>{{ \App\RincianPengajuan::where('nomor_pengajuan', $peng->nomor_pengajuan)->count() }}</td>
-                        <td>@currency(\App\RincianPengajuan::where('nomor_pengajuan',
-                            $peng->nomor_pengajuan)->sum('total'))</td>
-                        <td> <div class="d-flex justify-content-center mt-2">
-                            @if($peng->status_approval == 'pending')
-                            <span class="custom-badge status-red">pending</span>
-                            @endif
-                            @if($peng->status_approval == 'completed')
-                            <span class="custom-badge status-green">completed</span>
-                            @endif
-                            @if($peng->status_approval == 'review')
-                            <span class="custom-badge status-orange">review</span>
-                            @endif
-                        </div>
-                    </td>
-
-                        <td>
-
-                        <a href="{{ route('logistik.pengajuan.edit', $peng->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
-
-                            <form action="{{ route('logistik.pengajuan.destroy', $peng->id) }}" method="post"
-                                style="display: inline;" class="delete-form">
-                                @method('DELETE')
-                                @csrf
-                                <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
-                            </form>
-                        </td>
-                    </tr>
-                    @endforeach
+                  
                 </tbody>
                 <tfoot>
                     <tr>
                         <td>Total : </td>
                         <td colspan="5"></td>
-                        <td>{{ request('from') && request('to') ? \App\Pengajuan::whereBetween('tanggal_pengajuan', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d')])->where('id_user',auth()->user()->id)->count() : \App\Pengajuan::where('id_user',auth()->user()->id)->count() }}</td>
-                        <td>@currency( request('from') && request('to') ? \App\RincianPengajuan::whereBetween('tanggal_pengajuan', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d')])->groupBy('nomor_pengajuan')->get()->sum('grandtotal') : \App\RincianPengajuan::groupBy('nomor_pengajuan')->get()->sum('grandtotal'))</td>
+                        <td>{{ request('from') && request('to') ? \App\Pengajuan::whereBetween('tanggal_pengajuan', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d')])->where('id_user',auth()->user()->id)->get()->count() : \App\Pengajuan::where('id_user',auth()->user()->id)->get()->count() }}
+                        </td>
+                        <td>@currency( request('from') && request('to') ?  DB::table('rincian_pengajuans')->whereBetween('tanggal_pengajuan', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d')])->where('id_user',auth()->user()->id)->groupBy('nomor_pengajuan')->get()->sum('grandtotal') :
+                            DB::table('rincian_pengajuans')->where('id_user',auth()->user()->id)->groupBy('nomor_pengajuan')->get()->sum('grandtotal')
+                            )</td>
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
                     </tr>
@@ -114,38 +79,178 @@
 @stop
 
 @section('footer')
+<script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<link href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" rel="stylesheet">
+<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
 <script>
-    $('.report').DataTable({
-        dom: 'Bfrtip',
-        buttons: [{
-                extend: 'copy',
-                className: 'btn-default',
-                exportOptions: {
-                    columns: ':visible'
-                }
+    $(document).ready(function () {
+        $.noConflict();
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $('#pengajuan thead tr')
+            .clone(true)
+            .addClass('filters')
+            .appendTo('#pengajuan thead');
+
+        var table = $('#pengajuan').DataTable({
+            processing: true,
+            serverSide: true,
+            orderCellsTop: true,
+            fixedHeader: true,
+            dom: 'Bfrtip',
+            buttons: [{
+                    extend: 'copy',
+                    className: 'btn-default',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'excel',
+                    className: 'btn-default',
+                    title: 'Laporan Pengajuan',
+                    messageTop: 'Tanggal  {{ request("from") }} - {{ request("to") }}',
+                    footer: true,
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    className: 'btn-default',
+                    title: 'Laporan Pengajuan ',
+                    messageTop: 'Tanggal {{ request("from") }} - {{ request("to") }}',
+                    footer: true,
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'print',
+                    className: 'btn-default',
+                    title: 'Laporan Pengajuan ',
+                    messageTop: 'Tanggal {{ request("from") }} - {{ request("to") }}',
+                    footer: true,
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+            ],
+            initComplete: function () {
+                var api = this.api();
+
+                // For each column
+                api
+                    .columns()
+                    .eq(0)
+                    .each(function (colIdx) {
+                        // Set the header cell to contain the input element
+                        var cell = $('.filters th').eq(
+                            $(api.column(colIdx).header()).index()
+                        );
+                        var title = $(cell).text();
+                        $(cell).html('<input type="text" placeholder="' + title + '" />');
+
+                        // On every keypress in this input
+                        $(
+                                'input',
+                                $('.filters th').eq($(api.column(colIdx).header()).index())
+                            )
+                            .off('keyup change')
+                            .on('keyup change', function (e) {
+                                e.stopPropagation();
+
+                                // Get the search value
+                                $(this).attr('title', $(this).val());
+                                var regexr =
+                                    '({search})';
+                                // $(this).parents('th').find('select').val();
+
+                                var cursorPosition = this.selectionStart;
+                                // Search the column for that value
+                                api
+                                    .column(colIdx)
+                                    .search(
+                                        this.value != '' ?
+                                        regexr.replace('{search}', '(((' + this.value +
+                                            ')))') :
+                                        '',
+                                        this.value != '',
+                                        this.value == ''
+                                    )
+                                    .draw();
+
+                                $(this)
+                                    .focus()[0]
+                                    .setSelectionRange(cursorPosition, cursorPosition);
+                            });
+                    });
             },
-            {
-                extend: 'excel',
-                className: 'btn-default',
-                title: 'Laporan Pengajuan Dana ',
-                messageTop: 'Tanggal  {{ request("from") }} - {{ request("to") }}',
-                footer: true,
-                exportOptions: {
-                    columns: ':visible'
-                }
+
+            ajax: {
+                url: '/admin/ajax/ajax_pengajuan',
+                get: 'get'
+
             },
-            {
-                extend: 'pdf',
-                className: 'btn-default',
-                title: 'Laporan Pengajuan Dana ',
-                messageTop: 'Tanggal {{ request("from") }} - {{ request("to") }}',
-                footer: true,
-                exportOptions: {
-                    columns: ':visible'
-                }
-            },
-        ]
-    });
+           
+            columns: [{
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex'
+                },
+                {
+                    data: 'no_pengajuan',
+                    name: 'no_pengajuan'
+                },
+                {
+                    data: 'perusahaan',
+                    name: 'perusahaan'
+                },
+                {
+                    data: 'tanggal',
+                    name: 'tanggal'
+                },
+                {
+                    data: 'divisi',
+                    name: 'divisi'
+                },
+                {
+                    data: 'nama',
+                    name: 'nama'
+                },
+                {
+                    data: 'total',
+                    name: 'total'
+                },
+                {
+                    data: 'pembelian',
+                    name: 'pembelian',
+                    render: $.fn.dataTable.render.number('.', ',', 0, 'Rp.')
+                },
+               
+                {
+                    data: 'status',
+                    name: 'status'
+                },
+                 {
+                    data: 'action',
+                    name: 'action'
+                },
+           
+
+            ],
+
+
+        })
+    })
 
 </script>
 @stop

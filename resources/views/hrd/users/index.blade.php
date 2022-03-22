@@ -30,24 +30,24 @@
                 <tbody>
                     @foreach($users as $user)
                     <tr>
-                        <td class="text-center">{{ $loop->iteration }}</td>
-                        <td>{{ $user->name }}</td>
-                        <td>{{ $user->email }}</td>
-                        <td>
+                        <th class="text-center">{{ $loop->iteration }}</th>
+                        <th>{{ $user->name }}</th>
+                        <th>{{ $user->email }}</th>
+                        <th>
                             @foreach($user->roles as $role)
                             <span class="custom-badge status-blue">{{ $role->name }}</span>
                             @endforeach
-                        </td>
-                        <td>{{ $user->jabatan->nama }}</td>
-                        <td>{{ $user->perusahaan->nama_perusahaan }}</td>
-                        <td>
+                        </th>
+                        <th>{{ $user->jabatan->nama }}</th>
+                        <th>{{ $user->perusahaan->nama_perusahaan }}</th>
+                        <th>
                             <a href="{{ route('hrd.users.edit', $user->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
                             <form action="{{ route('hrd.users.destroy', $user->id) }}" method="post" style="display: inline;" class="delete-form">
                                 @method('DELETE')
                                 @csrf
                                 <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
                             </form>
-                        </td>
+                        </th>
                     </tr>
                     @endforeach
                 </tbody>

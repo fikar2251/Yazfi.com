@@ -21,7 +21,7 @@ class Pengajuan extends Model
     {
         return $this->belongsTo(Project::class, 'id');
     }
-
+  
     public function admin()
     {
         return $this->belongsTo(User::class, 'id_user');

@@ -39,29 +39,25 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="table-responsive">
-            <table class="table table-bordered table-striped custom-table report">
+            <table class="table table-bordered table-striped custom-table report" id="tukars">
                 <thead>
                     <tr style="font-size:12px;">
                         <th>No</th>
                         <th>No Tukar Faktur</th>
                         <th>Po / Spk</th>
                         <th>Tanggal Tukar Faktur</th>
-                        <th>No Po</th>
+                     
                         <th>No Invoice</th>
-                        {{-- <th>Vendor</th> --}}
+                   
                         <th>Total Item</th>
                         <th>Total Pembelian</th>
                         <th>Status Pembayaran</th>
                         <th>Action</th>
                     </tr>
                 </thead>
-                @php
-             
-                $array_no_po = [];
-                @endphp
-
+            
                 <tbody>
-                    @foreach($tukar as $purchase)
+                    {{-- @foreach($tukar as $purchase)
                     <tr style="font-size:12px;">
                         <td>{{ $loop->iteration }}</td>
                         <td>
@@ -82,7 +78,7 @@
                             </td>
                         
                         <td>{{ $purchase->no_invoice }}</td>
-                        {{-- <td>{{ $purchase->nama }}</td> --}}
+                        <td>{{ $purchase->nama }}</td>
                         <td>{{ \App\TukarFaktur::where('no_faktur', $purchase->no_faktur)->count() }}</td> 
                         <td>@currency($purchase->nilai_invoice)</td>
                         <td>
@@ -95,14 +91,11 @@
                                 @endif
                             </div>
                         </td>
-                       {{-- @if($status->count())
-
-                             <td> Result Not Found</td>
-                       @else --}}
+                      
                        
                        <td>
 
-                            <!-- <a href="{{ route('logistik.purchase.edit', $purchase->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a> -->
+                             <a href="{{ route('logistik.purchase.edit', $purchase->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
 
                             <form action="{{ route('purchasing.tukarfaktur.destroy', $purchase->id) }}" method="post" style="display: inline;" class="delete-form">
                                 @method('DELETE')
@@ -110,21 +103,22 @@
                                 <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
                             </form>
                         </td>
-                        {{-- @endif --}}
+                    
                     </tr>
-                    @endforeach
+                    @endforeach --}}
                 </tbody>
+             
                 <tfoot>
-                    <tr style="font-size:12px;">
+                    <tr>
                         <td>Total : </td>
-                        <td colspan="5"></td>
-                        <td>{{ request('from') && request('to') ? \App\TukarFaktur::whereBetween('tanggal_tukar_faktur', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s')])->where('id_user',auth()->user()->id)->count() : \App\TukarFaktur::where('id_user',auth()->user()->id)->count() }}</td>
-                     
-                        <td>@currency( request('from') && request('to') ? \App\TukarFaktur::whereBetween('tanggal_tukar_faktur', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d')])->where('id_user',auth()->user()->id)->sum('nilai_invoice') :   \App\TukarFaktur::where('id_user',auth()->user()->id)->sum('nilai_invoice') )</td>
-                      
+                        <td colspan="4"></td>
+                        <td>{{ request('from') && request('to') ? \App\TukarFaktur::whereBetween('tanggal_tukar_faktur', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m--d'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d')])->where('id_user',auth()->user()->id)->count() : \App\TukarFaktur::where('id_user',auth()->user()->id)->count() }}
+                        </td>
+
+                        <td>@currency( request('from') && request('to') ? \App\TukarFaktur::whereBetween('tanggal_tukar_faktur', [Carbon\Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d'), Carbon\Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d')])->where('id_user',auth()->user()->id)->groupBy('no_faktur')->get()->sum('nilai_invoice') : \App\TukarFaktur::where('id_user',auth()->user()->id)->groupBy('no_faktur')->get()->sum('nilai_invoice') )</td>
+
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
-                       
                     </tr>
                 </tfoot>
             </table>
@@ -133,38 +127,180 @@
 </div>
 @stop
 
+
+
 @section('footer')
+<script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<link href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" rel="stylesheet">
+<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+
 <script>
-    $('.report').DataTable({
-        dom: 'Bfrtip',
-        buttons: [{
-                extend: 'copy',
-                className: 'btn-default',
-                exportOptions: {
-                    columns: ':visible'
-                }
+    $(document).ready(function () {
+        $.noConflict();
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $('#tukars thead tr')
+            .clone(true)
+            .addClass('filters')
+            .appendTo('#tukars thead');
+
+        var table = $('#tukars').DataTable({
+            processing: true,
+            serverSide: true,
+            orderCellsTop: true,
+            fixedHeader: true,
+            dom: 'Bfrtip',
+            buttons: [{
+                    extend: 'copy',
+                    className: 'btn-default',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'excel',
+                    className: 'btn-default',
+                    title: 'Laporan penerimaan',
+                    messageTop: 'Tanggal  {{ request("from") }} - {{ request("to") }}',
+                    footer: true,
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    className: 'btn-default',
+                    title: 'Laporan penerimaan',
+                    messageTop: 'Tanggal {{ request("from") }} - {{ request("to") }}',
+                    footer: true,
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'print',
+                    className: 'btn-default',
+                    title: 'Laporan penerimaan',
+                    messageTop: 'Tanggal {{ request("from") }} - {{ request("to") }}',
+                    footer: true,
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+            ],
+            initComplete: function () {
+                var api = this.api();
+
+                // For each column
+                api
+                    .columns()
+                    .eq(0)
+                    .each(function (colIdx) {
+                        // Set the header cell to contain the input element
+                        var cell = $('.filters th').eq(
+                            $(api.column(colIdx).header()).index()
+                        );
+                        var title = $(cell).text();
+                        $(cell).html('<input type="text" placeholder="' + title + '" />');
+
+                        // On every keypress in this input
+                        $(
+                                'input',
+                                $('.filters th').eq($(api.column(colIdx).header()).index())
+                            )
+                            .off('keyup change')
+                            .on('keyup change', function (e) {
+                                e.stopPropagation();
+
+                                // Get the search value
+                                $(this).attr('title', $(this).val());
+                                var regexr =
+                                    '({search})';
+                                // $(this).parents('th').find('select').val();
+
+                                var cursorPosition = this.selectionStart;
+                                // Search the column for that value
+                                api
+                                    .column(colIdx)
+                                    .search(
+                                        this.value != '' ?
+                                        regexr.replace('{search}', '(((' + this.value +
+                                            ')))') :
+                                        '',
+                                        this.value != '',
+                                        this.value == ''
+                                    )
+                                    .draw();
+
+                                $(this)
+                                    .focus()[0]
+                                    .setSelectionRange(cursorPosition, cursorPosition);
+                            });
+                    });
             },
-            {
-                extend: 'excel',
-                className: 'btn-default',
-                title: 'Laporan Pembelian ',
-                messageTop: 'Tanggal  {{ request("from") }} - {{ request("to") }}',
-                footer: true,
-                exportOptions: {
-                    columns: ':visible'
-                }
+           
+            ajax: {
+                url: '/admin/ajax/ajax_faktur',
+                get: 'get'
+
             },
-            {
-                extend: 'pdf',
-                className: 'btn-default',
-                title: 'Laporan Pembelian ',
-                messageTop: 'Tanggal {{ request("from") }} - {{ request("to") }}',
-                footer: true,
-                exportOptions: {
-                    columns: ':visible'
-                }
-            },
-        ]
-    });
+           
+            
+            columns: [{
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex'
+                },
+                {
+                    data: 'no_tukar',
+                    name: 'no_tukar'
+                },
+                {
+                    data: 'status_po',
+                    name: 'status_po'
+                },
+                {
+                    data: 'tanggal',
+                    name: 'tanggal'
+                },
+                {
+                    data: 'invoice',
+                    name: 'invoice'
+                },
+                {
+                    data: 'total',
+                    name: 'total'
+                },
+                {
+                    data: 'pembelian',
+                    name: 'pembelian',
+                    render: $.fn.dataTable.render.number('.', ',', 0, 'Rp.')
+                },
+               
+                {
+                    data: 'status',
+                    name: 'status'
+                },
+                 {
+                    data: 'action',
+                    name: 'action'
+                },
+           
+            ],
+           
+
+
+
+        })
+    })
+
 </script>
 @stop

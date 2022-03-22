@@ -10,6 +10,7 @@ class TeamSales extends Model
 
     protected $guarded = ['id'];
     protected $table = 'team_sales_user';
+    public $timestamps = false;
 
     public function teamSales()
     {

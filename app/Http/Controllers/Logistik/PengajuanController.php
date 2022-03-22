@@ -87,13 +87,14 @@ class PengajuanController extends Controller
                     'approval_time' => $request->tanggal,
                     'status_approval' => 'pending',
                     'approval_by' => 'pending',
-                    'id_roles' => auth()->user()->id_roles,
+                    'id_roles' => 9,
 
                 ];
                 // dd($attr);
                 foreach ($barang as $key => $no) {
                     $in[] = [
                         'barang_id' => $no,
+                        'id_user' => auth()->user()->id,
                         'PPN' => $request->PPN,
                         'harga_beli' => $request->harga_beli[$key],
                         'keterangan' => $request->keterangan[$key],
@@ -138,6 +139,7 @@ class PengajuanController extends Controller
             ->leftJoin('jabatans', 'users.id_jabatans', '=', 'jabatans.id')
             ->leftJoin('roles', 'users.id_roles', '=', 'roles.id')
             ->leftJoin('pengajuans', 'users.id_perusahaan', '=', 'pengajuans.id_perusahaan')
+            // ->leftJoin('units','units.id','=','rincian_pengajuans.unit')
             ->select('jabatans.nama', 'users.name', 'roles.name')
             ->where('pengajuans.nomor_pengajuan', $pengajuan->nomor_pengajuan)
             ->first();

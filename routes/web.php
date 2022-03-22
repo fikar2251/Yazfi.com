@@ -68,13 +68,27 @@ Route::middleware('auth')->group(function () {
             Route::get('ajax/ajax_rekap_reinburst', 'AjaxController@ajax_rekap_reinburst');
             
             Route::get('ajax/ajax_pembatalan', 'AjaxController@ajax_pembatalan');
+            Route::get('ajax/ajax_listpurchase', 'AjaxController@ajax_listpurchase');
 
             Route::get('ajax/ajax_gaji', 'AjaxController@ajax_gaji');
        
             Route::get('ajax/ajax_acc_reinburst', 'AjaxController@ajax_acc_reinburst');
+          
+            Route::get('ajax/ajax_reinburst', 'AjaxController@ajax_reinburst');
+
+
+            Route::get('ajax/ajax_customer', 'AjaxController@ajax_customer');
             
             
             Route::get('ajax/ajax_pengajuan', 'AjaxController@ajax_pengajuan');
+
+
+            Route::get('ajax/ajax_penerimaan', 'AjaxController@ajax_penerimaan');
+            Route::get('ajax/ajax_faktur', 'AjaxController@ajax_faktur');
+
+
+            Route::get('ajax/ajax_purchase', 'AjaxController@ajax_purchase');
+            Route::get('ajax/ajax_product', 'AjaxController@ajax_product');
 
             Route::resource('supplier', 'SupplierController');
             Route::get('/where/product', 'PurchaseController@WhereProduct');
@@ -392,11 +406,11 @@ Route::middleware('auth')->group(function () {
             Route::get('/where/project', 'TukarFakturController@whereProject');
             Route::get('/where/tukar/search', 'TukarFakturController@search');
             Route::get('/where/unit', 'TukarFakturController@WhereUnit');
-            Route::get('/tukarfaktur/pdf/{id}', 'TukarFakturController@pdf')->name('tukarfaktur.pdf');
+
             Route::resource('tukarfaktur', 'TukarFakturController');
 
             Route::post('tukarfaktur/create/store', 'TukarFakturController@store')->name('tukarfaktur.create.store');
-
+            Route::get('/tukarfaktur/pdf/{id}','TukarFakturController@pdf')->name('tukarfaktur.pdf');
 
             Route::resource('reinburst', 'ReinburstController');
             Route::resource('penerimaan-barang', 'PenerimaanBarangController');

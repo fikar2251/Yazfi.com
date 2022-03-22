@@ -6,13 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBarangRequest;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\UpdateBarangRequest;
+use App\InOut;
 use Carbon\Carbon;
 
 use App\PembatalanUnit;
+use App\PenerimaanBarang;
 use App\Pengajuan;
 use App\Penggajian;
+use App\Purchase;
 use App\Reinburst;
 use App\Spr;
+use App\TukarFaktur;
 
 class AjaxController extends Controller
 {
@@ -182,6 +186,63 @@ class AjaxController extends Controller
             ->rawColumns(['no_reinburst','status_hrd','status_pembayaran','action'])
             ->make(true);
     }
+    public function ajax_reinburst(){
+        $reinbursts = Reinburst::
+        leftJoin('rincian_reinbursts','reinbursts.nomor_reinburst','=','rincian_reinbursts.nomor_reinburst')
+        ->select('reinbursts.id_user','reinbursts.nomor_reinburst','reinbursts.status_hrd','reinbursts.status_pembayaran','reinbursts.tanggal_reinburst',
+        'rincian_reinbursts.total','reinbursts.id')->where('reinbursts.id_user',auth()->user()->id)
+        ->groupBy('reinbursts.nomor_reinburst')
+        ->orderBy('reinbursts.id', 'desc')
+        ->get();
+        // dd($reinbursts);
+
+        return datatables()
+            ->of($reinbursts)
+            ->editColumn('no_reinburst', function ($reinburst) {
+                return '<a href="' . route("admin.reinburst.show", $reinburst->id) . '">' . $reinburst->nomor_reinburst . '</a>';
+            })
+            ->editColumn('tanggal', function ($reinburst) {
+                return Carbon::parse($reinburst->tanggal_reinburst)->format('d/m/Y');
+            })
+            ->editColumn('total', function ($reinburst) {
+                return \App\Reinburst::where('nomor_reinburst', $reinburst->nomor_reinburst)->count();
+            })
+            ->editColumn('pembelian', function ($reinburst) {
+                return $reinburst->total;
+            })
+            ->editColumn('status_hrd', function ($reinburst) {
+                if($reinburst->status_hrd == 'pending'){
+               return '<a class="custom-badge status-red">pending</a>';
+               }
+                if($reinburst->status_hrd == 'completed'){
+                    return '<a class="custom-badge status-green">completed</a>';
+                }
+                if($reinburst->status_hrd == 'review'){
+                    return '<a class="custom-badge status-orange">review</a>';
+                }
+            })
+            ->editColumn('status_pembayaran', function ($reinburst) {
+                if($reinburst->status_pembayaran == 'pending'){
+                    return '<a class="custom-badge status-red">pending</a>';
+                    }
+                     if($reinburst->status_pembayaran == 'completed'){
+                         return '<a class="custom-badge status-green">completed</a>';
+                     }
+                     if($reinburst->status_pembayaran == 'review'){
+                         return '<a class="custom-badge status-orange">review</a>';
+                     }
+            })
+            ->editColumn('action', function ($data) {
+                
+                Reinburst::where('id', $data->id)->get();
+            
+                return '<button type="delete"  href="' .  route('hrd.pengajuan.destroy', $data->id). '" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>';         
+
+            })
+            ->addIndexColumn()
+            ->rawColumns(['no_reinburst','status_hrd','status_pembayaran','action'])
+            ->make(true);
+    }
     public function ajax_pengajuan(){
         $pengajuans = Pengajuan::
         leftJoin('rincian_pengajuans','pengajuans.nomor_pengajuan','=','rincian_pengajuans.nomor_pengajuan')
@@ -196,7 +257,7 @@ class AjaxController extends Controller
         return datatables()
             ->of($pengajuans)
             ->editColumn('no_pengajuan', function ($pengajuan) {
-                return $pengajuan->nomor_pengajuan;
+                return '<a href="' . route("logistik.pengajuan.show", $pengajuan->id) . '">' . $pengajuan->nomor_pengajuan . '</a>';
             })
             ->editColumn('perusahaan', function ($pengajuan) {
                 return $pengajuan->perusahaan->nama_perusahaan;
@@ -234,8 +295,304 @@ class AjaxController extends Controller
 
             })
             ->addIndexColumn()
-            ->rawColumns(['no_reinburst','status','action'])
+            ->rawColumns(['no_pengajuan','status','action'])
             ->make(true);
+    }
+
+
+    public function ajax_purchase(){
+        $purchases = Purchase::groupBy('invoice')
+        ->orderBy('id', 'desc')
+        ->get();
+        // dd($purchases);
+
+        return datatables()
+            ->of($purchases)
+            ->editColumn('no_invoice', function ($purchase) {
+                return '<a href="' . route("logistik.purchase.show", $purchase->id) . '">' . $purchase->invoice . '</a>';
+            })
+            ->editColumn('admin', function ($purchase) {
+                return $purchase->admin->name;
+            })
+            ->editColumn('tanggal', function ($purchase) {
+                return Carbon::parse($purchase->created_at)->format('d/m/Y');
+            })
+            ->editColumn('total', function ($purchase) {
+                return \App\Purchase::where('invoice', $purchase->invoice)->count();
+            })
+            ->editColumn('pembelian', function ($purchase) {
+                return $purchase->grand_total;
+            })
+            ->editColumn('status', function ($purchase) {
+                if($purchase->status_barang == 'pending'){
+               return '<a class="custom-badge status-red">pending</a>';
+               }
+                if($purchase->status_barang == 'completed'){
+                    return '<a class="custom-badge status-green">completed</a>';
+                }
+               
+            })
+            ->editColumn('action', function ($data) {
+                
+                Pengajuan::where('id', $data->id)->get();
+            
+                return '<button type="delete"  href="' .  route('hrd.pengajuan.destroy', $data->id). '" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>';
+             
+
+            })
+            ->addIndexColumn()
+            ->rawColumns(['no_invoice','status','action'])
+            ->make(true);
+    }
+
+    public function ajax_product(){
+        $barangs = InOut::where('user_id',auth()->user()->id)->get();
+        // dd($purchases);
+
+        return datatables()
+            ->of($barangs)
+            ->editColumn('item', function ($product) {
+               return $product->barang->nama_barang;
+            })
+            ->editColumn('supplier', function ($product) {
+                return $product->supplier->nama;
+            })
+            ->editColumn('project', function ($product) {
+                return $product->cabang->nama_project;
+            })
+            ->editColumn('in', function ($product) {
+                return $product->in ?? '-';
+            })
+            ->editColumn('out', function ($product) {
+                return $product->out ?? '-';
+            })
+            ->editColumn('last', function ($product) {
+                return $product->in - $product->out;
+            })
+            ->editColumn('waktu', function ($product) {
+                return Carbon::parse($product->created_at)->format('d/m/Y');
+            })
+            ->editColumn('admin', function ($product) {
+                return $product->admin->name;
+            })
+        
+            ->addIndexColumn()
+            ->rawColumns(['no_invoice','status','action'])
+            ->make(true);
+    }
+
+
+    public function ajax_penerimaan()
+    {
+     
+       if (request('from') && request('to')) {
+            $from = Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d');
+            $to = Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d');
+            $penerimaans = PenerimaanBarang::groupBy('no_penerimaan_barang')->whereBetween('tanggal_penerimaan', [$from, $to])->where('id_user',auth()->user()->id)->get();
+        } else {
+            $penerimaans = PenerimaanBarang::groupBy('no_penerimaan_barang')
+            ->where('id_user',auth()->user()->id)
+            ->orderBy('id', 'desc')->get();
+            
+        }
+        // dd($penerimaans);
+        return datatables()
+            ->of($penerimaans)
+            ->editColumn('no_penerimaan', function ($penerimaan) {
+                return '<a href="' . route("purchasing.penerimaan-barang.show", $penerimaan->id) . '">' . $penerimaan->no_penerimaan_barang . '</a>';
+            })
+            ->editColumn('diajukan', function ($penerimaan) {
+                return $penerimaan->admin->name;
+            })
+            ->editColumn('tanggal', function ($penerimaan) {
+                return Carbon::parse($penerimaan->tanggal_penerimaan)->format('d/m/Y');
+            })
+            
+            ->editColumn('total', function ($penerimaan) {
+                return \App\PenerimaanBarang::where('no_penerimaan_barang', $penerimaan->no_penerimaan_barang)->count();
+            })
+            ->editColumn('pembelian', function ($penerimaan) {
+                return $penerimaan->grandtotal;
+            })
+        
+            ->editColumn('status', function ($penerimaan) {
+                if($penerimaan->status_tukar_faktur == 'pending'){
+               return '<a class="custom-badge status-red">pending</a>';
+               }
+                if($penerimaan->status_tukar_faktur == 'completed'){
+                    return '<a class="custom-badge status-green">completed</a>';
+                }
+               
+            })
+            ->editColumn('action', function ($penerimaan) {
+                
+                PenerimaanBarang::where('id', $penerimaan->id)->get();
+            
+                return '<button type="delete"  href="' .  route('hrd.pengajuan.destroy', $penerimaan->id). '" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>';
+             
+
+            })
+            ->addIndexColumn()
+            ->rawColumns(['no_penerimaan', 'status','action'])
+            ->make(true);
+            // ->addColumn('action', function ($row) {
+            //     $html = '<a href="" class="btn btn-xs btn-secondary">Edit</a> ';
+            //     $html .= '<button data-rowid="'.$row->id.'" class="btn btn-xs btn-danger">Del</button>';
+            //     return $html;
+            // })
+            
+            // ->toJson()
+    }
+
+    public function ajax_faktur()
+    {
+     
+        if (request('from') && request('to')) {
+            $from = Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d');
+            $to = Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d');
+            $tukar = DB::table('tukar_fakturs')
+            ->whereBetween('tanggal_tukar_faktur', [$from, $to])
+            ->where('id_user',auth()->user()->id)
+            ->groupBy('tukar_fakturs.no_faktur')
+            ->orderBy('tukar_fakturs.id','desc')
+            ->get();    
+
+        
+        } else {
+
+            $tukar = DB::table('tukar_fakturs')
+            ->where('id_user',auth()->user()->id)
+            ->groupBy('tukar_fakturs.no_faktur')
+            ->orderBy('tukar_fakturs.id','desc')
+            ->get();   
+            // dd($tukar);
+                
+        }
+        // dd($penerimaans);
+        return datatables()
+            ->of($tukar)
+            ->editColumn('no_tukar', function ($tukars) {
+                return '<a href="' . route("purchasing.tukarfaktur.show", $tukars->id) . '">' . $tukars->no_faktur . '</a>';
+            })
+            ->editColumn('status_po', function ($tukars) {
+                if($tukars->po_spk == '1'){
+               return '<a class="custom-badge status-orange">PO</a>';
+               }
+                if($tukars->po_spk == '2'){
+                    return '<a class="custom-badge status-green">SPK</a>';
+                }
+               
+            })
+            ->editColumn('tanggal', function ($tukars) {
+                return Carbon::parse($tukars->tanggal_tukar_faktur)->format('d/m/Y');
+            })
+            ->editColumn('invoice', function ($tukars) {
+                return $tukars->no_invoice;
+            })
+            
+            ->editColumn('total', function ($tukars) {
+                return  \App\TukarFaktur::where('no_faktur', $tukars->no_faktur)->count();
+            })
+            ->editColumn('pembelian', function ($tukars) {
+                return $tukars->nilai_invoice;
+            })
+            ->editColumn('status', function ($tukars) {
+                if($tukars->status_pembayaran == 'pending'){
+               return '<a class="custom-badge status-red">pending</a>';
+               }
+                if($tukars->status_pembayaran == 'completed'){
+                    return '<a class="custom-badge status-green">completed</a>';
+                }
+               
+            })
+            ->editColumn('action', function ($tukars) {
+                
+                TukarFaktur::where('id', $tukars->id)->get();
+            
+                return '<a href="' . route('purchasing.tukarfaktur.pdf', $tukars->id) . '"class="btn btn-sm btn-secondary"><i class="fa-solid fa-print"></i></a>
+                <button type="delete"  href="' .  route('purchasing.tukarfaktur.destroy', $tukars->id). '" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>';
+             
+
+            })
+            ->addIndexColumn()
+            ->rawColumns(['no_tukar', 'status','status_po','action'])
+            ->make(true);
+            // ->addColumn('action', function ($row) {
+            //     $html = '<a href="" class="btn btn-xs btn-secondary">Edit</a> ';
+            //     $html .= '<button data-rowid="'.$row->id.'" class="btn btn-xs btn-danger">Del</button>';
+            //     return $html;
+            // })
+            
+            // ->toJson()
+    }
+    public function ajax_listpurchase()
+    {
+     
+        if (request('from') && request('to')) {
+            $from = Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d');
+            $to = Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d');
+       
+            $purchases = DB::table('purchases')
+            ->leftJoin('tukar_fakturs','purchases.invoice','=','tukar_fakturs..no_po_vendor')
+            ->leftJoin('users','purchases.user_id','=','users.id')
+            ->select('purchases.id','users.name','purchases.invoice','purchases.created_at','purchases.grand_total','tukar_fakturs.nilai_invoice','tukar_fakturs.no_po_vendor')
+            ->groupBy('purchases.invoice')
+            ->whereBetween('purchases.created_at', [$from, $to])
+            ->orderBy('purchases.id','desc')->get();
+        
+        } else {
+            $purchases = DB::table('purchases')
+            ->leftJoin('tukar_fakturs','purchases.invoice','=','tukar_fakturs..no_po_vendor')
+            ->leftJoin('users','purchases.user_id','=','users.id')
+            ->select('tukar_fakturs.status_pembayaran','purchases.id','users.name','purchases.invoice','purchases.created_at','purchases.grand_total','tukar_fakturs.nilai_invoice','tukar_fakturs.no_po_vendor')
+            ->groupBy('purchases.invoice')
+            ->orderBy('purchases.id','desc')->get();
+            // dd($tukar);
+                
+        }
+        // dd($penerimaans);
+        return datatables()
+            ->of($purchases)
+            ->editColumn('no_purchase', function ($purchase) {
+                return '<a href="' . route("purchasing.listpurchase.show", $purchase->id) . '">' . $purchase->invoice . '</a>';
+            })
+           
+            ->editColumn('name', function ($purchase) {
+                return $purchase->name;
+            })
+            ->editColumn('tanggal', function ($purchase) {
+                return Carbon::parse($purchase->created_at)->format('d/m/Y');
+            })
+            
+            ->editColumn('total', function ($purchase) {
+                return  \App\Purchase::where('invoice', $purchase->invoice)->count();
+            })
+            ->editColumn('pembelian', function ($purchase) {
+                return $purchase->grand_total;
+            })
+            ->editColumn('pembelian_purchase', function ($purchase) {
+                return \App\TukarFaktur::where('no_po_vendor', $purchase->no_po_vendor)->where('status_pembayaran','completed')->sum('nilai_invoice');
+            })
+            ->editColumn('status', function ($purchase) {
+                if($purchase->grand_total != \App\TukarFaktur::where('no_po_vendor', $purchase->no_po_vendor)->where('status_pembayaran','completed')->sum('total')){
+               return '<a class="custom-badge status-red">pending</a>';
+               }
+                if($purchase->grand_total == \App\TukarFaktur::where('no_po_vendor', $purchase->no_po_vendor)->where('status_pembayaran','completed')->sum('total')){
+                    return '<a class="custom-badge status-green">completed</a>';
+                }
+               
+            })
+      
+            ->addIndexColumn()
+            ->rawColumns(['no_purchase', 'status','pembelian_purchase'])
+            ->make(true);
+            // ->addColumn('action', function ($row) {
+            //     $html = '<a href="" class="btn btn-xs btn-secondary">Edit</a> ';
+            //     $html .= '<button data-rowid="'.$row->id.'" class="btn btn-xs btn-danger">Del</button>';
+            //     return $html;
+            // })
+            
+            // ->toJson()
     }
 
     public function ajax_pembatalan()
@@ -310,5 +667,57 @@ class AjaxController extends Controller
             // })
             
             // ->toJson()
+    }
+
+    public function ajax_customer()
+    {
+        $reinbursts = Reinburst::
+        leftJoin('rincian_reinbursts','reinbursts.nomor_reinburst','=','rincian_reinbursts.nomor_reinburst')
+        ->select('reinbursts.id_user','reinbursts.nomor_reinburst','reinbursts.status_hrd','reinbursts.status_pembayaran','reinbursts.tanggal_reinburst',
+        'rincian_reinbursts.total','reinbursts.id')
+        ->groupBy('reinbursts.nomor_reinburst')
+        ->orderBy('reinbursts.id', 'desc')->where('reinbursts.status_hrd','completed')
+        ->get();
+        // dd($reinbursts);
+
+        return datatables()
+            ->of($reinbursts)
+            ->editColumn('no_reinburst', function ($reinburst) {
+                return $reinburst->nomor_reinburst;
+            })
+            ->editColumn('tanggal', function ($reinburst) {
+                return Carbon::parse($reinburst->tanggal_reinburst)->format('d/m/Y');
+            })
+            ->editColumn('total', function ($reinburst) {
+                return \App\Reinburst::where('nomor_reinburst', $reinburst->nomor_reinburst)->count();
+            })
+            ->editColumn('pembelian', function ($reinburst) {
+                return $reinburst->total;
+            })
+            ->editColumn('status_hrd', function ($reinburst) {
+                if($reinburst->status_hrd == 'pending'){
+               return '<a class="custom-badge status-red">pending</a>';
+               }
+                if($reinburst->status_hrd == 'completed'){
+                    return '<a class="custom-badge status-green">completed</a>';
+                }
+                if($reinburst->status_hrd == 'review'){
+                    return '<a class="custom-badge status-orange">review</a>';
+                }
+            })
+            ->editColumn('status_pembayaran', function ($reinburst) {
+                if($reinburst->status_pembayaran == 'pending'){
+                    return '<a class="custom-badge status-red">pending</a>';
+                    }
+                     if($reinburst->status_pembayaran == 'completed'){
+                         return '<a class="custom-badge status-green">completed</a>';
+                     }
+                     if($reinburst->status_pembayaran == 'review'){
+                         return '<a class="custom-badge status-orange">review</a>';
+                     }
+            })
+            ->addIndexColumn()
+            ->rawColumns(['pembelian','status_hrd','status_pembayaran'])
+            ->make(true);
     }
 }

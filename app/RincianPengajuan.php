@@ -15,4 +15,9 @@ class RincianPengajuan extends Model
     {
         return $this->belongsTo(Barang::class, 'barang_id');
     }
+    public function units()
+    {
+        return $this->belongsTo(Unit::class, 'unit');
+    }
+
 }

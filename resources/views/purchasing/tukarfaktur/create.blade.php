@@ -342,10 +342,12 @@
                                                                     let attr = $(e).attr('data')
                                                                     let total = $(`.total-${attr}`)
                                                                         .val()
-                                                                    let updated_total = parseInt(total * 0)
+                                                                    let total1 = $(`.total-${attr}`)
+                                                                        .val()
+                                                                    let updated_total = parseInt(total - total) 
                                                                     $(`.total_all-${attr}`).val(
                                                                         updated_total)
-                                                                    // nilai_invoice.value = updated_total
+                                                                    nilai_invoice.value = updated_total
 
                                                                     let ele = coll[i]
                                                                     total_all += parseInt(ele.value)

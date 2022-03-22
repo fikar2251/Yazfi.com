@@ -32,11 +32,17 @@ class UserController extends Controller
         $perkawinans = DB::table('status_pernikahans')->get();
         $agamas = DB::table('agamas')->get();
 
-        return view('hrd.users.create', compact('roles', 'user', 'jabatans', 'perusahaans', 'projects','perkawinans','agamas'));
+        $noUrutAkhir = \App\User::max('id');
+        // dd($noUrutAkhir);
+        $nourut =   sprintf("%02s", abs($noUrutAkhir + 1))  . sprintf("%05s", abs($noUrutAkhir + 1));
+
+        return view('hrd.users.create', compact('roles', 'nourut','user', 'jabatans', 'perusahaans', 'projects','perkawinans','agamas'));
     }
 
     public function store(StoreUserRequest $request)
     {
+        // dd($request->all());
+
         $attr = $request->all();
         $image = $request->file('image');
         $imageUrl = $image->storeAs('images/users', \Str::random(15) . '.' . $image->extension());
@@ -61,7 +67,11 @@ class UserController extends Controller
         $perkawinans = DB::table('status_pernikahans')->get();
         $agamas = DB::table('agamas')->get();
 
-        return view('hrd.users.edit', compact('user', 'roles', 'perusahaans', 'jabatans', 'projects','perkawinans','agamas'));
+        $noUrutAkhir = \App\User::max('id');
+        // dd($noUrutAkhir);
+        $nourut =   sprintf("%02s", abs($noUrutAkhir + 1))  . sprintf("%05s", abs($noUrutAkhir + 1));
+
+        return view('hrd.users.edit', compact('user', 'roles','nourut', 'perusahaans', 'jabatans', 'projects','perkawinans','agamas'));
     }
 
     /**
