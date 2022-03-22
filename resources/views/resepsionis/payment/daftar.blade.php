@@ -23,7 +23,7 @@
                                         <th>Nominal</th>
                                         <th>Status</th>
                                         <th>Bank tujuan</th>
-
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -48,15 +48,10 @@
                                                     <span
                                                         class="custom-badge status-green">{{ $item->status_approval }}</span>
                                                 @endif
-                                                &nbsp;
-                                                <select name="status[]" id="status" class="form-control rincian"
-                                                    style="width: 150px">
-                                                    <option selected value="">Select status</option>
-                                                    <option value="paid">paid</option>
-                                                    <option value="reject">reject</option>
 
 
-                                                    {{-- <div class="dropdown action-label">
+
+                                                {{-- <div class="dropdown action-label">
                                                     <a class="custom-badge status-red dropdown-toggle" href="#"
                                                         data-toggle="dropdown" aria-expanded="false">
                                                         Pending
@@ -76,6 +71,13 @@
                                                 @else
                                                     Mandiri
                                                 @endif
+                                            </td>
+                                            <td>
+                                                <select name="status[]" id="status" class="form-control rincian"
+                                                    style="width: 150px">
+                                                    <option selected value="">Select status</option>
+                                                    <option value="paid">paid</option>
+                                                    <option value="reject">reject</option>
                                             </td>
                                         </tr>
                                     @endforeach

@@ -5,7 +5,7 @@
     use App\Alasan;
     use App\Http\Controllers\Controller;
     use App\Pembatalan;
-    use App\Pembayaran;
+    use App\Pembayaran; 
     use App\Refund;
     use App\Rumah;
     use App\Spr;
@@ -53,17 +53,17 @@
                 $user = User::where('id_roles', 4)->get();
 
                 $batal = Pembatalan::orderBy('no_pembatalan', 'desc')->get();
-                        
+
                 return view('supervisor.payment.index', compact('user', 'batal'));
-                    
+
             }
-            
+
         }
 
         public function cancel($id)
         {
             $no = request()->get('no_transaksi');
-           
+
             $spr = Spr::where('id_sales', $id)->orderBy('id_transaksi', 'desc')->get();
             $attr[] = [
                 'no' => ['1' , '2']
@@ -71,7 +71,7 @@
             $cekbatal = DB::table('pembatalan_unit')
             ->whereIn('spr_id', [1, 2])
             ->get();
-        
+
             $getSpr = Spr::where('no_transaksi', $no)->get();
             $tagihan = Tagihan::where('no_transaksi', $no)->get();
             $bayar = Pembayaran::where('no_detail_transaksi', $no)->get();
@@ -93,7 +93,7 @@
                     $idbatal = '';
                     return view('supervisor.payment.cancel', compact('getSpr', 'spr', 'alasan', 'idbatal'));
                 }
-               
+
             } else{
                 # code...
                 return view('supervisor.payment.cancel', compact('getSpr', 'spr', 'alasan'));
@@ -119,7 +119,7 @@
                 'alasan_pembatalan' => $request->alasan,
                 'diajukan' => $spv,
                 'status' => 'pending',
-                'refund' => 'unpaid'    
+                'refund' => 'unpaid'
             ]);
 
             return redirect()->route('supervisor.payment.index');
@@ -136,16 +136,16 @@
             $data = DB::table('rincian_tagihan_spr')
                 ->select('rincian_tagihan_spr.id_rincian', 'rincian_tagihan_spr.jumlah_tagihan')
                 ->groupBy('rincian_tagihan_spr.jumlah_tagihan', 'rincian_tagihan_spr.id_rincian')
-                ->where($where)->get(); 
+                ->where($where)->get();
 
             $data1 = Pembayaran::where('rincian_id', $where)->first();
-            
+
             if ($data1) {
                 # code...
                 $nominal = $data1->nominal;
                 $jumlah_tagihan = $data1->rincian->jumlah_tagihan;
                 $data2 = $jumlah_tagihan - $nominal;
-                
+
                 return $data2;
             }elseif($data){
 

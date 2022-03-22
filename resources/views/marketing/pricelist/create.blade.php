@@ -70,7 +70,7 @@
                 </div>
                 <div class="form-group">
                     <label for="phone_number">NPWP</label>
-                    <input type="number" name="npwp" id="npwp" class="form-control" maxlength="20"
+                    <input type="number" name="npwp" id="npwp" class="form-control" maxlength="15"
                         oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
 
                     @error('phone_number')

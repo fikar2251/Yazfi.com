@@ -20,7 +20,6 @@
                                     <th>Nominal</th>
                                     <th>Status</th>
                                     <th>Bank tujuan</th>
-                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -50,14 +49,14 @@
                                                 Mandiri
                                             @endif
                                         </td>
-                                        <td>
+                                        {{-- <td>
                                             <div class="text-center">
                                                 <a href="{{ route('resepsionis.payment.status', $item->id) }}">
                                                     <button type="submit" class="btn btn-success"><i
                                                             class="fa-solid fa-check"></i></button>
                                                 </a>
                                             </div>
-                                        </td>
+                                        </td> --}}
                                     </tr>
                                 @endforeach
 
