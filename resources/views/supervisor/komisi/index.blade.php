@@ -37,7 +37,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="table-responsive">
-                <table class="table table-striped custom-table" id="appointments" width="100%">
+                <table class="table table-striped custom-table" width="100%" id="komisi">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -53,7 +53,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($komisi as $km)
+                        {{-- @foreach ($komisi as $km)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $km->no_komisi }}</td>
@@ -72,7 +72,7 @@
                                 </td>
                                 <td>{{ $km->tanggal_pembayaran }}</td>
                             </tr>
-                        @endforeach
+                        @endforeach --}}
                     </tbody>
                 </table>
             </div>
@@ -80,146 +80,72 @@
     </div>
 @stop
 
-<!--@section('footer')-->
-    <!--<script>
-        -- >
-        <
-        !--$(document).ready(function() {
-                -- >
-                <
-                !--$.ajaxSetup({
-                    -- >
-                    <
-                    !--headers: {
-                        -- >
-                        <
-                        !--'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') -- >
-                            <
-                            !--
-                    }-- >
-                    <
-                    !--
-                });
-                -- >
-                <
-                !--$('#appointments').DataTable({
-                        -- >
-                        <
-                        !--processing: true,
-                        -- >
-                        <
-                        !--serverSide: true,
-                        -- >
-                        <
-                        !--ajax: {
-                            -- >
-                            <
-                            !--url: '/supervisor/komisi/ajax',
-                            -- >
-                            <
-                            !--get: 'get'-- >
-                                <
-                                !--
-                        },
-                        -- >
-                        <
-                        !--columns: [{
-                                    -- >
-                                    <
-                                    !--data: 'DT_RowIndex',
-                                    -- >
-                                    <
-                                    !--name: 'DT_RowIndex'-- >
-                                        <
-                                        !--
-                                }, -- >
-                                <
-                                !--{
-                                    -- >
-                                    <
-                                    !--data: 'booking',
-                                    -- >
-                                    <
-                                    !--name: 'booking'-- >
-                                        <
-                                        !--
-                                }, -- >
-                                <
-                                !--{
-                                    -- >
-                                    <
-                                    !--data: 'pasien',
-                                    -- >
-                                    <
-                                    !--name: 'pasien'-- >
-                                        <
-                                        !--
-                                }, -- >
-                                <
-                                !--{
-                                    -- >
-                                    <
-                                    !--data: 'cabang',
-                                    -- >
-                                    <
-                                    !--name: 'cabang'-- >
-                                        <
-                                        !--
-                                }, -- >
-                                <
-                                !--{
-                                    -- >
-                                    <
-                                    !--data: 'tgl',
-                                    -- >
-                                    <
-                                    !--name: 'tgl'-- >
-                                        <
-                                        !--
-                                }, -- >
-                                <
-                                !--{
-                                    -- >
-                                    <
-                                    !--data: 'waktu',
-                                    -- >
-                                    <
-                                    !--name: 'waktu'-- >
-                                        <
-                                        !--
-                                }, -- >
-                                <
-                                !--{
-                                    -- >
-                                    <
-                                    !--data: 'status',
-                                    -- >
-                                    <
-                                    !--name: 'status'-- >
-                                        <
-                                        !--
-                                }, -- >
-                                <
-                                !--{
-                                    -- >
-                                    <
-                                    !--data: 'tindakan',
-                                    -- >
-                                    <
-                                    !--name: 'tindakan'-- >
-                                        <
-                                        !--
-                                }, -- >
-                                <
-                                !--
-                            ]-- >
-                            <
-                            !--
-                    }) -- >
-                    <
-                    !--
-            }) -- >
-            <
-            !--
-    </script> -->
-<!--@stop-->
+@section('footer')
+<script src="{{ asset('/') }}js/jquery.dataTables.min.js"></script>
+<script src="{{ asset('/') }}js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.6/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.6/js/responsive.bootstrap.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+<script>
+    $(function() {
+        $('#komisi').DataTable({
+            processing: true,
+            serverSide: true,
+            order: [[0, 'desc']],
+            ajax: "/supervisor/komisi/json",
+            columns: [
+                {
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex',
+
+                },
+                {
+                    data: 'no_komisi',
+                    name: 'no_komisi',
+                },
+                {
+                    data: 'tanggal_komisi',
+                    name: 'tanggal_komisi',
+                },
+                {
+                    data: 'no_spr',
+                    name: 'no_spr',
+                },
+                {
+                    data: 'nominal_sales',
+                    name: 'nominal_sales',
+                    render: $.fn.dataTable.render.number('.', '.', 0, 'Rp. ')
+                },
+                {
+                    data: 'nominal_spv',
+                    name: 'nominal_spv',
+                    render: $.fn.dataTable.render.number('.', '.', 0, 'Rp. ')
+                   
+                },
+                {
+                    data: 'nominal_manager',
+                    name: 'nominal_manager',
+                    render: $.fn.dataTable.render.number('.', '.', 0, 'Rp. ')
+                },
+                {
+                    data: 'spv',
+                    name: 'spv',
+                },
+                {
+                    data: 'status_pembayaran',
+                    name: 'status_pembayaran',
+                },
+                {
+                    data: 'tanggal_pembayaran',
+                    name: 'tanggal_pembayaran',
+                },
+            ]
+        });
+    });
+</script>
+@stop

@@ -37,7 +37,7 @@
             <div class="card shadow">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered custom-table table-striped">
+                        <table class="table table-bordered custom-table table-striped" id="batal" style="width: 100%">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -56,35 +56,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($batal as $item)
-                                    <tr>
-                                        <td> {{ $loop->iteration }} </td>
-                                        <td style="width: 100px">{{ Carbon\Carbon::now()->format('d-m-Y') }}</td>
-                                        <td> {{ $item->no_pembatalan }} </td>
-                                        <td>
-                                            {{ $item->spr->unit->type }}
-                                        </td>
-                                        <td>
-                                            {{ $item->spr->no_transaksi }}
-                                        </td>
-                                        <td>
-                                            @currency($item->spr->harga_net)
-                                        </td>
-                                        <td> {{ $item->spr->nama }} </td>
-                                        <td> {{ $item->spr->user->name }} </td>
-                                        {{-- <td> @currency($bf->jumlah_tagihan) </td>
-                                        <td> @currency($dp->jumlah_tagihan) </td> --}}
-                                        <td> {{ auth()->user()->name }} </td>
-                                        <td> {{ $item->status }} </td>
-                                        <td>
-                                            @if ($item->refund == 'unpaid')
-                                                <span class="custom-badge status-red">{{ $item->refund }}</span>
-                                            @elseif ($item->refund == 'paid')
-                                                <span class="custom-badge status-green">{{ $item->refund }}</span>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
+                               
 
                             </tbody>
                         </table>
@@ -94,4 +66,75 @@
         </div>
     </div>
 
+@stop
+@section('footer')
+<script src="{{ asset('/') }}js/jquery.dataTables.min.js"></script>
+<script src="{{ asset('/') }}js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.6/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.6/js/responsive.bootstrap.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+<script>
+    $(function() {
+        $('#batal').DataTable({
+            processing: true,
+            serverSide: true,
+            order: [[0, 'desc']],
+            ajax: "/supervisor/payment/json",
+            columns: [
+                {
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex',
+
+                },
+                {
+                    data: 'tanggal',
+                    name: 'tanggal'
+                },
+                {
+                    data: 'no_pembatalan',
+                    name: 'no_pembatalan'
+                },
+                {
+                    data: 'type',
+                    name: 'type'
+                },
+                {
+                    data: 'no_transaksi',
+                    name: 'no_transaksi',
+                   
+                },
+                {
+                    data: 'harga_net',
+                    name: 'harga_net',
+                    render: $.fn.dataTable.render.number('.', '.', 0, 'Rp. ')
+                },
+                {
+                    data: 'konsumen',
+                    name: 'konsumen'
+                },
+                {
+                    data: 'sales',
+                    name: 'sales'
+                },
+                {
+                    data: 'diajukan',
+                    name: 'diajukan'
+                },
+                {
+                    data: 'status',
+                    name: 'status'
+                },
+                {
+                    data: 'refund',
+                    name: 'refund',
+                },
+            ]
+        });
+    });
+</script>
 @stop

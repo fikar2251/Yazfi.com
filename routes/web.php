@@ -231,6 +231,7 @@ Route::middleware('auth')->group(function () {
             // Route Payment
             Route::get('/payment', 'FinanceController@index')->name('payment');
             Route::get('/payment/updatestatus/{id}', 'FinanceController@ubahStatus')->name('payment.status');
+            Route::get('/payment/json', 'FinanceController@paymentJson')->name('payment.json');
 
             // Route Daftar Pembayaran
             Route::get('/daftar', 'FinanceController@listPayment')->name('daftar');
@@ -242,11 +243,15 @@ Route::middleware('auth')->group(function () {
             Route::get('refund/list', 'RefundController@list')->name('refund.list');
             Route::get('refund/update/{id}', 'RefundController@updateStatus')->name('refund.update');
             Route::get('refund/daftar', 'RefundController@listRefund')->name('daftar.refund');
+            Route::get('refund/json', 'RefundController@refundJson')->name('json.refund');
             Route::post('refund/daftar/store', 'RefundController@storeListRefund')->name('store.list.refund');
 
             //Route Komisi
             Route::get('/komisi', 'FinanceController@komisiFinance')->name('komisi');
             Route::get('/komisi/update/{id}', 'FinanceController@updateKomisi')->name('updatekomisi');
+            Route::get('/komisi/daftar', 'FinanceController@listKomisi')->name('list.komisi');
+            Route::get('/komisi/json', 'FinanceController@komisiJson')->name('json.komisi');
+            Route::post('/komisi/daftar/store', 'FinanceController@storeKomisi')->name('store.list.komisi');
 
             // Route Dokter
             Route::resource('dokter', 'DokterController');
@@ -274,9 +279,11 @@ Route::middleware('auth')->group(function () {
             Route::get('komisi/{komisi:id}/change', 'KomisiController@change')->name('komisi.change');
             Route::patch('komisi/{komisi:id}/updatechange', 'KomisiController@updatechange')->name('komisi.updatechange');
             Route::post('komisi/store', 'KomisiController@storeKomisi')->name('komisi.storekomisi');
+            Route::get('komisi/json', 'KomisiController@komisiJson')->name('komisijson');
             Route::resource('komisi', 'KomisiController');
 
             Route::get('payment', 'BayarController@sales')->name('payment.index');
+            Route::get('payment/json', 'BayarController@batalJson')->name('bataljson');
             Route::get('payment/{id}', 'BayarController@show')->name('payment.show');
             Route::get('cancel/{id}', 'BayarController@cancel')->name('payment.cancel');
             Route::post('cancel/store', 'BayarController@storeBatal')->name('cancel.store');

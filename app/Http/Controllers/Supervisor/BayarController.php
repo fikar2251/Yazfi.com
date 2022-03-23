@@ -14,6 +14,7 @@
     use Carbon\Carbon;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\DataTables;
 
     class BayarController extends Controller
     {
@@ -52,12 +53,52 @@
             if (auth()->user()->roles()->first()->name == 'supervisor') {
                 $user = User::where('id_roles', 4)->get();
 
-                $batal = Pembatalan::orderBy('no_pembatalan', 'desc')->get();
+                
 
-                return view('supervisor.payment.index', compact('user', 'batal'));
+                return view('supervisor.payment.index', compact('user'));
 
             }
 
+        }
+
+        public function batalJson()
+        {
+            if (auth()->user()->roles()->first()->name == 'supervisor') {
+                $user = User::where('id_roles', 4)->get();
+
+                $batal = Pembatalan::orderBy('no_pembatalan', 'desc')->get();
+
+                return DataTables::of($batal)
+                ->editColumn('refund', function($batal){
+                    if ($batal->refund == 'unpaid'){
+                    return '<span class="badge badge-danger">' . $batal->refund . '</span>';
+                    }elseif ($batal->refund == 'paid'){
+                    return '<span class="badge status-green">' . $batal->refund. '</span>';
+                    }
+                })
+                ->editColumn('type', function($batal){
+                    return $batal->spr->unit->type;
+                })
+                ->editColumn('no_transaksi', function($batal){
+                    return $batal->spr->no_transaksi;
+                })
+                ->editColumn('harga_net', function($batal){
+                    return $batal->spr->harga_net;
+                })
+                ->editColumn('konsumen', function($batal){
+                    return $batal->spr->nama;
+                })
+                ->editColumn('sales', function($batal){
+                    return $batal->spr->user->name;
+                })
+                ->editColumn('diajukan', function($batal){
+                    return auth()->user()->name;
+                })
+                ->addIndexColumn()
+                ->rawColumns(['no_transaksi', 'type', 'harga_net', 'konsumen', 'sales', 'diajukan' , 'refund'])
+                ->make(true);
+
+            }
         }
 
         public function cancel($id)

@@ -9,6 +9,8 @@ use App\Refund;
 use App\Tagihan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Symfony\Component\VarDumper\Cloner\Data;
+use Yajra\DataTables\Facades\DataTables;
 
 class RefundController extends Controller
 {
@@ -84,9 +86,31 @@ class RefundController extends Controller
 
     public function listRefund()
     {
-        $refund = Refund::orderBy('no_refund', 'desc')->get();
+        $refund = Refund::orderBy('no_refund', 'desc')->where('status', ['unpaid', 'reject'])->get();
 
         return view('resepsionis.refund.daftar', compact('refund'));
+    }
+    public function refundJson()
+    {
+        $refund = Refund::orderBy('no_refund', 'desc')->where('status', 'paid')->get();
+        
+        return DataTables::of($refund)
+                ->editColumn('refund', function($refund){
+                    if ($refund->status == 'unpaid'){
+                    return '<span class="badge badge-danger">' . $refund->status . '</span>';
+                    }elseif ($refund->status == 'paid'){
+                    return '<span class="badge status-green">' . $refund->status. '</span>';
+                    }
+                })
+                ->editColumn('konsumen', function($refund){
+                    return $refund->pembatalan->spr->nama;
+                })
+                ->editColumn('sales', function($refund){
+                    return $refund->pembatalan->spr->user->name;
+                })
+                ->addIndexColumn()
+                ->rawColumns(['refund', 'konsumen', 'sales'])
+                ->make(true);
     }
 
     public function storeListRefund(Request $request)

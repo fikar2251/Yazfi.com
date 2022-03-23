@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Booking;
 use App\Customer;
 use App\Holidays;
+use App\Komisi;
 use App\Pembayaran;
 use App\Refund;
 use App\Tindakan;
@@ -71,10 +72,11 @@ class DashboardController extends Controller
                 $cabang = auth()->user()->cabang_id;
                 return $query->where('cabang_id', $cabang);
             })->where('status', 0)->count();
-            $bayar = Pembayaran::all()->count();
-            $refund = Refund::all()->count();
+            $bayar = Pembayaran::where('status_approval', ['pending', 'reject'])->get()->count();
+            $refund = Refund::orderBy('no_refund', 'desc')->where('status', ['unpaid', 'reject'])->get()->count();
+            $komisi = Komisi::orderBy('id', 'desc')->where('status_pembayaran', ['unpaid','reject'])->get()->count();
 
-            return view('dashboard.index', compact('jadwal', 'datang', 'periksa', 'pasien', 'appointments', 'tindakan', 'dokter', 'bayar', 'refund'));
+            return view('dashboard.index', compact('jadwal', 'datang', 'periksa', 'pasien', 'appointments', 'tindakan', 'dokter', 'bayar', 'refund', 'komisi'));
         }
 
         if (auth()->user()->hasRole('dokter')) {

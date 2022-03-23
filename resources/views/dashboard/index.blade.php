@@ -7,7 +7,7 @@
 @endrole
 
 @role('resepsionis')
-<x-resepsionis._resepsionis :jadwal="$jadwal" :datang="$datang" :pasien="$pasien" :appointments="$appointments" :tindakan="$tindakan" :periksa="$periksa" :bayar="$bayar" :refund="$refund"></x-resepsionis._resepsionis>
+<x-resepsionis._resepsionis :jadwal="$jadwal" :datang="$datang" :pasien="$pasien" :appointments="$appointments" :tindakan="$tindakan" :periksa="$periksa" :bayar="$bayar" :refund="$refund" :komisi="$komisi"></x-resepsionis._resepsionis>
 @endrole
 
 @role('dokter')

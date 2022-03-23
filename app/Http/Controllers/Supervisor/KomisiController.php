@@ -8,6 +8,7 @@ use App\Spr;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class KomisiController extends Controller
 {
@@ -21,6 +22,27 @@ class KomisiController extends Controller
             return view('supervisor.komisi.index', compact('user', 'komisi'));
         }
 
+    }
+
+    public function komisiJson()
+    {
+        if (auth()->user()->roles()->first()->name == 'supervisor') {
+            $user = User::where('id_roles', 4)->get();
+
+            $komisi = Komisi::orderBy('id', 'desc')->get(); 
+
+            return DataTables::of($komisi)
+                ->editColumn('status_pembayaran', function($komisi){
+                    if ($komisi->status_pembayaran == 'unpaid'){
+                    return '<span class="badge badge-danger">' . $komisi->status_pembayaran . '</span>';
+                    }elseif ($komisi->status_pembayaran == 'paid'){
+                    return '<span class="badge status-green">' . $komisi->status_pembayaran. '</span>';
+                    }
+                })
+                ->addIndexColumn()
+                ->rawColumns(['status_pembayaran'])
+                ->make(true);
+        }
     }
 
     public function show($id)

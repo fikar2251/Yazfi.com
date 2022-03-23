@@ -9,6 +9,7 @@ use App\Spr;
 use App\Tagihan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class FinanceController extends Controller
 {
@@ -19,15 +20,85 @@ class FinanceController extends Controller
         return view('resepsionis.payment.index', compact('bayar'));
     }
 
+    public function paymentJson()
+    {
+        $bayar = Pembayaran::where('status_approval', 'paid')->get();
+
+        return DataTables::of($bayar)
+                ->editColumn('status_approval', function($bayar){
+                    if ($bayar->status_approval == 'pending'){
+                    return '<span class="badge badge-danger">' . $bayar->status_approval . '</span>';
+                    }elseif ($bayar->status_approval == 'paid'){
+                    return '<span class="badge status-green">' . $bayar->status_approval. '</span>';
+                    }
+                })
+                ->editColumn('bank_tujuan', function($bayar){
+                    if ($bayar->bank_tujuan == 'BRI'){
+                    return 'BRI';
+                    }elseif ($bayar->bank_tujuan == 'BCA'){
+                    return 'BCA';
+                    }else {
+                        return 'Mandiri';
+                    }
+                })
+                ->editColumn('keterangan', function($bayar){
+                    return $bayar->rincian->keterangan;
+                })
+                ->addIndexColumn()
+                ->rawColumns(['status_approval', 'bank_tujuan', 'keterangan'])
+                ->make(true);
+    }
+
     public function komisiFinance()
     {
-        $komisi = Komisi::orderBy('id', 'desc')->get();
+        $komisi = Komisi::orderBy('id', 'desc')->where('status_pembayaran', 'paid')->get();
         return view('resepsionis.komisi.index', compact('komisi'));
+    }
+
+    public function komisiJson()
+    {
+        $komisi = Komisi::orderBy('id', 'desc')->where('status_pembayaran', 'paid')->get();
+
+        
+        return DataTables::of($komisi)
+        ->editColumn('status_pembayaran', function($komisi){
+            if ($komisi->status_pembayaran == 'unpaid'){
+            return '<span class="badge badge-danger">' . $komisi->status_pembayaran . '</span>';
+            }elseif ($komisi->status_pembayaran == 'paid'){
+            return '<span class="badge status-green">' . $komisi->status_pembayaran. '</span>';
+            }
+        })
+        ->addIndexColumn()
+        ->rawColumns(['status_pembayaran'])
+        ->make(true);
+    }
+
+    public function listKomisi(Request $request)
+    {
+        $komisi = Komisi::orderBy('id', 'desc')->where('status_pembayaran', ['unpaid','reject'])->get();
+        return view('resepsionis.komisi.daftar', compact('komisi'));
+    }
+
+    public function storeKomisi(Request $request)
+    {
+        $status = $request->get('status');
+        $itemid = $request->get('id');
+        $count_status = count($status);
+
+        for ($i=0; $i <$count_status ; $i++) { 
+            $change = Komisi::where('id', $itemid[$i])->first();
+
+            $change->update([
+                'status_pembayaran' => $status[$i],
+                'tanggal_pembayaran' => $request->tanggal_pembayaran,
+            ]);
+        }
+        return redirect()->back();
     }
 
     public function listPayment()
     {
-        $bayar = Pembayaran::all();
+        $bayar = Pembayaran::where('status_approval', ['pending', 'reject'])->get();
         return view('resepsionis.payment.daftar', compact('bayar'));
     }
 
