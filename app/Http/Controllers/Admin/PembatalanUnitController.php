@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use App\PembatalanUnit;
 use App\Penggajian;
 use App\Spr;
+use App\UnitRumah;
 
 class PembatalanUnitController extends Controller
 {
@@ -22,18 +23,20 @@ class PembatalanUnitController extends Controller
 
 
 
-    public function update(PembatalanUnit $pembatalan)
+    public function update($id)
     {
-        $post = PembatalanUnit::where('spr_id',$pembatalan->spr_id)->get();
+        $post = PembatalanUnit::where('id',$id)->get();
         // dd($post);
         foreach ($post as $pur) {
-            $unit = Spr::where('id_unit', $pur->id)->first();
-            dd($unit);
-            $unit->update(['status' => 'Approval']);
-            $unit_rumah = DB::table('unit_rumahs')
-            ->leftJoin('sprs','unit_rumahs.id','=','sprs.id_unit')
-            ->select('unit_rumahs.id','sprs.id_unit')
-            ->where('unit_rumahs.id', $unit);
+            $pur->update(['status' => 'Approval']);
+            $unit = Spr::select('id_unit')->where('id', $pur->spr_id)->get();
+            // dd($unit);
+            // $unit_rumah = DB::table('unit_rumahs')
+            // ->leftJoin('sprs','unit_rumahs.id','=','sprs.id_unit')
+            // ->select('unit_rumahs.id','sprs.id_unit')
+            // ->where('unit_rumahs.id', $unit)->get();
+            $unit_rumah = UnitRumah::whereIn('id',$unit)->first();
+            // dd($unit_rumah);
             $unit_rumah->update(['status_penjualan' => 'Available']);
         }
         
