@@ -204,9 +204,9 @@ class ReinburstController extends Controller
         return view('purchasing.reinburst.pdf',compact('reinbursts','rincianreinbursts'));
     }
 
-    public function destroy(Reinburst $reinburst)
+    public function destroy( $id)
     {
-        $reinbursts = Reinburst::where('nomor_reinburst', $reinburst->nomor_reinburst)->get();
+        $reinbursts = Reinburst::where('id', $id)->get();
 
         foreach ($reinbursts as $pur) {
             RincianReinburst::where('nomor_reinburst', $pur->nomor_reinburst)->delete();

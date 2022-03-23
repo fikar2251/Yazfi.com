@@ -12,34 +12,32 @@
 </div>
 <x-alert></x-alert>
 
-<form action="{{ route('logistik.purchase.index') }}" method="get">
-    <div class="row filter-row">
-        <div class="col-sm-6 col-md-3">
-            <div class="form-group form-focus">
-                <label class="focus-label">From</label>
-                <div class="cal-icon">
-                    <input class="form-control floating datetimepicker" type="text" name="from" required>
-                </div>
+<div class="row input-daterange">
+    <div class="col-sm-6 col-md-3">
+        <div class="form-group form-focus">
+            <label class="focus-label">From</label>
+            <div class="cal-icon">
+                <input type="text" name="from" id="from" class="form-control" placeholder="From Date" />
             </div>
-        </div>
-
-        <div class="col-sm-6 col-md-3">
-            <div class="form-group form-focus">
-                <label class="focus-label">To</label>
-                <div class="cal-icon">
-                    <input class="form-control floating datetimepicker" type="text" name="to" required>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6 col-md-3">
-            <button type="submit" class="btn btn-success btn-block">Search</button>
         </div>
     </div>
-</form>
+
+    <div class="col-sm-6 col-md-3">
+        <div class="form-group form-focus">
+            <label class="focus-label">To</label>
+            <div class="cal-icon">
+                <input type="text" name="to" id="to" class="form-control" placeholder="To Date" />
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-3">
+        <button type="button" name="filter" id="filter" class="btn btn-primary">Search</button>
+    </div>
+</div>
 <div class="row">
     <div class="col-sm-12">
         <div class="table-responsive">
-            <table class="table table-bordered table-striped custom-table report" id="purchase">
+            <table class="table table-bordered table-striped custom-table report" id="purchase" width="100%">
                 <thead>
                     <tr>
                         <th>No</th>
@@ -81,9 +79,8 @@
         </div>
     </div>
 </div>
+
 @stop
-
-
 @section('footer')
 <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
@@ -94,8 +91,16 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <link href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" rel="stylesheet">
 <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.js"></script>
 <script>
     $(document).ready(function () {
+        $('.input-daterange').datepicker({
+            todayBtn: 'linked',
+            format: 'yyyy-mm-dd',
+            autoclose: true
+        });
         $.noConflict();
         $.ajaxSetup({
             headers: {
@@ -106,6 +111,10 @@
             .clone(true)
             .addClass('filters')
             .appendTo('#purchase thead');
+            load_data();
+
+
+function load_data(from = '', to = '') {
 
         var table = $('#purchase').DataTable({
             processing: true,
@@ -204,7 +213,12 @@
 
             ajax: {
                 url: '/admin/ajax/ajax_purchase',
-                get: 'get'
+                get: 'get',
+                data: {
+                        from: from,
+                        to: to
+                    }
+
 
             },
            
@@ -244,11 +258,28 @@
                 },
            
 
-            ],
+                ],
 
 
-        })
-    })
+            });
+        }
+        $('#filter').click(function () {
+            var from = $('#from').val();
+            var to = $('#to').val();
+            if (from != '' && to != '') {
+                $('#purchase').DataTable().destroy();
+                load_data(from, to);
+            } else {
+                alert('Pilih Tanggal Terlebih Dahulu');
+            }
+        });
+        $('#refresh').click(function () {
+            $('#from').val('');
+            $('#to').val('');
+            $('#purchase').DataTable().destroy();
+            load_data();
+        });
+    });
 
 </script>
 @stop

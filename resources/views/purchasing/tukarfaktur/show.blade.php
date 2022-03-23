@@ -4,14 +4,6 @@
     <div class="col-sm-5 col-4">
         <h4 class="page-title">Show Tukar Faktur</h4>
     </div>
-    <div class="col-sm-7 col-8 text-right m-b-30">
-        <div class="btn-group btn-group-sm ">
-
-            <a href="{{ route('purchasing.tukarfaktur.pdf', $pdf->id) }}" class="btn btn-primary" target="_blank">CETAK
-                PDF</a>
-
-        </div>
-    </div>
 </div>
 
 <div class="container">

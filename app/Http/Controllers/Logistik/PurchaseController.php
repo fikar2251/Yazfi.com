@@ -183,9 +183,9 @@ class PurchaseController extends Controller
         return redirect()->route('logistik.purchase.index')->with('success', 'Edit Purchase barang berhasil');
     }
 
-    public function destroy(Purchase $purchase)
+    public function destroy($id)
     {
-        $purchases = Purchase::where('invoice', $purchase->invoice)->get();
+        $purchases = Purchase::where('id', $id)->get();
 
         foreach ($purchases as $pur) {
             InOut::where('invoice', $pur->invoice)->delete();
@@ -235,4 +235,9 @@ class PurchaseController extends Controller
 
         return response()->json($data);
     }	
+    public function pdf($id)
+    {
+        $purchase = Purchase::where('id', $id)->first();
+        return view('logistik.purchase.pdf',compact('purchase'));
+    }
 }

@@ -23,17 +23,17 @@ class CustomerController extends Controller
         return view('admin.customer.index');
     }
 
-    public function ajax()
+    public function ajax(Request $request)
     {
+        if(request()->ajax()){
+
         
-        if (request('from') && request('to')) {
-            $from = Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d H:i:s');
-            $to = Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d H:i:s');
+        if (!empty($request->from)) {
             $pembatalans = DB:: table('sprs')
             ->leftjoin('unit_rumahs','sprs.id_unit','=','unit_rumahs.id')
             ->select('sprs.tanggal_transaksi','sprs.no_transaksi','sprs.nama','sprs.no_hp','sprs.no_ktp','unit_rumahs.no','unit_rumahs.blok','unit_rumahs.type'
             ,'sprs.id','unit_rumahs.type','sprs.harga_net')
-            ->whereBetween('sprs.tanggal_transaksi', [$from, $to])
+            ->whereBetween('sprs.tanggal_transaksi', array($request->from, $request->to))
             ->orderBy('sprs.id','desc')->get();
          
         } else {
@@ -80,6 +80,7 @@ class CustomerController extends Controller
             ->addIndexColumn()
             ->rawColumns(['no_transaksi'])
             ->make(true);
+        }
             
     }
 

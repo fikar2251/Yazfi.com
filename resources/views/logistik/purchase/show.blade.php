@@ -4,13 +4,6 @@
     <div class="col-sm-5 col-4">
         <h4 class="page-title">Show Purchase</h4>
     </div>
-    <div class="col-sm-7 col-8 text-right m-b-30">
-        <div class="btn-group btn-group-sm ">
-            <button class="btn btn-white">CSV</button>
-            <button class="btn btn-white">PDF</button>
-            <button class="btn btn-white"><i class="fa fa-print fa-lg"></i> Print</button>
-        </div>
-    </div>
 </div>
 <div class="container">
     <div class="row">

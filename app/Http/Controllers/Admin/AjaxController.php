@@ -235,15 +235,33 @@ class AjaxController extends Controller
 
        
     }
-    public function ajax_reinburst(){
-        $reinbursts = Reinburst::
-        leftJoin('rincian_reinbursts','reinbursts.nomor_reinburst','=','rincian_reinbursts.nomor_reinburst')
-        ->select('reinbursts.id_user','reinbursts.nomor_reinburst','reinbursts.status_hrd','reinbursts.status_pembayaran','reinbursts.tanggal_reinburst',
-        'rincian_reinbursts.total','reinbursts.id')->where('reinbursts.id_user',auth()->user()->id)
-        ->groupBy('reinbursts.nomor_reinburst')
-        ->orderBy('reinbursts.id', 'desc')
-        ->get();
-        // dd($reinbursts);
+    public function ajax_reinburst(Request $request){
+
+        if(request()->ajax()){
+            if(!empty($request->from)){
+                $reinbursts = Reinburst::
+                leftJoin('rincian_reinbursts','reinbursts.nomor_reinburst','=','rincian_reinbursts.nomor_reinburst')
+                ->select('reinbursts.id_user','reinbursts.nomor_reinburst','reinbursts.status_hrd','reinbursts.status_pembayaran','reinbursts.tanggal_reinburst',
+                'rincian_reinbursts.total','reinbursts.id')->where('reinbursts.id_user',auth()->user()->id)
+                ->whereBetween('reinbursts.tanggal_reinburst', array($request->from, $request->to))
+                ->groupBy('reinbursts.nomor_reinburst')
+                ->orderBy('reinbursts.id', 'desc')
+                ->get();
+                // dd($reinbursts);
+
+            }else{
+
+
+                $reinbursts = Reinburst::
+                leftJoin('rincian_reinbursts','reinbursts.nomor_reinburst','=','rincian_reinbursts.nomor_reinburst')
+                ->select('reinbursts.id_user','reinbursts.nomor_reinburst','reinbursts.status_hrd','reinbursts.status_pembayaran','reinbursts.tanggal_reinburst',
+                'rincian_reinbursts.total','reinbursts.id')->where('reinbursts.id_user',auth()->user()->id)
+                ->groupBy('reinbursts.nomor_reinburst')
+                ->orderBy('reinbursts.id', 'desc')
+                ->get();
+                // dd($reinbursts);
+
+            }
 
         return datatables()
             ->of($reinbursts)
@@ -284,15 +302,14 @@ class AjaxController extends Controller
             ->editColumn('action', function ($data) {
                 
                 Reinburst::where('id', $data->id)->get();
-            
-               
                 return '<a href="' . route('purchasing.reinburst.pdf', $data->id) . '"class="btn btn-sm btn-secondary"><i class="fa-solid fa-print"></i></a>
-                <button type="delete"  href="' .  route('purchasing.tukarfaktur.destroy', $data->id). '" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>';
+                <a href="' .  route('purchasing.reinburst.destroy', $data->id). '" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>';
 
             })
             ->addIndexColumn()
             ->rawColumns(['no_reinburst','status_hrd','status_pembayaran','action'])
             ->make(true);
+        }
     }
     public function ajax_pengajuan(Request $request){
 
@@ -370,11 +387,22 @@ class AjaxController extends Controller
     }
 
 
-    public function ajax_purchase(){
-        $purchases = Purchase::groupBy('invoice')
-        ->orderBy('id', 'desc')
-        ->get();
-        // dd($purchases);
+    public function ajax_purchase(Request $request){
+        if(request()->ajax()){
+            if(!empty($request->from)){
+                
+                $purchases = Purchase::groupBy('invoice')
+                ->orderBy('id', 'desc')
+                ->whereBetween('created_at',array($request->from, $request->to))
+                ->get();
+                // dd($purchases);
+            }else{
+
+                $purchases = Purchase::groupBy('invoice')
+                ->orderBy('id', 'desc')
+                ->get();
+                // dd($purchases);
+            }
 
         return datatables()
             ->of($purchases)
@@ -406,19 +434,32 @@ class AjaxController extends Controller
                 
                 Pengajuan::where('id', $data->id)->get();
             
-                return '<button type="delete"  href="' .  route('hrd.pengajuan.destroy', $data->id). '" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>';
+               
              
-
+                $button = '<a href="' . route('logistik.purchase.pdf', $data->id) . '"class="btn btn-sm btn-secondary"><i class="fa-solid fa-print"></i></a>';
+                $button .= '<a href="' . route('logistik.purchase.destroy', $data->id) . '"   class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>';
+                return $button;
             })
             ->addIndexColumn()
             ->rawColumns(['no_invoice','status','action'])
             ->make(true);
+        }
     }
 
-    public function ajax_product(){
-        $barangs = InOut::where('user_id',auth()->user()->id)->get();
-        // dd($purchases);
+    public function ajax_product(Request $request){
+        if(request()->ajax()){
+            if(!empty($request->from)){
 
+                $barangs = InOut::where('user_id',auth()->user()->id)->orderBy('id','desc')
+                ->whereBetween('created_at', array($request->from, $request->to))
+                ->get();
+            }else{
+                
+                $barangs = InOut::where('user_id',auth()->user()->id)->orderBy('id','desc')->get();
+                // dd($barangs);
+
+
+            }
         return datatables()
             ->of($barangs)
             ->editColumn('item', function ($product) {
@@ -450,78 +491,81 @@ class AjaxController extends Controller
             ->rawColumns(['no_invoice','status','action'])
             ->make(true);
     }
-
-
-    public function ajax_penerimaan()
-    {
-     
-       if (request('from') && request('to')) {
-            $from = Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d');
-            $to = Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d');
-            $penerimaans = PenerimaanBarang::groupBy('no_penerimaan_barang')->whereBetween('tanggal_penerimaan', [$from, $to])->where('id_user',auth()->user()->id)->get();
-        } else {
-            $penerimaans = PenerimaanBarang::groupBy('no_penerimaan_barang')
-            ->where('id_user',auth()->user()->id)
-            ->orderBy('id', 'desc')->get();
-            
-        }
-        // dd($penerimaans);
-        return datatables()
-            ->of($penerimaans)
-            ->editColumn('no_penerimaan', function ($penerimaan) {
-                return '<a href="' . route("purchasing.penerimaan-barang.show", $penerimaan->id) . '">' . $penerimaan->no_penerimaan_barang . '</a>';
-            })
-            ->editColumn('diajukan', function ($penerimaan) {
-                return $penerimaan->admin->name;
-            })
-            ->editColumn('tanggal', function ($penerimaan) {
-                return Carbon::parse($penerimaan->tanggal_penerimaan)->format('d/m/Y');
-            })
-            
-            ->editColumn('total', function ($penerimaan) {
-                return \App\PenerimaanBarang::where('no_penerimaan_barang', $penerimaan->no_penerimaan_barang)->count();
-            })
-            ->editColumn('pembelian', function ($penerimaan) {
-                return $penerimaan->grandtotal;
-            })
-        
-            ->editColumn('status', function ($penerimaan) {
-                if($penerimaan->status_tukar_faktur == 'pending'){
-               return '<a class="custom-badge status-red">pending</a>';
-               }
-                if($penerimaan->status_tukar_faktur == 'completed'){
-                    return '<a class="custom-badge status-green">completed</a>';
-                }
-               
-            })
-            ->editColumn('action', function ($penerimaan) {
-                
-                PenerimaanBarang::where('id', $penerimaan->id)->get();
-            
-                return '<button type="delete"  href="' .  route('hrd.pengajuan.destroy', $penerimaan->id). '" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>';
-             
-
-            })
-            ->addIndexColumn()
-            ->rawColumns(['no_penerimaan', 'status','action'])
-            ->make(true);
-            // ->addColumn('action', function ($row) {
-            //     $html = '<a href="" class="btn btn-xs btn-secondary">Edit</a> ';
-            //     $html .= '<button data-rowid="'.$row->id.'" class="btn btn-xs btn-danger">Del</button>';
-            //     return $html;
-            // })
-            
-            // ->toJson()
     }
 
-    public function ajax_faktur()
+    public function ajax_penerimaan(Request $request)
     {
-     
-        if (request('from') && request('to')) {
-            $from = Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d');
-            $to = Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d');
+     if(request()->ajax()){
+
+         if (!empty($request->from)) {
+              $penerimaans = PenerimaanBarang::groupBy('no_penerimaan_barang')
+              ->whereBetween('tanggal_penerimaan', array($request->from, $request->to))->where('id_user',auth()->user()->id)->get();
+          } else {
+              $penerimaans = PenerimaanBarang::groupBy('no_penerimaan_barang')
+              ->where('id_user',auth()->user()->id)
+              ->orderBy('id', 'desc')->get();
+              
+          }
+          // dd($penerimaans);
+          return datatables()
+              ->of($penerimaans)
+              ->editColumn('no_penerimaan', function ($penerimaan) {
+                  return '<a href="' . route("purchasing.penerimaan-barang.show", $penerimaan->id) . '">' . $penerimaan->no_penerimaan_barang . '</a>';
+              })
+              ->editColumn('diajukan', function ($penerimaan) {
+                  return $penerimaan->admin->name;
+              })
+              ->editColumn('tanggal', function ($penerimaan) {
+                  return Carbon::parse($penerimaan->tanggal_penerimaan)->format('d/m/Y');
+              })
+              
+              ->editColumn('total', function ($penerimaan) {
+                  return \App\PenerimaanBarang::where('no_penerimaan_barang', $penerimaan->no_penerimaan_barang)->count();
+              })
+              ->editColumn('pembelian', function ($penerimaan) {
+                  return $penerimaan->grandtotal;
+              })
+          
+              ->editColumn('status', function ($penerimaan) {
+                  if($penerimaan->status_tukar_faktur == 'pending'){
+                 return '<a class="custom-badge status-red">pending</a>';
+                 }
+                  if($penerimaan->status_tukar_faktur == 'completed'){
+                      return '<a class="custom-badge status-green">completed</a>';
+                  }
+                 
+              })
+              ->editColumn('action', function ($penerimaan) {
+                  
+                  PenerimaanBarang::where('id', $penerimaan->id)->get();
+              
+                
+                //   $button = '<a href="' . route('purchasing.tukarfaktur.pdf', $penerimaan->id) . '"class="btn btn-sm btn-secondary"><i class="fa-solid fa-print"></i></a>';
+                  $button = '<a href="' . route('purchasing.penerimaan-barang.destroy', $penerimaan->id) . '"   class="delete-form btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>';
+                  return $button;
+               
+  
+              })
+              ->addIndexColumn()
+              ->rawColumns(['no_penerimaan', 'status','action'])
+              ->make(true);
+              // ->addColumn('action', function ($row) {
+              //     $html = '<a href="" class="btn btn-xs btn-secondary">Edit</a> ';
+              //     $html .= '<button data-rowid="'.$row->id.'" class="btn btn-xs btn-danger">Del</button>';
+              //     return $html;
+              // })
+              
+              // ->toJson()
+        }
+    }
+
+    public function ajax_faktur(Request $request)
+    {
+     if(request()->ajax())
+     {
+        if (!empty($request->from)) {
             $tukar = DB::table('tukar_fakturs')
-            ->whereBetween('tanggal_tukar_faktur', [$from, $to])
+            ->whereBetween('tanggal_tukar_faktur', array($request->from, $request->to))
             ->where('id_user',auth()->user()->id)
             ->groupBy('tukar_fakturs.no_faktur')
             ->orderBy('tukar_fakturs.id','desc')
@@ -579,8 +623,9 @@ class AjaxController extends Controller
                 
                 TukarFaktur::where('id', $tukars->id)->get();
             
-                return '<a href="' . route('purchasing.tukarfaktur.pdf', $tukars->id) . '"class="btn btn-sm btn-secondary"><i class="fa-solid fa-print"></i></a>
-                <button type="delete"  href="' .  route('purchasing.tukarfaktur.destroy', $tukars->id). '" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>';
+                $button = '<a href="' . route('purchasing.tukarfaktur.pdf', $tukars->id) . '"class="btn btn-sm btn-secondary"><i class="fa-solid fa-print"></i></a>';
+                $button .= '<a href="' . route('purchasing.tukarfaktur.destroy', $tukars->id) . '"   class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>';
+                return $button;
              
 
             })
@@ -594,6 +639,7 @@ class AjaxController extends Controller
             // })
             
             // ->toJson()
+     }
     }
     public function ajax_listpurchase(Request $request)
     {
@@ -664,10 +710,20 @@ class AjaxController extends Controller
         }
     }
 
-    public function ajax_pembatalan()
+    public function ajax_pembatalan(Request $request)
     {
-        // $pembatalans = PembatalanUnit::with('no_pembatalan', 'id_spr','alasan_id')->get();
+        if(request()->ajax()){
+            if(!empty($request->from)){
 
+        $pembatalans = DB:: table('pembatalan_units')
+        ->leftjoin('sprs','pembatalan_units.spr_id','=','sprs.id')
+        ->leftjoin('unit_rumahs','sprs.id_unit','=','unit_rumahs.id')
+        ->leftjoin('users','sprs.id_sales','=','users.id')
+        ->whereBetween('pembatalan_units.tanggal',array($request->from, $request->to))
+        ->select('pembatalan_units.tanggal','sprs.no_transaksi','users.name','sprs.status_approval','sprs.id_sales','pembatalan_units.no_pembatalan','pembatalan_units.id','pembatalan_units.diajukan','unit_rumahs.type','sprs.no_transaksi','sprs.harga_net','sprs.status_dp','sprs.status_booking','sprs.nama','pembatalan_units.status')
+        ->get();
+        // dd($pembatalans);
+    }else{
         $pembatalans = DB:: table('pembatalan_units')
         ->leftjoin('sprs','pembatalan_units.spr_id','=','sprs.id')
         ->leftjoin('unit_rumahs','sprs.id_unit','=','unit_rumahs.id')
@@ -675,6 +731,8 @@ class AjaxController extends Controller
         ->select('pembatalan_units.tanggal','sprs.no_transaksi','users.name','sprs.status_approval','sprs.id_sales','pembatalan_units.no_pembatalan','pembatalan_units.id','pembatalan_units.diajukan','unit_rumahs.type','sprs.no_transaksi','sprs.harga_net','sprs.status_dp','sprs.status_booking','sprs.nama','pembatalan_units.status')
         ->get();
         // dd($pembatalans);
+        
+            }
         return datatables()
             ->of($pembatalans)
             ->editColumn('no_pembatalan', function ($pembatalan) {
@@ -721,7 +779,9 @@ class AjaxController extends Controller
                  
             }else {
                 
-                return '<a href="' . route('admin.pembatalans.show', $data->id) . '"><i class="fa fa-pencil m-r-5"></i> Edit</a>';
+                $button = '<a href="' . route('admin.pembatalans.update', $data->id) . '"  class="custom-badge status-green"><i class="fa-solid fa-check-to-slot"></i></a>';
+                return $button;
+            
              
                 } 
             
@@ -736,6 +796,7 @@ class AjaxController extends Controller
             // })
             
             // ->toJson()
+        }
     }
 
     public function ajax_customer()

@@ -57,7 +57,7 @@ Route::middleware('auth')->group(function () {
             Route::resource('unit', 'UnitController');
             Route::patch('admin/unit/{unit:id}', 'UnitController@update')->name('unit.update');
          
-            Route::patch('pembatalans/{id}/update', 'PembatalanUnitController@update');
+            Route::get('pembatalans/{id}', 'PembatalanUnitController@update')->name('pembatalans.update');
             Route::resource('pembatalans', 'PembatalanUnitController');
 
 
@@ -389,6 +389,8 @@ Route::middleware('auth')->group(function () {
             Route::resource('pengajuan', 'PengajuanController');
             Route::get('/where/unit', 'PengajuanController@WhereUnit');
             Route::get('pengajuan/pdf/{id}', 'PengajuanController@pdf')->name('pengajuan.pdf');
+            Route::get('purchase/pdf/{id}', 'PurchaseController@pdf')->name('purchase.pdf');
+            Route::get('purchase/destroy/{id}', 'PurchaseController@destroy')->name('purchase.destroy');
             Route::resource('product', 'ProductController');
             Route::resource('supplier', 'SupplierController');
             Route::resource('permissions', 'PermissionController');
@@ -410,7 +412,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/where/unit', 'TukarFakturController@WhereUnit');
 
             Route::resource('tukarfaktur', 'TukarFakturController');
-
+            Route::get('tukarfaktur/destroy/{id}', 'TukarFakturController@destroy')->name('tukarfaktur.destroy');
             Route::post('tukarfaktur/create/store', 'TukarFakturController@store')->name('tukarfaktur.create.store');
             Route::get('/tukarfaktur/pdf/{id}','TukarFakturController@pdf')->name('tukarfaktur.pdf');
             
@@ -418,6 +420,9 @@ Route::middleware('auth')->group(function () {
             Route::get('/reinburst/pdf/{id}','ReinburstController@pdf')->name('reinburst.pdf');
 
             Route::resource('reinburst', 'ReinburstController');
+            Route::get('reinburst/destroy/{id}', 'ReinburstController@destroy')->name('reinburst.destroy');
+
+            Route::get('penerimaan-barang/{id}', 'PenerimaanBarangController@destroy')->name('penerimaan-barang.destroy');
             Route::resource('penerimaan-barang', 'PenerimaanBarangController');
             Route::post('penerimaan-barang/{id}/update', 'PenerimaanBarangController@update');
             Route::get('/where/penerimaan/search', 'PenerimaanBarangController@search');

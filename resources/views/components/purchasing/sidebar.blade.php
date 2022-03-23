@@ -12,7 +12,7 @@
         <a href="{{ route('purchasing.tukarfaktur.index') }}"><i class="fa-solid fa-list-check"></i> <span>List Faktur</span></a>
     </li>
     <li class="{{ request()->is('purchasing/penerimaanbarang*') ? 'active' : '' }}">
-        <a href="{{ route('purchasing.penerimaan-barang.index') }}"><i class="fa fa-cart-plus" aria-hidden="true"></i> <span>Penerimaan Barang</span></a>
+        <a href="{{ route('purchasing.penerimaan-barang.index') }}"><i class="fa fa-cart-plus"></i> <span>Penerimaan Barang</span></a>
     </li>
     <li class="{{ request()->is('purchasing/reinburst*') ? 'active' : '' }}">
         <a href="{{ route('purchasing.reinburst.index') }}"><i class="fa-solid fa-hand-holding-dollar"></i> <span>Reinburst</span></a>

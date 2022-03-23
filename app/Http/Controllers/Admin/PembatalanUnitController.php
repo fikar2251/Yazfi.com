@@ -22,17 +22,21 @@ class PembatalanUnitController extends Controller
 
 
 
-    public function show($id, Spr $spr)
+    public function update(PembatalanUnit $pembatalan)
     {
-  
-        $post = PembatalanUnit::findOrFail($id);
-        $unit = $post->spr->unit->id_unit_rumah;
-        $post->update(['status' => 'Approval']);
-        $unit_rumah = DB::table('unit_rumahs')
-        ->leftJoin('sprs','unit_rumahs.id','=','sprs.id_unit')
-        ->select('unit_rumahs.id','sprs.id_unit')
-        ->where('unit_rumahs.id', $unit);
-        $unit_rumah->update(['status_penjualan' => 'Available']);
+        $post = PembatalanUnit::where('spr_id',$pembatalan->spr_id)->get();
+        // dd($post);
+        foreach ($post as $pur) {
+            $unit = Spr::where('id_unit', $pur->id)->first();
+            dd($unit);
+            $unit->update(['status' => 'Approval']);
+            $unit_rumah = DB::table('unit_rumahs')
+            ->leftJoin('sprs','unit_rumahs.id','=','sprs.id_unit')
+            ->select('unit_rumahs.id','sprs.id_unit')
+            ->where('unit_rumahs.id', $unit);
+            $unit_rumah->update(['status_penjualan' => 'Available']);
+        }
+        
 
         return redirect()->route('admin.pembatalans.index')->with('success', 'Status has been updated');
     }
@@ -46,16 +50,28 @@ class PembatalanUnitController extends Controller
     //     return redirect()->route('admin.product.index')->with('success', 'Product has been deleted');
     // }
 
-    public function ajax()
+    public function ajax(Request $request)
     {
-        // $pembatalans = PembatalanUnit::with('no_pembatalan', 'id_spr','alasan_id')->get();
+       if(request()->ajax()){
+           if(!empty($request->from)){
 
-        $pembatalans = DB:: table('pembatalan_units')
-        ->leftjoin('sprs','pembatalan_units.spr_id','=','sprs.id')
-        ->leftjoin('unit_rumahs','sprs.id_unit','=','unit_rumahs.id')
-        ->leftjoin('users','sprs.id_sales','=','users.id')
-        ->select('pembatalan_units.tanggal','sprs.no_transaksi','users.name','sprs.status_approval','sprs.id_sales','pembatalan_units.no_pembatalan','pembatalan_units.id','pembatalan_units.diajukan','unit_rumahs.type','sprs.no_transaksi','sprs.harga_net','sprs.status_dp','sprs.status_booking','sprs.nama','pembatalan_units.status')
-        ->get();
+               $pembatalans = DB:: table('pembatalan_units')
+               ->leftjoin('sprs','pembatalan_units.spr_id','=','sprs.id')
+               ->leftjoin('unit_rumahs','sprs.id_unit','=','unit_rumahs.id')
+               ->leftjoin('users','sprs.id_sales','=','users.id')
+               ->whereBetween('pembatalan_units.tanggal', array($request->from, $request->to))
+               ->select('pembatalan_units.tanggal','sprs.no_transaksi','users.name','sprs.status_approval','sprs.id_sales','pembatalan_units.no_pembatalan','pembatalan_units.id','pembatalan_units.diajukan','unit_rumahs.type','sprs.no_transaksi','sprs.harga_net','sprs.status_dp','sprs.status_booking','sprs.nama','pembatalan_units.status')
+               ->get();
+           }else{
+
+            $pembatalans = DB:: table('pembatalan_units')
+               ->leftjoin('sprs','pembatalan_units.spr_id','=','sprs.id')
+               ->leftjoin('unit_rumahs','sprs.id_unit','=','unit_rumahs.id')
+               ->leftjoin('users','sprs.id_sales','=','users.id')
+               ->select('pembatalan_units.tanggal','sprs.no_transaksi','users.name','sprs.status_approval','sprs.id_sales','pembatalan_units.no_pembatalan','pembatalan_units.id','pembatalan_units.diajukan','unit_rumahs.type','sprs.no_transaksi','sprs.harga_net','sprs.status_dp','sprs.status_booking','sprs.nama','pembatalan_units.status')
+               ->get();
+           }
+
         // dd($pembatalans);
         return datatables()
             ->of($pembatalans)
@@ -103,7 +119,8 @@ class PembatalanUnitController extends Controller
                  
             }else {
                 
-                return '<a href="' . route('admin.pembatalans.show', $data->id) . '"><i class="fa fa-pencil m-r-5"></i> Edit</a>';
+                $button = '<a href="' . route('admin.pembatalans.update', $data->id) . '"  class="custom-badge status-green"><i class="fa-solid fa-check-to-slot"></i></a>';
+                 return $button;
              
                 } 
             
@@ -118,5 +135,6 @@ class PembatalanUnitController extends Controller
             // })
             
             // ->toJson()
+       }
     }
 }
