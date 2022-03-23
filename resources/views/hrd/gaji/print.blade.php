@@ -17,10 +17,8 @@
     <div class="container">
         <div class="row">
             <div class="border border-3">
-                <br>
-                <br>
                 <div class="dashboard-logo">
-                    <img style="width:150px;" src="{{url('/img/logo/yazfi.png ')}}" alt="Image" />
+                    <img style="width:120px;" src="{{url('/img/logo/yazfi.png ')}}" alt="Image" />
                 </div>
                 <hr>
                 <div class="row">
@@ -137,7 +135,7 @@
                             <table cellspacing="5" cellpadding="5">
                                 <thead>
                                     <tr>
-                                        <h4>PayRoll</h4>
+                                        <h2 style="font-size: 22px">PayRoll</h2>
                                     </tr>
                                 </thead>
                                 <br>
@@ -157,7 +155,7 @@
                             <table cellspacing="5" cellpadding="5">
                                 <thead>
                                     <tr>
-                                        <h4>Di Terima Oleh</h4>
+                                        <h2 style="font-size: 22px">DiTerima Oleh</h2>
                                         <br>
                                         <br>
                                         <h4>{{ $gaji->pegawai->name }}</h4>

@@ -284,26 +284,7 @@ class TukarFakturController extends Controller
             // dd($detail);
 
 
-        //     $pdf = DB::table('tukar_fakturs')
-        // ->leftJoin('suppliers', 'tukar_fakturs.id_supplier', '=', 'suppliers.id')
-        // ->leftJoin('detail_tukar_fakturs', 'tukar_fakturs.no_faktur', '=', 'detail_tukar_fakturs.no_faktur')
-        // ->leftJoin('dokumen_tukar_faktur','detail_tukar_fakturs.id_dokumen','=','dokumen_tukar_faktur.id')
-        // ->where('tukar_fakturs.id',$id)
-        // ->select('tukar_fakturs.status_pembayaran','suppliers.nama','tukar_fakturs.no_faktur','tukar_fakturs.id','tukar_fakturs.nilai_invoice',
-        // 'detail_tukar_fakturs.pilihan','dokumen_tukar_faktur.nama_dokumen', 'detail_tukar_fakturs.catatan','tukar_fakturs.tanggal_tukar_faktur')
-        // ->first();
-
-
-        // $purchases = DB::table('penerimaan_barangs')
-        // ->leftJoin('tukar_fakturs','penerimaan_barangs.no_po','=','tukar_fakturs.no_po_vendor')
-        // ->leftJoin('purchases','penerimaan_barangs.id_purchase','=','purchases.id')
-        // ->leftJoin('barangs','penerimaan_barangs.barang_id','=','barangs.id')
-        // // ->where('tukar_fakturs.id',$id)
-        // ->where('tukar_fakturs.no_faktur',$request->no_faktur)
-        // ->select('tukar_fakturs.no_faktur','penerimaan_barangs.ppn','barangs.nama_barang','purchases.harga_beli','purchases.qty','penerimaan_barangs.no_po')
-        //  ->get();
-            // dd($purchases);
-        return view('purchasing.tukarfaktur.show', compact('detail','pdf'));
+        return view('purchasing.tukarfaktur.show', compact('detail'));
     }
 
     public function edit(Purchase $purchase)

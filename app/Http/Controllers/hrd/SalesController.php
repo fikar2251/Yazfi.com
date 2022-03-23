@@ -15,16 +15,17 @@ use Illuminate\Support\Facades\DB;
 
 class SalesController extends Controller
 {
-    public function index( TeamSales $sale)
+    public function index( TeamSales $sale, Request $request)
     {
         $sales = TeamSales::groupBy('id_spv')->orderBy('id_spv','desc')->get();
 
+        // dd($sales);
+
         foreach ($sales as $tim) {
-            // $coba = TeamSales::whereIn('id_spv',$sales)->get();
-           $coba = TeamSales::where('id_spv',$tim->id_spv)->where('id_sales', $tim->id_sales)->get();
+            // $coba = TeamSales::whereIn('id_spv',$tim)->whereIn('id_manager',$tim)->first();
             // dd($coba);
         }
-       
+    
 
         return view('hrd.sales.index', compact('sales','coba'));
     }
@@ -102,8 +103,8 @@ class SalesController extends Controller
         // dd($sales);
         // DB::beginTransaction();
         foreach( $sales as $tim => $no){
-
-            $attr = TeamSales::first()->id;
+            
+            $attr = TeamSales::where('id_sales',$no)->get();
             // dd($attr);
             $attr->update([
                 'id_sales' => $tim,

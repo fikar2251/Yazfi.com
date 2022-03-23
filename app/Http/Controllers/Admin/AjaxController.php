@@ -21,170 +21,219 @@ use App\TukarFaktur;
 class AjaxController extends Controller
 {
   
-    public function ajax_gaji()
+    public function ajax_gaji( Request $request)
     {
-        $gaji = Penggajian::where('admin',auth()->user()->name)->orderBy('id', 'desc')->get();
+        if(request()->ajax()){
+            if(!empty($request->from_date))
+            {
+                $gaji = Penggajian::where('admin',auth()->user()->name)
+                ->whereBetween('tanggal', array($request->from_date, $request->to_date))->orderBy('id', 'desc')->get();
 
-        return datatables()
-            ->of($gaji)
-            ->editColumn('pegawai', function ($gajian) {
-                return $gajian->pegawai->name;
-            })
-            ->editColumn('tanggal', function ($gajian) {
-                return Carbon::parse($gajian->tanggal)->format('d/m/Y');
-            })
-            ->editColumn('bulan_tahun', function ($gajian) {
-                return Carbon::parse($gajian->bulan_tahun)->format('F/Y');
-            })
-            ->editColumn('gaji_pokok', function ($gajian) {
-                return $gajian->gaji_pokok;
-            })
-            ->editColumn('penerimaan', function ($gajian) {
-                return $gajian->penerimaan->sum('nominal') - $gajian->gaji_pokok;
-            })
-            ->editColumn('potongan', function ($gajian) {
-                return $gajian->potongan->sum('nominal');
-            })
-            ->editColumn('total', function ($gajian) {
-                return $gajian->gaji_pokok + (($gajian->penerimaan->sum('nominal') - $gajian->gaji_pokok) - $gajian->potongan->sum('nominal'));
-            })
-            ->editColumn('jabatan', function ($gajian) {
-                return $gajian->jabatan;
-            })
-            ->editColumn('divisi', function ($gajian) {
-                return $gajian->divisi;
-            })
-            ->editColumn('admin', function ($gajian) {
-                return $gajian->admin;
-            })
-            ->editColumn('action', function ($gajian) {
-                
-                Penggajian::where('id', $gajian->id)->get();
-        
-                
-                return '<a href="' . route('hrd.gaji.print', $gajian->id) . '"class="btn btn-sm btn-secondary"><i class="fa-solid fa-print"></i></a>
-                <a href="' . route('hrd.gaji.show', $gajian->id) . '"class="btn btn-sm btn-success"><i class="fa-solid fa-eye"></i></a>
-                <a href="' . route('hrd.gaji.edit', $gajian->id) . '"class="btn btn-sm btn-warning"><i class="fa-solid fa-pen-to-square"></i></a> 
-                <button type="delete"  href="' . route('hrd.gaji.destroy', $gajian->id) . '" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>';
-             
-             
+            }else{
+                $gaji = Penggajian::where('admin',auth()->user()->name)->orderBy('id', 'desc')->get();
+            }
+            return datatables()
+                ->of($gaji)
+                ->editColumn('pegawai', function ($gajian) {
+                    return $gajian->pegawai->name;
+                })
+                ->editColumn('tanggal', function ($gajian) {
+                    return Carbon::parse($gajian->tanggal)->format('d/m/Y');
+                })
+                ->editColumn('bulan_tahun', function ($gajian) {
+                    return Carbon::parse($gajian->bulan_tahun)->format('F/Y');
+                })
+                ->editColumn('gaji_pokok', function ($gajian) {
+                    return $gajian->gaji_pokok;
+                })
+                ->editColumn('penerimaan', function ($gajian) {
+                    return $gajian->penerimaan->sum('nominal') - $gajian->gaji_pokok;
+                })
+                ->editColumn('potongan', function ($gajian) {
+                    return $gajian->potongan->sum('nominal');
+                })
+                ->editColumn('total', function ($gajian) {
+                    return $gajian->gaji_pokok + (($gajian->penerimaan->sum('nominal') - $gajian->gaji_pokok) - $gajian->potongan->sum('nominal'));
+                })
+                ->editColumn('jabatan', function ($gajian) {
+                    return $gajian->jabatan;
+                })
+                ->editColumn('divisi', function ($gajian) {
+                    return $gajian->divisi;
+                })
+                ->editColumn('admin', function ($gajian) {
+                    return $gajian->admin;
+                })
+                ->editColumn('action', function ($gajian) {
+                    
+                    Penggajian::where('id', $gajian->id)->get();
             
-            })
-            ->addIndexColumn()
-            ->rawColumns(['pegawai','action'])
-            ->make(true);
+                    
+                    return '<a href="' . route('hrd.gaji.print', $gajian->id) . '"class="btn btn-sm btn-secondary"><i class="fa-solid fa-print"></i></a>
+                     <a href="' . route('hrd.gaji.show', $gajian->id) . '"class="btn btn-sm btn-success"><i class="fa-solid fa-eye"></i></a>
+                    <a href="' . route('hrd.gaji.edit', $gajian->id) . '"class="btn btn-sm btn-warning"><i class="fa-solid fa-pen-to-square"></i></a> 
+                    <a href="' . route('hrd.gaji.destroy', $gajian->id) . '"   class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>';
+                })
+                ->addIndexColumn()
+                ->rawColumns(['pegawai','action'])
+                ->make(true);
+        }
+
  
     }
-    public function ajax_rekap_reinburst()
+
+    //rekap reinburst
+    public function ajax_rekap_reinburst(Request $request)
     {
-        $reinbursts = Reinburst::
-        leftJoin('rincian_reinbursts','reinbursts.nomor_reinburst','=','rincian_reinbursts.nomor_reinburst')
-        ->select('reinbursts.id_user','reinbursts.nomor_reinburst','reinbursts.status_hrd','reinbursts.status_pembayaran','reinbursts.tanggal_reinburst',
-        'rincian_reinbursts.total','reinbursts.id')
-        ->groupBy('reinbursts.nomor_reinburst')
-        ->orderBy('reinbursts.id', 'desc')->where('reinbursts.status_hrd','completed')
-        ->get();
-        // dd($reinbursts);
+        if(request()->ajax())
+        {
+            if(!empty($request->from_date))
+            {
+            $reinbursts = Reinburst::
+            leftJoin('rincian_reinbursts','reinbursts.nomor_reinburst','=','rincian_reinbursts.nomor_reinburst')
+            ->select('reinbursts.id_user','reinbursts.nomor_reinburst','reinbursts.status_hrd','reinbursts.status_pembayaran','reinbursts.tanggal_reinburst',
+            'rincian_reinbursts.total','reinbursts.id')
+            ->whereBetween('reinbursts.tanggal_reinburst', array($request->from_date, $request->to_date))
+            ->groupBy('reinbursts.nomor_reinburst')
+            ->orderBy('reinbursts.id', 'desc')->where('reinbursts.status_hrd','completed')
+            ->get();
+            // dd($reinbursts);
+            }
+            else
+            {
+                $reinbursts = Reinburst::
+                leftJoin('rincian_reinbursts','reinbursts.nomor_reinburst','=','rincian_reinbursts.nomor_reinburst')
+                ->select('reinbursts.id_user','reinbursts.nomor_reinburst','reinbursts.status_hrd','reinbursts.status_pembayaran','reinbursts.tanggal_reinburst',
+                'rincian_reinbursts.total','reinbursts.id')
+                ->groupBy('reinbursts.nomor_reinburst')
+                ->orderBy('reinbursts.id', 'desc')->where('reinbursts.status_hrd','completed')
+                ->get();
 
-        return datatables()
-            ->of($reinbursts)
-            ->editColumn('no_reinburst', function ($reinburst) {
-                return $reinburst->nomor_reinburst;
-            })
-            ->editColumn('tanggal', function ($reinburst) {
-                return Carbon::parse($reinburst->tanggal_reinburst)->format('d/m/Y');
-            })
-            ->editColumn('total', function ($reinburst) {
-                return \App\Reinburst::where('nomor_reinburst', $reinburst->nomor_reinburst)->count();
-            })
-            ->editColumn('pembelian', function ($reinburst) {
-                return $reinburst->total;
-            })
-            ->editColumn('status_hrd', function ($reinburst) {
-                if($reinburst->status_hrd == 'pending'){
-               return '<a class="custom-badge status-red">pending</a>';
-               }
-                if($reinburst->status_hrd == 'completed'){
-                    return '<a class="custom-badge status-green">completed</a>';
-                }
-                if($reinburst->status_hrd == 'review'){
-                    return '<a class="custom-badge status-orange">review</a>';
-                }
-            })
-            ->editColumn('status_pembayaran', function ($reinburst) {
-                if($reinburst->status_pembayaran == 'pending'){
-                    return '<a class="custom-badge status-red">pending</a>';
+            }
+
+            return datatables()
+                ->of($reinbursts)
+                ->editColumn('no_reinburst', function ($reinburst) {
+                    return $reinburst->nomor_reinburst;
+                })
+                ->editColumn('tanggal', function ($reinburst) {
+                    return Carbon::parse($reinburst->tanggal_reinburst)->format('d/m/Y');
+                })
+                ->editColumn('total', function ($reinburst) {
+                    return \App\Reinburst::where('nomor_reinburst', $reinburst->nomor_reinburst)->count();
+                })
+                ->editColumn('pembelian', function ($reinburst) {
+                    return $reinburst->total;
+                })
+                ->editColumn('status_hrd', function ($reinburst) {
+                    if($reinburst->status_hrd == 'pending'){
+                   return '<a class="custom-badge status-red">pending</a>';
+                   }
+                    if($reinburst->status_hrd == 'completed'){
+                        return '<a class="custom-badge status-green">completed</a>';
                     }
-                     if($reinburst->status_pembayaran == 'completed'){
-                         return '<a class="custom-badge status-green">completed</a>';
-                     }
-                     if($reinburst->status_pembayaran == 'review'){
-                         return '<a class="custom-badge status-orange">review</a>';
-                     }
-            })
-            ->addIndexColumn()
-            ->rawColumns(['pembelian','status_hrd','status_pembayaran'])
-            ->make(true);
+                    if($reinburst->status_hrd == 'review'){
+                        return '<a class="custom-badge status-orange">review</a>';
+                    }
+                })
+                ->editColumn('status_pembayaran', function ($reinburst) {
+                    if($reinburst->status_pembayaran == 'pending'){
+                        return '<a class="custom-badge status-red">pending</a>';
+                        }
+                         if($reinburst->status_pembayaran == 'completed'){
+                             return '<a class="custom-badge status-green">completed</a>';
+                         }
+                         if($reinburst->status_pembayaran == 'review'){
+                             return '<a class="custom-badge status-orange">review</a>';
+                         }
+                })
+                ->addIndexColumn()
+                ->rawColumns(['pembelian','status_hrd','status_pembayaran'])
+                ->make(true);
+        }
+
     }
-    public function ajax_acc_reinburst(){
-        $reinbursts = Reinburst::
-        leftJoin('rincian_reinbursts','reinbursts.nomor_reinburst','=','rincian_reinbursts.nomor_reinburst')
-        ->select('reinbursts.id_user','reinbursts.nomor_reinburst','reinbursts.status_hrd','reinbursts.status_pembayaran','reinbursts.tanggal_reinburst',
-        'rincian_reinbursts.total','reinbursts.id')->where('reinbursts.status_hrd','!=','completed')
-        ->groupBy('reinbursts.nomor_reinburst')
-        ->orderBy('reinbursts.id', 'desc')
-        ->get();
-        // dd($reinbursts);
 
-        return datatables()
-            ->of($reinbursts)
-            ->editColumn('no_reinburst', function ($reinburst) {
-                return $reinburst->nomor_reinburst;
-            })
-            ->editColumn('tanggal', function ($reinburst) {
-                return Carbon::parse($reinburst->tanggal_reinburst)->format('d/m/Y');
-            })
-            ->editColumn('total', function ($reinburst) {
-                return \App\Reinburst::where('nomor_reinburst', $reinburst->nomor_reinburst)->count();
-            })
-            ->editColumn('pembelian', function ($reinburst) {
-                return $reinburst->total;
-            })
-            ->editColumn('status_hrd', function ($reinburst) {
-                if($reinburst->status_hrd == 'pending'){
-               return '<a class="custom-badge status-red">pending</a>';
-               }
-                if($reinburst->status_hrd == 'completed'){
-                    return '<a class="custom-badge status-green">completed</a>';
-                }
-                if($reinburst->status_hrd == 'review'){
-                    return '<a class="custom-badge status-orange">review</a>';
-                }
-            })
-            ->editColumn('status_pembayaran', function ($reinburst) {
-                if($reinburst->status_pembayaran == 'pending'){
-                    return '<a class="custom-badge status-red">pending</a>';
-                    }
-                     if($reinburst->status_pembayaran == 'completed'){
-                         return '<a class="custom-badge status-green">completed</a>';
-                     }
-                     if($reinburst->status_pembayaran == 'review'){
-                         return '<a class="custom-badge status-orange">review</a>';
-                     }
-            })
-            ->editColumn('action', function ($data) {
-                
-                Reinburst::where('id', $data->id)->get();
+    // acc-reinburst
+    public function ajax_acc_reinburst(Request $request){
+        if(request()->ajax())
+        {
+            if(!empty($request->from_date))
+            {
+                $reinbursts = Reinburst::
+                leftJoin('rincian_reinbursts','reinbursts.nomor_reinburst','=','rincian_reinbursts.nomor_reinburst')
+                ->select('reinbursts.id_user','reinbursts.nomor_reinburst','reinbursts.status_hrd','reinbursts.status_pembayaran','reinbursts.tanggal_reinburst',
+                'rincian_reinbursts.total','reinbursts.id')->where('reinbursts.status_hrd','!=','completed')
+                ->whereBetween('reinbursts.tanggal_reinburst', array($request->from_date, $request->to_date))
+                ->groupBy('reinbursts.nomor_reinburst')
+                ->orderBy('reinbursts.id', 'desc')
+                ->get();
+            }
+            else
+        {
             
-                
-                return '<a href="' . route('hrd.penerimaan.statuscompleted', $data->id) . '"  class="custom-badge status-green"><i class="fa-solid fa-check-to-slot"></i></a>
-                <a href="' . route('hrd.penerimaan.update', $data->id) . '"  class="custom-badge status-orange"><i class="fa-solid fa-eye"></i></a>';
-             
+            $reinbursts = Reinburst::
+            leftJoin('rincian_reinbursts','reinbursts.nomor_reinburst','=','rincian_reinbursts.nomor_reinburst')
+            ->select('reinbursts.id_user','reinbursts.nomor_reinburst','reinbursts.status_hrd','reinbursts.status_pembayaran','reinbursts.tanggal_reinburst',
+            'rincian_reinbursts.total','reinbursts.id')->where('reinbursts.status_hrd','!=','completed')
+            ->groupBy('reinbursts.nomor_reinburst')
+            ->orderBy('reinbursts.id', 'desc')
+            ->get();
+            // dd($reinbursts);
+        }
+        return datatables()
+        ->of($reinbursts)
+        ->editColumn('no_reinburst', function ($reinburst) {
+            return $reinburst->nomor_reinburst;
+        })
+        ->editColumn('tanggal', function ($reinburst) {
+            return Carbon::parse($reinburst->tanggal_reinburst)->format('d/m/Y');
+        })
+        ->editColumn('total', function ($reinburst) {
+            return \App\Reinburst::where('nomor_reinburst', $reinburst->nomor_reinburst)->count();
+        })
+        ->editColumn('pembelian', function ($reinburst) {
+            return $reinburst->total;
+        })
+        ->editColumn('status_hrd', function ($reinburst) {
+            if($reinburst->status_hrd == 'pending'){
+           return '<a class="custom-badge status-red">pending</a>';
+           }
+            if($reinburst->status_hrd == 'completed'){
+                return '<a class="custom-badge status-green">completed</a>';
+            }
+            if($reinburst->status_hrd == 'review'){
+                return '<a class="custom-badge status-orange">review</a>';
+            }
+        })
+        ->editColumn('status_pembayaran', function ($reinburst) {
+            if($reinburst->status_pembayaran == 'pending'){
+                return '<a class="custom-badge status-red">pending</a>';
+                }
+                 if($reinburst->status_pembayaran == 'completed'){
+                     return '<a class="custom-badge status-green">completed</a>';
+                 }
+                 if($reinburst->status_pembayaran == 'review'){
+                     return '<a class="custom-badge status-orange">review</a>';
+                 }
+        })
+        ->editColumn('action', function ($data) {
+            
+            Reinburst::where('id', $data->id)->get();
+            $button = '<a href="' . route('hrd.penerimaan.statuscompleted', $data->id) . '"  class="custom-badge status-green"><i class="fa-solid fa-check-to-slot"></i></a>';
+            return $button;
+            
+            // return '<a href="' . route('hrd.penerimaan.statuscompleted', $data->id) . '"  class="custom-badge status-green"><i class="fa-solid fa-check-to-slot"></i></a>
+            // <a href="' . route('hrd.penerimaan.update', $data->id) . '"  class="custom-badge status-orange"><i class="fa-solid fa-eye"></i></a>';
+         
 
-            })
-            ->addIndexColumn()
-            ->rawColumns(['no_reinburst','status_hrd','status_pembayaran','action'])
-            ->make(true);
+        })
+        ->addIndexColumn()
+        ->rawColumns(['no_reinburst','status_hrd','status_pembayaran','action'])
+        ->make(true);
+        }
+
+       
     }
     public function ajax_reinburst(){
         $reinbursts = Reinburst::
@@ -236,67 +285,88 @@ class AjaxController extends Controller
                 
                 Reinburst::where('id', $data->id)->get();
             
-                return '<button type="delete"  href="' .  route('hrd.pengajuan.destroy', $data->id). '" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>';         
+               
+                return '<a href="' . route('purchasing.reinburst.pdf', $data->id) . '"class="btn btn-sm btn-secondary"><i class="fa-solid fa-print"></i></a>
+                <button type="delete"  href="' .  route('purchasing.tukarfaktur.destroy', $data->id). '" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>';
 
             })
             ->addIndexColumn()
             ->rawColumns(['no_reinburst','status_hrd','status_pembayaran','action'])
             ->make(true);
     }
-    public function ajax_pengajuan(){
-        $pengajuans = Pengajuan::
-        leftJoin('rincian_pengajuans','pengajuans.nomor_pengajuan','=','rincian_pengajuans.nomor_pengajuan')
-        ->leftJoin('roles','pengajuans.id_roles','=','roles.id')
-        ->select('roles.name','pengajuans.id','pengajuans.status_approval','pengajuans.id_user','pengajuans.nomor_pengajuan','pengajuans.tanggal_pengajuan',
-        'rincian_pengajuans.grandtotal','pengajuans.id_perusahaan','pengajuans.id_roles')->where('pengajuans.id_user',auth()->user()->id)
-        ->groupBy('pengajuans.nomor_pengajuan')
-        ->orderBy('pengajuans.id', 'desc')
-        ->get();
-        // dd($reinbursts);
+    public function ajax_pengajuan(Request $request){
 
-        return datatables()
-            ->of($pengajuans)
-            ->editColumn('no_pengajuan', function ($pengajuan) {
-                return '<a href="' . route("logistik.pengajuan.show", $pengajuan->id) . '">' . $pengajuan->nomor_pengajuan . '</a>';
-            })
-            ->editColumn('perusahaan', function ($pengajuan) {
-                return $pengajuan->perusahaan->nama_perusahaan;
-            })
-            ->editColumn('tanggal', function ($pengajuan) {
-                return Carbon::parse($pengajuan->tanggal_pengajuan)->format('d/m/Y');
-            })
-            ->editColumn('divisi', function ($pengajuan) {
-                return $pengajuan->roles->name;
-            })
-            ->editColumn('nama', function ($pengajuan) {
-                return $pengajuan->admin->name;
-            })
-            ->editColumn('total', function ($pengajuan) {
-                return \App\Pengajuan::where('nomor_pengajuan', $pengajuan->nomor_pengajuan)->count();
-            })
-            ->editColumn('pembelian', function ($pengajuan) {
-                return $pengajuan->grandtotal;
-            })
-            ->editColumn('status', function ($pengajuan) {
-                if($pengajuan->status_approval == 'pending'){
-               return '<a class="custom-badge status-red">pending</a>';
-               }
-                if($pengajuan->status_approval == 'completed'){
-                    return '<a class="custom-badge status-green">completed</a>';
-                }
-               
-            })
-            ->editColumn('action', function ($data) {
+        if(request()->ajax()){
+
+            if(!empty($request->from_date))
+            {
                 
-                Pengajuan::where('id', $data->id)->get();
-            
-                return '<button type="delete"  href="' .  route('hrd.pengajuan.destroy', $data->id). '" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>';
-             
+                $pengajuans = Pengajuan::
+                leftJoin('rincian_pengajuans','pengajuans.nomor_pengajuan','=','rincian_pengajuans.nomor_pengajuan')
+                ->leftJoin('roles','pengajuans.id_roles','=','roles.id')
+                ->select('roles.name','pengajuans.id','pengajuans.status_approval','pengajuans.id_user','pengajuans.nomor_pengajuan','pengajuans.tanggal_pengajuan',
+                'rincian_pengajuans.grandtotal','pengajuans.id_perusahaan','pengajuans.id_roles')->where('pengajuans.id_user',auth()->user()->id)
+                ->whereBetween('pengajuans.tanggal_pengajuan', array($request->from_date, $request->to_date))
+                ->groupBy('pengajuans.nomor_pengajuan')
+                ->orderBy('pengajuans.id', 'desc')
+                ->get();
+                // dd($pengajuans);
 
-            })
-            ->addIndexColumn()
-            ->rawColumns(['no_pengajuan','status','action'])
-            ->make(true);
+            }else{
+                $pengajuans = Pengajuan::
+                leftJoin('rincian_pengajuans','pengajuans.nomor_pengajuan','=','rincian_pengajuans.nomor_pengajuan')
+                ->leftJoin('roles','pengajuans.id_roles','=','roles.id')
+                ->select('roles.name','pengajuans.id','pengajuans.status_approval','pengajuans.id_user','pengajuans.nomor_pengajuan','pengajuans.tanggal_pengajuan',
+                'rincian_pengajuans.grandtotal','pengajuans.id_perusahaan','pengajuans.id_roles')->where('pengajuans.id_user',auth()->user()->id)
+                ->groupBy('pengajuans.nomor_pengajuan')
+                ->orderBy('pengajuans.id', 'desc')
+                ->get();
+                // dd($pengajuans);
+            }
+            return datatables()
+                ->of($pengajuans)
+                ->editColumn('no_pengajuan', function ($pengajuan) {
+                    return '<a href="' . route("logistik.pengajuan.show", $pengajuan->id) . '">' . $pengajuan->nomor_pengajuan . '</a>';
+                })
+                ->editColumn('perusahaan', function ($pengajuan) {
+                    return $pengajuan->perusahaan->nama_perusahaan;
+                })
+                ->editColumn('tanggal', function ($pengajuan) {
+                    return Carbon::parse($pengajuan->tanggal_pengajuan)->format('d/m/Y');
+                })
+                ->editColumn('divisi', function ($pengajuan) {
+                    return $pengajuan->roles->name;
+                })
+                ->editColumn('nama', function ($pengajuan) {
+                    return $pengajuan->admin->name;
+                })
+                ->editColumn('total', function ($pengajuan) {
+                    return \App\Pengajuan::where('nomor_pengajuan', $pengajuan->nomor_pengajuan)->count();
+                })
+                ->editColumn('pembelian', function ($pengajuan) {
+                    return $pengajuan->grandtotal;
+                })
+                ->editColumn('status', function ($pengajuan) {
+                    if($pengajuan->status_approval == 'pending'){
+                   return '<a class="custom-badge status-red">pending</a>';
+                   }
+                    if($pengajuan->status_approval == 'completed'){
+                        return '<a class="custom-badge status-green">completed</a>';
+                    }
+                   
+                })
+                ->editColumn('action', function ($data) {
+                    
+                    Pengajuan::where('id', $data->id)->get();
+                    $button = '<a href="' . route('hrd.pengajuan.pdf', $data->id) . '"class="btn btn-sm btn-secondary"><i class="fa-solid fa-print"></i></a>';
+                    $button .= '<a href="' . route('hrd.pengajuan.destroy', $data->id) . '"   class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>';
+                    return $button;
+                })
+                ->addIndexColumn()
+                ->rawColumns(['no_pengajuan','status','action'])
+                ->make(true);
+        }
+
     }
 
 
@@ -525,19 +595,17 @@ class AjaxController extends Controller
             
             // ->toJson()
     }
-    public function ajax_listpurchase()
+    public function ajax_listpurchase(Request $request)
     {
+        if(request()->ajax()){
      
-        if (request('from') && request('to')) {
-            $from = Carbon::createFromFormat('d/m/Y', request('from'))->format('Y-m-d');
-            $to = Carbon::createFromFormat('d/m/Y', request('to'))->format('Y-m-d');
-       
+        if (!empty($request->from)) {
             $purchases = DB::table('purchases')
             ->leftJoin('tukar_fakturs','purchases.invoice','=','tukar_fakturs..no_po_vendor')
             ->leftJoin('users','purchases.user_id','=','users.id')
             ->select('purchases.id','users.name','purchases.invoice','purchases.created_at','purchases.grand_total','tukar_fakturs.nilai_invoice','tukar_fakturs.no_po_vendor')
             ->groupBy('purchases.invoice')
-            ->whereBetween('purchases.created_at', [$from, $to])
+            ->whereBetween('purchases.created_at',array($request->from, $request->to ))
             ->orderBy('purchases.id','desc')->get();
         
         } else {
@@ -593,6 +661,7 @@ class AjaxController extends Controller
             // })
             
             // ->toJson()
+        }
     }
 
     public function ajax_pembatalan()

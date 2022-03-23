@@ -12,7 +12,7 @@ class TeamSales extends Model
     protected $table = 'team_sales_user';
     public $timestamps = false;
 
-    public function teamSales()
+    public function user()
     {
         return $this->belongsTo(User::class,'id_sales');
     }

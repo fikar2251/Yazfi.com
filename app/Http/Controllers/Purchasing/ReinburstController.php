@@ -195,6 +195,14 @@ class ReinburstController extends Controller
 
         return redirect()->route('purchasing.reinburst.index')->with('success', 'Pengajuan barang berhasil');
     }
+    
+    public function pdf($id)
+    {
+        $reinbursts = Reinburst::where('id', $id)->first();
+        // dd($reinbursts);
+        // $rincianreinbursts = RincianReinburst::where('nomor_reinburst', $reinburst->nomor_reinburst)->get();
+        return view('purchasing.reinburst.pdf',compact('reinbursts','rincianreinbursts'));
+    }
 
     public function destroy(Reinburst $reinburst)
     {

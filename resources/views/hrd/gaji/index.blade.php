@@ -15,36 +15,34 @@
 </div>
 
 <x-alert></x-alert>
-<form action="{{ route('hrd.gaji.filter') }}" method="post">
-    @csrf
-    <div class="row filter-row">
-        <div class="col-sm-6 col-md-3">
-            <div class="form-group form-focus">
-           
-                <input type="date" class="form-control @error('start') is-invalid @enderror" name="start">
-                @error('start')
-                <span class="invalid-feedback">
-                    {{ $message }}
-                </span>
-                @enderror
+<br />
+<div class="row input-daterange">
+    <div class="col-sm-6 col-md-3">
+        <div class="form-group form-focus">
+            <label class="focus-label">From</label>
+            <div class="cal-icon">
+                <input type="text" name="from_date" id="from_date" class="form-control" placeholder="From Date"
+                    readonly />
             </div>
-        </div>
-        <div class="col-sm-6 col-md-3">
-            <div class="form-group form-focus">
-            
-                <input type="date" class="form-control @error('end') is-invalid @enderror" name="end">
-                @error('end')
-                <span class="invalid-feedback">
-                    {{ $message }}
-                </span>
-                @enderror
-            </div>
-        </div>
-        <div class="col-md-2">
-            <button class="btn btn-success btn-block">Submit</button>
         </div>
     </div>
-</form>
+
+    <div class="col-sm-6 col-md-3">
+        <div class="form-group form-focus">
+            <label class="focus-label">To</label>
+            <div class="cal-icon">
+                <input type="text" name="to_date" id="to_date" class="form-control" placeholder="To Date" readonly />
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-3">
+        <br />
+        <div class="form-group form-focus">
+            <button type="button" name="filter" id="filter" class="btn btn-primary">Search</button>
+        </div>
+    </div>
+</div>
+<br />
 <div class="row">
     <div class="col-md-12">
         <div class="table-responsive">
@@ -108,8 +106,9 @@
                 <th>&nbsp;</th>
                 <th>&nbsp;</th>
                 <th>&nbsp;</th>
+                <th>&nbsp;</th>
             </tr>
-     
+
         </tfoot>
         </table>
 
@@ -130,9 +129,16 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <link href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" rel="stylesheet">
 <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
-
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.js"></script>
 <script>
     $(document).ready(function () {
+        $('.input-daterange').datepicker({
+            todayBtn: 'linked',
+            format: 'yyyy-mm-dd',
+            autoclose: true
+        });
         $.noConflict();
         $.ajaxSetup({
             headers: {
@@ -143,164 +149,189 @@
             .clone(true)
             .addClass('filters')
             .appendTo('#gaji thead');
+        load_data();
 
-        var table = $('#gaji').DataTable({
-            processing: true,
-            serverSide: true,
-            orderCellsTop: true,
-            fixedHeader: true,
-            dom: 'Bfrtip',
-            buttons: [{
-                    extend: 'copy',
-                    className: 'btn-default',
-                    exportOptions: {
-                        columns: ':visible'
+
+        function load_data(from_date = '', to_date = '') {
+
+            var table = $('#gaji').DataTable({
+                processing: true,
+                serverSide: true,
+                orderCellsTop: true,
+                fixedHeader: true,
+                dom: 'Bfrtip',
+                buttons: [{
+                        extend: 'copy',
+                        className: 'btn-default',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    {
+                        extend: 'excel',
+                        className: 'btn-default',
+                        title: 'Laporan Penggajian ',
+                        messageTop: 'Tanggal  {{ request("start") }} - {{ request("end") }}',
+                        footer: true,
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    {
+                        extend: 'pdf',
+                        className: 'btn-default',
+                        title: 'Laporan Penggajian ',
+                        messageTop: 'Tanggal {{ request("start") }} - {{ request("end") }}',
+                        footer: true,
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        className: 'btn-default',
+                        title: 'Laporan Penggajian ',
+                        messageTop: 'Tanggal {{ request("start") }} - {{ request("end") }}',
+                        footer: true,
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                ],
+                initComplete: function () {
+                    var api = this.api();
+
+                    // For each column
+                    api
+                        .columns()
+                        .eq(0)
+                        .each(function (colIdx) {
+                            // Set the header cell to contain the input element
+                            var cell = $('.filters th').eq(
+                                $(api.column(colIdx).header()).index()
+                            );
+                            var title = $(cell).text();
+                            $(cell).html('<input type="text" placeholder="' + title + '" />');
+
+                            // On every keypress in this input
+                            $(
+                                    'input',
+                                    $('.filters th').eq($(api.column(colIdx).header()).index())
+                                )
+                                .off('keyup change')
+                                .on('keyup change', function (e) {
+                                    e.stopPropagation();
+
+                                    // Get the search value
+                                    $(this).attr('title', $(this).val());
+                                    var regexr =
+                                        '({search})';
+                                    // $(this).parents('th').find('select').val();
+
+                                    var cursorPosition = this.selectionStart;
+                                    // Search the column for that value
+                                    api
+                                        .column(colIdx)
+                                        .search(
+                                            this.value != '' ?
+                                            regexr.replace('{search}', '(((' + this.value +
+                                                ')))') :
+                                            '',
+                                            this.value != '',
+                                            this.value == ''
+                                        )
+                                        .draw();
+
+                                    $(this)
+                                        .focus()[0]
+                                        .setSelectionRange(cursorPosition, cursorPosition);
+                                });
+                        });
+                },
+
+                ajax: {
+                    url: '/admin/ajax/ajax_gaji',
+                    get: 'get',
+                    data: {
+                        from_date: from_date,
+                        to_date: to_date
                     }
-                },
-                {
-                    extend: 'excel',
-                    className: 'btn-default',
-                    title: 'Laporan Penggajian ',
-                    messageTop: 'Tanggal  {{ request("start") }} - {{ request("end") }}',
-                    footer: true,
-                    exportOptions: {
-                        columns: ':visible'
-                    }
-                },
-                {
-                    extend: 'pdf',
-                    className: 'btn-default',
-                    title: 'Laporan Penggajian ',
-                    messageTop: 'Tanggal {{ request("start") }} - {{ request("end") }}',
-                    footer: true,
-                    exportOptions: {
-                        columns: ':visible'
-                    }
-                },
-                {
-                    extend: 'print',
-                    className: 'btn-default',
-                    title: 'Laporan Penggajian ',
-                    messageTop: 'Tanggal {{ request("start") }} - {{ request("end") }}',
-                    footer: true,
-                    exportOptions: {
-                        columns: ':visible'
-                    }
-                },
-            ],
-            initComplete: function () {
-                var api = this.api();
 
-                // For each column
-                api
-                    .columns()
-                    .eq(0)
-                    .each(function (colIdx) {
-                        // Set the header cell to contain the input element
-                        var cell = $('.filters th').eq(
-                            $(api.column(colIdx).header()).index()
-                        );
-                        var title = $(cell).text();
-                        $(cell).html('<input type="text" placeholder="' + title + '" />');
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex'
+                    },
+                    {
+                        data: 'pegawai',
+                        name: 'pegawai'
+                    },
+                    {
+                        data: 'tanggal',
+                        name: 'tanggal'
+                    },
+                    {
+                        data: 'bulan_tahun',
+                        name: 'bulan_tahun'
+                    },
+                    {
+                        data: 'gaji_pokok',
+                        name: 'gaji_pokok',
+                        render: $.fn.dataTable.render.number('.', ',', 0, 'Rp.')
+                    },
+                    {
+                        data: 'penerimaan',
+                        name: 'penerimaan',
+                        render: $.fn.dataTable.render.number('.', ',', 0, 'Rp.')
+                    },
+                    {
+                        data: 'potongan',
+                        name: 'potongan',
+                        render: $.fn.dataTable.render.number('.', ',', 0, 'Rp.')
+                    },
+                    {
+                        data: 'total',
+                        name: 'total',
+                        render: $.fn.dataTable.render.number('.', ',', 0, 'Rp.')
+                    },
+                    {
+                        data: 'jabatan',
+                        name: 'jabatan'
+                    },
+                    {
+                        data: 'divisi',
+                        name: 'divisi'
+                    }, {
+                        data: 'admin',
+                        name: 'admin'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action'
+                    },
 
-                        // On every keypress in this input
-                        $(
-                                'input',
-                                $('.filters th').eq($(api.column(colIdx).header()).index())
-                            )
-                            .off('keyup change')
-                            .on('keyup change', function (e) {
-                                e.stopPropagation();
-
-                                // Get the search value
-                                $(this).attr('title', $(this).val());
-                                var regexr =
-                                    '({search})';
-                                // $(this).parents('th').find('select').val();
-
-                                var cursorPosition = this.selectionStart;
-                                // Search the column for that value
-                                api
-                                    .column(colIdx)
-                                    .search(
-                                        this.value != '' ?
-                                        regexr.replace('{search}', '(((' + this.value +
-                                            ')))') :
-                                        '',
-                                        this.value != '',
-                                        this.value == ''
-                                    )
-                                    .draw();
-
-                                $(this)
-                                    .focus()[0]
-                                    .setSelectionRange(cursorPosition, cursorPosition);
-                            });
-                    });
-            },
-
-            ajax: {
-                url: '/admin/ajax/ajax_gaji',
-                get: 'get'
-
-            },
-            columns: [{
-                    data: 'DT_RowIndex',
-                    name: 'DT_RowIndex'
-                },
-                {
-                    data: 'pegawai',
-                    name: 'pegawai'
-                },
-                {
-                    data: 'tanggal',
-                    name: 'tanggal'
-                },
-                {
-                    data: 'bulan_tahun',
-                    name: 'bulan_tahun'
-                },
-                {
-                    data: 'gaji_pokok',
-                    name: 'gaji_pokok',
-                    render: $.fn.dataTable.render.number('.', ',', 0, 'Rp.')
-                },
-                {
-                    data: 'penerimaan',
-                    name: 'penerimaan',
-                    render: $.fn.dataTable.render.number('.', ',', 0, 'Rp.')
-                },
-                {
-                    data: 'potongan',
-                    name: 'potongan',
-                    render: $.fn.dataTable.render.number('.', ',', 0, 'Rp.')
-                },
-                {
-                    data: 'total',
-                    name: 'total',
-                    render: $.fn.dataTable.render.number('.', ',', 0, 'Rp.')
-                },
-                {
-                    data: 'jabatan',
-                    name: 'jabatan'
-                },
-                {
-                    data: 'divisi',
-                    name: 'divisi'
-                }, {
-                    data: 'admin',
-                    name: 'admin'
-                },
-                {
-                    data: 'action',
-                    name: 'action'
-                },
-
-            ],
+                ],
 
 
-        })
-    })
+            });
+        }
+        $('#filter').click(function () {
+            var from_date = $('#from_date').val();
+            var to_date = $('#to_date').val();
+            if (from_date != '' && to_date != '') {
+                $('#gaji').DataTable().destroy();
+                load_data(from_date, to_date);
+            } else {
+                alert('Pilih Tanggal Terlebih Dahulu');
+            }
+        });
+        $('#refresh').click(function () {
+            $('#from_date').val('');
+            $('#to_date').val('');
+            $('#order_table').DataTable().destroy();
+            load_data();
+        });
+    });
 
 </script>
 @stop

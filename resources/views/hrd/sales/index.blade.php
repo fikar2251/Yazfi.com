@@ -25,7 +25,7 @@
                         <th></th>
                         <th>Action</th>
                     </tr>
-                </thead>
+                </thead>    
 
                 <tbody>
                     @foreach($sales as $sale)
@@ -33,9 +33,9 @@
                         <th class="text-center">{{ $loop->iteration }}</th>
                         <th>{{ $sale->manager->name }}</th>
                         <th>{{ $sale->spv->name }}</th>
-                        @foreach($coba as $cobas)
-                        <th> <span class="custom-badge status-blue" >{{ $cobas->teamSales->name }}</span></th>
-                        @endforeach
+                        {{-- @foreach(App\TeamSales::where('id_spv', $coba->id_spv)->get() as $cobas)
+                        <th> <span class="custom-badge status-blue" >{{ $cobas->user->name }}</span></th>
+                        @endforeach --}}
                         <th></th>
                         <th>
                             <a href="{{ route('hrd.sales.edit', $sale->id) }}" class="btn btn-sm btn-info"><i

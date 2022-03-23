@@ -39,7 +39,7 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="table-responsive">
-            <table class="table table-bordered table-striped custom-table report" id="reinburst">
+            <table class="table table-bordered table-striped custom-table report" id="reinburst" width="100%">
                  <thead>
                     <tr>
                         <th>No</th>

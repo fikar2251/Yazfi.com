@@ -76,9 +76,5 @@ class User extends Authenticatable
         return $this->belongsTo(Project::class, 'cabang_id');
     }
 
-    // public function teamSales()
-    // {
-    //     return $this->hasMany(TeamSales::class,'id_sales');
-    // }
 
 }

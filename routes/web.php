@@ -298,7 +298,8 @@ Route::middleware('auth')->group(function () {
             Route::resource('permission', 'PermissionController');
 
             Route::resource('pengajuan', 'PengajuanController');
-            
+            Route::get('pengajuan/pdf/{id}', 'PengajuanController@pdf')->name('pengajuan.pdf');
+            Route::get('pengajuan/destroy/{id}', 'PengajuanController@destroy')->name('pengajuan.destroy');
             
             Route::resource('reinburst', 'ReinburstController');
 
@@ -313,8 +314,8 @@ Route::middleware('auth')->group(function () {
 
             Route::resource('penerimaan', 'PenerimaanController');
 
-            Route::patch('hrd/penerimaan/{penerimaan}', 'PenerimaanController@edit')->name('penerimaan.edit');
-            Route::patch('hrd/penerimaan/{penerimaan}', 'PenerimaanController@statuscompleted')->name('penerimaan.statuscompleted');
+            Route::get('hrd/penerimaan/{penerimaan}', 'PenerimaanController@edit')->name('penerimaan.edit');
+            Route::get('hrd/penerimaan/{penerimaan}', 'PenerimaanController@statuscompleted')->name('penerimaan.statuscompleted');
 
 
             //pengajian
@@ -322,6 +323,7 @@ Route::middleware('auth')->group(function () {
             Route::resource('potongan','MstPotonganController');
            
             Route::get('gaji/print/{id}','GajiController@print')->name('gaji.print');
+            Route::get('gaji/{id}', 'GajiController@destroy')->name('gaji.destroy');
             Route::post('gaji/filter','GajiController@filter')->name('gaji.filter');
             Route::resource('gaji', 'GajiController');
             Route::get('/where/searchPegawai', 'GajiController@searchPegawai');
@@ -411,6 +413,9 @@ Route::middleware('auth')->group(function () {
 
             Route::post('tukarfaktur/create/store', 'TukarFakturController@store')->name('tukarfaktur.create.store');
             Route::get('/tukarfaktur/pdf/{id}','TukarFakturController@pdf')->name('tukarfaktur.pdf');
+            
+            
+            Route::get('/reinburst/pdf/{id}','ReinburstController@pdf')->name('reinburst.pdf');
 
             Route::resource('reinburst', 'ReinburstController');
             Route::resource('penerimaan-barang', 'PenerimaanBarangController');

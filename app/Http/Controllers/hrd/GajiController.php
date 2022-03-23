@@ -185,11 +185,14 @@ class GajiController extends Controller
      */
     public function destroy($id)
     {
+       $penggajian = Penggajian::where('id',$id)->get();
+        foreach ($penggajian as $peng) {
+            RincianGaji::where('penggajian_id', $peng->penggajian_id)->delete();
         
-            //code...
-            RincianGaji::where('penggajian_id', $id)->delete();
-            Penggajian::findOrFail($id)->delete();
-            return redirect()->route('hrd.gaji.index')->with('success', 'Penggajian has been deleted');
+            $peng->delete();
+        }
+       
+      return redirect()->route('hrd.gaji.index')->with('success', 'Penggajian has been deleted');
     }
     public function filter(Request $request)
     {

@@ -1,122 +1,276 @@
-@extends('layouts.master', ['title' => 'PDF Pengajuan Dana'])
-@section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-3 body-main">
-            <div class="col-md-12">
-                <div class="card shadow" id="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="dashboard-logo">
-                                    <img src="{{url('/img/logo/yazfi.png ')}}" alt="Image" />
-                                </div>
-                            </div>
-                            <div class="col-md-8 text-right">
-                                <h6><span style="font-size: 15px; color:white; background-color:blue;">{{$pengajuan->nomor_pengajuan}}</span></h6>
-                            </div>
-                        </div><br>
-                        <div class="payment-details">
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex, nofollow">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="yoriadiatma">
+    <!-- Bootstrap CSS -->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <title>Penggajian Karyawan</title>
+    <style>
+        @page {
+            margin: 0
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12;
+        }
+
+        .table-kop tr td {
+            padding: 5px;
+        }
+
+        .italic {
+            font-style: italic;
+        }
+
+        .sheet {
+            overflow: hidden;
+            position: relative;
+            display: block;
+            margin: 0 auto;
+            box-sizing: border-box;
+            page-break-after: always;
+        }
+
+        /** Paper sizes **/
+        body.A3 .sheet {
+            width: 297mm;
+            height: 419mm
+        }
+
+        body.A3.landscape .sheet {
+            width: 420mm;
+            height: 296mm
+        }
+
+        body.A4 .sheet {
+            width: 210mm;
+            height: 296mm
+        }
+
+        body.struk .sheet {
+            width: 100mm;
+        }
+
+        body.A4.landscape .sheet {
+            width: 297mm;
+            height: 209mm
+        }
+
+        body.A5 .sheet {
+            width: 148mm;
+            height: 209mm
+        }
+
+        body.A5.landscape .sheet {
+            width: 210mm;
+            height: 147mm
+        }
+
+        /** Padding area **/
+        .sheet.padding-1mm {
+            padding: 1mm
+        }
+
+        .sheet.padding-10mm {
+            padding: 10mm
+        }
+
+        .sheet.padding-15mm {
+            padding: 15mm
+        }
+
+        .sheet.padding-20mm {
+            padding: 20mm
+        }
+
+        .sheet.padding-25mm {
+            padding: 25mm
+        }
+
+        /** For screen preview **/
+        @media screen {
+            body {
+                background: #e0e0e0
+            }
+
+            .sheet {
+                background: white;
+                box-shadow: 0 .5mm 2mm rgba(0, 0, 0, .3);
+                margin: 5mm auto;
+                display: block;
+            }
+        }
+
+        /** Fix for Chrome issue #273306 **/
+        @media print {
+            body.A3.landscape {
+                width: 420mm
+            }
+
+            body.A3,
+            body.A4.landscape {
+                width: 297mm
+            }
+
+            body.A4,
+            body.A5.landscape {
+                width: 210mm
+            }
+
+            body.A5 {
+                width: 148mm
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-3 body-main">
+                <div class="col-md-12">
+                    <div class="card shadow" id="card">
+                        @foreach($pengajuan as $peng)
+                        @endforeach
+                        <div class="card-body">
                             <div class="row">
-                                <div class="col-sm-6">
-                                    <p style="font-size: 12px">Nama :
-                                        <a>
-                                            {{ $pengajuan->admin->name }}
-                                        </a>
-                                    </p style="font-size: 12px">
-                                    <p style="font-size: 12px">Jabatan :
-                                        <a style="font-size: 12px">
-                                            {{ $jabatan->nama }}
-                                        </a>
-                                    </p>
-                                    <p style="font-size: 12px">Divisi :
-                                        <a style="font-size: 12px">
-                                            {{ $pengajuan->roles->name }}
-                                        </a>
-                                    </p>
-                                </div>
-                                <div class="col-sm-6 tex-right">
-                                    <div class="form-group">
-                                        <p style="font-size: 12px">Tanggal : <a style="font-size: 12px">{{ Carbon\Carbon::parse($pengajuan->tanggal_pengajuan)->format('d/m/Y H:i:s') }}
-                                            </a></p>
+                                <div class="col-md-4">
+                                    <div class="dashboard-logo">
+                                        <img src="{{url('/img/logo/yazfi.png ')}}" alt="Image" />
                                     </div>
-                                    <div class="form-group">
-                                        <p style="font-size: 12px">Lampiran : <a style="font-size: 12px">{{$pengajuan->nomor_pengajuan}}/{{ $pengajuan->file }}</a>
+                                </div>
+                                <div class="col-md-8 text-right">
+                                    <h6><span
+                                            style="font-size: 15px; color:white; background-color:blue;">{{$peng->nomor_pengajuan}}</span>
+                                    </h6>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 text-center">
+                                    <h2><span style="color:blue; text-decoration: underline; font-size: 20px">Pengajuan
+                                            Dana</span></h2>
+                                </div>
+                            </div> <br />
+                            <div class="payment-details">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <p style="margin-right:50%;" style="font-size: 12px">Nama :
+                                            <a>
+                                                {{ $peng->admin->name }}
+                                            </a>
+                                        </p style="font-size: 12px">
+                                        <p style="font-size: 12px">Jabatan :
+                                            <a style="font-size: 12px">
+                                                {{ $jabatan->nama }}
+                                            </a>
+                                        </p>
+                                        <p style="font-size: 12px">Divisi :
+                                            <a style="font-size: 12px">
+                                                {{ $peng->roles->name }}
+                                            </a>
                                         </p>
                                     </div>
+                                    <div class="col-sm-6 tex-right">
+                                        <div class="form-group">
+                                            <p style="font-size: 12px">Tanggal : <a
+                                                    style="font-size: 12px">{{ Carbon\Carbon::parse($peng->tanggal_pengajuan)->format('d/m/Y H:i:s') }}
+                                                </a></p>
+                                        </div>
+                                        <div class="form-group">
+                                            <p style="font-size: 12px">Lampiran : <a
+                                                    style="font-size: 12px">{{ $peng->file }}</a>
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered  report">
-                                        <tr class="bg-success">
-                                            <th class="text-light">No.</th>
-                                            <th class="text-light">Deskripsi</th>
-                                            <th class="text-light">Harga Satuan</th>
-                                            <th class="text-light">Kwitansi</th>
-                                            <th class="text-light">Jumlah</th>
-                                            <th class="text-light">Keterangan</th>
-                                        </tr>
-                                        <tbody>
-                                            @php
-                                            $total = 0
-                                            @endphp
-                                            @foreach(App\Pengajuan::where('nomor_pengajuan', $pengajuan->nomor_pengajuan)->first() as $barang)
-                                            <tr>
-                                                <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $barang->barang->nama_barang }}</td>
-                                                <td>{{ $barang->rincianpengajuan->qty }}</td>
-                                                <td>@currency($barang->rincianpengajuan->harga_beli)</td>
-                                                <td>@currency($barang->rincianpengajuan->grandtotal)</td>
-                                                <td>{{$barang->rincianpengajuan->keterangan}}</td>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered  ">
+                                            <tr class="bg-success">
+                                                <th class="text-light">No.</th>
+                                                <th class="text-light">Keterangan</th>
+                                                <th style="width:15%;" class="text-light">Harga Satuan</th>
+                                                <th class="text-light">Kwitansi</th>
+                                                <th style="width:5%;" class="text-light">Qty</th>
+                                                <th style="width:5%;" class="text-light">Unit</th>
+                                                <th style="width:20%;" class="text-light">Deskripsi</th>
+                                                <th style="width:20%;" class="text-light">Jumlah</th>
                                             </tr>
-                                            @php
-                                            $total += $barang->total
-                                            @endphp
-                                            @endforeach
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <td colspan="3"><strong>Total<strong> </td>
-                                                <td></td>
-                                                <td><b>@currency($total + $barang->rincianpengajuan->grandtotal)</b></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="6" rowspan="1">Cat :</td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2">
-                                                    <p class="text-center">Diajukan Oleh,</p>
-                                                </td>
-                                                <td colspan="2">
-                                                    <p class="text-center">DiPeriksa,</p>
-                                                    <br>
-                                                    <br>
-                                                    <p class="text-left">Manager</p>
-                                                    <p class="text-right" style="margin-top: -37px;">Keuangan</p>
-                                                </td>
-                                                <td colspan="1">
-                                                    <p class="text-center">DiSetujui,</p>
-                                                    <br>
-                                                    <br>
-                                                    <p class="text-center">Direktur</p>
-                                                </td>
-                                                <td colspan="1">
-                                                    <p class="text-center">DiKetahui,</p>
-                                                    <br>
-                                                    <br>
-                                                    <p class="text-center">Komisaris</p>
-                                                </td>
-                                            </tr>
-                                            <!-- <tr>
-                                            <td colspan="6" rowspan="2">Cat :</td>
-                                        </tr> -->
+                                            <tbody>
 
-                                        </tfoot>
-                                    </table>
+                                                @php
+                                                $total = 0
+                                                @endphp
+                                                @foreach(App\RincianPengajuan::where('nomor_pengajuan',
+                                                $peng->nomor_pengajuan)->get() as $barang)
+                                                <tr>
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ $barang->barang_id }}</td>
+                                                    <td>@currency($barang->harga_beli)</td>
+                                                    <td>{{$barang->no_kwitansi}}</td>
+                                                    <td>{{$barang->qty}}</td>
+                                                    <td>{{$barang->unit}}</td>
+                                                    <td>{{ $barang->keterangan }}</td>
+                                                    <td>@currency($barang->total)</td>
+                                                </tr>
+
+                                                @endforeach
+
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="7"><strong>Total<strong> </td>
+                                                    <td colspan="2"><b>@currency($barang->grandtotal)</b></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="8" rowspan="1">Cat :</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2">
+                                                        <p class="text-center">Diajukan Oleh,</p>
+                                                    </td>
+                                                    <td colspan="2">
+                                                        <p class="text-center">DiPeriksa,</p>
+                                                        <br>
+                                                        <br>
+                                                        <p class="text-left">Manager</p>
+                                                        <p class="text-right" style="margin-top: -37px;">Keuangan</p>
+                                                    </td>
+                                                    <td colspan="2">
+                                                        <p class="text-center">DiSetujui,</p>
+                                                        <br>
+                                                        <br>
+                                                        <p class="text-center">Direktur</p>
+                                                    </td>
+                                                    <td colspan="2">
+                                                        <p class="text-center">DiKetahui,</p>
+                                                        <br>
+                                                        <br>
+                                                        <p class="text-center">Komisaris</p>
+                                                    </td>
+                                                </tr>
+                                                <!-- <tr>
+                                                <td colspan="6" rowspan="2">Cat :</td>
+                                            </tr> -->
+
+                                            </tfoot>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -125,188 +279,23 @@
             </div>
         </div>
     </div>
+    <!-- Optional JavaScript; choose one of the two! -->
 
-    </html>
-    <script>
-        function myFunction() {
-            document.getElementById("demo").innerHTML = "YOU CLICKED ME!";
-        }
-        $('.report').DataTable({
-            dom: 'Bfrtip',
-            buttons: [{
-                    extend: 'copy',
-                    className: 'btn-default',
-                    exportOptions: {
-                        columns: ':visible'
-                    }
-                },
-                {
-                    extend: 'excel',
-                    className: 'btn-default',
-                    title: 'Laporan Pembelian ',
-                    messageTop: 'Tanggal  {{ request("from") }} - {{ request("to") }}',
-                    footer: true,
-                    exportOptions: {
-                        columns: ':visible'
-                    }
-                },
-                {
-                    extend: 'pdf',
-                    className: 'btn-default',
-                    title: 'Laporan Pembelian ',
-                    messageTop: 'Tanggal {{ request("from") }} - {{ request("to") }}',
-                    footer: true,
-                    exportOptions: {
-                        columns: ':visible'
-                    }
-                },
-            ]
-        });
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
     </script>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
     <script>
-        var formatter = function(num) {
-            var str = num.toString().replace("", ""),
-                parts = false,
-                output = [],
-                i = 13,
-                formatted = null;
-            if (str.indexOf(".") > 0) {
-                parts = str.split(".");
-                str = parts[0];
-            }
-            str = str.split("").reverse();
-            for (var j = 0, len = str.length; j < len; j++) {
-                if (str[j] != ",") {
-                    output.push(str[j]);
-                    if (i % 3 == 0 && j < (len - 1)) {
-                        output.push(",");
-                    }
-                    i++;
-                }
-            }
-            formatted = output.reverse().join("");
-            return ("" + formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
-        };
+        window.print()
 
-
-        // document.getElementById('submit').disabled = true
-
-        function form_dinamic() {
-            let index = $('#dynamic_field tr').length + 1
-            document.getElementById('counter').innerHTML = index
-            let template = `
-        <tr class="rowComponent">
-                    <td hidden>
-                        <input type="hidden" name="barang_id[${index}]" class="barang_id-${index}">
-                    </td>
-                    <td>
-                        <select required name="barang_id[${index}]" id="${index}" class="form-control select-${index}"></select>
-                    </td>
-                    <td>
-                        <input type="number" name="qty[${index}]"  class="form-control qty-${index}" placeholder="0">
-                    </td>
-                    <td>
-                        <input type="number" name="harga_beli[${index}]" class="form-control harga_beli-${index} waktu" placeholder="0"  data="${index}" onkeyup="hitung(this), HowAboutIt(this)">
-                    </td>
-                    <td>
-                        <input type="number" name="total[${index}]" disabled class="form-control total-${index} total-form"  placeholder="0">
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-danger btn-sm" onclick="remove(this)">Delete</button>
-                    </td>
-                </tr>
-        `
-            $('#dynamic_field').append(template)
-
-            $(`.select-${index}`).select2({
-                placeholder: 'Select Product',
-                ajax: {
-                    url: `/admin/where/product`,
-                    processResults: function(data) {
-                        console.log(data)
-                        return {
-                            results: data
-                        };
-                    },
-                    cache: true
-                }
-            });
-
-
-        }
-
-        function remove(q) {
-            $(q).parent().parent().remove()
-        }
-        $('.remove').on('click', function() {
-            $(this).parent().parent().remove()
-        })
-
-        function hitung(e) {
-            let harga = e.value
-            let attr = $(e).attr('data')
-            let qty = $(`.qty-${attr}`).val()
-            let total = parseInt(harga * qty)
-
-            $(`.total-${attr}`).val(total)
-
-        }
-
-        function HowAboutIt(e) {
-            let sub_total = document.getElementById('sub_total')
-            let total = 0;
-
-            let coll = document.querySelectorAll('.total-form')
-            for (let i = 0; i < coll.length; i++) {
-                let ele = coll[i]
-                total += parseInt(ele.value)
-            }
-
-            sub_total.value = total
-            let tax = (10 / 100) * sub_total.value;
-            let total_all = parseInt(tax);
-            // rupiah()
-            document.getElementById('PPN').value = total_all;
-
-
-        }
-
-
-        $(document).ready(function() {
-            $('#add').on('click', function() {
-                form_dinamic()
-            })
-        })
-
-        $(document).ready(function() {
-            $('.dynamic').change(function() {
-
-                var id = $(this).val();
-                var div = $(this).parent();
-                var op = " ";
-                $.ajax({
-                    url: `/logistik/where/project`,
-                    method: "get",
-                    data: {
-                        'id': id
-
-
-                    },
-
-                    success: function(data) {
-                        console.log(data);
-                        op += '<option value="0" selected disabled> Lokasi</option>';
-                        for (var i = 0; i < data.length; i++) {
-                            op += '<option value="' + data[i].alamat_project + '">' + data[i].alamat_project + '</option>'
-                        };
-                        $('.root3').html(op);
-                    },
-                    error: function() {
-
-                    }
-                })
-            })
-        })
     </script>
-    @stop
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    -->
+</body>
+
+</html>

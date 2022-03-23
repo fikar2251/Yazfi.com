@@ -115,20 +115,17 @@ class PengajuanController extends Controller
         return redirect()->route('hrd.pengajuan.index')->with('success', 'Pengajuan Dana barang berhasil');
     }
 
-    public function pdf(Pengajuan $pengajuan, $id)
+    public function pdf($id)
     {
-        $pengajuan = Pengajuan::where('id', $id)->where('nomor_pengajuan', $pengajuan->nomor_pengajuan)->first();
-        // $rincian = RincianPengajuan::where('nomor_pengajuan', $pengajuan->nomor_pengajuan)->first();
-        // $jabatan = DB::table('users')
-        //     ->leftJoin('jabatans', 'users.id_jabatans', '=', 'jabatans.id')
-        //     ->leftJoin('pengajuans', 'users.id_perusahaan', '=', 'pengajuans.id_perusahaan')
-        //     ->select('jabatans.nama')
-        //     ->where('pengajuans.nomor_pengajuan', $pengajuan->nomor_pengajuan)
-        //     ->first();
-        // share data to view
-        view()->share('logistik.pengajuan.pdf', $pengajuan);
-        $pdf = PDF::loadView('logistik.pengajuan.pdf', ['pengajuan' => $pengajuan]);
-        return $pdf->download('Laporan Pengajuan.pdf');
+        $pengajuan = Pengajuan::where('id', $id)->get();
+        $jabatan = DB::table('users')
+            ->leftJoin('jabatans', 'users.id_jabatans', '=', 'jabatans.id')
+            ->leftJoin('roles', 'users.id_roles', '=', 'roles.id')
+            ->leftJoin('pengajuans', 'users.id_perusahaan', '=', 'pengajuans.id_perusahaan')
+            ->select('jabatans.nama', 'users.name', 'roles.name','pengajuans.id')
+            ->where('pengajuans.id', $id)
+            ->first();
+        return view('hrd.pengajuan.pdf',compact('pengajuan','jabatan'));
     }
     public function show(Pengajuan $pengajuan)
     {
@@ -230,9 +227,9 @@ class PengajuanController extends Controller
 
     
 
-    public function destroy(Pengajuan $pengajuan)
+    public function destroy($id)
     {
-        $pengajuan = Pengajuan::where('nomor_pengajuan', $pengajuan->nomor_pengajuan)->get();
+        $pengajuan = Pengajuan::where('id', $id)->get();
         // dd($pengajuan);
 
         foreach ($pengajuan as $pur) {
