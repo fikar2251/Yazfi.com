@@ -21,8 +21,8 @@ class DoctorController extends Controller
      */
     public function index()
     {
-
-        return view('marketing.doctor.index');
+        $stok = Marketing::all();
+        return view('marketing.doctor.index', compact('stok'));
     }
 
     public function json()
