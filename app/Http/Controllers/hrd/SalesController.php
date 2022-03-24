@@ -17,17 +17,10 @@ class SalesController extends Controller
 {
     public function index( TeamSales $sale, Request $request)
     {
-        $sales = TeamSales::all();
-       
-        // foreach ($sales as $tim) {
-        //     $coba = TeamSales::select('id_sales')->where('id_spv',$tim->id_spv)->get();
-        //     // dd($coba);
-
-        //     $sale = TeamSales::whereIn('id_sales',$coba)->select('id_sales')->get();
-        //     // dd($sale);
-        // }
-    
-        return view ('hrd.sales.index',['sales' => $sales]);
+        $sales = User::select('id')->role('supervisor')->where('id_jabatans', 2)->get();
+        $manager = TeamSales::whereIn('user_id', $sales)->select('id_manager','user_id')->first();
+        // dd($manager);
+        return view ('hrd.sales.index',compact('sales','manager'));
     }
 
     public function create(TeamSales $sale)
@@ -36,10 +29,10 @@ class SalesController extends Controller
 
         $roles = Role::get();
 
-        $manager_marketing = User::role('marketing')->where('id_jabatans','1')->get();
+        $manager_marketing = User::role('marketing')->where('id_jabatans',1)->get();
         // dd($manager_marketing);
 
-        $staff_marketing = User::role('marketing')->where('id_jabatans','2')->get();
+        $staff_marketing = User::role('marketing')->where('id_jabatans',2)->get();
         // dd($staff_marketing);
 
         $spv = User::role('supervisor')->get();
@@ -72,20 +65,23 @@ class SalesController extends Controller
     }
 
 
-    public function edit(TeamSales $sale)
+    public function edit(User $sale)
     {
+        
+        $team = TeamSales::whereIn('user_id', $sale)->select('id_manager','user_id')->first();
+        // dd($team);
     
         $roles = Role::get();
         
-        $manager_marketing = User::role('marketing')->where('id_jabatans','1')->get();
+        $manager_marketing = User::role('marketing')->where('id_jabatans',1)->get();
         // dd($manager_marketing);
 
-        $staff_marketing = User::role('marketing')->where('id_jabatans','2')->get();
+        $staff_marketing = User::role('marketing')->where('id_jabatans',2)->get();
         // dd($staff_marketing);
 
         $spv = User::role('supervisor')->get();
         
-        return view('hrd.sales.edit', compact('spv','staff_marketing', 'manager_marketing', 'jabatans','sale'));
+        return view('hrd.sales.edit', compact('spv','staff_marketing', 'manager_marketing', 'jabatans','sale','team'));
     }
 
     /**
@@ -116,16 +112,14 @@ class SalesController extends Controller
         return redirect()->route('hrd.sales.index')->with('success', 'Team Sales has been updated');
     }
 
-    public function destroy(TeamSales $sale)
+    public function destroy(User $sale)
     {
-        $team = TeamSales::where('id_spv', $sale->id_spv)->get();
+        $team = TeamSales::where('user_id', $sale->id)->get();
         // dd($team);
 
         foreach ($team as $tim) {
-            TeamSales::where('id_spv', $tim->id_spv)->delete();
-            // $harga = HargaProdukCabang::where('barang_id', $pur->barang_id)->where('project_id', auth()->user()->project_id)->first();
-
-         
+            TeamSales::where('user_id', $tim->id)->delete();
+            
             $tim->delete();
         }
     //   TeamSales::where('id',$id)->delete();

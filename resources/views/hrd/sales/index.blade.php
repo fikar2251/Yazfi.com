@@ -31,11 +31,13 @@
                     @foreach($sales as $sale)
                     <tr>
                         <th class="text-center">{{ $loop->iteration }}</th>
-                        <th>{{ $sale->manager->name }}</th>
-                        <th>{{ $sale->spv->name }}</th>
-                        @foreach($sale->sale as $pur)
-                        <th>{{ $pur->id_sales }}</th>
+                       <th>{{ $manager->manager->name }}</th>
+                       <th>{{ $manager->spv->name }}</th>
+                      <th>
+                        @foreach($sale->sales as $pur)
+                        <span class="custom-badge status-blue">{{ $pur->user->name }}</span>
                         @endforeach
+                      </th>
                         <th>
                             <a href="{{ route('hrd.sales.edit', $sale->id) }}" class="btn btn-sm btn-info"><i
                             class="fa fa-edit"></i></a>

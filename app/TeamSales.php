@@ -13,7 +13,7 @@ class TeamSales extends Model
     public $timestamps = false;
     public function user()
     {
-        return $this->hasOne('App\User','id_sales');
+        return $this->belongsTo(User::class,'id_sales');
     }
     public function manager()
     {
@@ -21,7 +21,7 @@ class TeamSales extends Model
     }
     public function spv()
     {
-        return $this->belongsTo(User::class,'id_spv');
+        return $this->belongsTo(User::class,'user_id');
     }
 
 }

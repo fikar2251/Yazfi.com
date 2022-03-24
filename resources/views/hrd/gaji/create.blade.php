@@ -26,23 +26,7 @@
                                             {{-- <select name="pegawai" id="pegawai"
                                                 class="form-control select2-ajax"></select> --}}
 
-                                            @if($errors->has('title'))
-                                            <span class="text-danger">{{ $errors->first('title') }}</span>
-                                            @endif
-                                            @if (request()->get('invoice') == $item->invoice && $item->status_barang == $item->status_barang =
-                                            'completed')
-                                            <div class="row">
-                                                <div class="col-sm-6 col-sg-4 m-b-4">
-                                                    <div class="alert alert-success alert-dismissible" role="alert">
-                                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                                                                aria-hidden="true">&times;</span></button>
-                                                        Data Sudah Completed
-                                                    </div>
-                                                </div>
-                            
-                                            </div>
-                                           
-                                            @endif
+                                          
                                             <select required="" name="pegawai_id" id="id"
                                                 class="form-control input-lg dynamic" data-dependent="id_jabatans"
                                                 required="">

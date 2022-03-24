@@ -308,8 +308,8 @@ Route::middleware('auth')->group(function () {
 
 
             Route::resource('sales', 'SalesController');
-            // Route::get('/sales/{sales:id}/edit','SalesController@edit')->name('sales.edit');
-            Route::patch('hrd/sales/{sales:id}', 'SalesController@update')->name('sales.update');
+            Route::get('sales/destroy/{id}/','SalesController@destroy')->name('sales.destroy');
+          
         
 
             Route::resource('penerimaan', 'PenerimaanController');

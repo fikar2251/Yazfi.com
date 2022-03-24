@@ -21,8 +21,7 @@
                         <select name="id_manager" required="" id="id_manager" class="form-control">
                             <option disabled selected>-- Select Nama Manager Marketing --</option>
                             @foreach($manager_marketing as $manager_marketings)
-                            
-                            <option {{ $sale->id_manager == $manager_marketings->id ? 'selected' : '' }}
+                            <option {{ $team->id_manager == $manager_marketings->id ? 'selected' : '' }}
                                 value="{{ $manager_marketings->id }}">{{ $manager_marketings->name }}</option>
                                 @endforeach
                             </select>
@@ -37,7 +36,7 @@
                             <option disabled selected>-- Select Nama SPV --</option>
                             @foreach($spv as $spvs)
     
-                            <option {{ $sale->id_spv == $spvs->id ? 'selected' : '' }} value="{{ $spvs->id }}">
+                            <option {{ $team->user_id == $spvs->id ? 'selected' : '' }} value="{{ $spvs->id }}">
                                 {{ $spvs->name }}</option>
                             @endforeach
                         </select>
@@ -49,11 +48,11 @@
                     <div class="form-group">
                         <label for="id_sales">Nama Sales </label>
                         <select name="id_sales[]" id="id_sales"  class="form-control select2" multiple="multiple">
-                            {{-- @foreach($sale->user as $rol)
-                                    <option selected value="{{ $rol->id_sales }}">{{ $rol->name }}</option>
-                            @endforeach --}}
+                            @foreach($sale->sales as $pur)
+                                    <option selected value="{{ $pur->id_sales }}">{{ $pur->user->name }}</option>
+                            @endforeach
                             @foreach($staff_marketing as $staff)
-                            <option {{ $sale->id_sales == $staff->id ? 'selected' : '' }} value="{{ $staff->id }}">
+                            <option value="{{ $staff->id }}">
                                 {{ $staff->name }}</option>
                             @endforeach
                         </select>
@@ -64,7 +63,7 @@
                     </div>
                     
                     
-                    
+                    s
                     <div class="m-t-20 text-center">
                         <button type="submit" class="btn btn-primary submit-btn"><i class="fa fa-save"></i> Save</button>
                     </div>
