@@ -18,6 +18,12 @@
         text-align: center !important
     }
 
+    body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14;
+    }
+
     .row {
         display: -ms-flexbox;
         display: flex;
@@ -126,8 +132,7 @@
     }
 
     #customers td,
-    #customers th
-    #customers table {
+    #customers th #customers table {
         border: none;
         padding: 5px;
     }
@@ -141,7 +146,7 @@
         color: white;
     }
 
-    
+
     #customer {
         font-family: Arial, Helvetica, sans-serif;
         border-collapse: collapse;
@@ -150,7 +155,7 @@
 
     #customer td,
     #customer th,
-    #customer table{
+    #customer table {
         border: 1px solid black;
         padding: 5px;
     }
@@ -212,14 +217,13 @@
         color: black;
     }
 
-   
-
 </style>
 
 <body>
     <div class="main-wrapper">
         <div class="page-wrapper">
             <div class="content">
+                <img src="{{ public_path('/img/logo/yazfi.png') }}" alt="" width="120" height="100">
                 <div class="text-center">
                     <h4 style="font-size: 30px; font-weight: 500; text-decoration: underline" class="page-title mb-3">
                         SURAT
@@ -338,13 +342,13 @@
                                                 <td>Blok</td>
                                                 <td>:</td>
                                                 <td> {{ $spr->unit->blok }}
-                                                
+
 
                                                 <td style="width: 50px">No</td>
                                                 <td style="width: 20px">:</td>
                                                 <td>
                                                     {{ $spr->unit->no }}
-                                                
+
                                                 </td>
 
                                             </tr>
@@ -413,26 +417,27 @@
                                                 <td>1</td>
                                                 <td>Booking Fee</td>
                                                 <td>@currency($bf->jumlah_tagihan)</td>
-                                                <td>{{$bf->jatuh_tempo}}</td>
-                                                <td >-</td>
+                                                <td>{{ $bf->jatuh_tempo }}</td>
+                                                <td>-</td>
                                             </tr>
                                             <tr>
                                                 <td>2</td>
                                                 <td>Downpayment</td>
                                                 <td>@currency($dp->jumlah_tagihan)</td>
-                                                <td>{{$dp->jatuh_tempo}}</td>
-                                                <td >-</td>
+                                                <td>{{ $dp->jatuh_tempo }}</td>
+                                                <td>-</td>
                                             </tr>
                                             <tr>
                                                 <td>3</td>
                                                 <td>Plafond Kredit</td>
                                                 <td>@currency($spr->harga_net - $dp->jumlah_tagihan)</td>
-                                                <td>{{$dp->jatuh_tempo}}</td>
-                                                <td >-</td>
+                                                <td>{{ $dp->jatuh_tempo }}</td>
+                                                <td>-</td>
                                             </tr>
                                             <tr>
                                                 <td colspan="2">Total Pembayaran</td>
-                                                <td>@currency($dp->jumlah_tagihan + ($spr->harga_net - $dp->jumlah_tagihan) + $bf->jumlah_tagihan)</td>
+                                                <td>@currency($dp->jumlah_tagihan + ($spr->harga_net -
+                                                    $dp->jumlah_tagihan) + $bf->jumlah_tagihan)</td>
                                                 <td></td>
                                             </tr>
                                         </tbody>

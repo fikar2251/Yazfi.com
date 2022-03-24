@@ -170,7 +170,7 @@
         </div>
     </div>
     <div class="m-t-20 text-center">
-        <a href="{{ route('marketing.pricelist.cetakspr', $spr->id_transaksi) }}"
+        <a href="{{ route('marketing.pricelist.cetakspr', $spr->id_transaksi) }}" target="_blank"
             class="btn btn-primary submit-btn btnprn"><i class="fa fa-save"></i> Cetak
         </a>
     </div>

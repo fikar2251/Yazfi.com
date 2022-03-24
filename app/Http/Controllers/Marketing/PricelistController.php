@@ -178,7 +178,12 @@ class PricelistController extends Controller
     {
         $spr = Spr::find($id);
         $add = Alamat::find($id);
-        return view('marketing.pricelist.cetakspr', compact('spr', 'add'));
+        $idspr = $spr->no_transaksi;
+      
+        $bf = Tagihan::where(['no_transaksi' => $idspr, 'tipe' => 1])->first();
+        $dp = Tagihan::where(['no_transaksi' => $idspr, 'tipe' => 2])->first();
+
+        return view('marketing.pricelist.cetakspr', compact('spr', 'add', 'bf','dp'));
     }
 
     /**
