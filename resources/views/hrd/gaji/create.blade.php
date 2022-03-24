@@ -25,12 +25,27 @@
                                         <th>
                                             {{-- <select name="pegawai" id="pegawai"
                                                 class="form-control select2-ajax"></select> --}}
-                                                
-                @if($errors->has('title'))
-                <span class="text-danger">{{ $errors->first('title') }}</span>
-              @endif
+
+                                            @if($errors->has('title'))
+                                            <span class="text-danger">{{ $errors->first('title') }}</span>
+                                            @endif
+                                            @if (request()->get('invoice') == $item->invoice && $item->status_barang == $item->status_barang =
+                                            'completed')
+                                            <div class="row">
+                                                <div class="col-sm-6 col-sg-4 m-b-4">
+                                                    <div class="alert alert-success alert-dismissible" role="alert">
+                                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                                                aria-hidden="true">&times;</span></button>
+                                                        Data Sudah Completed
+                                                    </div>
+                                                </div>
+                            
+                                            </div>
+                                           
+                                            @endif
                                             <select required="" name="pegawai_id" id="id"
-                                            class="form-control input-lg dynamic" data-dependent="id_jabatans" required="">
+                                                class="form-control input-lg dynamic" data-dependent="id_jabatans"
+                                                required="">
                                                 <option disabled selected>-- Select Pegawai --</option>
                                                 @foreach($pegawais as $pegawai)
                                                 <option value="{{ $pegawai->id }}">{{ $pegawai->name }}
@@ -110,14 +125,15 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                              
+
                                     @foreach($penerimaan as $terima)
                                     <tr>
                                         <th>{{ $terima->nama }}</th>
                                         <th>:</th>
                                         <th>
                                             <input type="text" onkeyup="penerimaan(this)" value="{{ number_format(0)}}"
-                                                name="penerimaan[{{ $terima->nama }}]" id="gajian" class="form-control penerimaan">
+                                                name="penerimaan[{{ $terima->nama }}]" id="gajian"
+                                                class="form-control penerimaan">
                                         </th>
                                     </tr>
                                     @endforeach
@@ -127,8 +143,8 @@
                                         <th>Total Penerimaan</th>
                                         <th>:</th>
                                         <th>
-                                            <input type="text" name="total_penerimaan"  value="0"
-                                                id="total_penerimaan" class="form-control">
+                                            <input type="text" name="total_penerimaan" value="0" id="total_penerimaan"
+                                                class="form-control">
                                         </th>
                                     </tr>
                                 </tfoot>
@@ -158,8 +174,8 @@
                                         <th>Total Potongan</th>
                                         <th>:</th>
                                         <th>
-                                            <input type="text" name="total_potongan"  value="0"
-                                                id="total_potongan" class="form-control">
+                                            <input type="text" name="total_potongan" value="0" id="total_potongan"
+                                                class="form-control">
                                         </th>
                                     </tr>
                                 </tfoot>
@@ -176,7 +192,7 @@
                                     <th>Total</th>
                                     <th>:</th>
                                     <th>
-                                        <input type="text"  name="total" id="total" class="form-control">
+                                        <input type="text" name="total" id="total" class="form-control">
                                     </th>
                                 </tbody>
                             </table>
@@ -200,7 +216,7 @@
             var id = $(this).val();
             var div = $(this).parent();
             var op = " ";
-        
+
             $.ajax({
                 url: `/hrd/where/searchPegawai`,
                 method: "get",
@@ -216,7 +232,7 @@
 
                         var role = data[i].id_roles;
                         document.getElementById('roles').value = role;
-                        
+
                         var perusahaan = data[i].id_perusahaan;
                         document.getElementById('perusahaans').value = perusahaan;
 
@@ -224,18 +240,19 @@
                         var gaji = data[i].gaji;
                         document.getElementById('gajian').value = gaji;
 
-                      
+
                     };
                 },
                 error: function () {}
             })
         })
     })
-    
+
     function WeCanSumSallary() {
         $('#total').val(parseFloat($('#total_penerimaan').val().replace(/,/g, '')) - parseFloat($(
             '#total_potongan').val().replace(/,/g, '')))
     }
+
     function potongan(e) {
         let total = 0;
         let coll = $('.potongan')
@@ -247,7 +264,8 @@
         $('#total_potongan').val(total)
         WeCanSumSallary()
     }
-    function penerimaan (e) {
+
+    function penerimaan(e) {
         let total = 0;
         let coll = $('.penerimaan')
         for (let i = 0; i < $(coll).length; i++) {
@@ -258,27 +276,27 @@
         $('#total_penerimaan').val(total)
         WeCanSumSallary()
     }
- 
-    
-    
+
+
+
     var rupiah = document.getElementById('rupiah');
-    
-    rupiah.addEventListener('keyup', function(e){
+
+    rupiah.addEventListener('keyup', function (e) {
         // tambahkan 'Rp.' pada saat form di ketik
         // gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
         rupiah.value = formatRupiah(this.value, 'Rp. ');
     });
 
     /* Fungsi formatRupiah */
-    function formatRupiah(angka, prefix){
+    function formatRupiah(angka, prefix) {
         var number_string = angka.replace(/[^,\d]/g, '').toString(),
-        split   		= number_string.split(','),
-        sisa     		= split[0].length % 3,
-        rupiah     		= split[0].substr(0, sisa),
-        ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
+            split = number_string.split(','),
+            sisa = split[0].length % 3,
+            rupiah = split[0].substr(0, sisa),
+            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
 
         // tambahkan titik jika yang di input sudah menjadi angka ribuan
-        if(ribuan){
+        if (ribuan) {
             separator = sisa ? '.' : '';
             rupiah += separator + ribuan.join('.');
         }
@@ -286,7 +304,5 @@
         rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
         return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
     }
-  
 
 </script>
-

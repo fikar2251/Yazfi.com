@@ -12,6 +12,7 @@ use App\RincianGaji;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
 class GajiController extends Controller
@@ -48,21 +49,12 @@ class GajiController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        $this->validate($request, [
-           
-            'tanggal' => 'required|date',
-            'pegawai_id' => 'required|unique:penggajians,pegawai_id',
-            'bulan_tahun' => 'required|unique:penggajians,bulan_tahun',
-            'total_potongan' => 'required',
-            'total' => 'required',
-      
-        ]);
-        // $pegawai = User::findOrFail($request->pegawai);
-        // dd($request->all());
+    {    
+        $pegawai = Penggajian::select('pegawai_id','bulan_tahun')->where('pegawai_id',$request->pegawai_id)->where('bulan_tahun',$request->bulan_tahun)->get();
+        // dd($pegawai);
     
-        DB::beginTransaction();
-   
+        // DB::beginTransaction();
+        if (count($pegawai) == 0) {
             $penggajian = Penggajian::create([
                 'pegawai_id' => $request->pegawai_id,
                 'tanggal' => $request->tanggal,
@@ -94,6 +86,12 @@ class GajiController extends Controller
 
             DB::commit();
             return redirect()->route('hrd.gaji.index')->with('success', 'Penggajian has been added');
+        } else {
+            
+            return redirect()->route('hrd.gaji.create')->with('error', 'gagal');
+            
+        }
+           
     }
 
     /**
