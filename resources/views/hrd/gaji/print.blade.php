@@ -11,6 +11,30 @@
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
     <title>Penggajian Karyawan</title>
+    <style>
+        @page {
+            width: 230mm;
+            height: 947mm;
+            margin-top: 90px;
+        }
+
+        @media screen {
+
+            body {
+                margin: 0;
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 12;
+            }
+
+            .sheet {
+                background: white;
+                box-shadow: 0 .5mm 2mm rgba(0, 0, 0, .3);
+                margin: 5mm auto;
+                display: block;
+            }
+        }
+
+    </style>
 </head>
 
 <body>
@@ -18,7 +42,7 @@
         <div class="row">
             <div class="border border-3">
                 <div class="dashboard-logo">
-                    <img style="width:120px;" src="{{url('/img/logo/yazfi.png ')}}" alt="Image" />
+                    <img style="width:180px;" src="{{url('/img/logo/yazfi.png ')}}" alt="Image" />
                 </div>
                 <hr>
                 <div class="row">
@@ -50,11 +74,11 @@
                                     <th>:</th>
                                     <th>{{ Carbon\Carbon::parse($gaji->bulan_tahun)->isoFormat('MMMM, Y') }}</th>
                                 </tr>
-                              
+
                             </tbody>
                         </table>
                     </div>
-                    <br>    
+                    <br>
 
                     <hr>
                     <table class="table table-borderless">
@@ -126,45 +150,50 @@
                                 </tr>
                             </thead>
                         </table>
+                        <br>
+                        <br>
+
+                        <table class="table table-borderless">
+                            <tr>
+                                <td style="padding-right: 100px;">
+                                    <table cellspacing="5" cellpadding="5">
+                                        <thead>
+                                            <tr>
+                                                <h2 style="font-size: 18px">PayRoll</h2>
+                                            </tr>
+                                        </thead>
+                                        <br>
+                                        <br>
+
+                                        <tfoot>
+                                            <h2 style="font-size: 18px">
+                                                <hr style="border : 2px solid black;">
+                                                </h4>
+                                        </tfoot>
+                                    </table>
+                                </td>
+                                <td style="padding-right: 100px;">
+                                    <table cellspacing="5" cellpadding="5">
+                                    
+                                    </table>
+                                </td>
+                                <td>
+                                    <table cellspacing="5" cellpadding="5">
+                                        <thead>
+                                            <tr>
+                                                <h2 style="font-size: 18px">DiTerima Oleh</h2>
+                                                <br>
+                                                <br>
+                                                <h2 style="font-size: 18px">{{ $gaji->pegawai->name }}</h4>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
                     </div>
                 </div>
-                <br>
-                <table class="table table-borderless">
-                    <tr>
-                        <td style="padding-right: 100px;">
-                            <table cellspacing="5" cellpadding="5">
-                                <thead>
-                                    <tr>
-                                        <h2 style="font-size: 22px">PayRoll</h2>
-                                    </tr>
-                                </thead>
-                                <br>
-                                <br>
-
-                                <tfoot>
-                                    <h4>
-                                        <hr style="border : 2px solid black;">
-                                    </h4>
-                                </tfoot>
-                            </table>
-                        </td>
-                        <td style="padding-right: 200px;">
-                        </td>
-                        
-                        <td style="padding-right: 100px;">
-                            <table cellspacing="5" cellpadding="5">
-                                <thead>
-                                    <tr>
-                                        <h2 style="font-size: 22px">DiTerima Oleh</h2>
-                                        <br>
-                                        <br>
-                                        <h4>{{ $gaji->pegawai->name }}</h4>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
             </div>
         </div>
     </div>

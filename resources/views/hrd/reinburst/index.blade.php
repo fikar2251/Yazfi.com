@@ -35,7 +35,7 @@
         </div>
     </div>
     <div class="col-sm-6 col-md-3">
-        <br />
+       
         <div class="form-group form-focus">
             <button type="button" name="filter" id="filter" class="btn btn-primary">Search</button>
         </div>
@@ -45,16 +45,16 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="table-responsive">
-            <table class="table table-bordered table-striped custom-table report" id="reinburst">
+            <table class="table table-bordered table-striped custom-table report" id="reinburst" width="100%">
                 <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Nomor Reinburst</th>
-                        <th>Tanggal Reinburst</th>
-                        <th>Total Item</th>
-                        <th>Total Pembelian</th>
-                        <th>Status Hrd</th>
-                        <th>Status Pembayaran</th>
+                    <tr class="text-left">
+                        <th  >No</th>
+                        <th style="width: 20%;">Nomor Reinburst</th>
+                        <th style="width: 20%;">Tanggal Reinburst</th>
+                        <th  style="width: 5%;">Total Item</th>
+                        <th style="width: 20%;">Total Pembelian</th>
+                        <th style="width: 20%;">Status Hrd</th>
+                        <th style="width: 15%;">Status Pembayaran</th>
                         {{-- <th>Action</th> --}}
                     </tr>
                 </thead>
@@ -62,13 +62,9 @@
                 $array_harga = [];
                 $array_totalitem = [];
                 @endphp
-                <tbody>
+                <tbody >
                     @foreach($reinbursts as $reinburst)
 
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
-
-                    </tr>
                     {{-- @php
                     array_push($array_totalitem, $reinburst->gaji_pokok);
                     array_push($array_harga, $reinburst->sum('total'));
@@ -89,6 +85,7 @@
                             :
                             DB::table('rincian_reinbursts')->leftjoin('reinbursts','rincian_reinbursts.nomor_reinburst','=','reinbursts.nomor_reinburst')->where('reinbursts.status_hrd','completed')->sum('rincian_reinbursts.total')
                             )</td>
+                        <td>&nbsp;</td>
                         <td>&nbsp;</td>
                     </tr>
                 </tfoot>
@@ -190,7 +187,7 @@
                                 $(api.column(colIdx).header()).index()
                             );
                             var title = $(cell).text();
-                            $(cell).html('<input type="text" placeholder="' + title + '" />');
+                            $(cell).html('<input type="text" placeholder="' + title + '" style="width:70%;" />');
 
                             // On every keypress in this input
                             $(

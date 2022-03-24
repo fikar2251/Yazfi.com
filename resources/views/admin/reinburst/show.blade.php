@@ -13,7 +13,7 @@
 </div>
 <div class="container">
     <div class="row">
-        <div class="col-md-8 col-md-offset-3 body-main">
+        <div class="col-md-10 col-md-offset-3 body-main">
             <div class="col-md-12">
                 <div class="card shadow" id="card">
                     <div class="card-body">
@@ -33,37 +33,60 @@
                                 <h2><span style="color:blue; text-decoration: underline; font-size: 20px">Pengajuan Reimburse</span></h2>
                             </div>
                         </div> <br />
-                        <div class="payment-details">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <p style="font-size: 12px">Nama :
-                                        <a>
-                                            {{ $reinbursts->admin->name }}
-                                        </a>
-                                    </p style="font-size: 12px">
-                                    <p style="font-size: 12px">Jabatan :
-                                        <a style="font-size: 12px">
-                                            {{ $reinbursts->jabatan->nama }}
-                                        </a>
-                                    </p>
-                                    <p style="font-size: 12px">Divisi :
-                                        <a style="font-size: 12px">
-                                            {{ $reinbursts->roles->name }}
-                                        </a>
-                                    </p>
-                                </div>
-                                <div class="col-sm-6 tex-right">
-                                    <div class="form-group">
-                                        <p style="font-size: 12px">Tanggal : <a style="font-size: 12px">{{ Carbon\Carbon::parse($reinbursts->tanggal_reinburst)->format('d/m/Y H:i:s') }}
-                                            </a></p>
-                                    </div>
-                                    <div class="form-group">
-                                        <p style="font-size: 12px">Lampiran : <a style="font-size: 12px">{{ $reinbursts->file }}</a>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <table class="table table-borderless">
+                            <tr>
+                                <td style="padding-right: 100px;">
+                                    <table cellspacing="5" cellpadding="5">
+        
+                                        <tbody style="font-size: 14px; 	font-family: 'Rubik', sans-serif;">
+        
+                                            <tr>
+                                                <td>Nama </td>
+                                                <td>:</td>
+                                                <td> {{ $reinbursts->admin->name }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Jabatan </td>
+                                                <td>:</td>
+                                                <td> {{ $reinbursts->jabatan->nama }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Divisi </td>
+                                                <td>:</td>
+                                                <td>  {{ $reinbursts->roles->name }}</td>
+                                            </tr>
+        
+        
+                                        </tbody>
+                                    </table>
+                                </td>
+                                <td style="padding-right: 150px;">
+        
+                                </td>
+                                <td>
+                                    <table cellspacing="5" cellpadding="5">
+        
+                                        <tbody style="font-size: 14px; 	font-family: 'Rubik', sans-serif;">
+        
+                                            <tr>
+                                                <td>Tanggal</td>
+                                                <td>:</td>
+                                                <td>{{ Carbon\Carbon::parse($reinbursts->tanggal_reinburst)->format('d/m/Y H:i:s') }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Lampiran</td>
+                                                <td>:</td>
+                                                <td>{{ $reinbursts->file }}</td>
+                                            </tr>
+        
+                                        </tbody>
+        
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+      
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="table-responsive">

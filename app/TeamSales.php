@@ -11,10 +11,9 @@ class TeamSales extends Model
     protected $guarded = ['id'];
     protected $table = 'team_sales_user';
     public $timestamps = false;
-
     public function user()
     {
-        return $this->belongsTo(User::class,'id_sales');
+        return $this->hasOne('App\User','id_sales');
     }
     public function manager()
     {

@@ -36,7 +36,7 @@
         </div>
     </div>
     <div class="col-sm-6 col-md-3">
-        <br />
+     
         <div class="form-group form-focus">
             <button type="button" name="filter" id="filter" class="btn btn-primary">Search</button>
         </div>
@@ -46,21 +46,21 @@
 <div class="row">
     <div class="col-md-12">
         <div class="table-responsive">
-            <table class="table table-bordered table-striped custom-table report" id="gaji" width="100%">
+            <table class="table table-bordered table-striped custom-table report" id="gaji"style="width:125%;">
                 <thead>
-                    <tr style="font-size: 12px; text-align: center;">
-                        <th>No</th>
-                        <th>Pegawai </th>
-                        <th>Tanggal</th>
-                        <th>Bulan&Tahun</th>
-                        <th>Gaji Pokok</th>
-                        <th>Penerimaan</th>
-                        <th>Potongan</th>
-                        <th>Total</th>
-                        <th>Jabatan</th>
-                        <th>Divisi</th>
-                        <th>Admin</th>
-                        <th>Action</th>
+                    <tr >
+                        <th style="width: 5%;">No</th>
+                        <th style="width: 5%;">Pegawai </th>
+                        <th style="width: 5%;">Tanggal</th>
+                        <th style="width: 5%;">Bulan&Tahun</th>
+                        <th style="width: 10%;">Gaji Pokok</th>
+                        <th style="width: 10%;">Penerimaan</th>
+                        <th style="width: 10%;">Potongan</th>
+                        <th style="width: 10%;">Total</th>
+                        <th style="width: 5%;">Jabatan</th>
+                        <th style="width: 5%;">Divisi</th>
+                        <th style="width: 5%;">Admin</th>
+                        <th style="width: 15%;">Action</th>
                     </tr>
                 </thead>
                 @php
@@ -211,7 +211,7 @@
                                 $(api.column(colIdx).header()).index()
                             );
                             var title = $(cell).text();
-                            $(cell).html('<input type="text" placeholder="' + title + '" />');
+                            $(cell).html('<input type="text" placeholder="' + title + '"  style="width:100%;"/>');
 
                             // On every keypress in this input
                             $(

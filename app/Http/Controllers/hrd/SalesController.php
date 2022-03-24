@@ -17,17 +17,17 @@ class SalesController extends Controller
 {
     public function index( TeamSales $sale, Request $request)
     {
-        $sales = TeamSales::groupBy('id_spv')->orderBy('id_spv','desc')->get();
+        $sales = TeamSales::all();
+       
+        // foreach ($sales as $tim) {
+        //     $coba = TeamSales::select('id_sales')->where('id_spv',$tim->id_spv)->get();
+        //     // dd($coba);
 
-        // dd($sales);
-
-        foreach ($sales as $tim) {
-            // $coba = TeamSales::whereIn('id_spv',$tim)->whereIn('id_manager',$tim)->first();
-            // dd($coba);
-        }
+        //     $sale = TeamSales::whereIn('id_sales',$coba)->select('id_sales')->get();
+        //     // dd($sale);
+        // }
     
-
-        return view('hrd.sales.index', compact('sales','coba'));
+        return view ('hrd.sales.index',['sales' => $sales]);
     }
 
     public function create(TeamSales $sale)

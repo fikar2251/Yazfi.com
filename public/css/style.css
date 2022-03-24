@@ -212,7 +212,7 @@ textarea.form-control {
 
 .table {
 	color: #000;
-	border: 1px solid #f0f0f0;
+	/* border: 1px solid #f0f0f0; */
 }
 
 .table.table-white {

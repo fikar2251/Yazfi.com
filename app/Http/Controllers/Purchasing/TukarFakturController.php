@@ -271,11 +271,11 @@ class TukarFakturController extends Controller
        
             $detail = DB::table('tukar_fakturs')
             ->leftJoin('penerimaan_barangs','penerimaan_barangs.no_po','=','tukar_fakturs.no_po_vendor')
-         
             ->leftJoin('suppliers', 'tukar_fakturs.id_supplier', '=', 'suppliers.id')
             ->leftJoin('detail_tukar_fakturs', 'tukar_fakturs.no_faktur', '=', 'detail_tukar_fakturs.no_faktur')
+            ->leftJoin('purchases','tukar_fakturs.no_po_vendor','=','purchases.invoice')
             ->leftJoin('dokumen_tukar_faktur','detail_tukar_fakturs.id_dokumen','=','dokumen_tukar_faktur.id')
-            ->select('penerimaan_barangs.no_penerimaan_barang','tukar_fakturs.no_faktur','tukar_fakturs.status_pembayaran','suppliers.nama',
+            ->select('purchases.barang_id','purchases.invoice','po_spk','tukar_fakturs.no_po_vendor','penerimaan_barangs.no_penerimaan_barang','tukar_fakturs.no_faktur','tukar_fakturs.status_pembayaran','suppliers.nama',
             'tukar_fakturs.no_faktur','tukar_fakturs.id','tukar_fakturs.nilai_invoice',
             'detail_tukar_fakturs.pilihan','dokumen_tukar_faktur.nama_dokumen', 'detail_tukar_fakturs.catatan','tukar_fakturs.tanggal_tukar_faktur')
             ->where('tukar_fakturs.id',$id)
@@ -283,8 +283,19 @@ class TukarFakturController extends Controller
             ->get();
             // dd($detail);
 
+            $tukar = TukarFaktur::where('id',$id)
+            ->select('tukar_fakturs.no_faktur')
+            ->get();
+            // dd($tukar);
 
-        return view('purchasing.tukarfaktur.show', compact('detail'));
+            $purchases = TukarFaktur::leftjoin('purchases','tukar_fakturs.no_po_vendor','=','invoice')
+            ->whereIn('tukar_fakturs.no_faktur',$tukar)
+            ->select('tukar_fakturs.nilai_invoice','purchases.barang_id','purchases.invoice','tukar_fakturs.total')
+            ->get();
+            // dd($purchases);
+
+
+        return view('purchasing.tukarfaktur.show', compact('detail','purchases'));
     }
 
     public function edit(Purchase $purchase)

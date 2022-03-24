@@ -16,93 +16,23 @@
     <title>Pengajuan Dana</title>
     <style>
         @page {
-            margin: 0
+            width: 230mm;
+            height: 987mm;
+            margin-top: 90px;
         }
 
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 12;
-        }
-
-        .table-kop tr td {
-            padding: 5px;
-        }
-
-        .italic {
-            font-style: italic;
-        }
-
-        .sheet {
-            overflow: hidden;
-            position: relative;
-            display: block;
-            margin: 0 auto;
-            box-sizing: border-box;
-            page-break-after: always;
-        }
-
-        /** Paper sizes **/
-        body.A3 .sheet {
-            width: 297mm;
-            height: 419mm
-        }
-
-        body.A3.landscape .sheet {
-            width: 420mm;
-            height: 296mm
-        }
-
-        body.A4 .sheet {
-            width: 210mm;
-            height: 296mm
-        }
-
-        body.struk .sheet {
-            width: 100mm;
-        }
-
-        body.A4.landscape .sheet {
-            width: 297mm;
-            height: 209mm
-        }
-
-        body.A5 .sheet {
-            width: 148mm;
-            height: 209mm
-        }
-
-        body.A5.landscape .sheet {
-            width: 210mm;
-            height: 147mm
-        }
-
-        /** Padding area **/
-        .sheet.padding-1mm {
-            padding: 1mm
-        }
-
-        .sheet.padding-10mm {
-            padding: 10mm
-        }
-
-        .sheet.padding-15mm {
-            padding: 15mm
-        }
-
-        .sheet.padding-20mm {
-            padding: 20mm
-        }
-
-        .sheet.padding-25mm {
-            padding: 25mm
-        }
-
-        /** For screen preview **/
         @media screen {
+
             body {
-                background: #e0e0e0
+
+                font-family: 'Rubik', sans-serif;
+                font-size: 0.875rem;
+                color: #666;
+                background-color: #fafafa;
+                overflow-x: hidden;
+                height: 100%;
             }
+
 
             .sheet {
                 background: white;
@@ -112,172 +42,243 @@
             }
         }
 
-        /** Fix for Chrome issue #273306 **/
-        @media print {
-            body.A3.landscape {
-                width: 420mm
-            }
+        .bg-success,
+        .badge-success {
+            background-color: #5559ce !important;
+        }
 
-            body.A3,
-            body.A4.landscape {
-                width: 297mm
-            }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+        }
 
-            body.A4,
-            body.A5.landscape {
-                width: 210mm
-            }
+        .col-6 {
+            width: 50%;
+            flex: 0 0 auto;
+        }
 
-            body.A5 {
-                width: 148mm
-            }
+        .table-responsive {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+            -ms-overflow-style: -ms-autohiding-scrollbar;
+        }
+
+        table.table td h2 {
+            display: inline-block;
+            font-size: inherit;
+            font-weight: 400;
+            margin: 0;
+            padding: 0;
+            vertical-align: middle;
+        }
+
+        table.table td h2 a {
+            color: #757575;
+        }
+
+        table.table td h2 a:hover {
+            color: #009efb;
+        }
+
+        table.table td h2 span {
+            color: #9e9e9e;
+            display: block;
+            font-size: 12px;
+            margin-top: 3px;
         }
 
     </style>
 </head>
 
 <body>
+    @foreach ($pengajuan as $peng)
+
+    @endforeach
 
     <div class="container">
         <div class="row">
-            <div class="col-md-10 col-md-offset-3 body-main">
-                <div class="col-md-12">
-                    <div class="card shadow" id="card">
-                        @foreach($pengajuan as $peng)
-                        @endforeach
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-4">
+            <div class="col-md-6 col-md-offset-1 body-main">
+
+                <table class="table table-borderless">
+                    <tr>
+                        <td style="padding-right: 100px;">
+                            <table cellspacing="5" cellpadding="5">
+
+                                <tbody>
+
                                     <div class="dashboard-logo">
-                                        <img src="{{url('/img/logo/yazfi.png ')}}" alt="Image" />
+                                        <img style="width:180px;" src="{{url('/img/logo/yazfi.png ')}}" alt="Image" />
                                     </div>
-                                </div>
-                                <div class="col-md-8 text-right">
-                                    <h6><span
-                                            style="font-size: 15px; color:white; background-color:blue;">{{$peng->nomor_pengajuan}}</span>
-                                    </h6>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12 text-center">
-                                    <h2><span style="color:blue; text-decoration: underline; font-size: 20px">Pengajuan
-                                            Dana</span></h2>
-                                </div>
-                            </div> <br />
-                            <div class="payment-details">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <p style="margin-right:50%;" style="font-size: 12px">Nama :
-                                            <a>
-                                                {{ $peng->admin->name }}
-                                            </a>
-                                        </p style="font-size: 12px">
-                                        <p style="font-size: 12px">Jabatan :
-                                            <a style="font-size: 12px">
-                                                {{ $jabatan->nama }}
-                                            </a>
-                                        </p>
-                                        <p style="font-size: 12px">Divisi :
-                                            <a style="font-size: 12px">
-                                                {{ $peng->roles->name }}
-                                            </a>
-                                        </p>
-                                    </div>
-                                    <div class="col-sm-6 tex-right">
-                                        <div class="form-group">
-                                            <p style="font-size: 12px">Tanggal : <a
-                                                    style="font-size: 12px">{{ Carbon\Carbon::parse($peng->tanggal_pengajuan)->format('d/m/Y H:i:s') }}
-                                                </a></p>
-                                        </div>
-                                        <div class="form-group">
-                                            <p style="font-size: 12px">Lampiran : <a
-                                                    style="font-size: 12px">{{ $peng->file }}</a>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered  ">
-                                            <tr class="bg-success">
-                                                <th class="text-light">No.</th>
-                                                <th class="text-light">Keterangan</th>
-                                                <th style="width:15%;" class="text-light">Harga Satuan</th>
-                                                <th class="text-light">Kwitansi</th>
-                                                <th style="width:5%;" class="text-light">Qty</th>
-                                                <th style="width:5%;" class="text-light">Unit</th>
-                                                <th style="width:20%;" class="text-light">Deskripsi</th>
-                                                <th style="width:20%;" class="text-light">Jumlah</th>
-                                            </tr>
-                                            <tbody>
 
-                                                @php
-                                                $total = 0
-                                                @endphp
-                                                @foreach(App\RincianPengajuan::where('nomor_pengajuan',
-                                                $peng->nomor_pengajuan)->get() as $barang)
-                                                <tr>
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $barang->barang_id }}</td>
-                                                    <td>@currency($barang->harga_beli)</td>
-                                                    <td>{{$barang->no_kwitansi}}</td>
-                                                    <td>{{$barang->qty}}</td>
-                                                    <td>{{$barang->unit}}</td>
-                                                    <td>{{ $barang->keterangan }}</td>
-                                                    <td>@currency($barang->total)</td>
-                                                </tr>
 
-                                                @endforeach
+                                </tbody>
+                            </table>
+                        </td>
+                        <td style="padding-right: 150px;">
 
-                                            </tbody>
-                                            <tfoot>
-                                                <tr>
-                                                    <td colspan="7"><strong>Total<strong> </td>
-                                                    <td colspan="2"><b>@currency($barang->grandtotal)</b></td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="8" rowspan="1">Cat :</td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="2">
-                                                        <p class="text-center">Diajukan Oleh,</p>
-                                                    </td>
-                                                    <td colspan="2">
-                                                        <p class="text-center">DiPeriksa,</p>
-                                                        <br>
-                                                        <br>
-                                                        <p class="text-left">Manager</p>
-                                                        <p class="text-right" style="margin-top: -37px;">Keuangan</p>
-                                                    </td>
-                                                    <td colspan="2">
-                                                        <p class="text-center">DiSetujui,</p>
-                                                        <br>
-                                                        <br>
-                                                        <p class="text-center">Direktur</p>
-                                                    </td>
-                                                    <td colspan="2">
-                                                        <p class="text-center">DiKetahui,</p>
-                                                        <br>
-                                                        <br>
-                                                        <p class="text-center">Komisaris</p>
-                                                    </td>
-                                                </tr>
-                                                <!-- <tr>
-                                                <td colspan="6" rowspan="2">Cat :</td>
-                                            </tr> -->
+                        </td>
+                        <td>
+                            <table cellspacing="5" cellpadding="5">
 
-                                            </tfoot>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                <tbody>
+
+                                    <tr>
+                                        <h6><span
+                                                style="font-size: 15px; color:white; background-color:blue;">{{$peng->nomor_pengajuan}}</span>
+                                        </h6>
+                                    </tr>
+
+
+                                </tbody>
+
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <h2><span style="color:blue; text-decoration: underline; font-size: 20px">Pengajuan
+                                Dana</span>
+                        </h2>
                     </div>
                 </div>
+                <br>
+                <br>
+                <table class="table table-borderless">
+                    <tr>
+                        <td style="padding-right: 100px;">
+                            <table cellspacing="5" cellpadding="5">
+
+                                <tbody style="font-size: 16px; 	font-family: 'Rubik', sans-serif;">
+
+                                    <tr>
+                                        <td>Nama </td>
+                                        <td>:</td>
+                                        <td>{{ $peng->admin->name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Jabatan </td>
+                                        <td>:</td>
+                                        <td>{{ $jabatan->nama }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Divisi </td>
+                                        <td>:</td>
+                                        <td>{{ $peng->roles->name }}</td>
+                                    </tr>
+
+
+                                </tbody>
+                            </table>
+                        </td>
+                        <td style="padding-right: 150px;">
+
+                        </td>
+                        <td>
+                            <table cellspacing="5" cellpadding="5">
+
+                                <tbody style="font-size: 16px; 	font-family: 'Rubik', sans-serif;">
+
+                                    <tr>
+                                        <td>Tanggal</td>
+                                        <td>:</td>
+                                        <td>{{ Carbon\Carbon::parse($peng->tanggal_pengajuan)->format('d/m/Y') }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Lampiran</td>
+                                        <td>:</td>
+                                        <td>{{ $peng->file }}</td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                <br>
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <tr class="bg-success" style="font-size: 14px">
+                                <th class="text-light">No.</th>
+                                <th class="text-light">Keterangan</th>
+                                <th class="text-light">Harga Satuan</th>
+                                <th class="text-light">Kwitansi</th>
+                                <th style="width:5%;" class="text-light">Qty</th>
+                                <th style="width:5%;" class="text-light">Unit</th>
+                                <th style="width:5%;" class="text-light">Deskripsi</th>
+                                <th class="text-light">Jumlah</th>
+                            </tr>
+                            <tbody>
+
+                                @php
+                                $total = 0
+                                @endphp
+                                @foreach(App\RincianPengajuan::where('nomor_pengajuan',
+                                $peng->nomor_pengajuan)->get() as $barang)
+                                <tr style="font-size: 14px">
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $barang->barang_id }}</td>
+                                    <td>@currency($barang->harga_beli)</td>
+                                    <td>{{$barang->no_kwitansi}}</td>
+                                    <td>{{$barang->qty}}</td>
+                                    <td>{{$barang->unit}}</td>
+                                    <td>{{ $barang->keterangan }}</td>
+                                    <td>@currency($barang->total)</td>
+                                </tr>
+                                @endforeach
+
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="7"><strong>Total<strong> </td>
+                                    <td colspan="2"><b>@currency($barang->grandtotal)</b></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="8" rowspan="1">Cat :</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <p class="text-center">Diajukan Oleh,</p>
+                                    </td>
+                                    <td colspan="2">
+                                        <p class="text-center">DiPeriksa,</p>
+                                        <br>
+                                        <br>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <p class="text-left">Manager</p>
+                                            </div>
+                                            <div class="col-6">
+                                                <p class="text-left">Keuangan</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td colspan="3">
+                                        <p class="text-center">DiSetujui,</p>
+                                        <br>
+                                        <br>
+                                        <p class="text-center">Direktur</p>
+                                    </td>
+                                    <td colspan="2">
+                                        <p class="text-center">DiKetahui,</p>
+                                        <br>
+                                        <br>
+                                        <p class="text-center">Komisaris</p>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+
+
             </div>
         </div>
+    </div>
     </div>
     <!-- Optional JavaScript; choose one of the two! -->
 

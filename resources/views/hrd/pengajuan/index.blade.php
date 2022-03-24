@@ -13,25 +13,28 @@
     @endcan
 </div>
 <x-alert></x-alert>
-
 <br />
 <div class="row input-daterange">
     <div class="col-sm-6 col-md-3">
-        <label class="focus-label">From</label>
         <div class="form-group form-focus">
-            <input type="text" name="from_date" id="from_date" class="form-control" placeholder="From Date" readonly />
+            <label class="focus-label">From</label>
+            <div class="cal-icon">
+                <input type="text" name="from_date" id="from_date" class="form-control" placeholder="From Date"
+                    readonly />
+            </div>
         </div>
     </div>
 
     <div class="col-sm-6 col-md-3">
-        <label class="focus-label">To</label>
         <div class="form-group form-focus">
-            <input type="text" name="to_date" id="to_date" class="form-control" placeholder="To Date" readonly />
+            <label class="focus-label">To</label>
+            <div class="cal-icon">
+                <input type="text" name="to_date" id="to_date" class="form-control" placeholder="To Date" readonly />
+            </div>
         </div>
     </div>
     <div class="col-sm-6 col-md-3">
-        <br />
-        <div class="form-group form-focus">
+         <div class="form-group form-focus">
             <button type="button" name="filter" id="filter" class="btn btn-primary">Search</button>
         </div>
     </div>
@@ -44,15 +47,15 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>No Pengajuan</th>
-                        <th>Perusahaan</th>
-                        <th>Tanggal</th>
-                        <th>Divisi</th>
-                        <th>Nama</th>
-                        <th>Total Item</th>
-                        <th>Total Pembelian</th>
-                        <th>Status</th>
-                        <th>Action</th>
+                        <th style="width: 20%;">No Pengajuan</th>
+                        <th style="width: 20%;">Perusahaan</th>
+                        <th >Tanggal</th>
+                        <th >Divisi</th>
+                        <th >Nama</th>
+                        <th >Total Item</th>
+                        <th style="width: 20%;">Total Pembelian</th>
+                        <th >Status</th>
+                        <th >Action</th>
                     </tr>
                 </thead>
 
@@ -176,7 +179,7 @@
                                 $(api.column(colIdx).header()).index()
                             );
                             var title = $(cell).text();
-                            $(cell).html('<input type="text" placeholder="' + title + '" />');
+                            $(cell).html('<input type="text" placeholder="' + title + '"  style="width:70%;"/>');
 
                             // On every keypress in this input
                             $(

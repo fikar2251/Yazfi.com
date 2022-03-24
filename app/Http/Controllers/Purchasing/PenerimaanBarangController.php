@@ -105,7 +105,8 @@ class PenerimaanBarangController extends Controller
 
         
         $purchases = Purchase::where('status_barang', 'pending')->where('invoice',$request->invoice)->get();
-        // dd($purchases);
+
+        $gudang = PenerimaanBarang::where('no_po', $request->invoice)->first();
 
 
         $penerimaan = DB::table('penerimaan_barangs')
@@ -138,7 +139,7 @@ class PenerimaanBarangController extends Controller
       
       
         // dd($tukar);
-        return view('purchasing.penerimaan-barang.create', compact('ppn','tukar', 'purchases', 'purchase','nourut','status_barang','inout','penerimaan','ppn_partial','warehouses'));
+        return view('purchasing.penerimaan-barang.create', compact('ppn','tukar', 'purchases', 'purchase','nourut','status_barang','inout','penerimaan','gudang','ppn_partial','warehouses'));
     }
 
 

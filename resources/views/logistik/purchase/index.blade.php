@@ -40,11 +40,11 @@
             <table class="table table-bordered table-striped custom-table report" id="purchase" width="100%">
                 <thead>
                     <tr>
-                        <th>No</th>
+                        <th style="width:5%;">No</th>
                         <th>Number PO</th>
                         <th>Di Ajukan</th>
                         <th>Tanggal</th>
-                        <th>Total Item</th>
+                        <th style="width:5%;">Total Item</th>
                         <th>Jumlah</th>
                         <th>Status Barang</th>
                         {{-- <th>Status Pembayaran</th> --}}
@@ -114,7 +114,7 @@
             load_data();
 
 
-function load_data(from = '', to = '') {
+        function load_data(from = '', to = '') {
 
         var table = $('#purchase').DataTable({
             processing: true,
@@ -173,7 +173,7 @@ function load_data(from = '', to = '') {
                             $(api.column(colIdx).header()).index()
                         );
                         var title = $(cell).text();
-                        $(cell).html('<input type="text" placeholder="' + title + '" />');
+                        $(cell).html('<input type="text" placeholder="' + title + '" style="width:70%;" />');
 
                         // On every keypress in this input
                         $(

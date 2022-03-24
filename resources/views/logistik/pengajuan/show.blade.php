@@ -23,47 +23,70 @@
                                     <img src="{{url('/img/logo/yazfi.png ')}}" alt="Image" />
                                 </div>
                             </div>
-                            <div class="col-md-8 text-right">
+                            <div class="col-md-4 text-center    ">
+                               
+                                    <h2><span style="color:blue; text-decoration: underline; font-size: 25px">Pengajuan Dana</span></h2>
+                             
+                            </div>
+                            <div class="col-md-4 text-right">
                                 <h6><span style="font-size: 15px; color:white; background-color:blue;">{{$pengajuan->nomor_pengajuan}}</span>
                                 </h6>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12 text-center">
-                                <h2><span style="color:blue; text-decoration: underline; font-size: 20px">Pengajuan Dana</span></h2>
-                            </div>
-                        </div> <br />
-                        <div class="payment-details">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <p style="margin-right:50%;" style="font-size: 12px">Nama :
-                                        <a>
-                                            {{ $pengajuan->admin->name }}
-                                        </a>
-                                    </p style="font-size: 12px">
-                                    <p style="font-size: 12px">Jabatan :
-                                        <a style="font-size: 12px">
-                                            {{ $jabatan->nama }}
-                                        </a>
-                                    </p>
-                                    <p style="font-size: 12px">Divisi :
-                                        <a style="font-size: 12px">
-                                            {{ $pengajuan->roles->name }}
-                                        </a>
-                                    </p>
-                                </div>
-                                <div class="col-sm-6 tex-right">
-                                    <div class="form-group">
-                                        <p style="font-size: 12px">Tanggal : <a style="font-size: 12px">{{ Carbon\Carbon::parse($pengajuan->tanggal_pengajuan)->format('d/m/Y') }}
-                                            </a></p>
-                                    </div>
-                                    <div class="form-group">
-                                        <p style="font-size: 12px">Lampiran : <a style="font-size: 12px">{{ $pengajuan->file }}</a>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    
+                        <table class="table table-borderless">
+                            <tr>
+                                <td style="padding-right: 100px;">
+                                    <table cellspacing="5" cellpadding="5">
+        
+                                        <tbody style="font-size: 14px; 	font-family: 'Rubik', sans-serif;">
+        
+                                            <tr>
+                                                <td>Nama </td>
+                                                <td>:</td>
+                                                <td>{{ $pengajuan->admin->name }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Jabatan </td>
+                                                <td>:</td>
+                                                <td>{{ $jabatan->nama }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Divisi </td>
+                                                <td>:</td>
+                                                <td>{{ $pengajuan->roles->name }}</td>
+                                            </tr>
+        
+        
+                                        </tbody>
+                                    </table>
+                                </td>
+                                <td style="padding-right: 150px;">
+        
+                                </td>
+                                <td>
+                                    <table cellspacing="5" cellpadding="5">
+        
+                                        <tbody style="font-size: 14px; 	font-family: 'Rubik', sans-serif;">
+        
+                                            <tr>
+                                                <td>Tanggal</td>
+                                                <td>:</td>
+                                                <td>{{ Carbon\Carbon::parse($pengajuan->tanggal_pengajuan)->format('d/m/Y') }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Lampiran</td>
+                                                <td>:</td>
+                                                <td>{{ $pengajuan->file }}</td>
+                                            </tr>
+        
+                                        </tbody>
+        
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="table-responsive">

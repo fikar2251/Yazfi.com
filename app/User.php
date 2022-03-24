@@ -15,6 +15,7 @@ class User extends Authenticatable
 
     protected $guarded = ['id'];
     protected $table = 'users';
+    public $timestamps = false;
 
 
     protected $hidden = [
@@ -76,5 +77,9 @@ class User extends Authenticatable
         return $this->belongsTo(Project::class, 'cabang_id');
     }
 
+    public function sale()
+    {
+        return $this->hasMany('App\TeamSales','id_sales');
+    }
 
 }

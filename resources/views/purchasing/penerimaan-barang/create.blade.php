@@ -73,7 +73,7 @@
 
                 @foreach($purchase as $item)
 
-                @if (request()->get('invoice') == $item->invoice && $item->status_barang == $item->status = 'pending' )
+                @if (request()->get('invoice') == $item->invoice && $item->status_barang == $item->status = 'pending'  )
                 <div class="row">
                     <div class="col-sm-6 col-sg-4 m-b-4">
                         <ul class="list-unstyled">
@@ -500,8 +500,9 @@
                         </div>
                     </div>
                 </div>
-                @elseif (request()->get('invoice') == $item->invoice && $item->status_barang == $item->status_barang =
-                'partial' && $item->barang_id)
+                @endif
+                @if (request()->get('invoice') == $item->invoice && $item->status_barang == $item->status_barang =
+                'partial')
                 <div class="row">
                     <div class="col-sm-6 col-sg-4 m-b-4">
                         <ul class="list-unstyled">
@@ -546,7 +547,6 @@
                             </li>
                         </ul>
                     </div>
-
                 </div>
 
                 <form action="{{ route('purchasing.penerimaan-barang.store') }}" name="form1" method="post">
@@ -610,6 +610,7 @@
                                         </li>
                                     </ul>
                                 </div>
+                                
                                 <div class="col-sm-6 col-sg-4 m-b-4">
                                     <ul class="list-unstyled">
                                         <li>
@@ -625,6 +626,17 @@
                                         </li>
                                     </ul>
                                 </div>
+                                <div class="col-sm-6 col-sg-4 m-b-4">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="form-group">
+                                        <label for="warehouse">Warehouse <span style="color: red">*</span></label>
+                                        <input type="text" readonly class="form-control"
+                                            value="{{$gudang->purchase->warehouse->nama_warehouse}}">
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
                             </div>
                             <div class="table-responsive">
                                 <table class="table table-bordered  report">
@@ -917,8 +929,9 @@
                         </div>
                     </div>
                 </div>
-                @elseif (request()->get('invoice') == $item->invoice && $item->status_barang == $item->status_barang =
-                'completed' && $item->barang_id)
+                @endif
+                @if (request()->get('invoice') == $item->invoice && $item->status_barang == $item->status_barang =
+                'completed')
                 <div class="row">
                     <div class="col-sm-6 col-sg-4 m-b-4">
                         <div class="alert alert-success alert-dismissible" role="alert">
@@ -929,8 +942,9 @@
                     </div>
 
                 </div>
-                @else
+               
                 @endif
+                
                 @endforeach
             </div>
         </div>

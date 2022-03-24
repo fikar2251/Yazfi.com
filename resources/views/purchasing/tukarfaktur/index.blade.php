@@ -40,18 +40,16 @@
         <div class="table-responsive">
             <table class="table table-bordered table-striped custom-table report" id="tukars"width="100%">
                 <thead>
-                    <tr style="font-size:12px;">
-                        <th>No</th>
-                        <th>No Tukar Faktur</th>
-                        <th>Po / Spk</th>
-                        <th>Tanggal Tukar Faktur</th>
-
-                        <th>No Invoice</th>
-
-                        <th>Total Item</th>
-                        <th>Total Pembelian</th>
-                        <th>Status Pembayaran</th>
-                        <th>Action</th>
+                    <tr style="font-size:11px;">
+                        <th  style="width:5%;">No</th>
+                        <th  style="width:15%;">No Tukar Faktur</th>
+                        <th  style="width:10%;">Po / Spk</th>
+                        <th  style="width:10%;">Tanggal Tukar Faktur</th>
+                        <th  style="width:10%;">No Invoice</th>
+                        <th  style="width:5%;">Total Item</th>
+                        <th style="width:10%;">Total Pembelian</th>
+                        <th  style="width:5%;">Status Pembayaran</th>
+                        <th style="width:5%;">Action</th>
                     </tr>
                 </thead>
 
@@ -231,7 +229,7 @@
                                 $(api.column(colIdx).header()).index()
                             );
                             var title = $(cell).text();
-                            $(cell).html('<input type="text" placeholder="' + title + '" />');
+                            $(cell).html('<input type="text" placeholder="' + title + '"  style="width:70%;" />');
 
                             // On every keypress in this input
                             $(

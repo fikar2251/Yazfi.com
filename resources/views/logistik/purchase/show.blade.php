@@ -7,7 +7,7 @@
 </div>
 <div class="container">
     <div class="row">
-        <div class="col-md-8 col-md-offset-3 body-main">
+        <div class="col-md-12 col-md-offset-3 body-main">
             <div class="col-md-12">
                 <div class="card shadow" id="card">
                     <div class="card-body">
@@ -28,62 +28,82 @@
                                 <h2><span class="purchase-order">Purchase Order</span></h2>
                             </div>
                         </div> <br />
-                        <div class="payment-details">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <p style="font-size: 12px">Supplier/ Vendor :
-                                        <a style="font-size: 12px">
-                                            {{ $purchase->supplier->nama }}
-                                        </a>
-                                    </p style="font-size: 12px">
-                                    <p style="font-size: 12px">Contact Person:
-                                        <a style="font-size: 12px">
-                                            {{ $purchase->admin->name }} -{{ $purchase->admin->phone_number }}
-                                        </a>
-                                    </p>
-                                    <p style="font-size: 12px">Location :
-                                        <a style="font-size: 12px">
-                                            {{ $purchase->supplier->nama }}
-                                        </a>
-                                    </p>
-                                    <p style="font-size: 12px">Delevery On Site :
-                                        <a style="font-size: 12px">
-                                            {{ $purchase->project->nama_project }}
-                                            <p style="text-indent: 100px; margin-top:-10px;  font-size:12px;">{{ $purchase->lokasi }}</p>
-                                        </a>
-                                    </p>
-                                </div>
-                                <div class="col-sm-6 tex-right">
-                                    <div class="form-group">
-                                        <p style="font-size: 12px">Date :
-                                            <a style="font-size: 12px">
-                                                {{ Carbon\Carbon::parse($purchase->created_at)->format('d/m/Y') }}
-                                            </a>
-                                        </p>
-                                        <p style="font-size: 12px">Contact Penerimaan:
-                                            <a style="font-size: 12px">
-                                                {{ $purchase->admin->name }}-{{ $purchase->admin->phone_number }}
-                                            </a>
-                                        </p>
-                                        <p style="font-size: 12px">PO Number :
-                                            <a style="font-size: 12px">
-                                                {{ $purchase->invoice }}
-                                            </a>
-                                        </p>
-                                        <p style="font-size: 12px">Project :
-                                            <a style="font-size: 12px">
-                                                {{ $purchase->project->nama_project }}
-                                            </a>
-                                        </p>
-                                        <p style="font-size: 12px">Project Code :
-                                            <a style="font-size: 12px">
-                                                {{ $purchase->project->project_code }}
-                                            </a>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <table class="table table-borderless">
+                            <tr>
+                                <td style="padding-right: 100px;">
+                                    <table cellspacing="5" cellpadding="5">
+        
+                                        <tbody style="font-size: 14px; 	font-family: 'Rubik', sans-serif;">
+        
+                                            <tr>
+                                                <td>Supplier/ Vendor </td>
+                                                <td>:</td>
+                                                <td> {{ $purchase->supplier->nama }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Contact Person </td>
+                                                <td>:</td>
+                                                <td>  {{ $purchase->admin->name }} -{{ $purchase->admin->phone_number }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Location </td>
+                                                <td>:</td>
+                                                <td> {{ $purchase->supplier->nama }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Delevery On Site</td>
+                                                <td>:</td>
+                                                <td>{{ $purchase->project->nama_project }}</td>
+                                                <td>{{ $purchase->lokasi }}</td>
+                                            </tr>
+                                            
+        
+        
+                                        </tbody>
+                                    </table>
+                                </td>
+                                <td style="padding-right: 150px;">
+        
+                                </td>
+                                <td>
+                                    <table cellspacing="5" cellpadding="5">
+        
+                                        <tbody style="font-size: 14px; 	font-family: 'Rubik', sans-serif;">
+        
+                                            <tr>
+                                                <td>Date</td>
+                                                <td>:</td>
+                                                <td>  {{ Carbon\Carbon::parse($purchase->created_at)->format('d/m/Y') }}
+                                                </td>
+                                            </tr>
+                                                {{-- <tr>
+                                                    <td>Contact Penerima</td>
+                                                    <td>:</td>
+                                                    <td> {{ $purchase->admin->name }}</td>
+                                                </tr> --}}
+                                            <tr>
+                                                <td>PO Number</td>
+                                                <td>:</td>
+                                                <td> {{ $purchase->invoice }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Project</td>
+                                                <td>:</td>
+                                                <td>   {{ $purchase->project->nama_project }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Project</td>
+                                                <td>:</td>
+                                                <td>   {{ $purchase->project->project_code }}</td>
+                                            </tr>
+        
+                                        </tbody>
+        
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                        
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="table-responsive">

@@ -29,7 +29,6 @@
         </div>
     </div>
     <div class="col-sm-6 col-md-3">
-        <br />
         <div class="form-group form-focus">
             <button type="button" name="filter" id="filter" class="btn btn-primary">Search</button>
         </div>
@@ -41,14 +40,14 @@
         <div class="table-responsive">
             <table class="table table-bordered table-striped custom-table report" id="accreinburst" width="100%">
                 <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Nomor Reinburst</th>
-                        <th>Tanggal Reinburst</th>
-                        <th>Total Item</th>
-                        <th>Total Pembelian</th>
-                        <th>Status Hrd</th>
-                        <th>Status Pembayaran</th>
+                    <tr class="text-left">
+                        <th >No</th>
+                        <th style="width: 20%;">Nomor Reinburst</th>
+                        <th style="width: 20%;">Tanggal Reinburst</th>
+                        <th  style="width: 5%;">Total Item</th>
+                        <th style="width: 20%;">Total Pembelian</th>
+                        <th style="width: 20%;">Status Hrd</th>
+                        <th style="width: 15%;">Status Pembayaran</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -225,7 +224,7 @@
                                 $(api.column(colIdx).header()).index()
                             );
                             var title = $(cell).text();
-                            $(cell).html('<input type="text" placeholder="' + title + '" />');
+                            $(cell).html('<input type="text" placeholder="' + title + '"  style="width:70%;"/>');
 
                             // On every keypress in this input
                             $(

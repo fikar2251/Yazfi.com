@@ -41,14 +41,14 @@
             <table class="table table-bordered table-striped custom-table report" id="penerimaan"width="100%">
                 <thead>
                     <tr style="font-size:13px;">
-                        <th>No</th>
-                        <th>Number PN</th>
+                        <th  style="width:5%;">No</th>
+                        <th  style="width:20%;">Number PN</th>
                         <th>Di Ajukan</th>
                         <th>Tanggal</th>
-                        <th style="width: 10px">Total Item</th>
+                        <th style="width:5%">Total Item</th>
                         <th>Total Pembelian</th>
-                        <th>Status Tukar Faktur</th>
-                        <th>Action</th>
+                        <th  style="width:10%;">Status Tukar Faktur</th>
+                        <th  style="width:10%;">Action</th>
                     </tr>
                 </thead>
 
@@ -211,7 +211,7 @@
                                 $(api.column(colIdx).header()).index()
                             );
                             var title = $(cell).text();
-                            $(cell).html('<input type="text" placeholder="' + title + '" />');
+                            $(cell).html('<input type="text" placeholder="' + title + '" style="width:70%;"/>');
 
                             // On every keypress in this input
                             $(

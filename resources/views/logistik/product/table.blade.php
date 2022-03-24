@@ -4,14 +4,14 @@
             <table class="table table-bordered table-striped custom-table report" id="product" width="100%">
                 <thead>
                     <tr>
-                        <th style="text-align: center;">No</th>
+                        <th style="width:5%;">No</th>
                         <th>Nama Item</th>
                         <th>Supllier</th>
                         <th>Project</th>
                         {{-- <th>Before</th> --}}
-                        <th>In</th>
-                        <th>Out</th>
-                        <th>Last Stok</th>
+                        <th style="width:5%;">In</th>
+                        <th style="width:5%;">Out</th>
+                        <th style="width:5%;">Last Stok</th>
                         <th>Waktu</th>
                         <th>Admin</th>
                     </tr>

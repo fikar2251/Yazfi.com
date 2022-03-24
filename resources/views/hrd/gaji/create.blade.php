@@ -182,7 +182,7 @@
                             </table>
                         </div>
                     </div>
-                    <div class="col-sm-1 offset-sm-8">
+                    <div class="col-sm-1">
                         <button type="submit" class="btn btn-primary" id="submit">Submit</button>
                     </div>
                 </form>

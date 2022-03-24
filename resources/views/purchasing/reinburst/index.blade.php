@@ -44,14 +44,14 @@
             <table class="table table-bordered table-striped custom-table report" id="reinburst" width="100%">
                 <thead>
                     <tr>
-                        <th>No</th>
-                        <th>Nomor Reinburst</th>
-                        <th>Tanggal Reinburst</th>
-                        <th>Total Item</th>
-                        <th>Total Pembelian</th>
-                        <th>Status Hrd</th>
-                        <th>Status Pembayaran</th>
-                        <th>Action</th>
+                        <th  style="width:5%;">No</th>
+                        <th style="width:10%;">Nomor Reinburst</th>
+                        <th style="width:10%;">Tanggal Reinburst</th>
+                        <th style="width:5%;">Total Item</th>
+                        <th style="width:5%;">Total Pembelian</th>
+                        <th style="width:10%;">Status Hrd</th>
+                        <th style="width:10%;">Status Pembayaran</th>
+                        <th style="width:10%;">Action</th>
                     </tr>
                 </thead>
                 {{-- @foreach($reinbursts as $reinburst)
@@ -224,7 +224,7 @@
                             );
                             var title = $(cell).text();
                             $(cell).html('<input type="text" placeholder="' + title +
-                                '" />');
+                                '" style="width:70%;" />');
 
                             // On every keypress in this input
                             $(

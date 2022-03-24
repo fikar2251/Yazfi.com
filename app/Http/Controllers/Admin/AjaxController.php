@@ -72,7 +72,7 @@ class AjaxController extends Controller
                     return '<a href="' . route('hrd.gaji.print', $gajian->id) . '"class="btn btn-sm btn-secondary"><i class="fa-solid fa-print"></i></a>
                      <a href="' . route('hrd.gaji.show', $gajian->id) . '"class="btn btn-sm btn-success"><i class="fa-solid fa-eye"></i></a>
                     <a href="' . route('hrd.gaji.edit', $gajian->id) . '"class="btn btn-sm btn-warning"><i class="fa-solid fa-pen-to-square"></i></a> 
-                    <a href="' . route('hrd.gaji.destroy', $gajian->id) . '"   class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>';
+                    <a href="' . route('hrd.gaji.hapus', $gajian->id) . '"   class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>';
                 })
                 ->addIndexColumn()
                 ->rawColumns(['pegawai','action'])
@@ -114,7 +114,7 @@ class AjaxController extends Controller
             return datatables()
                 ->of($reinbursts)
                 ->editColumn('no_reinburst', function ($reinburst) {
-                    return $reinburst->nomor_reinburst;
+                    return '<a href="' . route("admin.reinburst.show", $reinburst->id) . '">' . $reinburst->nomor_reinburst . '</a>';
                 })
                 ->editColumn('tanggal', function ($reinburst) {
                     return Carbon::parse($reinburst->tanggal_reinburst)->format('d/m/Y');
@@ -148,7 +148,7 @@ class AjaxController extends Controller
                          }
                 })
                 ->addIndexColumn()
-                ->rawColumns(['pembelian','status_hrd','status_pembayaran'])
+                ->rawColumns(['no_reinburst','pembelian','status_hrd','status_pembayaran'])
                 ->make(true);
         }
 
@@ -184,7 +184,7 @@ class AjaxController extends Controller
         return datatables()
         ->of($reinbursts)
         ->editColumn('no_reinburst', function ($reinburst) {
-            return $reinburst->nomor_reinburst;
+            return '<a href="' . route("admin.reinburst.show", $reinburst->id) . '">' . $reinburst->nomor_reinburst . '</a>';
         })
         ->editColumn('tanggal', function ($reinburst) {
             return Carbon::parse($reinburst->tanggal_reinburst)->format('d/m/Y');
@@ -658,7 +658,8 @@ class AjaxController extends Controller
             $purchases = DB::table('purchases')
             ->leftJoin('tukar_fakturs','purchases.invoice','=','tukar_fakturs..no_po_vendor')
             ->leftJoin('users','purchases.user_id','=','users.id')
-            ->select('tukar_fakturs.status_pembayaran','purchases.id','users.name','purchases.invoice','purchases.created_at','purchases.grand_total','tukar_fakturs.nilai_invoice','tukar_fakturs.no_po_vendor')
+            ->select('tukar_fakturs.status_pembayaran','purchases.id','users.name','purchases.invoice',
+            'purchases.created_at','purchases.grand_total','tukar_fakturs.nilai_invoice','tukar_fakturs.total','tukar_fakturs.no_po_vendor')
             ->groupBy('purchases.invoice')
             ->orderBy('purchases.id','desc')->get();
             // dd($tukar);
@@ -685,14 +686,14 @@ class AjaxController extends Controller
                 return $purchase->grand_total;
             })
             ->editColumn('pembelian_purchase', function ($purchase) {
-                return \App\TukarFaktur::where('no_po_vendor', $purchase->no_po_vendor)->where('status_pembayaran','completed')->sum('nilai_invoice');
+                return \App\TukarFaktur::where('no_po_vendor', $purchase->no_po_vendor)->where('status_pembayaran','completed')->sum('total');
             })
             ->editColumn('status', function ($purchase) {
                 if($purchase->grand_total != \App\TukarFaktur::where('no_po_vendor', $purchase->no_po_vendor)->where('status_pembayaran','completed')->sum('total')){
-               return '<a class="custom-badge status-red">pending</a>';
+               return '<a class="custom-badge status-red">Unpaid</a>';
                }
                 if($purchase->grand_total == \App\TukarFaktur::where('no_po_vendor', $purchase->no_po_vendor)->where('status_pembayaran','completed')->sum('total')){
-                    return '<a class="custom-badge status-green">completed</a>';
+                    return '<a class="custom-badge status-green">Paid</a>';
                 }
                
             })

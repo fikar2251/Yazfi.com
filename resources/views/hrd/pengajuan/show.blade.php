@@ -4,11 +4,6 @@
     <div class="col-sm-5 col-4">
         <h4 class="page-title">Show Pengajuan Dana</h4>
     </div>
-    <div class="col-sm-7 col-8 text-right m-b-30">
-        <div class="btn-group btn-group-sm ">
-            <a href="{{ route('logistik.pengajuan.pdf',$pengajuan->id) }}" class="btn btn-success btn-sm">Export to PDF</a>
-        </div>
-    </div>
 </div>
 </div>
 <div class="container">
@@ -33,37 +28,7 @@
                                 <h2><span style="color:blue; text-decoration: underline; font-size: 20px">Pengajuan Dana</span></h2>
                             </div>
                         </div> <br />
-                        <div class="payment-details">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <p style="margin-right:50%;" style="font-size: 12px">Nama :
-                                        <a>
-                                            {{ $pengajuan->admin->name }}
-                                        </a>
-                                    </p style="font-size: 12px">
-                                    <p style="font-size: 12px">Jabatan :
-                                        <a style="font-size: 12px">
-                                            {{ $jabatan->nama }}
-                                        </a>
-                                    </p>
-                                    <p style="font-size: 12px">Divisi :
-                                        <a style="font-size: 12px">
-                                            {{ $pengajuan->roles->name }}
-                                        </a>
-                                    </p>
-                                </div>
-                                <div class="col-sm-6 tex-right">
-                                    <div class="form-group">
-                                        <p style="font-size: 12px">Tanggal : <a style="font-size: 12px">{{ Carbon\Carbon::parse($pengajuan->tanggal_pengajuan)->format('d/m/Y H:i:s') }}
-                                            </a></p>
-                                    </div>
-                                    <div class="form-group">
-                                        <p style="font-size: 12px">Lampiran : <a style="font-size: 12px">{{ $pengajuan->file }}</a>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                       
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="table-responsive">

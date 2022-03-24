@@ -11,8 +11,8 @@ use App\Penggajian;
 use App\RincianGaji;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
+use Illuminate\Validation\Rule;
 
 class GajiController extends Controller
 {
@@ -52,9 +52,8 @@ class GajiController extends Controller
         $this->validate($request, [
            
             'tanggal' => 'required|date',
-            // 'pegawai_id' => Penggajian::where('pegawai_id',$request->pegawai_id)
-            // ->get(),
-            'pegawai_id' => 'required|exists:users,id',
+            'pegawai_id' => 'required|unique:penggajians,pegawai_id',
+            'bulan_tahun' => 'required|unique:penggajians,bulan_tahun',
             'total_potongan' => 'required',
             'total' => 'required',
       
@@ -105,6 +104,8 @@ class GajiController extends Controller
      */
     public function show($id)
     {
+
+        
         return view('hrd.gaji.show', [
             'penggajian' => Penggajian::findOrFail($id)
         ]);
@@ -183,7 +184,7 @@ class GajiController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function hapus($id)
     {
        $penggajian = Penggajian::where('id',$id)->get();
         foreach ($penggajian as $peng) {
@@ -191,6 +192,7 @@ class GajiController extends Controller
         
             $peng->delete();
         }
+        
        
       return redirect()->route('hrd.gaji.index')->with('success', 'Penggajian has been deleted');
     }

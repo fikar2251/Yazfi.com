@@ -13,16 +13,21 @@
                 <div class="card shadow" id="card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-5">
                                 <div class="dashboard-logo">
-                                    <img src="{{url('/img/logo/yazfi.png ')}}" alt="Image" />
+                                    <img style="width:180px;" src="{{url('/img/logo/yazfi.png ')}}" alt="Image" />
                                 </div>
+    
                             </div>
-                            <div class="col-md-8">
-
+                            <div class="col-6">
+                                <h2><span style="color:black; font-size: 30px;">Tanda Terima <br>Tukar Faktur</span>
+                                </h2>
                             </div>
-                        </div><br>
-                        <br />
+                            <div class="col-1">
+                            </div>
+                        </div>
+                        <hr style="border: solid;"><br>
+                        <br>
                         @foreach($detail as $tur)
                         @endforeach
                         <div class="row">
@@ -163,45 +168,98 @@
                                     <div class="col-sm-5 col-4">
                                         <h4 style="font-size:12px;" class="page-title">Riwayat Purchasing Order</h4>
                                     </div>
-
+                                    
+                                    @foreach($purchases as $pur)
+                                    @endforeach
+                                    @if($tur->po_spk == '1')
                                     <table class="table table-bordered  report">
                                         <tr style="font-size:12px;" class="bg-success">
                                             <th class=" text-light">No.</th>
-                                            <th class="text-light">No. PO</th>
-                                            <th class="text-light">No. PN</th>
-                                            <th class="text-light">Total Item</th>
+                                            <th class="text-light">No. Purchase Order</th>
+                                            <th class="text-light">Nama Item</th>
                                             <th class="text-light">Harga</th>
-                                            <th class="text-light"> Total</th>
+                                           
                                         </tr>
                                         <tbody id="dynamic_field">
+                                            @php
+                                            $total = 0
+                                            @endphp
+                                            @foreach( $purchases as $purchase)
+                                            <tr style="font-size:12px;" class="rowComponent">
+                                                <td>
+                                                    {{$loop->iteration}}
+                                                </td>
+                                                <td>
+                                                    {{$purchase->invoice ?? '-'}}
+                                                </td>
+                                                <td>
+                                                    {{$purchase->barang->nama_barang}}
+                                                </td>
+                                                <td>
+                                                    @currency($purchase->total)
+                                                </td>
+                                            </tr>
+                                            @php
+                                            $total += $purchase->total
+                                            @endphp
+                                            @endforeach
+                                        </tbody>
+                                        <tfoot>
+                                            <tr style="font-size:12px;">
+                                                <td></td>
+                                                <td colspan="1"></td>
+                                                <td>SUB TOTAL </td>
+                                                <td><b>@currency($pur->nilai_invoice)</b></td>
+                                            </tr>
+                                        </tfoot>
+
+                                    </table>
+                                    @endif
+                                    @if($tur->po_spk == '2')
+                                    <table class="table table-bordered  report">
+                                        <tr style="font-size:12px;" class="bg-success">
+                                            <th class=" text-light">No.</th>
+                                            <th class="text-light">No. Purchase Order</th>
+                                            <th class="text-light">Nama Item</th>
+                                            <th class="text-light">Harga</th>
+                                           
+                                        </tr>
+                                        <tbody id="dynamic_field">
+                                            @php
+                                            $total = 0
+                                            @endphp
+
                                             @foreach(App\TukarFaktur::where('no_faktur', $tur->no_faktur)->get() as $purchase)
                                             <tr style="font-size:12px;" class="rowComponent">
                                                 <td>
                                                     {{$loop->iteration}}
                                                 </td>
                                                 <td>
-                                                    {{$purchase->no_po_vendor}}
+                                                    {{$purchase->no_po_vendor ?? '-'}}
                                                 </td>
                                                 <td>
                                                     {{$purchase->nama_barang}}
                                                 </td>
                                                 <td>
-                                                    {{$purchase->qty }}
-                                                </td>
-                                                <td>
                                                     @currency($purchase->nilai_invoice)
                                                 </td>
-                                                <td>
-                                                    @currency($purchase->harga_beli * $purchase->qty)
-                                                </td>
-                                                {{-- <td>
-                                                        {{$purchase->name}}
-                                                </td> --}}
                                             </tr>
+                                            @php
+                                            $total += $purchase->nilai_invoice
+                                            @endphp
                                             @endforeach
                                         </tbody>
+                                        <tfoot>
+                                            <tr style="font-size:12px;">
+                                                <td></td>
+                                                <td colspan="1"></td>
+                                                <td>SUB TOTAL </td>
+                                                <td><b>@currency($total)</b></td>
+                                            </tr>
+                                        </tfoot>
 
                                     </table>
+                                    @endif
                                 </div>
                             </div>
                         </div>

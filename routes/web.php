@@ -323,9 +323,18 @@ Route::middleware('auth')->group(function () {
             Route::resource('potongan','MstPotonganController');
            
             Route::get('gaji/print/{id}','GajiController@print')->name('gaji.print');
-            Route::get('gaji/{id}', 'GajiController@destroy')->name('gaji.destroy');
+            
+            Route::get('gaji/{id}/hapus', 'GajiController@hapus')->name('gaji.hapus');
+        
+            Route::get('gaji/show/{id}', 'GajiController@show')->name('gaji.show');
+        
+            Route::get('gaji/{id}/edit', 'GajiController@edit')->name('gaji.edit');
+           
+        
             Route::post('gaji/filter','GajiController@filter')->name('gaji.filter');
+            
             Route::resource('gaji', 'GajiController');
+    
             Route::get('/where/searchPegawai', 'GajiController@searchPegawai');
             Route::get('gaji/ajax', 'GajiController@ajax')->name('gaji.ajax');
 
@@ -422,7 +431,8 @@ Route::middleware('auth')->group(function () {
             Route::resource('reinburst', 'ReinburstController');
             Route::get('reinburst/destroy/{id}', 'ReinburstController@destroy')->name('reinburst.destroy');
 
-            Route::get('penerimaan-barang/{id}', 'PenerimaanBarangController@destroy')->name('penerimaan-barang.destroy');
+            Route::get('penerimaan-barang/destroy/{id}', 'PenerimaanBarangController@destroy')->name('penerimaan-barang.destroy');
+            Route::get('penerimaan-barang/show/{id}', 'PenerimaanBarangController@show')->name('penerimaan-barang.show');
             Route::resource('penerimaan-barang', 'PenerimaanBarangController');
             Route::post('penerimaan-barang/{id}/update', 'PenerimaanBarangController@update');
             Route::get('/where/penerimaan/search', 'PenerimaanBarangController@search');

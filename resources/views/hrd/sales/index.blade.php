@@ -21,11 +21,11 @@
                         <th class="text-center">No</th>
                         <th>Manager</th>
                         <th>Supervisor</th>
-                        <th colspan="2">Sales</th>
-                        <th></th>
+                        <th>Sales</th>
                         <th>Action</th>
                     </tr>
                 </thead>    
+
 
                 <tbody>
                     @foreach($sales as $sale)
@@ -33,14 +33,13 @@
                         <th class="text-center">{{ $loop->iteration }}</th>
                         <th>{{ $sale->manager->name }}</th>
                         <th>{{ $sale->spv->name }}</th>
-                        {{-- @foreach(App\TeamSales::where('id_spv', $coba->id_spv)->get() as $cobas)
-                        <th> <span class="custom-badge status-blue" >{{ $cobas->user->name }}</span></th>
-                        @endforeach --}}
-                        <th></th>
+                        @foreach($sale->sale as $pur)
+                        <th>{{ $pur->id_sales }}</th>
+                        @endforeach
                         <th>
                             <a href="{{ route('hrd.sales.edit', $sale->id) }}" class="btn btn-sm btn-info"><i
                             class="fa fa-edit"></i></a>
-                        <form action="{{ route('hrd.sales.destroy', $sale->id) }}" method="post"
+                            <form action="{{ route('hrd.sales.destroy', $sale->id) }}" method="post"
                             style="display: inline;" class="delete-form">
                             @method('DELETE')
                             @csrf
