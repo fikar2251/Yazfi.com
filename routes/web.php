@@ -174,44 +174,22 @@ Route::middleware('auth')->group(function () {
             Route::get('/', function () {
                 return redirect()->route('dashboard');
             })->name('dashboard');
-            //   Route::resource('/dashboard', 'DashboardController');
-            Route::get('appointments/ajax', 'AppointmentsController@ajax');
-            Route::resource('/appointments', 'AppointmentsController');
-            Route::get('pasien/ajax', 'PatientController@ajaxPasien');
-            Route::resource('/patient', 'PatientController');
-            Route::get('doctor/json', 'DoctorController@json');
-            Route::resource('/doctor', 'DoctorController');
-            Route::post('/pricelist/{id}', 'PricelistController@storeSpr')->name('storespr');
-            Route::get('/pricelist/show/{id}', 'PricelistController@create')->name('pricelist.detail');
-            Route::get('/pricelist/cetakspr/{id}', 'PricelistController@cetakSPR')->name('pricelist.cetakspr');
-            Route::get('/pricelist/showcetak/{id}', 'PricelistController@showSPR')->name('pricelist.showspr');
-            Route::get('pricelist/json', 'PricelistController@mrkJson');
-            Route::resource('/pricelist', 'PricelistController');
-            Route::get('/blok', 'PricelistController@blok');
-            Route::get('/no', 'PricelistController@no');
-            Route::get('/lt', 'PricelistController@lt');
-            Route::get('/hj', 'PricelistController@hj');
-            Route::get('/kota', 'PricelistController@kota');
-            Route::get('/kecamatan', 'PricelistController@kecamatan');
-            Route::get('/desa', 'PricelistController@desa');
-            Route::post('/fetch', 'PricelistController@fetch')->name('pricelist.fetch');
-            Route::get('/pricelist/findBlokName', 'PricelistController@findBlokName');
-            Route::resource('/profile', 'ProfileController');
-            Route::prefix('/service')->name('service.')->group(function () {
-                Route::get('/appointments/filter', 'ServiceController@AppointmentsFilter')->name('appointments.filter');
-                Route::post('/appointments/books', 'ServiceController@AppointmentsBook')->name('appointments.book');
-            });
-            Route::get('/jadwal/{id}/{dokter}', 'AjaxController@GetBook');
-            Route::get('/jadwal/now/{id}/{dokter}', 'AjaxController@GetBookNow');
-            Route::get('/resource/{id}', 'AjaxController@GetProduct');
-            Route::get('/barang', 'AjaxController@GetProducts');
-            Route::get('/where/customer', 'AjaxController@WhereCustomer');
-            Route::get('/where/product', 'AjaxController@WhereProduct');
-            Route::get('/cabang', 'AjaxController@GetCabang');
-            Route::get('/pasien/{id}', 'AjaxController@GetCustomer');
-            Route::get('/time/{jadwal}/{time}/{waktu_mulai}', 'AjaxController@GetTime');
-            Route::get('/show/{id}', 'AjaxController@show')->name('show');
-            Route::get('/datatable/appointments', 'AjaxController@DataTableAppointment');
+            Route::get('unit/json', 'UnitController@json');
+            Route::resource('/unit', 'UnitController');
+            Route::post('/spr/{id}', 'SprController@storeSpr')->name('storespr');
+            Route::get('/spr/show/{id}', 'SprController@create')->name('spr.detail');
+            Route::get('/spr/cetakspr/{id}', 'SprController@cetakSPR')->name('spr.cetakspr');
+            Route::get('/spr/showcetak/{id}', 'SprController@showSPR')->name('spr.showspr');
+            Route::get('spr/json', 'SprController@mrkJson');
+            Route::resource('/spr', 'SprController');
+            Route::get('/blok', 'SprController@blok');
+            Route::get('/no', 'SprController@no');
+            Route::get('/lt', 'SprController@lt');
+            Route::get('/hj', 'SprController@hj');
+            Route::get('/kota', 'SprController@kota');
+            Route::get('/kecamatan', 'SprController@kecamatan');
+            Route::get('/desa', 'SprController@desa');
+          
         });
 
         // Route Resepsionis
@@ -269,12 +247,6 @@ Route::middleware('auth')->group(function () {
             Route::get('/', function () {
                 return redirect()->route('dashboard');
             })->name('dashboard');
-
-            // Route Appointment
-            Route::get('appointments/ajax', 'AppointmentController@ajaxAppointment');
-            Route::post('appointments/deleterincian', 'AppointmentController@deleterincian')->name('appointments.deleterincian');
-            Route::resource('appointments', 'AppointmentController');
-
             Route::get('komisi/ajax', 'KomisiController@ajaxKomisi');
             Route::get('komisi/{komisi:id}/change', 'KomisiController@change')->name('komisi.change');
             Route::patch('komisi/{komisi:id}/updatechange', 'KomisiController@updatechange')->name('komisi.updatechange');
@@ -282,7 +254,7 @@ Route::middleware('auth')->group(function () {
             Route::get('komisi/json', 'KomisiController@komisiJson')->name('komisijson');
             Route::resource('komisi', 'KomisiController');
 
-            Route::get('payment', 'BayarController@sales')->name('payment.index');
+            Route::get('cancel', 'BayarController@sales')->name('cancel.index');
             Route::get('payment/json', 'BayarController@batalJson')->name('bataljson');
             Route::get('payment/{id}', 'BayarController@show')->name('payment.show');
             Route::get('cancel/{id}', 'BayarController@cancel')->name('payment.cancel');

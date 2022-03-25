@@ -15,8 +15,8 @@
     </li>
     {{-- @endcan --}}
 
-     <li class="{{ request()->is('supervisor/payment') ? 'active' : '' }}">
-        <a href="{{ route('supervisor.payment.index') }}"><i class="fa fa-money"></i> <span>Pembatalan</span></a>
+     <li class="{{ request()->is('supervisor/cancel') ? 'active' : '' }}">
+        <a href="{{ route('supervisor.cancel.index') }}"><i class="fa fa-money"></i> <span>Pembatalan</span></a>
     </li>
 
 

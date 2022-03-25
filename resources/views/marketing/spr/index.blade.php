@@ -82,7 +82,7 @@
             processing: true,
             serverSide: true,
             order: [[0, 'desc']],
-            ajax: "/marketing/pricelist/json",
+            ajax: "/marketing/spr/json",
             columns: [{
                     data: 'no_transaksi',
                     name: 'no_transaksi'

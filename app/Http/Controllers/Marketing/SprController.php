@@ -21,7 +21,7 @@ use Illuminate\View\View;
 Use PDF;
 use Yajra\DataTables\Facades\DataTables;
 
-class PricelistController extends Controller
+class SprController extends Controller
 {
     /**
      * Display a listing of the resource.

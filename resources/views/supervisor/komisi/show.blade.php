@@ -132,7 +132,7 @@
                                                     <h3> % </h3> <input type="text" name="bphtb" id="bphtb"
                                                         class="form-control" style="width: 145px"
                                                         value="@currency($potongan['bphtb'])" style="text-decoration: none"
-                                                        readonly>
+                                                        readonly> 
                                                 </td>
                                             </tr>
                                             {{-- @endforeach --}}
@@ -229,7 +229,38 @@
                 var persenpph = parseFloat($("#persenpph").val());
                 var potonganpph = harga_jual * (persenpph / 100);
                 var pph = rupiah(potonganpph);
+
+                var persenpph = parseFloat($("#persenpll").val());
+                var potonganpll = harga_jual * (persenpph / 100);
+
+                var persenpph = parseFloat($("#persenbphtb").val());
+                var potonganbphtb = harga_jual * (persenpph / 100);
+
+                var total = potonganpll + potonganbphtb + potonganpph;
+                var totalpotongan = rupiah(total);
+                var dasarperhitungan = harga_jual - total;
+                var dasar = rupiah(dasarperhitungan);
+
+                var persensales = parseFloat($("#persensales").val());
+                var potongansales = dasarperhitungan * (persensales / 100);
+                var sales = rupiah(potongansales);
+
+                var persenspv = parseFloat($("#persenspv").val());
+                var potonganspv = dasarperhitungan * (persenspv / 100);
+                var spv = rupiah(potonganspv);
+
+                var persenmanager = parseFloat($("#persenmanager").val());
+                var potonganmanager = dasarperhitungan * (persenmanager / 100);
+                var manager = rupiah(potonganmanager);
+
                 document.getElementById("pph").value = pph;
+                document.getElementById("totalpotongan").innerHTML = totalpotongan;
+                document.getElementById("dasar").innerHTML = dasar;
+
+                document.getElementById("sales").value = sales;
+                document.getElementById("spv").value = spv;
+                document.getElementById("manager").value = manager;
+
             });
         });
 
@@ -238,8 +269,39 @@
                 var harga_jual = parseInt($("#harga_jual").val());
                 var persenpph = parseFloat($("#persenbphtb").val());
                 var potonganbphtb = harga_jual * (persenpph / 100);
-                var pph = rupiah(potonganbphtb);
-                document.getElementById("bphtb").value = pph;
+                var bphtb = rupiah(potonganbphtb);
+
+                var persenpph = parseFloat($("#persenpll").val());
+                var potonganpll = harga_jual * (persenpph / 100);
+
+                var persenpph = parseFloat($("#persenpph").val());
+                var potonganpph = harga_jual * (persenpph / 100);
+
+                var total = potonganpll + potonganbphtb + potonganpph;
+                var totalpotongan = rupiah(total);
+                var dasarperhitungan = harga_jual - total;
+                var dasar = rupiah(dasarperhitungan);
+
+                var persensales = parseFloat($("#persensales").val());
+                var potongansales = dasarperhitungan * (persensales / 100);
+                var sales = rupiah(potongansales);
+
+                var persenspv = parseFloat($("#persenspv").val());
+                var potonganspv = dasarperhitungan * (persenspv / 100);
+                var spv = rupiah(potonganspv);
+
+                var persenmanager = parseFloat($("#persenmanager").val());
+                var potonganmanager = dasarperhitungan * (persenmanager / 100);
+                var manager = rupiah(potonganmanager);
+
+                document.getElementById("bphtb").value = bphtb;
+                document.getElementById("totalpotongan").innerHTML = totalpotongan;
+                document.getElementById("dasar").innerHTML = dasar;
+
+                document.getElementById("sales").value = sales;
+                document.getElementById("spv").value = spv;
+                document.getElementById("manager").value = manager;
+
             });
         });
 
@@ -250,7 +312,7 @@
                 var harga_jual = parseInt($("#harga_jual").val());
                 var persenpph = parseFloat($("#persenpll").val());
                 var potonganpll = harga_jual * (persenpph / 100);
-                var pph = rupiah(potonganpll);
+                var pll = rupiah(potonganpll);
 
                 var persenpph = parseFloat($("#persenbphtb").val());
                 var potonganbphtb = harga_jual * (persenpph / 100);
@@ -263,10 +325,25 @@
                 var dasarperhitungan = harga_jual - total;
                 var dasar = rupiah(dasarperhitungan);
 
-                document.getElementById("pll").value = pph;
+                var persensales = parseFloat($("#persensales").val());
+                var potongansales = dasarperhitungan * (persensales / 100);
+                var sales = rupiah(potongansales);
+
+                var persenspv = parseFloat($("#persenspv").val());
+                var potonganspv = dasarperhitungan * (persenspv / 100);
+                var spv = rupiah(potonganspv);
+
+                var persenmanager = parseFloat($("#persenmanager").val());
+                var potonganmanager = dasarperhitungan * (persenmanager / 100);
+                var manager = rupiah(potonganmanager);
+
+                document.getElementById("pll").value = pll;
                 document.getElementById("totalpotongan").innerHTML = totalpotongan;
                 document.getElementById("dasar").innerHTML = dasar;
 
+                document.getElementById("sales").value = sales;
+                document.getElementById("spv").value = spv;
+                document.getElementById("manager").value = manager;
             });
         });
 

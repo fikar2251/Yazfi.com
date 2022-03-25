@@ -18,7 +18,7 @@
                     <img src="{{url('/img/' . $product->image)}}" alt="Image" />
                 </div>
                 {{-- <a href="{{ route('marketing.pricelist.index') }}" class="btn btn-primary">Booking</a> --}}
-                <a href="{{route('marketing.pricelist.show', $product->id)}}" class="btn btn-primary">Booking</a>
+                <a href="{{route('marketing.spr.show', $product->id)}}" class="btn btn-primary">Booking</a>
 
 
             </div>

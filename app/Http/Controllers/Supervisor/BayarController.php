@@ -55,7 +55,7 @@ use Yajra\DataTables\DataTables;
 
                 
 
-                return view('supervisor.payment.index', compact('user'));
+                return view('supervisor.cancel.index', compact('user'));
 
             }
 
@@ -129,15 +129,15 @@ use Yajra\DataTables\DataTables;
                 if ($batal) {
                     # code...
                     $idbatal = $batal->spr->no_transaksi;
-                    return view('supervisor.payment.cancel', compact('getSpr', 'spr', 'alasan', 'idbatal'));
+                    return view('supervisor.cancel.cancel', compact('getSpr', 'spr', 'alasan', 'idbatal'));
                 }else {
                     $idbatal = '';
-                    return view('supervisor.payment.cancel', compact('getSpr', 'spr', 'alasan', 'idbatal'));
+                    return view('supervisor.cancel.cancel', compact('getSpr', 'spr', 'alasan', 'idbatal'));
                 }
 
             } else{
                 # code...
-                return view('supervisor.payment.cancel', compact('getSpr', 'spr', 'alasan'));
+                return view('supervisor.cancel.cancel', compact('getSpr', 'spr', 'alasan'));
             }
 
         }
@@ -163,7 +163,7 @@ use Yajra\DataTables\DataTables;
                 'refund' => 'unpaid'
             ]);
 
-            return redirect()->route('supervisor.payment.index');
+            return redirect()->route('supervisor.cancel.index');
         }
 
         public function nominal(Request $request)

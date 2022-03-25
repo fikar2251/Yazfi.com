@@ -33,9 +33,9 @@ class FinanceController extends Controller
                     }
                 })
                 ->editColumn('bank_tujuan', function($bayar){
-                    if ($bayar->bank_tujuan == 'BRI'){
+                    if ($bayar->bank_tujuan == 'Bri'){
                     return 'BRI';
-                    }elseif ($bayar->bank_tujuan == 'BCA'){
+                    }elseif ($bayar->bank_tujuan == 'Bca'){
                     return 'BCA';
                     }else {
                         return 'Mandiri';
