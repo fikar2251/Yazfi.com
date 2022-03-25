@@ -99,11 +99,11 @@ class PenerimaanBarangController extends Controller
         }
         return $data;
     }
-    public function create(Purchase $penerimaan,Request $request)
+    public function create(Purchase $purchase,Request $request)
     {
-        // $tukar = Purchase::where('status_barang', 'pending')->where('invoice', $purchase->invoice)->get();
-
-        
+        $coba = Purchase::where('invoice', $request->invoice)->get();
+        // dd($coba);
+        if (count($coba) != 0) {
         $purchases = Purchase::where('status_barang', 'pending')->where('invoice',$request->invoice)->get();
 
         $gudang = PenerimaanBarang::where('no_po', $request->invoice)->first();
@@ -135,11 +135,12 @@ class PenerimaanBarangController extends Controller
         $nourut = $AWAL . '/' .  sprintf("%02s", abs($noUrutAkhir + 1)) . '/' . sprintf("%05s", abs($noUrutAkhir + 1));
         
         $purchase = Purchase::groupBy('invoice')->get();
-        
-      
-      
-        // dd($tukar);
+    
         return view('purchasing.penerimaan-barang.create', compact('ppn','tukar', 'purchases', 'purchase','nourut','status_barang','inout','penerimaan','gudang','ppn_partial','warehouses'));
+        }else{
+          
+            return back()->with('error', 'Data Tidak Temukan');
+        }
     }
 
 

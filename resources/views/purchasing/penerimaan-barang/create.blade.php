@@ -70,10 +70,17 @@
 
                     </div>
                 </form>
+                @if(session()->has('error'))
+                <div class="alert alert-danger">
+                    {{ session()->get('error') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                </div>
+                @endif
 
                 @foreach($purchase as $item)
 
-                @if (request()->get('invoice') == $item->invoice && $item->status_barang == $item->status = 'pending'  )
+                @if (request()->get('invoice') == $item->invoice && $item->status_barang == $item->status = 'pending' )
                 <div class="row">
                     <div class="col-sm-6 col-sg-4 m-b-4">
                         <ul class="list-unstyled">
@@ -202,8 +209,7 @@
                                         <li>
                                             <div class="form-group">
                                                 <label for="warehouses">Warehouse</label>
-                                                <select name="id_warehouse" id="id_warehouse"
-                                                    class="form-control">
+                                                <select name="id_warehouse" id="id_warehouse" class="form-control">
                                                     <option disabled selected>-- Select Warehouse --</option>
                                                     @foreach($warehouses as $warehouse)
                                                     <option value="{{ $warehouse->id }}">
@@ -267,7 +273,7 @@
                                                     onkeyup="testNum(this),hitung(this), HowAboutIt(this),qtyText(this)"
                                                     id="qty_received" placeholder=" 0">
                                             </td>
-                                          
+
                                             <td>
                                                 <input type="number" value="{{ $purchase->qty }}"
                                                     data="{{ $loop->iteration }}" name="qty[{{ $loop->iteration }}]"
@@ -610,7 +616,7 @@
                                         </li>
                                     </ul>
                                 </div>
-                                
+
                                 <div class="col-sm-6 col-sg-4 m-b-4">
                                     <ul class="list-unstyled">
                                         <li>
@@ -627,16 +633,17 @@
                                     </ul>
                                 </div>
                                 <div class="col-sm-6 col-sg-4 m-b-4">
-                            <ul class="list-unstyled">
-                                <li>
-                                    <div class="form-group">
-                                        <label for="warehouse">Warehouse <span style="color: red">*</span></label>
-                                        <input type="text" readonly class="form-control"
-                                            value="{{$gudang->purchase->warehouse->nama_warehouse}}">
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
+                                    <ul class="list-unstyled">
+                                        <li>
+                                            <div class="form-group">
+                                                <label for="warehouse">Warehouse <span
+                                                        style="color: red">*</span></label>
+                                                <input type="text" readonly class="form-control"
+                                                    value="{{$gudang->purchase->warehouse->nama_warehouse}}">
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                             <div class="table-responsive">
                                 <table class="table table-bordered  report">
@@ -667,9 +674,8 @@
                                                 <input type="hidden" name="barang_id[{{ $loop->iteration }}]"
                                                     data="{{ $loop->iteration }}" id="barang_id"
                                                     value="{{ $purchase->barang_id }}"
-
                                                     class="form-control barang_id-{{ $loop->iteration }}">
-                                                    <input type="hidden" name="id_purchase[{{ $loop->iteration }}]"
+                                                <input type="hidden" name="id_purchase[{{ $loop->iteration }}]"
                                                     data="{{ $loop->iteration }}" id="id_purchase"
                                                     value="{{ $purchase->id }}"
                                                     class="form-control id_purchase-{{ $loop->iteration }}">
@@ -890,7 +896,7 @@
                                         <td colspan="3" rowspan="3"><b>Total Pembelian : </b></td>
                                         <td><b>Total: </b></td>
 
-                                    {{-- error --}}
+                                        {{-- error --}}
                                         <td>
                                             @currency($purchase->harga_beli * $purchase->qty_partial)
                                         </td>
@@ -918,7 +924,8 @@
                                         <td><b>Grand Total: </b></td>
 
                                         <td>
-                                            @currency($purchase->harga_beli * $purchase->qty_partial  / 100 *  $ppn_partial->PPN  + $purchase->harga_beli * $purchase->qty_partial    )
+                                            @currency($purchase->harga_beli * $purchase->qty_partial / 100 *
+                                            $ppn_partial->PPN + $purchase->harga_beli * $purchase->qty_partial )
                                         </td>
 
                                         <td></td>
@@ -930,7 +937,7 @@
                     </div>
                 </div>
                 @endif
-                @if (request()->get('invoice') == $item->invoice && $item->status_barang == $item->status_barang =
+                @if (request()->get('invoice') == $item->invoice && $item->status_barang =
                 'completed')
                 <div class="row">
                     <div class="col-sm-6 col-sg-4 m-b-4">
@@ -942,9 +949,11 @@
                     </div>
 
                 </div>
-               
+
                 @endif
-                
+
+               
+
                 @endforeach
             </div>
         </div>
