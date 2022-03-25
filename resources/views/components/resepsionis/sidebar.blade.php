@@ -28,19 +28,19 @@
         </li>
     @endcan --}}
 
-    <li class="{{ request()->is('resepsionis/payment') ? 'active' : '' }}">
-        <a href="{{ route('resepsionis.payment') }}"><i class="fa-solid fa-money-bill-wave"></i> <span>Payment</span></a>
+    <li class="{{ request()->is('finance/payment') ? 'active' : '' }}">
+        <a href="{{ route('finance.payment') }}"><i class="fa-solid fa-money-bill-wave"></i> <span>Payment</span></a>
     </li>
 
-    <li class="{{ request()->is('resepsionis/refund') ? 'active' : '' }}">
-        <a href="{{ route('resepsionis.refund') }}"><i class="fa fa-files-o"></i> <span>Refund</span></a>
+    <li class="{{ request()->is('finance/refund') ? 'active' : '' }}">
+        <a href="{{ route('finance.refund') }}"><i class="fa fa-files-o"></i> <span>Refund</span></a>
     </li>
 
-    <li class="{{ request()->is('resepsionis/refund/list') ? 'active' : '' }}">
-        <a href="{{ route('resepsionis.refund.list') }}"><i class="fa fa-files-o"></i> <span>List Refund</span></a>
+    <li class="{{ request()->is('finance/refund/list') ? 'active' : '' }}">
+        <a href="{{ route('finance.refund.list') }}"><i class="fa fa-files-o"></i> <span>List Refund</span></a>
     </li>
 
-    <li class="{{ request()->is('resepsionis/komisi') ? 'active' : '' }}">
-        <a href="{{ route('resepsionis.komisi') }}"><i class="fa fa-files-o"></i> <span>Komisi</span></a>
+    <li class="{{ request()->is('finance/komisi') ? 'active' : '' }}">
+        <a href="{{ route('finance.komisi') }}"><i class="fa fa-files-o"></i> <span>Komisi</span></a>
     </li>
 </ul>

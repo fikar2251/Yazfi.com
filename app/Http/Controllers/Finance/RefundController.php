@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Resepsionis;
+namespace App\Http\Controllers\Finance;
 
 use App\Http\Controllers\Controller;
 use App\Pembatalan;
@@ -9,6 +9,7 @@ use App\Refund;
 use App\Tagihan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\VarDumper\Cloner\Data;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -41,21 +42,22 @@ class RefundController extends Controller
             // dd($contoh);
 
             $idbatal = $singlebatal->no_pembatalan;
-
+            $account = DB::table('chart_of_account')->get();
+           
             $refund = Refund::where('no_pembatalan', $getno)->first();
             if ($refund) {
                 $idbatal1 = $refund->no_pembatalan;
 
-                return view('resepsionis.refund.index', compact('batal', 'singlebatal', 'singlebayar', 'idbatal1', 'totalbayar'));
+                return view('finance.refund.index', compact('batal', 'singlebatal', 'singlebayar', 'idbatal1', 'totalbayar', 'account'));
             } else {
                 $idbatal1 = '';
-                return view('resepsionis.refund.index', compact('batal', 'singlebatal', 'singlebayar', 'idbatal1', 'totalbayar'));
+                return view('finance.refund.index', compact('batal', 'singlebatal', 'singlebayar', 'idbatal1', 'totalbayar', 'account'));
             }
 
         } else {
             $batal = Pembatalan::orderBy('id', 'desc')->get();
 
-            return view('resepsionis.refund.index', compact('batal'));
+            return view('finance.refund.index', compact('batal'));
 
         }
 
@@ -75,20 +77,20 @@ class RefundController extends Controller
             'pembatalan_id' => $request->pembatalan_id,
         ]);
 
-        return redirect('resepsionis/refund/list');
+        return redirect('finance/refund/list');
     }
 
     function list() {
         $refund = Refund::orderBy('no_refund', 'desc')->where('status', 'paid')->get();
 
-        return view('resepsionis.refund.list', compact('refund'));
+        return view('finance.refund.list', compact('refund'));
     }
 
     public function listRefund()
     {
         $refund = Refund::orderBy('no_refund', 'desc')->where('status', ['unpaid', 'reject'])->get();
 
-        return view('resepsionis.refund.daftar', compact('refund'));
+        return view('finance.refund.daftar', compact('refund'));
     }
     public function refundJson()
     {

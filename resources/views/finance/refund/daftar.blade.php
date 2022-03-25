@@ -7,7 +7,7 @@
         </div>
     </div>
 
-    <form action="{{ route('resepsionis.store.list.refund') }}" method="POST">
+    <form action="{{ route('finance.store.list.refund') }}" method="POST">
         @csrf
         <div class="row">
             <div class="col-lg-12">

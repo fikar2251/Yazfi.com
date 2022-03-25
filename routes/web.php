@@ -193,18 +193,18 @@ Route::middleware('auth')->group(function () {
         });
 
         // Route Resepsionis
-        Route::prefix('resepsionis')->namespace('Resepsionis')->as('resepsionis.')->group(function () {
+        Route::prefix('finance')->namespace('Finance')->as('finance.')->group(function () {
             // Route Appointment
-            Route::post('appointments/update/perawat', 'AppointmentController@updateperawat')->name('appointments.updateperawat');
-            Route::post('appointments/update/ob', 'AppointmentController@updateob')->name('appointments.updateob');
-            Route::post('appointments/status', 'AppointmentController@status')->name('appointments.status');
-            Route::post('appointments/updatestatus', 'AppointmentController@ajaxStatus')->name('appointments.ajaxstatus');
-            Route::post('appointments/upload', 'AppointmentController@upload')->name('appointments.upload');
-            Route::post('appointments/voucher', 'AppointmentController@voucher')->name('appointments.voucher');
-            Route::post('appointments/bayar', 'AppointmentController@bayar')->name('appointments.bayar');
-            Route::get('appointments/print/{id}', 'AppointmentController@print')->name('appointments.print');
-            Route::get('appointments/ajax', 'AppointmentController@ajax');
-            Route::resource('appointments', 'AppointmentController');
+            // Route::post('appointments/update/perawat', 'AppointmentController@updateperawat')->name('appointments.updateperawat');
+            // Route::post('appointments/update/ob', 'AppointmentController@updateob')->name('appointments.updateob');
+            // Route::post('appointments/status', 'AppointmentController@status')->name('appointments.status');
+            // Route::post('appointments/updatestatus', 'AppointmentController@ajaxStatus')->name('appointments.ajaxstatus');
+            // Route::post('appointments/upload', 'AppointmentController@upload')->name('appointments.upload');
+            // Route::post('appointments/voucher', 'AppointmentController@voucher')->name('appointments.voucher');
+            // Route::post('appointments/bayar', 'AppointmentController@bayar')->name('appointments.bayar');
+            // Route::get('appointments/print/{id}', 'AppointmentController@print')->name('appointments.print');
+            // Route::get('appointments/ajax', 'AppointmentController@ajax');
+            // Route::resource('appointments', 'AppointmentController');
 
             // Route Payment
             Route::get('/payment', 'FinanceController@index')->name('payment');
@@ -232,14 +232,14 @@ Route::middleware('auth')->group(function () {
             Route::post('/komisi/daftar/store', 'FinanceController@storeKomisi')->name('store.list.komisi');
 
             // Route Dokter
-            Route::resource('dokter', 'DokterController');
+            // Route::resource('dokter', 'DokterController');
 
             // Route Pasien
-            Route::get('/ajax/pasien', 'PasienController@ajaxPasien');
-            Route::resource('pasien', 'PasienController');
+            // Route::get('/ajax/pasien', 'PasienController@ajaxPasien');
+            // Route::resource('pasien', 'PasienController');
 
             // Report Resepsionis
-            Route::get('report/payment', 'AppointmentController@report')->name('report.payment');
+            // Route::get('report/payment', 'AppointmentController@report')->name('report.payment');
         });
 
         // Route Supervisor

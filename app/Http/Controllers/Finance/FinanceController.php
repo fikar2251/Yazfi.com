@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Controllers\Resepsionis;
+namespace App\Http\Controllers\Finance;
 
 use App\Http\Controllers\Controller;
 use App\Komisi;
@@ -17,7 +17,7 @@ class FinanceController extends Controller
     {
         $bayar = Pembayaran::where('status_approval', 'paid')->get();
 
-        return view('resepsionis.payment.index', compact('bayar'));
+        return view('finance.payment.index', compact('bayar'));
     }
 
     public function paymentJson()
@@ -52,7 +52,7 @@ class FinanceController extends Controller
     public function komisiFinance()
     {
         $komisi = Komisi::orderBy('id', 'desc')->where('status_pembayaran', 'paid')->get();
-        return view('resepsionis.komisi.index', compact('komisi'));
+        return view('finance.komisi.index', compact('komisi'));
     }
 
     public function komisiJson()
@@ -76,7 +76,7 @@ class FinanceController extends Controller
     public function listKomisi(Request $request)
     {
         $komisi = Komisi::orderBy('id', 'desc')->where('status_pembayaran', ['unpaid','reject'])->get();
-        return view('resepsionis.komisi.daftar', compact('komisi'));
+        return view('finance.komisi.daftar', compact('komisi'));
     }
 
     public function storeKomisi(Request $request)
@@ -99,7 +99,7 @@ class FinanceController extends Controller
     public function listPayment()
     {
         $bayar = Pembayaran::where('status_approval', ['pending', 'reject'])->get();
-        return view('resepsionis.payment.daftar', compact('bayar'));
+        return view('finance.payment.daftar', compact('bayar'));
     }
 
     public function storePayment(Request $request)

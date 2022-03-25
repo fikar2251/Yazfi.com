@@ -165,7 +165,7 @@
                 order: [
                     [0, 'desc']
                 ],
-                ajax: "/resepsionis/payment/json",
+                ajax: "/finance/payment/json",
                 columns: [{
                         data: 'no_detail_transaksi',
                         name: 'no_detail_transaksi',

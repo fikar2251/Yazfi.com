@@ -162,7 +162,7 @@
                 order: [
                     [0, 'desc']
                 ],
-                ajax: "/resepsionis/refund/json",
+                ajax: "/finance/refund/json",
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',

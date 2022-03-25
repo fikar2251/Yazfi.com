@@ -14,7 +14,7 @@
             <div class="dash-widget-info text-right">
                 <h3>{{ $bayar }}</h3>
 
-                <span class="widget-title2"> <a style="color: white" href="{{ url('resepsionis/daftar') }}"> Pembayaran <i
+                <span class="widget-title2"> <a style="color: white" href="{{ url('finance/daftar') }}"> Pembayaran pending <i
                             class="fa fa-check" aria-hidden="true"></i>
                     </a></span>
             </div>
@@ -25,7 +25,7 @@
             <span class="dash-widget-bg3"><i class="fa-solid fa-arrow-right-arrow-left"></i></span>
             <div class="dash-widget-info text-right">
                 <h3>{{ $refund }}</h3>
-                <span class="widget-title3"> <a style="color: white" href="{{url('resepsionis/refund/daftar')}}"> Refund<i class="fa fa-check" aria-hidden="true"></i></a></span>
+                <span class="widget-title3"> <a style="color: white" href="{{url('finance/refund/daftar')}}"> Refund pending<i class="fa fa-check" aria-hidden="true"></i></a></span>
             </div>
         </div>
     </div>
@@ -34,7 +34,7 @@
             <span class="dash-widget-bg4"><i class="fa-solid fa-money-check-dollar"></i></span>
             <div class="dash-widget-info text-right">
                 <h3 class="p-1">{{ $komisi }} </h3>
-                <span class="widget-title4"> <a style="color: white" href="{{url('resepsionis/komisi/daftar')}}"> Komisi<i class="fa fa-check" aria-hidden="true"></i></a></span>
+                <span class="widget-title4"> <a style="color: white" href="{{url('finance/komisi/daftar')}}"> Komisi pending<i class="fa fa-check" aria-hidden="true"></i></a></span>
             </div>
         </div>
     </div>

@@ -154,7 +154,7 @@
                 order: [
                     [0, 'desc']
                 ],
-                ajax: "/resepsionis/komisi/json",
+                ajax: "/finance/komisi/json",
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',

@@ -6,7 +6,7 @@
         </div>
     </div>
 
-    <form action="{{ route('resepsionis.store.list.komisi') }}" method="POST">
+    <form action="{{ route('finance.store.list.komisi') }}" method="POST">
         @csrf
         <div class="row">
             <div class="col-md-12">
