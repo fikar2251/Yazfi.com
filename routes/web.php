@@ -308,7 +308,9 @@ Route::middleware('auth')->group(function () {
 
 
             Route::resource('sales', 'SalesController');
-            Route::get('sales/destroy/{id}/','SalesController@destroy')->name('sales.destroy');
+            Route::get('sales/destroy/{id}','SalesController@destroy')->name('sales.destroy');
+          
+            Route::patch('sales/update/{id}','SalesController@update')->name('sales.update');
           
         
 

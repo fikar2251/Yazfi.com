@@ -8,6 +8,13 @@
 </div>
 
 <form action="{{ route('hrd.sales.store') }}" method="post" enctype="multipart/form-data">
+    @if(session()->has('error'))
+    <div class="alert alert-danger">
+        {{ session()->get('error') }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+            aria-hidden="true">&times;</span></button>
+    </div>
+    @endif
     @csrf
     @include('hrd.sales.form')
 
@@ -17,5 +24,6 @@
 @section('footer')
 <script>
     $(".select2").select2()
+
 </script>
 @stop

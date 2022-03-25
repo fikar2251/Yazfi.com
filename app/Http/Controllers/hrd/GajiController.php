@@ -88,7 +88,7 @@ class GajiController extends Controller
             return redirect()->route('hrd.gaji.index')->with('success', 'Penggajian has been added');
         } else {
             
-            return redirect()->route('hrd.gaji.create')->with('error', 'gagal');
+            return back()->with('error', 'Data Pegawai Sudah Pernah Dibuat Seusai Bulan dan Tahun Yang Sama');
             
         }
            

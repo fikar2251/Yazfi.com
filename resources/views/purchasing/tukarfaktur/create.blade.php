@@ -43,12 +43,12 @@
                                     <label for="no_po">Berdasarkan Pilihan : </label>
 
 
-                                    <input style="width:15px;" id="myCheck" type="radio" name="myCheck" onclick="myFunction()"
-                                        value="1" class="detail" data-binding-checked="" >
+                                    <input style="width:15px;" id="myCheck" type="radio" name="myCheck"
+                                        onclick="myFunction()" value="1" class="detail" data-binding-checked="">
                                     <label class="form-check-label" for="myCheck">No Penerimaan Barang</label>
-                             
-                                    <input style="width:15px;" id="myCheck2" type="radio" name="myCheck" onclick="myFunction()"
-                                        value="1" class="detail" data-binding-checked="" >
+
+                                    <input style="width:15px;" id="myCheck2" type="radio" name="myCheck"
+                                        onclick="myFunction()" value="1" class="detail" data-binding-checked="">
                                     <label class="form-check-label" for="myCheck">SPK</label>
 
                                 </div>
@@ -264,7 +264,7 @@
                                                         <td>
                                                             @currency($purchase->total / 100 * $purchase->ppn +
                                                             $purchase->total)
-                                                            <input type="hidden" value="0"
+                                                            <input type="text" value="0"
                                                                 class="form-control total_all-{{ $loop->iteration }} total-form"
                                                                 placeholder="0">
                                                         </td>
@@ -291,8 +291,16 @@
                                                         <td></td>
                                                         <td><b>Grand Total: </b></td>
                                                         <td colspan="3">
-                                                            <input type="text" readonly name="nilai_invoice" id="nilai_invoice"
-                                                                class="form-control"  value="0">
+                                                            <input type="text" readonly name="nilai_invoice"
+                                                                id="nilai_invoice" class="form-control" value="0">
+                                                        </td>
+                                                        <td colspan="3">
+                                                            <input type="text" readonly name="nilai_invoice_out"
+                                                                id="nilai_invoice_out" class="form-control" value="0">
+                                                        </td>
+                                                        <td colspan="3">
+                                                            <input type="text" readonly name="nilai_total"
+                                                                id="nilai_total" class="form-control" value="0">
                                                         </td>
                                                     </tr>
                                                 </tfoot>
@@ -317,53 +325,63 @@
                                                     nilai_invoice.value = updated_total
 
 
+
                                                     let total_all = 0;
+                                                    let total_out = 0;
                                                     let coll = document.querySelectorAll('.total-form')
-                                                    for (let i = 0; i < coll.length; i++) {
 
-                                                        $(document).ready(function () {
-                                                            $('input[type="checkbox"]').click(function () {
-                                                                if ($(this).is(":checked")) {
-                                                                    // $("#result").html(
-                                                                    //     "Checkbox is checked.");
+                                                    $(document).ready(function () {
+                                                        $('input[type="checkbox"]').click(function () {
+                                                            if ($(this).is(":checked")) {
+                                                                // $("#result").html(
+                                                                //     "Checkbox is checked.");
 
+                                                                for (let i = 0; i < coll.length; i++) {
                                                                     let ele = coll[i]
-                                                                    total_all += parseInt(ele.value)
-                                                                    console.log(total_all);
-
-                                                                    nilai_invoice.value = total_all
-                                                                } else if ($(this).is(
-                                                                        ":not(:checked)")) {
-                                                                    // $("#result").html(
-                                                                    //     "Checkbox is unchecked.");\
-                                                                    let nilai_invoice = document
-                                                                        .getElementById('nilai_invoice')
-
-                                                                    let attr = $(e).attr('data')
-                                                                    let total = $(`.total-${attr}`)
-                                                                        .val()
-                                                                    let total1 = $(`.total-${attr}`)
-                                                                        .val()
-                                                                    let updated_total = parseInt(total - total) 
-                                                                    $(`.total_all-${attr}`).val(
-                                                                        updated_total)
-                                                                    nilai_invoice.value = updated_total
-
-                                                                    let ele = coll[i]
-                                                                    total_all += parseInt(ele.value)
-                                                                    console.log(total_all);
+                                                                    total_all += parseFloat($(ele).val()
+                                                                        .replace(/,/g, ''))
+                                                                    // console.log(total_all);
 
 
-                                                                    nilai_invoice.value = total_all
                                                                 }
-                                                            });
+                                                                $('#nilai_invoice').val(total_all)
+                                                                WeCanSumSallary()
+                                                            } else if ($(this).is(
+                                                                    ":not(:checked)")) {
+                                                                
+
+                                                                let attr = $(e).attr('data')
+                                                                let total = $(`.total-${attr}`)
+                                                                    .val()
+                                                                let updated_total = parseInt(total)
+                                                                let updated_total_all = parseInt(updated_total - total)
+                                                               
+                                                             
+                                                                $('#nilai_total').val(updated_total)
+                                                                WeCanSumSallary()
+                                                                WeCanSumSallaryall()
+                                                                $(`.total_all-${attr}`).val(
+                                                                    updated_total_all)
+
+                                                            }
+
                                                         });
+                                                    });
+                                                    
 
+                                                }
 
-
-
-                                                    }
-
+                                                function WeCanSumSallary() {
+                                                    $('#nilai_invoice_out').val(parseFloat($('#nilai_invoice').val().replace(
+                                                        /,/g, '')) - parseFloat($('#nilai_total').val()
+                                                        .replace(/,/g, '')))
+                                                   
+                                                }
+                                                function WeCanSumSallaryall() {
+                                                    $('#nilai_invoice').val(parseFloat($('#nilai_invoice_out').val().replace(
+                                                        /,/g, '')) * parseFloat($('#nilai_total').val()
+                                                        .replace(/,/g, '')))
+                                                   
                                                 }
 
                                             </script>
@@ -679,7 +697,7 @@
         }
     }
 
-    
+
     var formatter = function (num) {
         var str = num.toString().replace("", ""),
             parts = false,
@@ -703,7 +721,7 @@
         formatted = output.reverse().join("");
         return ("" + formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
     };
-  
+
     var rupiah = document.getElementById('nilai_invoice');
     if (rupiah) {
         rupiah.addEventListener('change', function (e) {

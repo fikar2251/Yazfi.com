@@ -28,25 +28,25 @@
 
 
                 <tbody>
-                    @foreach($sales as $sale)
+                    @foreach($sale as $sales)
                     <tr>
                         <th class="text-center">{{ $loop->iteration }}</th>
-                       <th>{{ $manager->manager->name }}</th>
-                       <th>{{ $manager->spv->name }}</th>
+                        @foreach($manager as $man)
+                       <th>{{ $man->name  }}</th>
+                         @endforeach
+                         <th>
+                             {{ $sales->name }}
+                         </th>
                       <th>
-                        @foreach($sale->sales as $pur)
+                        @foreach($sales->sales as $pur)
                         <span class="custom-badge status-blue">{{ $pur->user->name }}</span>
                         @endforeach
                       </th>
                         <th>
-                            <a href="{{ route('hrd.sales.edit', $sale->id) }}" class="btn btn-sm btn-info"><i
+                            <a href="{{ route('hrd.sales.edit', $sales->id) }}" class="btn btn-sm btn-info"><i
                             class="fa fa-edit"></i></a>
-                            <form action="{{ route('hrd.sales.destroy', $sale->id) }}" method="post"
-                            style="display: inline;" class="delete-form">
-                            @method('DELETE')
-                            @csrf
-                            <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
-                        </form>
+                            <a href="{{ route('hrd.sales.destroy', $sales->id) }}" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>
+                           
                         </th>
                     </tr>
                     @endforeach

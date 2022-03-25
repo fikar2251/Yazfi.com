@@ -3,6 +3,13 @@
 @section('content')
 <div class="row">
     <div class="col-md-12">
+        @if(session()->has('error'))
+        <div class="alert alert-danger">
+            {{ session()->get('error') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>
+        </div>
+        @endif
         <div class="card">
             <div class="card-header d-flex flex-row justify-content-between">
                 <a href="{{ url()->previous() }}" class="btn btn-sm btn-info">Back</a>
@@ -47,7 +54,7 @@
                                         <th>Tanggal</th>
                                         <th>:</th>
                                         <th>
-                                            <input name="tanggal" type="date" class="form-control"
+                                            <input name="tanggal" type="date" required="" class="form-control"
                                                 value="{{ Carbon\Carbon::parse()->format('Y-m-d') }}">
                                         </th>
                                     </tr>
@@ -55,7 +62,7 @@
                                         <th>Bulan Tahun</th>
                                         <th>:</th>
                                         <th>
-                                            <input type="month" value="{{ Carbon\Carbon::parse()->format('Y-m') }}"
+                                            <input type="month" required="" value="{{ Carbon\Carbon::parse()->format('Y-m') }}"
                                                 name="bulan_tahun" class="form-control">
                                         </th>
                                     </tr>
@@ -75,7 +82,7 @@
                                         <th>:</th>
                                         <th>
 
-                                            <input type="text" name="roles" id="roles" class="form-control" readonly>
+                                            <input type="text" required="" name="roles" id="roles" class="form-control" readonly>
                                         </th>
                                     </tr>
                                     <tr>
@@ -83,7 +90,7 @@
                                         <th>:</th>
                                         <th>
 
-                                            <input type="text" name="jabatans" id="jabatans" class="form-control"
+                                            <input type="text" required="" name="jabatans" id="jabatans" class="form-control"
                                                 readonly>
                                         </th>
                                     </tr>
@@ -92,7 +99,7 @@
                                         <th>:</th>
                                         <th>
 
-                                            <input type="text" name="perusahaans" id="perusahaans" class="form-control"
+                                            <input type="text" required="" name="perusahaans" id="perusahaans" class="form-control"
                                                 readonly>
                                         </th>
                                     </tr>

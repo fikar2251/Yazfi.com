@@ -20,8 +20,8 @@
                     @enderror
                 </div>
                 <div class="form-group">
-                    <label for="id_spv">Nama Spv</label>
-                    <select name="id_spv" id="id_spv" class="form-control">
+                    <label for="user_id">Nama Spv</label>
+                    <select name="user_id" id="user_id" class="form-control">
                         <option disabled selected>-- Select Nama SPV --</option>
                         @foreach($spv as $spvs)
 
@@ -30,7 +30,7 @@
                         @endforeach
                     </select>
 
-                    @error('id_jabatan')
+                    @error('user_id')
                     <small class="text-danger">{{ $message }}</small>
                     @enderror
                 </div>

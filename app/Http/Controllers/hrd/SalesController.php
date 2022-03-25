@@ -15,12 +15,15 @@ use Illuminate\Support\Facades\DB;
 
 class SalesController extends Controller
 {
-    public function index( TeamSales $sale, Request $request)
+    public function index()
     {
-        $sales = User::select('id')->role('supervisor')->where('id_jabatans', 2)->get();
-        $manager = TeamSales::whereIn('user_id', $sales)->select('id_manager','user_id')->first();
+        $sale = User::select('id','name')->role('supervisor')->where('id_jabatans', 2)->get(); 
+        // dd($sales);
+    
+        $manager = User::role('marketing')->where('id_jabatans', 1)->get();
         // dd($manager);
-        return view ('hrd.sales.index',compact('sales','manager'));
+
+        return view ('hrd.sales.index',compact('sale','manager'));
     }
 
     public function create(TeamSales $sale)
@@ -43,16 +46,18 @@ class SalesController extends Controller
 
     public function store(Request $request)
     {
+        $sales_all = TeamSales::select('user_id')->where('user_id', $request->id_spv)->get();
+        // dd($sales_all);
         $sales = $request->input('id_sales', []);
-        // dd($sales);
-        // $attr = $request->all();
+      
         $attr= [];
+        if(count($sales_all) == 0){
         DB::beginTransaction();
         foreach( $sales as $tim){
             $attr[]=[
                 'id_sales' => $tim,
                 'id_manager' => $request->id_manager,
-                'id_spv' => $request-> id_spv
+                'user_id' => $request-> user_id
             ];
             // dd($attr);
 
@@ -60,8 +65,14 @@ class SalesController extends Controller
         
         TeamSales::insert($attr);
         DB::commit();
-
         return redirect()->route('hrd.sales.index')->with('success', 'Team Sales has been added');
+    }else{
+
+        return back()->with('error', 'Data Spv Sudah Pernah Dibuat');
+
+    }
+
+      
     }
 
 
@@ -91,38 +102,47 @@ class SalesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, TeamSales $sale)
+    public function update(Request $request, $id)
     {
-       
-   
+        DB::beginTransaction();
         $sales = $request->input('id_sales', []);
         // dd($sales);
-        // DB::beginTransaction();
-        foreach( $sales as $tim => $no){
-            
-            $attr = TeamSales::where('id_sales',$no)->get();
-            // dd($attr);
-            $attr->update([
-                'id_sales' => $tim,
+        // dd($request->all());
+        
+        foreach ($sales as $key => $value) {
+        TeamSales::where('user_id', $id)->update([
+                'id_sales' => $value,
                 'id_manager' => $request->id_manager,
-                'id_spv' => $request-> id_spv
+                'user_id' => $request-> user_id
             ]);
-            // dd($attr);
         }
+            // foreach ($sales as $key => $value) {
+            //     TeamSales::create([
+            //     'id_sales' => $key,
+            //     'id_manager' => $request->id_manager,
+            //     'user_id' => $request-> user_id
+            //     ]);
+            // }
+           
+            DB::commit();
+        
         return redirect()->route('hrd.sales.index')->with('success', 'Team Sales has been updated');
     }
 
-    public function destroy(User $sale)
+    public function destroy($id)
     {
-        $team = TeamSales::where('user_id', $sale->id)->get();
-        // dd($team);
+        $sales = TeamSales::where('user_id', $id)->get();
+        // dd($sales);
 
-        foreach ($team as $tim) {
+        foreach ($sales as $tim) {
             TeamSales::where('user_id', $tim->id)->delete();
-            
+
             $tim->delete();
+            
+        
         }
-    //   TeamSales::where('id',$id)->delete();
+      
+     
         return redirect()->route('hrd.sales.index')->with('success', 'Team Sales has been deleted');
     }
     public function whereProject(Request $request)
