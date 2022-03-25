@@ -26,7 +26,7 @@
                                 <td>
                                     <div class="btn-group">
                                         <a href="{{ route('hrd.potongan.edit', $data->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                                        <form action="{{ route('hrd.potongan.destroy', $data->id) }}" method="post">
+                                        <form action="{{ route('hrd.potongan.destroy', $data->id) }}" class="delete-form" method="post">
                                             @csrf
                                             @method('delete')
                                             <button class="btn btn-sm btn-danger delete_confirm" type="submit">Destroy</button>

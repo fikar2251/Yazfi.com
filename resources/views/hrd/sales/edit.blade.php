@@ -48,6 +48,7 @@
                     <div class="form-group">
                         <label for="id_sales">Nama Sales </label>
                         <select name="id_sales[]" id="id_sales"  class="form-control select2" multiple="multiple">
+                           
                             @foreach($sale->sales as $pur)
                                     <option selected value="{{ $pur->id_sales }}">{{ $pur->user->name }}</option>
                             @endforeach

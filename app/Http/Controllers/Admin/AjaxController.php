@@ -72,7 +72,7 @@ class AjaxController extends Controller
                     return '<a href="' . route('hrd.gaji.print', $gajian->id) . '"class="btn btn-sm btn-secondary"><i class="fa-solid fa-print"></i></a>
                      <a href="' . route('hrd.gaji.show', $gajian->id) . '"class="btn btn-sm btn-success"><i class="fa-solid fa-eye"></i></a>
                     <a href="' . route('hrd.gaji.edit', $gajian->id) . '"class="btn btn-sm btn-warning"><i class="fa-solid fa-pen-to-square"></i></a> 
-                    <a href="' . route('hrd.gaji.hapus', $gajian->id) . '"   class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>';
+                    <a href="' . route('hrd.gaji.hapus', $gajian->id) . '"   class="delete-form btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>';
                 })
                 ->addIndexColumn()
                 ->rawColumns(['pegawai','action'])
@@ -303,7 +303,7 @@ class AjaxController extends Controller
                 
                 Reinburst::where('id', $data->id)->get();
                 return '<a href="' . route('purchasing.reinburst.pdf', $data->id) . '"class="btn btn-sm btn-secondary"><i class="fa-solid fa-print"></i></a>
-                <a href="' .  route('purchasing.reinburst.destroy', $data->id). '" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>';
+                <a href="' .  route('purchasing.reinburst.destroy', $data->id). '" class="delete-form btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>';
 
             })
             ->addIndexColumn()
@@ -376,7 +376,7 @@ class AjaxController extends Controller
                     
                     Pengajuan::where('id', $data->id)->get();
                     $button = '<a href="' . route('hrd.pengajuan.pdf', $data->id) . '"class="btn btn-sm btn-secondary"><i class="fa-solid fa-print"></i></a>';
-                    $button .= '<a href="' . route('hrd.pengajuan.destroy', $data->id) . '"   class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>';
+                    $button .= '<a href="' . route('hrd.pengajuan.destroy', $data->id) . '"   class=" delete-form btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>';
                     return $button;
                 })
                 ->addIndexColumn()
@@ -437,7 +437,7 @@ class AjaxController extends Controller
                
              
                 $button = '<a href="' . route('logistik.purchase.pdf', $data->id) . '"class="btn btn-sm btn-secondary"><i class="fa-solid fa-print"></i></a>';
-                $button .= '<a href="' . route('logistik.purchase.destroy', $data->id) . '"   class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>';
+                $button .= '<a href="' . route('logistik.purchase.destroy', $data->id) . '"   class=" delete-form btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>';
                 return $button;
             })
             ->addIndexColumn()
@@ -541,7 +541,7 @@ class AjaxController extends Controller
               
                 
                 //   $button = '<a href="' . route('purchasing.tukarfaktur.pdf', $penerimaan->id) . '"class="btn btn-sm btn-secondary"><i class="fa-solid fa-print"></i></a>';
-                  $button = '<a href="' . route('purchasing.penerimaan-barang.destroy', $penerimaan->id) . '"   class="delete-form btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>';
+                  $button = '<a href="' . route('purchasing.penerimaan-barang.destroy', $penerimaan->id) . '"   class="delete-form delete-form btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>';
                   return $button;
                
   
@@ -624,7 +624,7 @@ class AjaxController extends Controller
                 TukarFaktur::where('id', $tukars->id)->get();
             
                 $button = '<a href="' . route('purchasing.tukarfaktur.pdf', $tukars->id) . '"class="btn btn-sm btn-secondary"><i class="fa-solid fa-print"></i></a>';
-                $button .= '<a href="' . route('purchasing.tukarfaktur.destroy', $tukars->id) . '"   class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>';
+                $button .= '<a href="' . route('purchasing.tukarfaktur.destroy', $tukars->id) . '"   class="delete-form btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>';
                 return $button;
              
 
@@ -851,4 +851,5 @@ class AjaxController extends Controller
             ->rawColumns(['pembelian','status_hrd','status_pembayaran'])
             ->make(true);
     }
+    
 }

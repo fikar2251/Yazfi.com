@@ -100,6 +100,26 @@
     href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.js"></script>
 <script>
+    $('.delete-form').on('click', function(e) {
+        e.preventDefault();
+        var form = this;
+        Swal.fire({
+            title: 'Delete this data ?',
+            text: "Are you sure you want to delete this data?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                return form.submit();
+            }
+        })
+    });
+</script>
+<script>
     $(document).ready(function () {
 
         $('.input-daterange').datepicker({

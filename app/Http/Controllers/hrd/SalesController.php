@@ -19,11 +19,17 @@ class SalesController extends Controller
     {
         $sale = User::select('id','name')->role('supervisor')->where('id_jabatans', 2)->get(); 
         // dd($sales);
+        $sales= TeamSales::leftJoin('users','users.id','=','team_sales_user.user_id')
+        ->whereIn('team_sales_user.user_id',$sale)
+        ->select('team_sales_user.id_manager','team_sales_user.user_id')
+        ->groupBy('team_sales_user.user_id')
+        ->get();
+        // dd($sales);
     
         $manager = User::role('marketing')->where('id_jabatans', 1)->get();
         // dd($manager);
 
-        return view ('hrd.sales.index',compact('sale','manager'));
+        return view ('hrd.sales.index',compact('sale','sales','manager'));
     }
 
     public function create(TeamSales $sale)
@@ -46,7 +52,7 @@ class SalesController extends Controller
 
     public function store(Request $request)
     {
-        $sales_all = TeamSales::select('user_id')->where('user_id', $request->id_spv)->get();
+        $sales_all = TeamSales::select('user_id')->where('user_id', $request->user_id)->get();
         // dd($sales_all);
         $sales = $request->input('id_sales', []);
       
@@ -108,9 +114,13 @@ class SalesController extends Controller
         $sales = $request->input('id_sales', []);
         // dd($sales);
         // dd($request->all());
-        
+        $sale = TeamSales::where('user_id', $id)->get();
+        foreach ($sale as $tim) {
+            TeamSales::where('user_id', $tim->id)->delete();
+            $tim->delete();
+        }
         foreach ($sales as $key => $value) {
-        TeamSales::where('user_id', $id)->update([
+        TeamSales::where('user_id', $id)->updateorinsert([
                 'id_sales' => $value,
                 'id_manager' => $request->id_manager,
                 'user_id' => $request-> user_id

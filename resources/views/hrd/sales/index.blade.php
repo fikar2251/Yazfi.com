@@ -24,29 +24,29 @@
                         <th>Sales</th>
                         <th>Action</th>
                     </tr>
-                </thead>    
+                </thead>
 
 
                 <tbody>
-                    @foreach($sale as $sales)
+                  
+                    @foreach($sales as $man)
                     <tr>
                         <th class="text-center">{{ $loop->iteration }}</th>
-                        @foreach($manager as $man)
-                       <th>{{ $man->name  }}</th>
-                         @endforeach
-                         <th>
-                             {{ $sales->name }}
-                         </th>
-                      <th>
-                        @foreach($sales->sales as $pur)
-                        <span class="custom-badge status-blue">{{ $pur->user->name }}</span>
-                        @endforeach
-                      </th>
+                        <th>{{ $man->manager->name  }}</th>
+                        <th>{{ $man->spv->name  }}</th>
+                        
+                        @foreach($sale as $sal)
                         <th>
-                            <a href="{{ route('hrd.sales.edit', $sales->id) }}" class="btn btn-sm btn-info"><i
-                            class="fa fa-edit"></i></a>
-                            <a href="{{ route('hrd.sales.destroy', $sales->id) }}" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>
-                           
+                            @foreach($sal->sales as $pur)
+                            <span class="custom-badge status-blue">{{ $pur->user->name }}</span>
+                            @endforeach
+                        </th>
+                        @endforeach
+                        <th>
+                            <a href="{{ route('hrd.sales.edit', $man->user_id) }}" class="btn btn-sm btn-info"><i
+                                    class="fa fa-edit"></i></a>
+                            <a href="{{ route('hrd.sales.destroy', $man->user_id) }}" class="delete-form btn btn-sm btn-danger"><i
+                                    class="fa fa-trash"></i></a>
                         </th>
                     </tr>
                     @endforeach
