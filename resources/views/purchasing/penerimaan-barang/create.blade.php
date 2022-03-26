@@ -70,13 +70,7 @@
 
                     </div>
                 </form>
-                @if(session()->has('error'))
-                <div class="alert alert-danger">
-                    {{ session()->get('error') }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                </div>
-                @endif
+               
 
                 @foreach($purchase as $item)
 
@@ -638,7 +632,7 @@
                                             <div class="form-group">
                                                 <label for="warehouse">Warehouse <span
                                                         style="color: red">*</span></label>
-                                                <input type="text" readonly class="form-control"
+                                                <input type="text" readonly name="id_warehouse"class="form-control"
                                                     value="{{$gudang->purchase->warehouse->nama_warehouse}}">
                                             </div>
                                         </li>
@@ -937,8 +931,7 @@
                     </div>
                 </div>
                 @endif
-                @if (request()->get('invoice') == $item->invoice && $item->status_barang =
-                'completed')
+                @if (request()->get('invoice') == $item->invoice && $item->status_barang == $item->status = 'completed')
                 <div class="row">
                     <div class="col-sm-6 col-sg-4 m-b-4">
                         <div class="alert alert-success alert-dismissible" role="alert">
@@ -951,6 +944,19 @@
                 </div>
 
                 @endif
+                {{-- @if(request()->get('invoice'))
+                <div class="row">
+                    <div class="col-sm-6 col-sg-4 m-b-4">
+                        <div class="alert alert-success alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                            Data Not Found
+                        </div>
+                    </div>
+
+                </div>
+
+                @endif --}}
 
                
 

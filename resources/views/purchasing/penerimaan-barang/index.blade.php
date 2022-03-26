@@ -153,6 +153,8 @@
 
         function load_data(from = '', to = '') {
 
+            // let sub_total = document.getElementById('from')
+            // console.log(sub_total)
 
             var table = $('#penerimaan').DataTable({
                 processing: true,

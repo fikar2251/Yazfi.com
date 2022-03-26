@@ -433,8 +433,9 @@ Route::middleware('auth')->group(function () {
             Route::resource('reinburst', 'ReinburstController');
             Route::get('reinburst/destroy/{id}', 'ReinburstController@destroy')->name('reinburst.destroy');
 
-            Route::get('penerimaan-barang/destroy/{id}', 'PenerimaanBarangController@destroy')->name('penerimaan-barang.destroy');
+            // Route::get('penerimaan-barang/destroy/{id}', 'PenerimaanBarangController@destroy')->name('penerimaan-barang.destroy');
             Route::get('penerimaan-barang/show/{id}', 'PenerimaanBarangController@show')->name('penerimaan-barang.show');
+            Route::get('penerimaan-barang/hapus/{id}', 'PenerimaanBarangController@hapus')->name('penerimaan-barang.hapus');
             Route::resource('penerimaan-barang', 'PenerimaanBarangController');
             Route::post('penerimaan-barang/{id}/update', 'PenerimaanBarangController@update');
             Route::get('/where/penerimaan/search', 'PenerimaanBarangController@search');

@@ -541,7 +541,7 @@ class AjaxController extends Controller
               
                 
                 //   $button = '<a href="' . route('purchasing.tukarfaktur.pdf', $penerimaan->id) . '"class="btn btn-sm btn-secondary"><i class="fa-solid fa-print"></i></a>';
-                  $button = '<a href="' . route('purchasing.penerimaan-barang.destroy', $penerimaan->id) . '"   class="delete-form delete-form btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>';
+                  $button = '<a href="' . route('purchasing.penerimaan-barang.hapus', $penerimaan->id) . '"   class="delete-form delete-form btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>';
                   return $button;
                
   

@@ -99,11 +99,11 @@ class PenerimaanBarangController extends Controller
         }
         return $data;
     }
-    public function create(Purchase $purchase,Request $request)
+    public function create(Purchase $penerimaan,Request $request)
     {
-        $coba = Purchase::where('invoice', $request->invoice)->get();
-        // dd($coba);
-        if (count($coba) != 0) {
+        // $tukar = Purchase::where('status_barang', 'pending')->where('invoice', $purchase->invoice)->get();
+
+      
         $purchases = Purchase::where('status_barang', 'pending')->where('invoice',$request->invoice)->get();
 
         $gudang = PenerimaanBarang::where('no_po', $request->invoice)->first();
@@ -134,13 +134,13 @@ class PenerimaanBarangController extends Controller
         // dd($noUrutAkhir);
         $nourut = $AWAL . '/' .  sprintf("%02s", abs($noUrutAkhir + 1)) . '/' . sprintf("%05s", abs($noUrutAkhir + 1));
         
-        $purchase = Purchase::groupBy('invoice')->get();
-    
+        $purchase = Purchase::groupBy('invoice')->where('status_barang','!=','completed')->get();
+        
+      
+      
+        // dd($tukar);
         return view('purchasing.penerimaan-barang.create', compact('ppn','tukar', 'purchases', 'purchase','nourut','status_barang','inout','penerimaan','gudang','ppn_partial','warehouses'));
-        }else{
-          
-            return back()->with('error', 'Data Tidak Temukan');
-        }
+    
     }
 
 
@@ -281,7 +281,7 @@ class PenerimaanBarangController extends Controller
         return redirect()->route('purchasing.penerimaan-barang.index')->with('success', 'Update Penerimaan barang berhasil');
     }
 
-    public function destroy( $id)
+    public function hapus( $id)
     {
         // $post = PenerimaanBarang::findOrFail($id);
         // $purchase = Purchase::where('id', $post)->first();
@@ -289,15 +289,17 @@ class PenerimaanBarangController extends Controller
         // dd($penerimaans);
         foreach ($penerimaans as $pur) {
             
-            // $purchase = Purchase::where('barang_id', $pur->barang_id)->get();
-             $purchase = Purchase::where('invoice', $pur->no_po)->where('barang_id', $pur->barang_id)->get();
+           
+            // dd($purchase);
+         
         
             // dd($purchase);
-            DB::table('purchases')->whereIn('id', $purchase)->update(array( 
+            DB::table('purchases')->whereIn('invoice', $pur)->update(array( 
          
-                'status_barang' => 'pending'));
+            'status_barang' => 'pending',
+            'id_warehouse' => 0));
         
-            $pur->delete();
+            PenerimaanBarang::where('no_po', $pur->no_po)->delete();
         }
             
         return redirect()->route('purchasing.penerimaan-barang.index')->with('success', 'Penerimaan Barang barang didelete');
