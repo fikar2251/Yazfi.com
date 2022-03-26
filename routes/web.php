@@ -150,7 +150,8 @@ Route::middleware('auth')->group(function () {
             // Route Master Komisi
             Route::resource('komisi', 'KomisiController');
 
-            // Route Master Dokter
+            // Route Master 
+            
             Route::get('dokter/resign/{id}', 'DokterController@resign')->name('dokter.resign');
             Route::resource('dokter', 'DokterController');
             // Route Master Ruangan
@@ -194,28 +195,28 @@ Route::middleware('auth')->group(function () {
             Route::resource('/setting', 'SettingController');
         });
 
-        Route::prefix('dokter')->name('dokter.')->namespace('Dokter')->group(function () {
-            Route::get('/', function () {
-                return redirect()->route('dashboard');
-            })->name('dashboard');
+        // Route::prefix('dokter')->name('dokter.')->namespace('Dokter')->group(function () {
+        //     Route::get('/', function () {
+        //         return redirect()->route('dashboard');
+        //     })->name('dashboard');
 
-            Route::resource('/appointments', 'AppointmentsController');
-            Route::resource('/profile', 'ProfileController');
-            Route::get('/ajax/pasien', 'ServiceController@AjaxPasien');
-            Route::post('/ajax/pasien/post', 'ServiceController@AjaxPasienPost');
-            Route::get('/pasien/history/{id}', 'ServiceController@history')->name('history');
-            Route::get('/pasien/fisik/{id}', 'ServiceController@fisik')->name('fisik');
-            Route::get('/ajax/update/{id}/{value}/{id_booking}', 'ServiceController@ajax');
-            Route::get('dokter/show/{id}', 'ServiceController@show')->name('show');
+        //     Route::resource('/appointments', 'AppointmentsController');
+        //     Route::resource('/profile', 'ProfileController');
+        //     Route::get('/ajax/pasien', 'ServiceController@AjaxPasien');
+        //     Route::post('/ajax/pasien/post', 'ServiceController@AjaxPasienPost');
+        //     Route::get('/pasien/history/{id}', 'ServiceController@history')->name('history');
+        //     Route::get('/pasien/fisik/{id}', 'ServiceController@fisik')->name('fisik');
+        //     Route::get('/ajax/update/{id}/{value}/{id_booking}', 'ServiceController@ajax');
+        //     Route::get('dokter/show/{id}', 'ServiceController@show')->name('show');
 
-            Route::get('pasien/simbol/{warna}', 'ServiceController@simbol')->name('pasien.simbol');
-            Route::get('pasien/{customer:id}/odontogram', 'ServiceController@odontogram')->name('pasien.odontogram');
-            Route::get('pasien/{customer:id}/cekfisik', 'ServiceController@cekfisik')->name('pasien.cekfisik');
-            Route::get('pasien/cetakodontogram/{customer:id}', 'ServiceController@cetakodontogram')->name('pasien.cetakodonto');
-            Route::get('pasien/cetakriwayat/{customer:id}', 'ServiceController@cetakriwayat')->name('pasien.cetakriwayat');
-            Route::post('pasien/{customer:id}/storefisik', 'ServiceController@storefisik')->name('pasien.storefisik');
-            Route::get('pasien', 'ServiceController@pasien')->name('pasien');
-        });
+        //     Route::get('pasien/simbol/{warna}', 'ServiceController@simbol')->name('pasien.simbol');
+        //     Route::get('pasien/{customer:id}/odontogram', 'ServiceController@odontogram')->name('pasien.odontogram');
+        //     Route::get('pasien/{customer:id}/cekfisik', 'ServiceController@cekfisik')->name('pasien.cekfisik');
+        //     Route::get('pasien/cetakodontogram/{customer:id}', 'ServiceController@cetakodontogram')->name('pasien.cetakodonto');
+        //     Route::get('pasien/cetakriwayat/{customer:id}', 'ServiceController@cetakriwayat')->name('pasien.cetakriwayat');
+        //     Route::post('pasien/{customer:id}/storefisik', 'ServiceController@storefisik')->name('pasien.storefisik');
+        //     Route::get('pasien', 'ServiceController@pasien')->name('pasien');
+        // });
 
         Route::prefix('marketing')->name('marketing.')->namespace('Marketing')->group(function () {
             Route::get('/', function () {

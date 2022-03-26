@@ -26,6 +26,7 @@
         </div>
     </div>
     <div class="col-sm-6 col-md-3">
+        <div class="form-group form-focus">
         <button type="button" name="filter" id="filter" class="btn btn-primary">Search</button>
     </div>
 </div>
@@ -37,9 +38,9 @@
             <table class="table table-bordered table-striped custom-table report" width="100%" id="customers">
                 <thead>
                     <tr>
-                        <th>No</th>
+                        <th style="width: 5%">No</th>
                         <th>No Transaksi</th>
-                        <th>Nama Customer</th>
+                        <th >Nama Customer</th>
                         <th>No KTP</th>
                         <th>No Telepon</th>
                         <th>Unit</th>
@@ -153,7 +154,7 @@
                                 $(api.column(colIdx).header()).index()
                             );
                             var title = $(cell).text();
-                            $(cell).html('<input type="text" placeholder="' + title + '" />');
+                            $(cell).html('<input type="text" placeholder="' + title + '" style="width:70%" />');
 
                             // On every keypress in this input
                             $(

@@ -37,7 +37,7 @@
             <table class="table table-striped custom-table" id="pembatalans" width="100%">
                 <thead>
                     <tr>
-                        <th>No</th>
+                        <th style="width: 5%;">No</th>
                         <th>No Pembatalan</th>
                         <th>Tanggal</th>
                         <th>Type</th>
@@ -156,7 +156,7 @@
                                 $(api.column(colIdx).header()).index()
                             );
                             var title = $(cell).text();
-                            $(cell).html('<input type="text" placeholder="' + title + '" />');
+                            $(cell).html('<input type="text" placeholder="' + title + '" style="width:70%;" />');
 
                             // On every keypress in this input
                             $(

@@ -1,4 +1,4 @@
-@extends('layouts.master', ['title' => 'Product'])
+@extends('layouts.master', ['title' => 'Create Barang'])
 
 @section('content')
 <div class="row justify-content-center text-center">

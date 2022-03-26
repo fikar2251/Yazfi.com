@@ -1,7 +1,7 @@
 @extends('layouts.master', ['title' => 'Satuan Barang'])
 
 @section('content')
-<div class="row">
+<div class="row justify-content-center text-center">
     <div class="col-sm-4 col-3">
         <h4 class="page-title">Edit Satuan Barang</h4>
     </div>

@@ -44,10 +44,10 @@ class DashboardController extends Controller
         $datang = [];
         $periksa = [];
 
-        $pasien = Customer::count();
-        $dokter = User::role('dokter')->count();
-        $appointments =  Booking::count();
-        $tindakan =  Tindakan::with('booking')->where('status', 0)->count();
+        // $pasien = Customer::count();
+        // $dokter = User::role('dokter')->count();
+        // $appointments =  Booking::count();
+        // $tindakan =  Tindakan::with('booking')->where('status', 0)->count();
 
         if (auth()->user()->hasRole('super-admin')) {
             $now = Carbon::now()->format('Y-m-d');
@@ -63,22 +63,22 @@ class DashboardController extends Controller
             ]);
         }
 
-        if (auth()->user()->hasRole('resepsionis')) {
-            $waktu = Carbon::now()->format('Y-m-d');
-            $cabang = auth()->user()->cabang_id;
+        // if (auth()->user()->hasRole('resepsionis')) {
+        //     $waktu = Carbon::now()->format('Y-m-d');
+        //     $cabang = auth()->user()->cabang_id;
 
-            $jadwal = Booking::with('pasien', 'dokter')->where('tanggal_status', $waktu)->where('status_kedatangan_id', 1)->where('cabang_id', $cabang)->get();
-            $datang = Booking::with('pasien', 'dokter')->where('status_kedatangan_id', 2)->where('cabang_id', $cabang)->get();
-            $periksa = Booking::with('pasien', 'dokter')->where('status_kedatangan_id', 3)->get();
-            $pasien =  Customer::where('cabang_id', $cabang)->count();
-            $appointments =  Booking::where('cabang_id', $cabang)->count();
-            $tindakan =  Tindakan::with('booking')->whereHas('booking', function ($query) {
-                $cabang = auth()->user()->cabang_id;
-                return $query->where('cabang_id', $cabang);
-            })->where('status', 0)->count();
+        //     $jadwal = Booking::with('pasien', 'dokter')->where('tanggal_status', $waktu)->where('status_kedatangan_id', 1)->where('cabang_id', $cabang)->get();
+        //     $datang = Booking::with('pasien', 'dokter')->where('status_kedatangan_id', 2)->where('cabang_id', $cabang)->get();
+        //     $periksa = Booking::with('pasien', 'dokter')->where('status_kedatangan_id', 3)->get();
+        //     $pasien =  Customer::where('cabang_id', $cabang)->count();
+        //     $appointments =  Booking::where('cabang_id', $cabang)->count();
+        //     $tindakan =  Tindakan::with('booking')->whereHas('booking', function ($query) {
+        //         $cabang = auth()->user()->cabang_id;
+        //         return $query->where('cabang_id', $cabang);
+        //     })->where('status', 0)->count();
 
-            return view('dashboard.index', compact('jadwal', 'datang', 'periksa', 'pasien', 'appointments', 'tindakan', 'dokter'));
-        }
+        //     return view('dashboard.index', compact('jadwal', 'datang', 'periksa', 'pasien', 'appointments', 'tindakan', 'dokter'));
+        // }
 
         if (auth()->user()->hasRole('purchasing')) {
 
@@ -108,9 +108,9 @@ class DashboardController extends Controller
         }
 
         if (auth()->user()->roles()->first()->name == 'marketing') {
-            $dokter = User::whereHas('roles', function ($role) {
-                return $role->where('name', 'dokter');
-            })->where('cabang_id', auth()->user()->cabang_id)->where('is_active', 1)->get();
+            // $dokter = User::whereHas('roles', function ($role) {
+            //     return $role->where('name', 'dokter');
+            // })->where('cabang_id', auth()->user()->cabang_id)->where('is_active', 1)->get();
             $startdate = Carbon::parse(Carbon::now()->format('Y-m-d'));
             $enddate = Carbon::parse(Carbon::now()->endOfMonth()->format('Y-m-d'));
             $current = Carbon::now();
@@ -123,7 +123,7 @@ class DashboardController extends Controller
             return view('marketing.dashboard', compact('data'));
             return view('dashboard.index', [
                 'booking' => Booking::get(),
-                'dokter' => $dokter,
+                // 'dokter' => $dokter,
                 'holiday' => $holiday,
                 'count' => $count,
                 'data' => $data,

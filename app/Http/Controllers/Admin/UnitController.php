@@ -39,7 +39,7 @@ class UnitController extends Controller
         $request['lt'] = request('lt');
         $request['nstd'] = request('nstd');
         $request['total'] = request('total');
-        $request['jual'] = request('jual');
+        $request['harga_jual'] = request('jual');
         $request['status_penjualan'] = 'Available';
 
         UnitRumah::create($request->all());
@@ -65,7 +65,7 @@ class UnitController extends Controller
         $request['lt'] = request('lt');
         $request['nstd'] = request('nstd');
         $request['total'] = request('total');
-        $request['jual'] = request('jual');
+        $request['harga_jual'] = request('jual');
         $request['status_penjualan'] = 'Available';
 
         $unit->update($request->all());
