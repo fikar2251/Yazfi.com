@@ -274,7 +274,7 @@
                                                                 name="total[{{ $loop->iteration }}]"
                                                                 data="{{ $loop->iteration }}" id="total"
                                                                 value="{{$purchase->total / 100 * $purchase->ppn + $purchase->total}}"
-                                                                onclick="totalAll(this) ,WeCanSumSallary()"
+                                                                onclick="totalAll(this) "
                                                                 style=" width:1.2em; text-align:center;">
                                                         </td>
 
@@ -293,12 +293,12 @@
                                                         <td colspan="3">
                                                             <input type="text" name="nilai_invoice" id="nilai_invoice"
                                                                 class="form-control" value="0">
-                                                      
-                                                            <input type="text" 
-                                                                id="nilai_invoice_out" class="form-control" value="0">
-                                                        
-                                                            <input type="text"  id="nilai_total"
+
+                                                            <input type="text" id="nilai_invoice_out"
                                                                 class="form-control" value="0">
+
+                                                            <input type="text" id="nilai_total" class="form-control"
+                                                                value="0">
                                                         </td>
                                                     </tr>
                                                 </tfoot>
@@ -313,6 +313,7 @@
                                                 function totalAll(e) {
                                                     let nilai_invoice = document
                                                         .getElementById('nilai_invoice')
+                                                        
 
                                                     let attr = $(e).attr('data')
                                                     let total = $(`.total-${attr}`)
@@ -320,8 +321,8 @@
                                                     let updated_total = parseInt(total)
                                                     $(`.total_all-${attr}`).val(
                                                         updated_total)
-                                                  
-                                                        nilai_invoice.value = updated_total
+
+                                                    // nilai_invoice.value = updated_total
                                                     // $('#nilai_invoice_out').val(updated_total)
 
                                                     let total_all = 0;
@@ -342,22 +343,31 @@
                                                                 }
                                                                 $('#nilai_invoice').val(total_all)
                                                                 $('#nilai_invoice_out').val(total_all)
-                                                                // $('#nilai_total').val(total_out)
-                                                              
+                                                                $('#nilai_total').val(0)
+
 
                                                             } else if ($(this).is(
                                                                     ":not(:checked)")) {
+                                                                // for (let i = 0; i < coll.length; i++) {
+                                                                //     let ele = coll[i]
+                                                                //     total_all += parseFloat($(ele).val()
+                                                                //         .replace(/,/g, ''))
+                                                                //     // console.log(total_all);
 
-
+                                                                // }
+                                                                
                                                                 let attr = $(e).attr('data')
+                                                                let total_all = $(`.total_all-${attr}`)
+                                                                 .val()
                                                                 let total = $(`.total-${attr}`)
                                                                     .val()
+                                                                 
+                                                                $(`.total_all-${attr}`).val(parseFloat($(`.total-${attr}`).val()
+                                                                    .replace(/,/g, '')) - parseFloat($(`.total-${attr}`).val()
+                                                                     .replace(/,/g, '')))
+                                                                // $('#nilai_total').val(total)
+                                                                // WeCanSumSallary()
 
-                                                                $(`.total_all-${attr}`).val(
-                                                                    total - total)
-                                                                $('#nilai_total').val(total)
-                                                                WeCanSumSallary() 
-                                                           
 
                                                             }
 
@@ -366,14 +376,16 @@
 
                                                 }
 
-                                                function WeCanSumSallary() {
+                                                // function WeCanSumSallary(e) {
+                                                //     let attr = $(e).attr('data')
+                                                //     let total = $(`.total-${attr}`)
+                                                //         .val()
 
-                                                    $('#nilai_invoice').val(parseFloat($('#nilai_invoice_out').val()
-                                                        .replace(
-                                                            /,/g, '')) - parseFloat($('#nilai_total')
-                                                        .val()
-                                                        .replace(/,/g, '')))
-                                                }
+
+                                                //     $('#nilai_invoice').val(parseFloat($(`.total-${attr}`).val()
+                                                //         .replace(/,/g, '')) - parseFloat($('#nilai_total').val()
+                                                //         .replace(/,/g, '')))
+                                                // }
 
                                             </script>
                                         </div>

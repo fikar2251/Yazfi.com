@@ -97,6 +97,10 @@
 
 
         function load_data(from = '', to = '') {
+            var from = $('#from').val();
+            console.log(from)
+         
+            // var to = $('#to').val();
 
 
             var table = $('#pembatalans').DataTable({
@@ -123,6 +127,7 @@
                         }
                     },
                     {
+                        
                         extend: 'pdf',
                         className: 'btn-default',
                         title: 'Laporan Pembatalan',
@@ -133,10 +138,11 @@
                         }
                     },
                     {
+                        
                         extend: 'print',
                         className: 'btn-default',
                         title: 'Laporan Pembatalan',
-                        messageTop: 'Tanggal {{ request("from") }} - {{ request("to") }}',
+                        messageTop: 'Tanggal {{ request("from")}} - {{ request("to") }}',
                         footer: true,
                         exportOptions: {
                             columns: ':visible'

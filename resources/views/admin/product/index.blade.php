@@ -17,7 +17,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="table-responsive">
-            <table class="table table-bordered table-striped custom-table datatable">
+            <table class="table table-bordered table-striped custom-table report">
                 <thead>
                     <tr>
                         <th>No</th>
@@ -55,4 +55,42 @@
         </div>
     </div>
 </div>
+@stop
+
+
+@section('footer')
+<script>
+    $('.report').DataTable({
+        dom: 'Bfrtip',
+        buttons: [{
+                extend: 'copy',
+                className: 'btn-default',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            {
+                extend: 'excel',
+                className: 'btn-default',
+                title: 'Laporan Users ',
+                messageTop: 'Tanggal  {{ request("from") }} - {{ request("to") }}',
+                footer: true,
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            {
+                extend: 'pdf',
+                className: 'btn-default',
+                title: 'Laporan Users ',
+                messageTop: 'Tanggal {{ request("from") }} - {{ request("to") }}',
+                footer: true,
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+        ]
+    });
+
+</script>
 @stop

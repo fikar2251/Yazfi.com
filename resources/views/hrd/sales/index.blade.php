@@ -45,7 +45,7 @@
                         <th>
                             <a href="{{ route('hrd.sales.edit', $man->user_id) }}" class="btn btn-sm btn-info"><i
                                     class="fa fa-edit"></i></a>
-                            <a href="{{ route('hrd.sales.destroy', $man->user_id) }}" class="delete-form btn btn-sm btn-danger"><i
+                            <a href="{{ route('hrd.sales.hapus', $man->user_id) }}" class=" btn btn-sm btn-danger"><i
                                     class="fa fa-trash"></i></a>
                         </th>
                     </tr>

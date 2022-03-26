@@ -139,7 +139,7 @@ class SalesController extends Controller
         return redirect()->route('hrd.sales.index')->with('success', 'Team Sales has been updated');
     }
 
-    public function destroy($id)
+    public function hapus($id)
     {
         $sales = TeamSales::where('user_id', $id)->get();
         // dd($sales);

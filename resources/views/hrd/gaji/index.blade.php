@@ -22,7 +22,7 @@
             <label class="focus-label">From</label>
             <div class="cal-icon">
                 <input type="text" name="from_date" id="from_date" class="form-control" placeholder="From Date"
-                    readonly />
+                     />
             </div>
         </div>
     </div>
@@ -31,7 +31,7 @@
         <div class="form-group form-focus">
             <label class="focus-label">To</label>
             <div class="cal-icon">
-                <input type="text" name="to_date" id="to_date" class="form-control" placeholder="To Date" readonly />
+                <input type="text" name="to_date" id="to_date" class="form-control" placeholder="To Date"  />
             </div>
         </div>
     </div>

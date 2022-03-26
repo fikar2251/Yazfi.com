@@ -1,27 +1,16 @@
 @extends('layouts.master', ['title' => 'Create Rincian Gaji'])
 @section('content')
-
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header d-flex flex-row justify-content-between">
-                <a href="{{ route('hrd.rincianpenggajian.index') }} " class="btn btn-sm btn-info">Back</a>
-            </div>
-            <div class="card-body">
-                <form action="{{ route('hrd.rincianpenggajian.store') }}" method="post" id="form">
-                    @csrf
-                    @include('hrd.rincianpenggajian.form')
-                    <div class="row">
-                        <div class="form-group">
-                            <div class="col-sm-1 offset-sm-0">
-                                <button type="submit" class="btn btn-primary" id="submit">Submit</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-
-        </div>
+<div class="row justify-content-center text-center">
+    <div class="col-sm-4 col-3">
+        <h4 class="page-title">Add Rincian Gaji</h4>
+    </div>
+</div>
+<div class="row justify-content-center">
+    <div class="col-sm-6">
+        <form action="{{ route('hrd.rincianpenggajian.store') }}" method="post" id="form">
+            @csrf
+            @include('hrd.rincianpenggajian.form')
+        </form>
     </div>
 </div>
 @stop
