@@ -130,7 +130,7 @@ class TukarFakturController extends Controller
     public function store(Request $request)
     {
 
-        // dd($request->all());
+        dd($request->all());
 
         // $request->validate([
         //     'no_faktur' => 'required',

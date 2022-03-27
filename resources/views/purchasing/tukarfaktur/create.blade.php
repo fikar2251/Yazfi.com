@@ -313,6 +313,8 @@
                                                 function totalAll(e) {
                                                     let nilai_invoice = document
                                                         .getElementById('nilai_invoice')
+                                                    let nilai_invoice_out = document
+                                                        .getElementById('nilai_invoice_out')
                                                         
 
                                                     let attr = $(e).attr('data')
@@ -323,7 +325,8 @@
                                                         updated_total)
 
                                                     // nilai_invoice.value = updated_total
-                                                    // $('#nilai_invoice_out').val(updated_total)
+                                                    nilai_total.value = updated_total
+                                                   
 
                                                     let total_all = 0;
                                                     let coll = document.querySelectorAll('.total-form')
@@ -342,8 +345,8 @@
 
                                                                 }
                                                                 $('#nilai_invoice').val(total_all)
+                                                                $('#nilai_total').val(total_all)
                                                                 $('#nilai_invoice_out').val(total_all)
-                                                                $('#nilai_total').val(0)
 
 
                                                             } else if ($(this).is(
@@ -358,15 +361,19 @@
                                                                 
                                                                 let attr = $(e).attr('data')
                                                                 let total_all = $(`.total_all-${attr}`)
-                                                                 .val()
+                                                                .val()
                                                                 let total = $(`.total-${attr}`)
-                                                                    .val()
+                                                                .val()
+                                                                $('#nilai_total').val(total)
                                                                  
                                                                 $(`.total_all-${attr}`).val(parseFloat($(`.total-${attr}`).val()
                                                                     .replace(/,/g, '')) - parseFloat($(`.total-${attr}`).val()
                                                                      .replace(/,/g, '')))
+                                                                $(`.nilai_total-${attr}`).val(parseFloat($(`.total-${attr}`).val()
+                                                                    .replace(/,/g, '')) - parseFloat($(`.total-${attr}`).val()
+                                                                     .replace(/,/g, '')))
                                                                 // $('#nilai_total').val(total)
-                                                                // WeCanSumSallary()
+                                                                WeCanSumSallary()
 
 
                                                             }
@@ -375,17 +382,21 @@
                                                     });
 
                                                 }
+                                                
 
-                                                // function WeCanSumSallary(e) {
-                                                //     let attr = $(e).attr('data')
-                                                //     let total = $(`.total-${attr}`)
-                                                //         .val()
+                                                function WeCanSumSallary(e) {
+                                                    let attr = $(e).attr('data')
+                                                    let total = $(`.total-${attr}`)
+                                                        .val()
 
 
-                                                //     $('#nilai_invoice').val(parseFloat($(`.total-${attr}`).val()
-                                                //         .replace(/,/g, '')) - parseFloat($('#nilai_total').val()
-                                                //         .replace(/,/g, '')))
-                                                // }
+                                                    $('#nilai_invoice').val(parseFloat($(`#nilai_invoice_out`).val()
+                                                        .replace(/,/g, '')) - parseFloat($('#nilai_total').val()
+                                                        .replace(/,/g, '')))
+                                                    // $('#nilai_invoice_out').val(parseFloat($(`#nilai_invoice_out`).val()
+                                                    //     .replace(/,/g, '')) - parseFloat($('#nilai_total').val()
+                                                    //     .replace(/,/g, '')))
+                                                }
 
                                             </script>
                                         </div>
