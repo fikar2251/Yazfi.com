@@ -267,6 +267,9 @@
                                                             <input type="text" value="0"
                                                                 class="form-control total_all-{{ $loop->iteration }} total-form"
                                                                 placeholder="0">
+                                                            <input type="text" value="0"
+                                                                class="form-control total-out-{{ $loop->iteration }} total-out"
+                                                                placeholder="0">
                                                         </td>
                                                         <td>
                                                             <input type="checkbox"
@@ -274,7 +277,7 @@
                                                                 name="total[{{ $loop->iteration }}]"
                                                                 data="{{ $loop->iteration }}" id="total"
                                                                 value="{{$purchase->total / 100 * $purchase->ppn + $purchase->total}}"
-                                                                onclick="totalAll(this)"
+                                                                onclick="totalAll(this), totalAll_out(this)"
                                                                 style=" width:1.2em; text-align:center;">
                                                         </td>
 
@@ -294,10 +297,14 @@
                                                             <input type="text" name="nilai_invoice" id="nilai_invoice"
                                                                 class="form-control" value="0">
 
+                                                            <input type="text" id="nilai_invoice_all"
+                                                                class="form-control" value="0">
                                                             <input type="text" id="nilai_invoice_out"
                                                                 class="form-control" value="0">
 
-                                                            <input type="text" id="nilai_total" onkeyup="WeCanSumSallary_out(this)"  class="form-control"
+                                                            {{-- <input type="text" id="nilai_total" onkeyup="WeCanSumSallary_out(this)"  class="form-control"
+                                                                value="0"> --}}
+                                                            <input type="text" id="nilai_total" class="form-control"
                                                                 value="0">
                                                         </td>
                                                     </tr>
@@ -315,7 +322,7 @@
                                                         .getElementById('nilai_invoice')
                                                     let nilai_invoice_out = document
                                                         .getElementById('nilai_invoice_out')
-                                                        
+
 
                                                     let attr = $(e).attr('data')
                                                     let total = $(`.total-${attr}`)
@@ -324,9 +331,9 @@
                                                     $(`.total_all-${attr}`).val(
                                                         updated_total)
 
-                                                    // nilai_invoice.value = updated_total
-                                                    nilai_total.value = updated_total
-                                                   
+                                                    nilai_invoice.value = updated_total
+                                                    // nilai_total.value = updated_total
+
 
                                                     let total_all = 0;
                                                     let coll = document.querySelectorAll('.total-form')
@@ -345,36 +352,11 @@
 
                                                                 }
                                                                 $('#nilai_invoice').val(total_all)
-                                                                $('#nilai_total').val(total_all)
+                                                                $('#nilai_total').val(total_all * 0)
+                                                                $(`.total_out-${attr}`).val(
+                                                                    total_all*0)
                                                                 $('#nilai_invoice_out').val(total_all)
 
-
-                                                            } else if ($(this).is(
-                                                                    ":not(:checked)")) {
-                                                                // for (let i = 0; i < coll.length; i++) {
-                                                                //     let ele = coll[i]
-                                                                //     total_all += parseFloat($(ele).val()
-                                                                //         .replace(/,/g, ''))
-                                                                //     // console.log(total_all);
-
-                                                                // }
-                                                                
-                                                                let attr = $(e).attr('data')
-                                                                let total_all = $(`.total_all-${attr}`)
-                                                                .val()
-                                                                let total = $(`.total-${attr}`)
-                                                                .val()
-                                                                $('#nilai_total').val(total)
-                                                                 
-                                                                $(`.total_all-${attr}`).val(parseFloat($(`.total-${attr}`).val()
-                                                                    .replace(/,/g, '')) - parseFloat($(`.total-${attr}`).val()
-                                                                     .replace(/,/g, '')))
-                                                                $(`.nilai_total-${attr}`).val(parseFloat($(`.total-${attr}`).val()
-                                                                    .replace(/,/g, '')) - parseFloat($(`.total-${attr}`).val()
-                                                                     .replace(/,/g, '')))
-                                                                // $('#nilai_total').val(total)
-                                                                WeCanSumSallary()
-                                                                
 
 
                                                             }
@@ -383,21 +365,55 @@
                                                     });
 
                                                 }
-                                                
 
-                                                function WeCanSumSallary(e) {
-                                                    let attr = $(e).attr('data')
-                                                    let total = $(`.total-${attr}`)
-                                                        .val()                                                        
+                                                function totalAll_out(e) {
+                                                   
+
+
+                                                    let total_out = 0;
+                                                    let coll = document.querySelectorAll('.total-out')
+
+                                                    $(document).ready(function () {
+                                                        $('input[type="checkbox"]').click(function () {
+                                                            if ($(this).is(
+                                                                    ":not(:checked)")) {
+
+                                                                for (let i = 0; i < coll.length; i++) {
+                                                                    let ele = coll[i]
+                                                                    total_out += parseFloat($(ele).val()
+                                                                        .replace(/,/g, ''))
+                                                                    // console.log(total_all);
+
+                                                                }
+                                                                $('#nilai_total').val(total_out)
+                                                                
+                                                                // $(`.total_all-${attr}`).val(parseFloat(
+                                                                //     $(`.total-${attr}`).val()
+                                                                //     .replace(/,/g, '')))
+                                                                // WeCanSumSallary()
+                                                                WeCanSumSallary_out()
+
+
+                                                            }
+
+                                                        });
+                                                    });
+
+                                                }
+
+
+                                                // function WeCanSumSallary(e) {
+                                                //     let attr = $(e).attr('data')
+                                                //     let total = $(`.total-${attr}`)
+                                                //         .val()                                                        
+
+                                                //     $('#nilai_invoice_all').val(parseFloat($(`#nilai_invoice_out`).val()
+                                                //         .replace(/,/g, '')) - parseFloat($('#nilai_total').val()
+                                                //         .replace(/,/g, '')))
+                                                // }
+                                                function WeCanSumSallary_out(e) {
 
                                                     $('#nilai_invoice').val(parseFloat($(`#nilai_invoice_out`).val()
-                                                        .replace(/,/g, '')) - parseFloat($('#nilai_total').val()
-                                                        .replace(/,/g, '')))
-                                                }
-                                                function WeCanSumSallary_out(e) {
-                                                                                                        
-
-                                                        $('#nilai_invoice_out').val(parseFloat($(`#nilai_invoice_out`).val()
                                                         .replace(/,/g, '')) - parseFloat($('#nilai_total').val()
                                                         .replace(/,/g, '')))
                                                 }
