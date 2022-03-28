@@ -98,7 +98,7 @@ class SalesController extends Controller
 
         $spv = User::role('supervisor')->get();
         
-        return view('hrd.sales.edit', compact('spv','staff_marketing', 'manager_marketing', 'jabatans','sale','team'));
+        return view('hrd.sales.edit', compact('spv','staff_marketing', 'manager_marketing','sale','team'));
     }
 
     /**

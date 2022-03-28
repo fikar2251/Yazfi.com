@@ -8,6 +8,8 @@ use Spatie\Permission\Models\Role;
 class Komisi extends Model
 {
     protected $guarded = ['id'];
+    protected $table = 'komisi';
+    public $timestamps = false;
 
     public function role()
     {

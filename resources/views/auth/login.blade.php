@@ -47,9 +47,9 @@
                         <div class="form-group text-center">
                             <button type="submit" class="btn btn-primary account-btn">Login</button>
                         </div>
-                        <div class="text-center register-link">
+                        {{-- <div class="text-center register-link">
                             Don’t have an account? <a href="{{ route('register') }}">Register Now</a>
-                        </div>
+                        </div> --}}
                     </form>
                 </div>
             </div>

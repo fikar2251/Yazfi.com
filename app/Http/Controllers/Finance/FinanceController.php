@@ -93,12 +93,12 @@ class FinanceController extends Controller
                 'tanggal_pembayaran' => $request->tanggal_pembayaran,
             ]);
         }
-        return redirect()->back();
+        return redirect('/finance/komisi');
     }
 
     public function listPayment()
     {
-        $bayar = Pembayaran::where('status_approval', ['pending', 'reject'])->get();
+        $bayar = Pembayaran::where('status_approval', ['pending', 'reject'])->orderBy('id', 'desc')->get();
         return view('finance.payment.daftar', compact('bayar'));
     }
 

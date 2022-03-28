@@ -5,12 +5,14 @@
     use App\Alasan;
     use App\Http\Controllers\Controller;
     use App\Pembatalan;
-    use App\Pembayaran; 
+use App\PembatalanUnit;
+use App\Pembayaran; 
     use App\Refund;
     use App\Rumah;
     use App\Spr;
     use App\Tagihan;
-    use App\User;
+use App\TeamSales;
+use App\User;
     use Carbon\Carbon;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\DB;
@@ -36,6 +38,7 @@ use Yajra\DataTables\DataTables;
             $getSpr = Spr::where('no_transaksi', $no)->get();
             $tagihan = Tagihan::where('no_transaksi', $no)->get();
             $bayar = Pembayaran::where('no_detail_transaksi', $no)->get();
+            // dd($bayar);
 
             foreach ($tagihan as $key) {
                 $status[] = [
@@ -51,9 +54,10 @@ use Yajra\DataTables\DataTables;
         public function sales()
         {
             if (auth()->user()->roles()->first()->name == 'supervisor') {
-                $user = User::where('id_roles', 4)->get();
-
                 
+                // $user = User::where('id', 20)->get();
+                $id = auth()->user()->id;
+                $user = TeamSales::where('user_id', $id)->get();
 
                 return view('supervisor.cancel.index', compact('user'));
 
@@ -64,9 +68,9 @@ use Yajra\DataTables\DataTables;
         public function batalJson()
         {
             if (auth()->user()->roles()->first()->name == 'supervisor') {
-                $user = User::where('id_roles', 4)->get();
+                $user = User::where('id', 20)->get();
 
-                $batal = Pembatalan::orderBy('no_pembatalan', 'desc')->get();
+                $batal = PembatalanUnit::orderBy('no_pembatalan', 'desc')->get();
 
                 return DataTables::of($batal)
                 ->editColumn('refund', function($batal){
@@ -117,7 +121,7 @@ use Yajra\DataTables\DataTables;
             $tagihan = Tagihan::where('no_transaksi', $no)->get();
             $bayar = Pembayaran::where('no_detail_transaksi', $no)->get();
 
-            $alasan = Alasan::all();
+            // $alasan = Alasan::all();
             if ($no) {
 
                 $notf = Spr::select('id_transaksi')->where('no_transaksi', $no)->get();
@@ -125,19 +129,19 @@ use Yajra\DataTables\DataTables;
                     # code...
                 }
                 $idtf = $no->id_transaksi;
-                $batal = Pembatalan::where('spr_id', $idtf)->first();
+                $batal = PembatalanUnit::where('spr_id', $idtf)->first();
                 if ($batal) {
                     # code...
                     $idbatal = $batal->spr->no_transaksi;
-                    return view('supervisor.cancel.cancel', compact('getSpr', 'spr', 'alasan', 'idbatal'));
+                    return view('supervisor.cancel.cancel', compact('getSpr', 'spr', 'idbatal'));
                 }else {
                     $idbatal = '';
-                    return view('supervisor.cancel.cancel', compact('getSpr', 'spr', 'alasan', 'idbatal'));
+                    return view('supervisor.cancel.cancel', compact('getSpr', 'spr', 'idbatal'));
                 }
 
             } else{
                 # code...
-                return view('supervisor.cancel.cancel', compact('getSpr', 'spr', 'alasan'));
+                return view('supervisor.cancel.cancel', compact('getSpr', 'spr','id' ));
             }
 
         }
@@ -149,11 +153,11 @@ use Yajra\DataTables\DataTables;
 
             $tgl = Carbon::now()->format('d-m-Y');
             $AWAL = 'PB';
-            $noUrutAkhir = Pembatalan::max('id');
+            $noUrutAkhir = PembatalanUnit::max('id');
 
             $nourut = $AWAL . '/' . sprintf('%02s', abs(1)) . '/' . sprintf('%05s', abs($noUrutAkhir + 1));
 
-            Pembatalan::create([
+            PembatalanUnit::create([
                 'tanggal' => $tgl,
                 'no_pembatalan' => $nourut,
                 'spr_id' => $request->id_spr,

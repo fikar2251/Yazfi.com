@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Supervisor;
 use App\Http\Controllers\Controller;
 use App\Komisi;
 use App\Spr;
+use App\TeamSales;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -15,8 +16,10 @@ class KomisiController extends Controller
     public function index()
     {
         if (auth()->user()->roles()->first()->name == 'supervisor') {
-            $user = User::where('id_roles', 4)->get();
+            // $user = User::where('id', 20)->get();
 
+            $id = auth()->user()->id;
+            $user = TeamSales::where('user_id', $id)->get();
             $komisi = Komisi::orderBy('id', 'desc')->get(); 
 
             return view('supervisor.komisi.index', compact('user', 'komisi'));
@@ -47,10 +50,13 @@ class KomisiController extends Controller
 
     public function show($id)
     {
-        $spr = Spr::orderBy('id_transaksi', 'desc')->get();
+        $spr = Spr::orderBy('id_transaksi', 'desc')->where('id_sales', $id)->get();
         // foreach ($spr as $sp) {
         //     $hj = $sp->harga_jual;
         // }
+        $authid = auth()->user()->id;
+        $manager = TeamSales::where('user_id', $authid)->first();
+        
         $nospr = request()->get('no_transaksi');
         if ($nospr) {
 
@@ -90,9 +96,9 @@ class KomisiController extends Controller
                 'manager' => $kmmanager,
             ];
 
-            return view('supervisor.komisi.show', compact('spr', 'potongan', 'dasar', 'totalfee', 'komisi', 'sprno', 'hj'));
+            return view('supervisor.komisi.show', compact('spr', 'potongan', 'dasar', 'totalfee', 'komisi', 'sprno', 'hj', 'manager'));
         } else {
-            return view('supervisor.komisi.show', compact('spr'));
+            return view('supervisor.komisi.show', compact('spr', 'id'));
         }
     }
 

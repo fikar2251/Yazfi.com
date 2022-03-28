@@ -9,6 +9,7 @@ class Spr extends Model
     protected $table = 'spr';
     protected $guarded = ['id_transaksi'];
     protected $primaryKey = 'id_transaksi';
+    public $timestamps = false;
 
     public function tagihan()
     {

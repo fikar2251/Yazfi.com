@@ -15,13 +15,13 @@
             <div class="col-md-4 col-sm-4  col-lg-3">
                 <div class="profile-widget">
                     <div class="doctor-img">
-                        <a class="avatar" href="#"><img alt="" src=""
+                        <a class="avatar" href="#"><img alt="" src="https://w1.pngwing.com/pngs/386/684/png-transparent-face-icon-user-icon-design-user-profile-share-icon-avatar-black-and-white-silhouette.png"
                                 style="object-fit: cover; object-position: center;"></a>
                     </div>
                     <h4 class="doctor-name text-ellipsis"><a
-                            href="{{ url('supervisor/payment/' . $u->id) }}">{{ $u->name }}</a></h4>
+                            href="{{ url('supervisor/payment/' . $u->user->id) }}">{{ $u->user->name }}</a></h4>
                     <div class="user-country">
-                        <i class="fa fa-map-marker"></i> {{ $u->address }}
+                        <i class="fa fa-map-marker"></i> {{ $u->user->address }}
                     </div>
                 </div>
             </div>

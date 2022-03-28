@@ -18,4 +18,9 @@ class PembatalanUnit extends Model
         return $this->belongsTo(Spr::class, 'spr_id');
     }
 
+    public function refund()
+    {
+        return $this->hasOne(Refund::class, 'pembatalan_id');
+    }
+
 }

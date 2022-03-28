@@ -13,6 +13,6 @@ class Refund extends Model
 
     public function pembatalan()
     {
-        return $this->belongsTo(Pembatalan::class, 'pembatalan_id');
+        return $this->belongsTo(PembatalanUnit::class, 'pembatalan_id');
     }
 }

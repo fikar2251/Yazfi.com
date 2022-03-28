@@ -1,42 +1,45 @@
 @error('images')
-<div class="alert alert-danger alert-dismissible fade show" role="alert">
-    <b>Error, </b> {{ $message }}
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">×</span>
-    </button>
-</div>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <b>Error, </b> {{ $message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
 @enderror
 
 <div class="row">
     <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4">
         <div class="dash-widget">
-            <span class="dash-widget-bg2"><i class="fa fa-user-o"></i></span>
+            <span class="dash-widget-bg2"><i class="fa-solid fa-money-bill-wave"></i></span>
             <div class="dash-widget-info text-right">
-                <h3>{{ $pasien }}</h3>
-                <span class="widget-title2">Patients <i class="fa fa-check" aria-hidden="true"></i></span>
+                <h3>{{ $bayar }}</h3>
+
+                <span class="widget-title2"> <a style="color: white" href="{{ url('finance/daftar') }}"> Pembayaran pending <i
+                            class="fa fa-check" aria-hidden="true"></i>
+                    </a></span>
             </div>
         </div>
     </div>
     <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4">
         <div class="dash-widget">
-            <span class="dash-widget-bg3"><i class="fa fa-user-md" aria-hidden="true"></i></span>
+            <span class="dash-widget-bg3"><i class="fa-solid fa-arrow-right-arrow-left"></i></span>
             <div class="dash-widget-info text-right">
-                <h3>{{ $appointments }}</h3>
-                <span class="widget-title3">Appointment<i class="fa fa-check" aria-hidden="true"></i></span>
+                <h3>{{ $refund }}</h3>
+                <span class="widget-title3"> <a style="color: white" href="{{url('finance/refund/daftar')}}"> Refund pending<i class="fa fa-check" aria-hidden="true"></i></a></span>
             </div>
         </div>
     </div>
     <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4">
         <div class="dash-widget">
-            <span class="dash-widget-bg4"><i class="fa fa-heartbeat" aria-hidden="true"></i></span>
+            <span class="dash-widget-bg4"><i class="fa-solid fa-money-check-dollar"></i></span>
             <div class="dash-widget-info text-right">
-                <h4 class="p-1">{{ $tindakan }} </h4>
-                <span class="widget-title4">Tindakan Pending<i class="fa fa-check" aria-hidden="true"></i></span>
+                <h3 class="p-1">{{ $komisi }} </h3>
+                <span class="widget-title4"> <a style="color: white" href="{{url('finance/komisi/daftar')}}"> Komisi pending<i class="fa fa-check" aria-hidden="true"></i></a></span>
             </div>
         </div>
     </div>
-</div>
-<div class="row">
+
+{{-- <div class="row">
     <div class="col-12 col-md-6 col-lg-4 col-xl-4">
         <div class="card">
             <div class="card-header">
@@ -45,7 +48,7 @@
             <div class="card-body p-0">
                 <table class="table mb-0">
                     <tbody>
-                        @foreach($jadwal as $jdw)
+                        @foreach ($jadwal as $jdw)
                         <tr>
                             <td style="min-width: 100px;">
                                 <a class="avatar" href="#"><img src="{{ asset('storage/' . $jdw->pasien->pict) }}" alt=""></a>
@@ -80,7 +83,7 @@
             </div>
             <div class="card-body">
                 <ul class="contact-list">
-                    @foreach($datang as $dtng)
+                    @foreach ($datang as $dtng)
                     <li class="d-flex">
                         <div class="contact-cont mr-auto">
                             <div class="float-left user-img m-r-10">
@@ -115,7 +118,7 @@
             </div>
             <div class="card-body">
                 <ul class="contact-list">
-                    @foreach($periksa as $prk)
+                    @foreach ($periksa as $prk)
                     <li class="d-flex">
                         <div class="contact-cont mr-auto">
                             <div class="float-left user-img m-r-10">
@@ -141,8 +144,7 @@
         </div>
     </div>
 </div>
-
-@foreach($periksa as $prk)
+@foreach ($periksa as $prk)
 <div class="modal fade" id="modalUpload{{ $prk->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -170,4 +172,4 @@
         </div>
     </div>
 </div>
-@endforeach
+@endforeach --}}

@@ -7,11 +7,15 @@ use Illuminate\Support\Facades\DB;
 use App\Booking;
 use App\Customer;
 use App\Holidays;
+use App\Komisi;
+use App\Pembayaran;
 use App\Pengajuan;
 use App\Purchase;
+use App\Refund;
 use App\Reinburst;
 use App\Tindakan;
 use App\Spr;
+use App\TeamSales;
 use App\TukarFaktur;
 use App\User;
 use Carbon\Carbon;
@@ -62,23 +66,25 @@ class DashboardController extends Controller
                 'warehouse' => $warehouse,
             ]);
         }
+        if (auth()->user()->hasRole('finance')) {
+            // $waktu = Carbon::now()->format('Y-m-d');
+            // $cabang = auth()->user()->cabang_id;
 
-        // if (auth()->user()->hasRole('resepsionis')) {
-        //     $waktu = Carbon::now()->format('Y-m-d');
-        //     $cabang = auth()->user()->cabang_id;
+            // $jadwal = Booking::with('pasien', 'dokter')->where('tanggal_status', $waktu)->where('status_kedatangan_id', 1)->where('cabang_id', $cabang)->get();
+            // $datang = Booking::with('pasien', 'dokter')->where('status_kedatangan_id', 2)->where('cabang_id', $cabang)->get();
+            // $periksa = Booking::with('pasien', 'dokter')->where('status_kedatangan_id', 3)->get();
+            // $pasien = Customer::where('cabang_id', $cabang)->count();
+            // $appointments = Booking::where('cabang_id', $cabang)->count();
+            // $tindakan = Tindakan::with('booking')->whereHas('booking', function ($query) {
+            //     $cabang = auth()->user()->cabang_id;
+            //     return $query->where('cabang_id', $cabang);
+            // })->where('status', 0)->count();
+            $bayar = Pembayaran::where('status_approval', ['pending', 'reject'])->get()->count();
+            $refund = Refund::orderBy('no_refund', 'desc')->where('status', ['unpaid', 'reject'])->get()->count();
+            $komisi = Komisi::orderBy('id', 'desc')->where('status_pembayaran', ['unpaid','reject'])->get()->count();
 
-        //     $jadwal = Booking::with('pasien', 'dokter')->where('tanggal_status', $waktu)->where('status_kedatangan_id', 1)->where('cabang_id', $cabang)->get();
-        //     $datang = Booking::with('pasien', 'dokter')->where('status_kedatangan_id', 2)->where('cabang_id', $cabang)->get();
-        //     $periksa = Booking::with('pasien', 'dokter')->where('status_kedatangan_id', 3)->get();
-        //     $pasien =  Customer::where('cabang_id', $cabang)->count();
-        //     $appointments =  Booking::where('cabang_id', $cabang)->count();
-        //     $tindakan =  Tindakan::with('booking')->whereHas('booking', function ($query) {
-        //         $cabang = auth()->user()->cabang_id;
-        //         return $query->where('cabang_id', $cabang);
-        //     })->where('status', 0)->count();
-
-        //     return view('dashboard.index', compact('jadwal', 'datang', 'periksa', 'pasien', 'appointments', 'tindakan', 'dokter'));
-        // }
+            return view('dashboard.index', compact('bayar', 'refund', 'komisi'));
+        }
 
         if (auth()->user()->hasRole('purchasing')) {
 
@@ -132,7 +138,10 @@ class DashboardController extends Controller
         }
 
         if (auth()->user()->hasRole('supervisor')) {
-            $user = User::where('id_roles', 4)->get();
+            // $user = User::where('id', 20)->get();
+            $id = auth()->user()->id;
+            $user = TeamSales::where('user_id', $id)->get();
+
             return view('supervisor.dashboard', compact('user'));
 
         }

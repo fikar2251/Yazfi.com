@@ -6,8 +6,8 @@
 @include('dashboard._super-admin')
 @endrole
 
-@role('resepsionis')
-<x-resepsionis._resepsionis :jadwal="$jadwal" :datang="$datang" :pasien="$pasien" :appointments="$appointments" :tindakan="$tindakan" :periksa="$periksa"></x-resepsionis._resepsionis>
+@role('finance')
+<x-resepsionis._resepsionis :bayar="$bayar" :refund="$refund" :komisi="$komisi"></x-resepsionis._resepsionis>
 @endrole
 
 {{-- @role('dokter')
