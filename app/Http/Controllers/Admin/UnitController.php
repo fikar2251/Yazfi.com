@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\UpdateWarehouseRequest;
-use App\{Cabang, Unit, HargaProdukCabang, Perusahaan, Ruangan, UnitRumah};
+use App\{ Perusahaan, UnitRumah};
 use Illuminate\Support\Facades\DB;
 
 class UnitController extends Controller
@@ -14,13 +14,14 @@ class UnitController extends Controller
     {
         // abort_unless(\Gate::allows('product-access'), 403);
 
-        $units = DB::table('unit_rumahs')->orderBy('id','desc')
-        ->get();
+        $units = UnitRumah::orderBy('id_unit_rumah','desc')->get();
+        // dd($units);
         return view('admin.unit.index', compact('units'));
     }
 
     public function create(UnitRumah $unit)
     {
+        // dd($unit);
         // abort_unless(\Gate::allows('product-create'), 403);
 
         $perusahaans = Perusahaan::get();
@@ -47,9 +48,14 @@ class UnitController extends Controller
         return redirect()->route('admin.unit.index')->with('success', 'Unit Rumah has been added');
     }
 
+   
     public function edit(UnitRumah $unit)
     {
-        // abort_unless(\Gate::allows('cabang-edit'), 403);
+
+     
+
+        // dd($units);
+      
      
 
         return view('admin.unit.edit', compact('unit'));
@@ -67,6 +73,7 @@ class UnitController extends Controller
         $request['total'] = request('total');
         $request['harga_jual'] = request('jual');
         $request['status_penjualan'] = 'Available';
+     
 
         $unit->update($request->all());
 
@@ -76,7 +83,7 @@ class UnitController extends Controller
     public function destroy($id)
     {
         // abort_unless(\Gate::allows('product-delete'), 403);
-        UnitRumah::where('id', $id)->delete();
+        UnitRumah::where('id_unit_rumah', $id)->delete();
 
         // $unit->delete();
 

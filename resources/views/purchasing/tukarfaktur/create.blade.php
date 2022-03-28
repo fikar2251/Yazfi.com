@@ -274,7 +274,7 @@
                                                                 name="total[{{ $loop->iteration }}]"
                                                                 data="{{ $loop->iteration }}" id="total"
                                                                 value="{{$purchase->total / 100 * $purchase->ppn + $purchase->total}}"
-                                                                onclick="totalAll(this) "
+                                                                onclick="totalAll(this)"
                                                                 style=" width:1.2em; text-align:center;">
                                                         </td>
 
@@ -297,7 +297,7 @@
                                                             <input type="text" id="nilai_invoice_out"
                                                                 class="form-control" value="0">
 
-                                                            <input type="text" id="nilai_total" class="form-control"
+                                                            <input type="text" id="nilai_total" onkeyup="WeCanSumSallary_out(this)"  class="form-control"
                                                                 value="0">
                                                         </td>
                                                     </tr>
@@ -374,6 +374,7 @@
                                                                      .replace(/,/g, '')))
                                                                 // $('#nilai_total').val(total)
                                                                 WeCanSumSallary()
+                                                                
 
 
                                                             }
@@ -387,15 +388,18 @@
                                                 function WeCanSumSallary(e) {
                                                     let attr = $(e).attr('data')
                                                     let total = $(`.total-${attr}`)
-                                                        .val()
-
+                                                        .val()                                                        
 
                                                     $('#nilai_invoice').val(parseFloat($(`#nilai_invoice_out`).val()
                                                         .replace(/,/g, '')) - parseFloat($('#nilai_total').val()
                                                         .replace(/,/g, '')))
-                                                    // $('#nilai_invoice_out').val(parseFloat($(`#nilai_invoice_out`).val()
-                                                    //     .replace(/,/g, '')) - parseFloat($('#nilai_total').val()
-                                                    //     .replace(/,/g, '')))
+                                                }
+                                                function WeCanSumSallary_out(e) {
+                                                                                                        
+
+                                                        $('#nilai_invoice_out').val(parseFloat($(`#nilai_invoice_out`).val()
+                                                        .replace(/,/g, '')) - parseFloat($('#nilai_total').val()
+                                                        .replace(/,/g, '')))
                                                 }
 
                                             </script>

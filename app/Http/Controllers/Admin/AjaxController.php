@@ -716,20 +716,21 @@ class AjaxController extends Controller
         if(request()->ajax()){
             if(!empty($request->from)){
 
-        $pembatalans = DB:: table('pembatalan_units')
-        ->leftjoin('sprs','pembatalan_units.spr_id','=','sprs.id')
-        ->leftjoin('unit_rumahs','sprs.id_unit','=','unit_rumahs.id')
-        ->leftjoin('users','sprs.id_sales','=','users.id')
-        ->whereBetween('pembatalan_units.tanggal',array($request->from, $request->to))
-        ->select('pembatalan_units.tanggal','sprs.no_transaksi','users.name','sprs.status_approval','sprs.id_sales','pembatalan_units.no_pembatalan','pembatalan_units.id','pembatalan_units.diajukan','unit_rumahs.type','sprs.no_transaksi','sprs.harga_net','sprs.status_dp','sprs.status_booking','sprs.nama','pembatalan_units.status')
+        $pembatalans = DB:: table('pembatalan_unit')
+        ->leftjoin('spr','pembatalan_unit.spr_id','=','spr.id_transaksi')
+        ->leftjoin('unit_rumah','spr.id_unit','=','unit_rumah.id_unit_rumah')
+        ->leftjoin('users','spr.id_sales','=','users.id')
+        ->whereBetween('pembatalan_unit.tanggal',array($request->from, $request->to))
+        ->select('pembatalan_unit.tanggal','spr.no_transaksi','users.name','spr.status_approval',
+        'spr.id_sales','pembatalan_unit.no_pembatalan','pembatalan_unit.id','pembatalan_unit.diajukan','unit_rumah.type','spr.no_transaksi','spr.harga_net','spr.status_dp','spr.status_booking','spr.nama','pembatalan_unit.status')
         ->get();
         // dd($pembatalans);
     }else{
-        $pembatalans = DB:: table('pembatalan_units')
-        ->leftjoin('sprs','pembatalan_units.spr_id','=','sprs.id')
-        ->leftjoin('unit_rumahs','sprs.id_unit','=','unit_rumahs.id')
-        ->leftjoin('users','sprs.id_sales','=','users.id')
-        ->select('pembatalan_units.tanggal','sprs.no_transaksi','users.name','sprs.status_approval','sprs.id_sales','pembatalan_units.no_pembatalan','pembatalan_units.id','pembatalan_units.diajukan','unit_rumahs.type','sprs.no_transaksi','sprs.harga_net','sprs.status_dp','sprs.status_booking','sprs.nama','pembatalan_units.status')
+        $pembatalans = DB:: table('pembatalan_unit')
+        ->leftjoin('spr','pembatalan_unit.spr_id','=','spr.id_transaksi')
+        ->leftjoin('unit_rumah','spr.id_unit','=','unit_rumah.id_unit_rumah')
+        ->leftjoin('users','spr.id_sales','=','users.id')
+        ->select('pembatalan_unit.tanggal','spr.no_transaksi','users.name','spr.status_approval','spr.id_sales','pembatalan_unit.no_pembatalan','pembatalan_unit.id','pembatalan_unit.diajukan','unit_rumah.type','spr.no_transaksi','spr.harga_net','spr.status_dp','spr.status_booking','spr.nama','pembatalan_unit.status')
         ->get();
         // dd($pembatalans);
         

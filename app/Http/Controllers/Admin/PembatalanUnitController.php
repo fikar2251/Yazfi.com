@@ -29,15 +29,18 @@ class PembatalanUnitController extends Controller
         // dd($post);
         foreach ($post as $pur) {
             $pur->update(['status' => 'Approval']);
-            $unit = Spr::select('id_unit')->where('id', $pur->spr_id)->get();
+            $unit = Spr::select('id_unit')->where('id_transaksi', $pur->spr_id)->get();
             // dd($unit);
             // $unit_rumah = DB::table('unit_rumahs')
             // ->leftJoin('sprs','unit_rumahs.id','=','sprs.id_unit')
             // ->select('unit_rumahs.id','sprs.id_unit')
             // ->where('unit_rumahs.id', $unit)->get();
-            $unit_rumah = UnitRumah::whereIn('id',$unit)->first();
+            $unit_rumah = UnitRumah::whereIn('id_unit_rumah',$unit)->update([
+
+             'status_penjualan' => 'Available']);
             // dd($unit_rumah);
-            $unit_rumah->update(['status_penjualan' => 'Available']);
+            // $unit_rumah->update([
+            //     'status_penjualan' => 'Available']);
         }
         
 
@@ -55,27 +58,27 @@ class PembatalanUnitController extends Controller
 
     public function ajax(Request $request)
     {
-       if(request()->ajax()){
-           if(!empty($request->from)){
+        if(request()->ajax()){
+            if(!empty($request->from)){
 
-               $pembatalans = DB:: table('pembatalan_units')
-               ->leftjoin('sprs','pembatalan_units.spr_id','=','sprs.id')
-               ->leftjoin('unit_rumahs','sprs.id_unit','=','unit_rumahs.id')
-               ->leftjoin('users','sprs.id_sales','=','users.id')
-               ->whereBetween('pembatalan_units.tanggal', array($request->from, $request->to))
-               ->select('pembatalan_units.tanggal','sprs.no_transaksi','users.name','sprs.status_approval','sprs.id_sales','pembatalan_units.no_pembatalan','pembatalan_units.id','pembatalan_units.diajukan','unit_rumahs.type','sprs.no_transaksi','sprs.harga_net','sprs.status_dp','sprs.status_booking','sprs.nama','pembatalan_units.status')
-               ->get();
-           }else{
-
-            $pembatalans = DB:: table('pembatalan_units')
-               ->leftjoin('sprs','pembatalan_units.spr_id','=','sprs.id')
-               ->leftjoin('unit_rumahs','sprs.id_unit','=','unit_rumahs.id')
-               ->leftjoin('users','sprs.id_sales','=','users.id')
-               ->select('pembatalan_units.tanggal','sprs.no_transaksi','users.name','sprs.status_approval','sprs.id_sales','pembatalan_units.no_pembatalan','pembatalan_units.id','pembatalan_units.diajukan','unit_rumahs.type','sprs.no_transaksi','sprs.harga_net','sprs.status_dp','sprs.status_booking','sprs.nama','pembatalan_units.status')
-               ->get();
-           }
-
+        $pembatalans = DB:: table('pembatalan_unit')
+        ->leftjoin('spr','pembatalan_unit.spr_id','=','spr.id')
+        ->leftjoin('unit_rumahs','spr.id_unit','=','unit_rumahs.id')
+        ->leftjoin('users','spr.id_sales','=','users.id')
+        ->whereBetween('pembatalan_unit.tanggal',array($request->from, $request->to))
+        ->select('pembatalan_unit.tanggal','spr.no_transaksi','users.name','spr.status_approval','spr.id_sales','pembatalan_unit.no_pembatalan','pembatalan_unit.id','pembatalan_unit.diajukan','unit_rumahs.type','spr.no_transaksi','spr.harga_net','spr.status_dp','spr.status_booking','spr.nama','pembatalan_unit.status')
+        ->get();
         // dd($pembatalans);
+    }else{
+        $pembatalans = DB:: table('pembatalan_unit')
+        ->leftjoin('spr','pembatalan_unit.spr_id','=','spr.id')
+        ->leftjoin('unit_rumahs','spr.id_unit','=','unit_rumahs.id')
+        ->leftjoin('users','spr.id_sales','=','users.id')
+        ->select('pembatalan_unit.tanggal','spr.no_transaksi','users.name','spr.status_approval','spr.id_sales','pembatalan_unit.no_pembatalan','pembatalan_unit.id','pembatalan_unit.diajukan','unit_rumahs.type','spr.no_transaksi','spr.harga_net','spr.status_dp','spr.status_booking','spr.nama','pembatalan_unit.status')
+        ->get();
+        // dd($pembatalans);
+        
+            }
         return datatables()
             ->of($pembatalans)
             ->editColumn('no_pembatalan', function ($pembatalan) {
@@ -123,7 +126,8 @@ class PembatalanUnitController extends Controller
             }else {
                 
                 $button = '<a href="' . route('admin.pembatalans.update', $data->id) . '"  class="custom-badge status-green"><i class="fa-solid fa-check-to-slot"></i></a>';
-                 return $button;
+                return $button;
+            
              
                 } 
             
@@ -138,6 +142,6 @@ class PembatalanUnitController extends Controller
             // })
             
             // ->toJson()
-       }
+        }
     }
 }

@@ -7,7 +7,7 @@
     </div>
 </div>
 
-<form action="{{ route('admin.unit.update', $unit->id) }}" method="post">
+<form action="{{ route('admin.unit.update', $unit->id_unit_rumah) }}" method="post">
     @method('PATCH')
     @csrf
 

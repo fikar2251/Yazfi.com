@@ -178,7 +178,7 @@
                         <td>
                             <table cellspacing="5" cellpadding="5">
 
-                                <tbody style="font-size: 16%; 	font-family: 'Rubik', sans-serif;">
+                                <tbody style="font-size: 16px; 	font-family: 'Rubik', sans-serif;">
 
                                     <tr>
                                         <td>Tanggal</td>

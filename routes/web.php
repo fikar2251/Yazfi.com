@@ -53,9 +53,9 @@ Route::middleware('auth')->group(function () {
             Route::patch('admin/satuan/{satuan:id}', 'SatuanController@update')->name('satuan.update');
             // Route::patch('satuan/{satuan}/update', 'SatuanController@update');
 
-         // Route satuan Unit
+       
             Route::resource('unit', 'UnitController');
-            Route::patch('admin/unit/{unit:id}', 'UnitController@update')->name('unit.update');
+     
          
             Route::get('pembatalans/{id}', 'PembatalanUnitController@update')->name('pembatalans.update');
             Route::resource('pembatalans', 'PembatalanUnitController');
@@ -195,100 +195,99 @@ Route::middleware('auth')->group(function () {
             Route::resource('/setting', 'SettingController');
         });
 
-        // Route::prefix('dokter')->name('dokter.')->namespace('Dokter')->group(function () {
-        //     Route::get('/', function () {
-        //         return redirect()->route('dashboard');
-        //     })->name('dashboard');
-
-        //     Route::resource('/appointments', 'AppointmentsController');
-        //     Route::resource('/profile', 'ProfileController');
-        //     Route::get('/ajax/pasien', 'ServiceController@AjaxPasien');
-        //     Route::post('/ajax/pasien/post', 'ServiceController@AjaxPasienPost');
-        //     Route::get('/pasien/history/{id}', 'ServiceController@history')->name('history');
-        //     Route::get('/pasien/fisik/{id}', 'ServiceController@fisik')->name('fisik');
-        //     Route::get('/ajax/update/{id}/{value}/{id_booking}', 'ServiceController@ajax');
-        //     Route::get('dokter/show/{id}', 'ServiceController@show')->name('show');
-
-        //     Route::get('pasien/simbol/{warna}', 'ServiceController@simbol')->name('pasien.simbol');
-        //     Route::get('pasien/{customer:id}/odontogram', 'ServiceController@odontogram')->name('pasien.odontogram');
-        //     Route::get('pasien/{customer:id}/cekfisik', 'ServiceController@cekfisik')->name('pasien.cekfisik');
-        //     Route::get('pasien/cetakodontogram/{customer:id}', 'ServiceController@cetakodontogram')->name('pasien.cetakodonto');
-        //     Route::get('pasien/cetakriwayat/{customer:id}', 'ServiceController@cetakriwayat')->name('pasien.cetakriwayat');
-        //     Route::post('pasien/{customer:id}/storefisik', 'ServiceController@storefisik')->name('pasien.storefisik');
-        //     Route::get('pasien', 'ServiceController@pasien')->name('pasien');
-        // });
-
         Route::prefix('marketing')->name('marketing.')->namespace('Marketing')->group(function () {
             Route::get('/', function () {
                 return redirect()->route('dashboard');
             })->name('dashboard');
-            //   Route::resource('/dashboard', 'DashboardController');
-            Route::get('appointments/ajax', 'AppointmentsController@ajax');
-            Route::resource('/appointments', 'AppointmentsController');
-            Route::get('pasien/ajax', 'PatientController@ajaxPasien');
-            Route::resource('/patient', 'PatientController');
-            Route::resource('/doctor', 'DoctorController');
-            Route::resource('/pricelist', 'PricelistController');
-            Route::get('/blok', 'PricelistController@blok');
-            Route::get('/no', 'PricelistController@no');
-            Route::get('/lt', 'PricelistController@lt');
-            Route::get('/hj', 'PricelistController@hj');
-            Route::post('/fetch', 'PricelistController@fetch')->name('pricelist.fetch');
-            Route::get('/pricelist/findBlokName', 'PricelistController@findBlokName');
-            Route::resource('/profile', 'ProfileController');
-            Route::prefix('/service')->name('service.')->group(function () {
-                Route::get('/appointments/filter', 'ServiceController@AppointmentsFilter')->name('appointments.filter');
-                Route::post('/appointments/books', 'ServiceController@AppointmentsBook')->name('appointments.book');
-            });
-            Route::get('/jadwal/{id}/{dokter}', 'AjaxController@GetBook');
-            Route::get('/jadwal/now/{id}/{dokter}', 'AjaxController@GetBookNow');
-            Route::get('/resource/{id}', 'AjaxController@GetProduct');
-            Route::get('/barang', 'AjaxController@GetProducts');
-            Route::get('/where/customer', 'AjaxController@WhereCustomer');
-            Route::get('/where/product', 'AjaxController@WhereProduct');
-            Route::get('/cabang', 'AjaxController@GetCabang');
-            Route::get('/pasien/{id}', 'AjaxController@GetCustomer');
-            Route::get('/time/{jadwal}/{time}/{waktu_mulai}', 'AjaxController@GetTime');
-            Route::get('/show/{id}', 'AjaxController@show')->name('show');
-            Route::get('/datatable/appointments', 'AjaxController@DataTableAppointment');
+            Route::get('unit/json', 'UnitController@json');
+            Route::resource('/unit', 'UnitController');
+            Route::post('/spr/{id}', 'SprController@storeSpr')->name('storespr');
+            Route::get('/spr/show/{id}', 'SprController@create')->name('spr.detail');
+            Route::get('/spr/cetakspr/{id}', 'SprController@cetakSPR')->name('spr.cetakspr');
+            Route::get('/spr/showcetak/{id}', 'SprController@showSPR')->name('spr.showspr');
+            Route::get('spr/json', 'SprController@mrkJson');
+            Route::resource('/spr', 'SprController');
+            Route::get('/blok', 'SprController@blok');
+            Route::get('/no', 'SprController@no');
+            Route::get('/lt', 'SprController@lt');
+            Route::get('/hj', 'SprController@hj');
+            Route::get('/kota', 'SprController@kota');
+            Route::get('/kecamatan', 'SprController@kecamatan');
+            Route::get('/desa', 'SprController@desa');
+          
         });
 
         // Route Resepsionis
-        Route::prefix('resepsionis')->namespace('Resepsionis')->as('resepsionis.')->group(function () {
+        Route::prefix('finance')->namespace('Finance')->as('finance.')->group(function () {
             // Route Appointment
-            Route::post('appointments/update/perawat', 'AppointmentController@updateperawat')->name('appointments.updateperawat');
-            Route::post('appointments/update/ob', 'AppointmentController@updateob')->name('appointments.updateob');
-            Route::post('appointments/status', 'AppointmentController@status')->name('appointments.status');
-            Route::post('appointments/updatestatus', 'AppointmentController@ajaxStatus')->name('appointments.ajaxstatus');
-            Route::post('appointments/upload', 'AppointmentController@upload')->name('appointments.upload');
-            Route::post('appointments/voucher', 'AppointmentController@voucher')->name('appointments.voucher');
-            Route::post('appointments/bayar', 'AppointmentController@bayar')->name('appointments.bayar');
-            Route::get('appointments/print/{id}', 'AppointmentController@print')->name('appointments.print');
-            Route::get('appointments/ajax', 'AppointmentController@ajax');
-            Route::resource('appointments', 'AppointmentController');
+            // Route::post('appointments/update/perawat', 'AppointmentController@updateperawat')->name('appointments.updateperawat');
+            // Route::post('appointments/update/ob', 'AppointmentController@updateob')->name('appointments.updateob');
+            // Route::post('appointments/status', 'AppointmentController@status')->name('appointments.status');
+            // Route::post('appointments/updatestatus', 'AppointmentController@ajaxStatus')->name('appointments.ajaxstatus');
+            // Route::post('appointments/upload', 'AppointmentController@upload')->name('appointments.upload');
+            // Route::post('appointments/voucher', 'AppointmentController@voucher')->name('appointments.voucher');
+            // Route::post('appointments/bayar', 'AppointmentController@bayar')->name('appointments.bayar');
+            // Route::get('appointments/print/{id}', 'AppointmentController@print')->name('appointments.print');
+            // Route::get('appointments/ajax', 'AppointmentController@ajax');
+            // Route::resource('appointments', 'AppointmentController');
+
+            // Route Payment
+            Route::get('/payment', 'FinanceController@index')->name('payment');
+            Route::get('/payment/updatestatus/{id}', 'FinanceController@ubahStatus')->name('payment.status');
+            Route::get('/payment/json', 'FinanceController@paymentJson')->name('payment.json');
+
+            // Route Daftar Pembayaran
+            Route::get('/daftar', 'FinanceController@listPayment')->name('daftar');
+            Route::post('/daftar/store', 'FinanceController@storePayment')->name('store.payment');
+
+            // Route Refund
+            Route::get('/refund', 'RefundController@index')->name('refund');
+            Route::post('refund/store', 'RefundController@storeRefund')->name('refund.store');
+            Route::get('refund/list', 'RefundController@list')->name('refund.list');
+            Route::get('refund/update/{id}', 'RefundController@updateStatus')->name('refund.update');
+            Route::get('refund/daftar', 'RefundController@listRefund')->name('daftar.refund');
+            Route::get('refund/json', 'RefundController@refundJson')->name('json.refund');
+            Route::post('refund/daftar/store', 'RefundController@storeListRefund')->name('store.list.refund');
+
+            //Route Komisi
+            Route::get('/komisi', 'FinanceController@komisiFinance')->name('komisi');
+            Route::get('/komisi/update/{id}', 'FinanceController@updateKomisi')->name('updatekomisi');
+            Route::get('/komisi/daftar', 'FinanceController@listKomisi')->name('list.komisi');
+            Route::get('/komisi/json', 'FinanceController@komisiJson')->name('json.komisi');
+            Route::post('/komisi/daftar/store', 'FinanceController@storeKomisi')->name('store.list.komisi');
 
             // Route Dokter
-            Route::resource('dokter', 'DokterController');
+            // Route::resource('dokter', 'DokterController');
 
             // Route Pasien
-            Route::get('/ajax/pasien', 'PasienController@ajaxPasien');
-            Route::resource('pasien', 'PasienController');
+            // Route::get('/ajax/pasien', 'PasienController@ajaxPasien');
+            // Route::resource('pasien', 'PasienController');
 
             // Report Resepsionis
-            Route::get('report/payment', 'AppointmentController@report')->name('report.payment');
+            // Route::get('report/payment', 'AppointmentController@report')->name('report.payment');
         });
 
         // Route Supervisor
         Route::prefix('supervisor')->namespace('Supervisor')->as('supervisor.')->group(function () {
-            // Route Appointment
-            Route::get('appointments/ajax', 'AppointmentController@ajaxAppointment');
-            Route::post('appointments/deleterincian', 'AppointmentController@deleterincian')->name('appointments.deleterincian');
-            Route::resource('appointments', 'AppointmentController');
-
+            Route::get('/', function () {
+                return redirect()->route('dashboard');
+            })->name('dashboard');
             Route::get('komisi/ajax', 'KomisiController@ajaxKomisi');
             Route::get('komisi/{komisi:id}/change', 'KomisiController@change')->name('komisi.change');
             Route::patch('komisi/{komisi:id}/updatechange', 'KomisiController@updatechange')->name('komisi.updatechange');
+            Route::post('komisi/store', 'KomisiController@storeKomisi')->name('komisi.storekomisi');
+            Route::get('komisi/json', 'KomisiController@komisiJson')->name('komisijson');
             Route::resource('komisi', 'KomisiController');
+
+            Route::get('cancel', 'BayarController@sales')->name('cancel.index');
+            Route::get('payment/json', 'BayarController@batalJson')->name('bataljson');
+            Route::get('payment/{id}', 'BayarController@show')->name('payment.show');
+            Route::get('cancel/{id}', 'BayarController@cancel')->name('payment.cancel');
+            Route::post('cancel/store', 'BayarController@storeBatal')->name('cancel.store');
+            Route::get('/nominal', 'BayarController@nominal');
+            Route::post('payment/store', 'BayarController@storeBayar')->name('payment.store');
+            Route::get('payment/delete/{id}', 'BayarController@hapuskonfirmasi')->name('payment.delete');
+
         });
 
         // Route HRD

@@ -35,7 +35,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="table-responsive">
-            <table class="table table-bordered table-striped custom-table report" width="100%" id="customers">
+            <table class="table table-bordered table-striped custom-table report" style="width:100%"id="customers">
                 <thead>
                     <tr>
                         <th style="width: 5%">No</th>

@@ -1,215 +1,435 @@
-@extends('layouts.master', ['title' => 'Appointment'])
+@extends('layouts.master', ['title' => 'Input Komisi'])
 
 @section('content')
-<div class="row">
-    <div class="col-sm-5 col-4">
-        <h4 class="page-title">Rincian Appointment</h4>
-    </div>
-    <div class="col-sm-7 col-8 text-right m-b-30">
-        <div class="btn-group btn-group-sm">
-            <button class="btn btn-white">CSV</button>
-            <button class="btn btn-white">PDF</button>
-            <button class="btn btn-white"><i class="fa fa-print fa-lg"></i> Print</button>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="row custom-invoice">
-                    <div class="col-6 col-sm-6 m-b-20">
-                        <img src="{{ asset('/storage/' . \App\Setting::find(1)->logo) }}" class="inv-logo" alt="">
-                        <ul class="list-unstyled">
-                            <li>{{ \App\Setting::find(1)->web_name }}</li>
-                            <li>{{ $appointment->cabang->nama }}</li>
-                            <li>{{ $appointment->cabang->alamat }}</li>
-                        </ul>
-                    </div>
-                    <div class="col-6 col-sm-6 m-b-20">
-                        <div class="invoice-details">
-                            <h3 class="text-uppercase">{{ $appointment->no_booking }}</h3>
-                            <ul class="list-unstyled">
-                                <li>Date booking: <span>{{ Carbon\Carbon::parse($appointment->tanggal_status)->format('d/m/Y') }}}</span></li>
-                                <li>No Rekam Medik: <span>{{ $appointment->pasien->rekam_medik }}</span></li>
-                            </ul>
-                        </div>
+
+    @php
+
+    use App\Marketing;
+    use App\Spr;
+    use App\Pembatalan;
+    use App\Komisi;
+
+    $AWAL = 'KM';
+    $noUrutAkhir = Komisi::max('id');
+
+    $nourut = $AWAL . '/' . sprintf('%02s', abs(1)) . '/' . sprintf('%05s', abs($noUrutAkhir + 1));
+
+    @endphp
+
+    <div class="row">
+        <div class=" col text-center">
+            <h4 style="font-size: 30px; font-weight: 500;" class="page-title mb-3">FORM INPUT KOMISI </h4>
+            <div class="text-center">
+                <div class="form-group row d-flex justify-content-center">
+                    <label for="no_transaksi" class="col-sm-1">No <span>:</span></label>
+                    <div class="col-sm-2">
+                        <input style="text-decoration: none; border-style: none; background-color: #FAFAFA" type="text"
+                            name="no_komisi" id="tanggal" value="{{ $nourut }}">
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-sm-6 col-lg-6 m-b-20">
-
-                        <h5>Invoice to:</h5>
-                        <ul class="list-unstyled">
-                            <li>
-                                <h5><strong>{{ $appointment->pasien->nama }}</strong></h5>
-                            </li>
-                            <li><span>{{ $appointment->pasien->alamat }}</span></li>
-                            @php
-                            $age = explode(",", $appointment->pasien->ttl)
-                            @endphp
-                            <li>{{ \Carbon\Carbon::now()->format('Y') - \Carbon\Carbon::parse($appointment->pasien->tgl_lahir)->format('Y') }} Tahun</li>
-                            <li>{{ $appointment->pasien->jk }}</li>
-                            <li>{{ $appointment->pasien->nik_ktp }}</li>
-                        </ul>
-
-                    </div>
-                    @php
-                    $pajak = $appointment->tindakan->sum('nominal') * $appointment->cabang->ppn / 100
-                    @endphp
-                    <div class="col-sm-6 col-lg-6 m-b-20">
-                        <div class="invoices-view">
-                            <span class="text-muted">Payment Details:</span>
-                            <ul class="list-unstyled invoice-payment-details">
-                                <li>
-                                    <h5>Total Due: <span class="text-right">@currency($appointment->tindakan->sum('nominal') + $pajak)</span></h5>
-                                </li>
-                                <li>Perawat: <span data-toggle="modal" data-target="#perawatModal" id="perawat">{{ $appointment->perawat->name ?? '-' }}
-                                    </span></li>
-                                <li>Office boy: <span data-toggle="modal" data-target="#obModal" id="ob">{{ $appointment->ob->name ?? '-' }}</span></li>
-                                <li>Resepsionis: <span>{{ $appointment->resepsionis->name ?? '-'}}</span></li>
-                                <li>Address: <span>{{ $appointment->cabang->alamat }}</span></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-striped table-hover">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>ITEM</th>
-                                <th>DESCRIPTION</th>
-                                <th>UNIT COST</th>
-                                <th>QUANTITY</th>
-                                <th>DOKTER</th>
-                                <th>TOTAL</th>
-                                <th>STATUS</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @php
-                            $total = 0;
-                            @endphp
-                            @foreach($appointment->tindakan as $tindakan)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $tindakan->item->nama_barang }}</td>
-                                <td>{{ $tindakan->item->description }}</td>
-                                @php
-                                $harga = \App\HargaProdukCabang::where('barang_id', $tindakan->item->id)->where('cabang_id', auth()->user()->cabang_id)->first();
-                                @endphp
-                                <td>@currency($harga->harga)</td>
-                                <td>{{ $tindakan->qty }}</td>
-                                <td>{{ $tindakan->dokter->name }}</td>
-                                <td>@currency($harga->harga * $tindakan->qty)</td>
-                                <td><span class="custom-badge status-{{ $tindakan->status == 0 ? 'red' : 'green' }}">{{ $tindakan->status == 0 ? 'Belum' : 'Selesai' }}</span></td>
-                            </tr>
-                            @php
-                            $total += $harga->harga * $tindakan->qty
-                            @endphp
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-                <div>
-                    <div class="row invoice-payment">
-                        <div class="col-sm-7">
-                        </div>
-                        <div class="col-sm-12">
-                            <div class="m-b-20">
-                                <h6>Total due</h6>
-                                <div class="table-responsive no-border">
-                                    <table border="1" class="table mb-0">
-                                        <tbody>
-                                            <tr>
-                                                <th>Subtotal:</th>
-                                                <td class="text-right">@currency($total)</td>
-                                            </tr>
-                                            @if($appointment->cabang->status_pajak == 1)
-                                            <tr>
-                                                <th>Pajak ({{ $appointment->cabang->ppn }}%):</th>
-                                                <td class="text-right">
-                                                    @php
-                                                    $pajak = $total * $appointment->cabang->ppn / 100
-                                                    @endphp
-                                                    @currency($pajak)
-                                                </td>
-                                            </tr>
-                                            @endif
-                                            <tr>
-                                                <th>Grand Total :</th>
-                                                <td class="text-right">@currency($total + $pajak)</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Dibayar:</th>
-                                                <td class="text-right">@currency($rincians->sum('dibayar') + $appointment->rincian->sum('disc_vouc'))</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Sisa Pembayaran:</th>
-                                                <td class="text-right text-primary sisa" id="@currency($total - $appointment->rincian->sum('dibayar') + $pajak)">
-                                                    <h5 class="tsisa">@currency($total - $rincians->sum('dibayar') + $pajak - $appointment->rincian->sum('disc_vouc'))</h5>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="invoice-info">
-                        <h5>Rincian Komisi</h5>
-
-                        <p></p>
-                        <table width="520" border="0" class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Tanggal</th>
-                                    <th>Nama Pegawai</th>
-                                    <th>Nominal </th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                @foreach($rincians as $komisi)
-                                <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{ Carbon\Carbon::parse($komisi->created_at)->format('d/m/Y') }}</td>
-                                    <td>{{ $komisi->user->name }}</td>
-                                    <td>@currency($komisi->nominal_komisi)</td>
-                                    <td>
-                                        <a href="{{ route('supervisor.komisi.change', $komisi->id) }}" class="btn btn-sm btn-secondary">Change</a>
-                                        <a href="{{ route('supervisor.komisi.edit', $komisi->id) }}" class="btn btn-sm btn-success">Edit</a>
-                                        <form action="{{ route('supervisor.komisi.destroy', $komisi->id) }}" method="post" style="display: inline;" class="delete-form">
-                                            @method('DELETE')
-                                            @csrf
-                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                <div class="form-group row d-flex justify-content-center">
+                    <label for=" tanggal" class="col-sm-1">Tanggal <span>:</span></label>
+                    <div class="col-sm-2">
+                        <input style="text-decoration: none; border-style: none; background-color: #FAFAFA" type="text"
+                            name="tanggal_komisi" id="tanggal_komisi" value="{{ Carbon\Carbon::now()->format('d-m-Y') }}">
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-@stop
+    <form action="" method="GET">
+        <div class="form-group row d-flex justify-content-center mt-2">
+            <label for="name" class="col-sm-2">Masukkan nomor SPR :</label>
+            <div class="col-sm-2">
+                <select name="no_transaksi" id="spr" class="form-control">
+                    @if (!request()->get('no_transaksi'))
+                        <option selected value=""></option>
+                    @endif
+                    @foreach ($spr as $item)
+                        @if (request()->get('no_transaksi') == $item->no_transaksi)
+                            <option value="{{ $item->no_transaksi }}" selected>{{ $item->no_transaksi }}</option>
+                        @else
+                            <option value="{{ $item->no_transaksi }}">{{ $item->no_transaksi }}</option>
+                        @endif
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <button type="submit" name="submit" class="btn btn-primary">Cari</button>
+            </div>
+            @error('name')
+                <small class="text-danger">{{ $message }}</small>
+            @enderror
+        </div>
+    </form>
 
-@section('footer')
+    @if (request()->get('no_transaksi'))
+        @if (request()->get('no_transaksi') == $sprno)
+            <h2 class="text-center mt-5"> Anda sudah input SPR ini</h2>
+        @else
+            <form action="{{ route('supervisor.komisi.storekomisi') }}" method="POST">
+                @csrf
+                <div class="row">
+                    <div class="col-lg-12 container">
+                        <div class="card shadow">
+                            <div class="card-body">
 
-@if(session('success'))
-<script>
-    iziToast.success({
-        title: 'Success',
-        position: 'topRight',
-        message: "{{ session('success') }}",
-    });
-</script>
-@endif
+                                <div class="table-responsive">
+                                    <table class="table table-bordered custom-table table-striped">
+                                        <thead>
+
+                                            <tr>
+                                                <th style="width: 200px">NO</th>
+                                                <th style="width: 20px">:</th>
+                                                <th> {{ $nourut }} <input type="hidden" name="no_komisi"
+                                                    value="{{ $nourut }}">
+                                                    <input type="hidden" name="no_transaksi"
+                                                    value="{{ request()->get('no_transaksi') }}">
+                                                </th>
+
+                                                <td>Harga Jual</td>
+                                                <td>:</td>
+                                                <td> @currency($hj)
+                                                    <input type="hidden" value="{{ $hj }}"
+                                                    name="harga_jual" id="harga_jual">
+                                                </td>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            <tr>
+                                                <td style="width: 200px">Tanggal</td>
+                                                <td style="width: 20px">:</td>
+                                                <td>{{ Carbon\Carbon::now()->format('d-m-Y') }}</td>
+
+                                                <td>PPH</td>
+                                                <td>:</td>
+                                                <td class="d-flex"> <input type="number" name="persenpph"
+                                                        id="persenpph" class="form-control" style="width: 80px"
+                                                        value="2.5" step="any">&nbsp;
+                                                    <h3> % </h3> <input type="text" name="pph" id="pph"
+                                                        class="form-control" style="width: 145px"
+                                                        value="@currency($potongan['pph'])" style="text-decoration: none"
+                                                        readonly>
+                                                </td>
+                                            </tr>
+
+                                            {{-- @foreach ($getSpr as $item) --}}
+                                            <tr>
+                                                <td style="width: 200px">Project</td>
+                                                <td style="width: 20px">:</td>
+                                                <td>
+                                                    {{ $item->project->nama_project }}
+                                                </td>
+
+                                                <td>BPHTB</td>
+                                                <td>:</td>
+                                                <td class="d-flex"> <input type="number" name="persenbphtb"
+                                                        id="persenbphtb" class="form-control" style="width: 80px"
+                                                        value="2.5" step="any">&nbsp;
+                                                    <h3> % </h3> <input type="text" name="bphtb" id="bphtb"
+                                                        class="form-control" style="width: 145px"
+                                                        value="@currency($potongan['bphtb'])" style="text-decoration: none"
+                                                        readonly> 
+                                                </td>
+                                            </tr>
+                                            {{-- @endforeach --}}
+                                            <tr>
+                                                <td style="width: 200px">Sales ({{ $item->user->name }}) <input
+                                                        type="hidden" name="nama_sales" value="{{ $item->user->name }}">
+                                                </td>
+                                                <td style="width: 20px">:</td>
+                                                <td class="d-flex">
+                                                    <input type="number" name="persensales" id="persensales"
+                                                        class="form-control" style="width: 80px" value="0.1" step="any">&nbsp;
+                                                    <h3> % </h3> <input type="text" name="sales" id="sales"
+                                                        class="form-control" style="width: 145px"
+                                                        value="@currency($komisi['sales'])" style="text-decoration: none"
+                                                        readonly>
+                                                    <input type="hidden" id="nominal_sales" name="nominal_sales"
+                                                        value="{{ $komisi['sales'] }}">
+                                                </td>
+
+                                                <td>Pengurangan lain-lain</td>
+                                                <td>:</td>
+                                                <td class="d-flex"> <input type="number" name="persenpll"
+                                                        id="persenpll" class="form-control" style="width: 80px"
+                                                        value="2.5" step="any">&nbsp;
+                                                    <h3> % </h3> <input type="text" name="pll" id="pll"
+                                                        class="form-control" style="width: 145px"
+                                                        value="@currency($potongan['pll'])" style="text-decoration: none"
+                                                        readonly>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width: 200px">SPV ({{ auth()->user()->name }})</td> <input
+                                                    type="hidden" name="nama_spv" value="{{ auth()->user()->name }}">
+                                                <td style="width: 20px">:</td>
+                                                <td class="d-flex">
+                                                    <input type="number" name="persenspv" id="persenspv"
+                                                        class="form-control" style="width: 80px" value="0.1" step="any">&nbsp;
+                                                    <h3> % </h3> <input type="text" name="spv" id="spv"
+                                                        class="form-control" style="width: 145px"
+                                                        value="@currency($komisi['spv'])" style="text-decoration: none"
+                                                        readonly>
+                                                    <input type="hidden" id="nominal_spv" name="nominal_spv"
+                                                        value="{{ $komisi['spv'] }}">
+                                                </td>
+
+                                                <td>Total potongan</td>
+                                                <td>:</td>
+                                                <td id="totalpotongan">@currency($totalfee)</td>
+
+                                            </tr>
+                                            <tr>
+                                                <td style="width: 200px">Manager</td> <input type="hidden"
+                                                    name="nama_manager" value="Yanto">
+                                                <td style="width: 20px">:</td>
+                                                <td class="d-flex">
+                                                    <input type="number" name="persenmanager" id="persenmanager"
+                                                        class="form-control" style="width: 80px" value="0.1" step="any">&nbsp;
+                                                    <h3> % </h3> <input type="text" name="manager" id="manager"
+                                                        class="form-control" style="width: 145px"
+                                                        value="@currency($komisi['manager'])" style="text-decoration: none"
+                                                        readonly>
+                                                    <input type="hidden" id="nominal_manager" name="nominal_manager"
+                                                        value="{{ $komisi['manager'] }}">
+                                                </td>
+
+                                                <td>Dasar perhitungan</td>
+                                                <td>:</td>
+                                                <td id="dasar">@currency($dasar)</td>
+                                            </tr>
+
+                                        </tbody>
+        </table>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        <div class="m-t-20 text-center">
+            <button type="submit" name="submit" class="btn btn-primary submit-btn"><i class="fa fa-save"></i>
+                Save</button>
+        </div>
+        </form>
+    @endif
+    @endif
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#persenpph").keyup(function() {
+                var harga_jual = parseInt($("#harga_jual").val());
+                var persenpph = parseFloat($("#persenpph").val());
+                var potonganpph = harga_jual * (persenpph / 100);
+                var pph = rupiah(potonganpph);
+
+                var persenpph = parseFloat($("#persenpll").val());
+                var potonganpll = harga_jual * (persenpph / 100);
+
+                var persenpph = parseFloat($("#persenbphtb").val());
+                var potonganbphtb = harga_jual * (persenpph / 100);
+
+                var total = potonganpll + potonganbphtb + potonganpph;
+                var totalpotongan = rupiah(total);
+                var dasarperhitungan = harga_jual - total;
+                var dasar = rupiah(dasarperhitungan);
+
+                var persensales = parseFloat($("#persensales").val());
+                var potongansales = dasarperhitungan * (persensales / 100);
+                var sales = rupiah(potongansales);
+
+                var persenspv = parseFloat($("#persenspv").val());
+                var potonganspv = dasarperhitungan * (persenspv / 100);
+                var spv = rupiah(potonganspv);
+
+                var persenmanager = parseFloat($("#persenmanager").val());
+                var potonganmanager = dasarperhitungan * (persenmanager / 100);
+                var manager = rupiah(potonganmanager);
+
+                document.getElementById("pph").value = pph;
+                document.getElementById("totalpotongan").innerHTML = totalpotongan;
+                document.getElementById("dasar").innerHTML = dasar;
+
+                document.getElementById("sales").value = sales;
+                document.getElementById("spv").value = spv;
+                document.getElementById("manager").value = manager;
+
+            });
+        });
+
+        $(document).ready(function() {
+            $("#persenbphtb").keyup(function() {
+                var harga_jual = parseInt($("#harga_jual").val());
+                var persenpph = parseFloat($("#persenbphtb").val());
+                var potonganbphtb = harga_jual * (persenpph / 100);
+                var bphtb = rupiah(potonganbphtb);
+
+                var persenpph = parseFloat($("#persenpll").val());
+                var potonganpll = harga_jual * (persenpph / 100);
+
+                var persenpph = parseFloat($("#persenpph").val());
+                var potonganpph = harga_jual * (persenpph / 100);
+
+                var total = potonganpll + potonganbphtb + potonganpph;
+                var totalpotongan = rupiah(total);
+                var dasarperhitungan = harga_jual - total;
+                var dasar = rupiah(dasarperhitungan);
+
+                var persensales = parseFloat($("#persensales").val());
+                var potongansales = dasarperhitungan * (persensales / 100);
+                var sales = rupiah(potongansales);
+
+                var persenspv = parseFloat($("#persenspv").val());
+                var potonganspv = dasarperhitungan * (persenspv / 100);
+                var spv = rupiah(potonganspv);
+
+                var persenmanager = parseFloat($("#persenmanager").val());
+                var potonganmanager = dasarperhitungan * (persenmanager / 100);
+                var manager = rupiah(potonganmanager);
+
+                document.getElementById("bphtb").value = bphtb;
+                document.getElementById("totalpotongan").innerHTML = totalpotongan;
+                document.getElementById("dasar").innerHTML = dasar;
+
+                document.getElementById("sales").value = sales;
+                document.getElementById("spv").value = spv;
+                document.getElementById("manager").value = manager;
+
+            });
+        });
+
+
+
+        $(document).ready(function(pph) {
+            $("#persenpll").keyup(function() {
+                var harga_jual = parseInt($("#harga_jual").val());
+                var persenpph = parseFloat($("#persenpll").val());
+                var potonganpll = harga_jual * (persenpph / 100);
+                var pll = rupiah(potonganpll);
+
+                var persenpph = parseFloat($("#persenbphtb").val());
+                var potonganbphtb = harga_jual * (persenpph / 100);
+
+                var persenpph = parseFloat($("#persenpph").val());
+                var potonganpph = harga_jual * (persenpph / 100);
+
+                var total = potonganpll + potonganbphtb + potonganpph;
+                var totalpotongan = rupiah(total);
+                var dasarperhitungan = harga_jual - total;
+                var dasar = rupiah(dasarperhitungan);
+
+                var persensales = parseFloat($("#persensales").val());
+                var potongansales = dasarperhitungan * (persensales / 100);
+                var sales = rupiah(potongansales);
+
+                var persenspv = parseFloat($("#persenspv").val());
+                var potonganspv = dasarperhitungan * (persenspv / 100);
+                var spv = rupiah(potonganspv);
+
+                var persenmanager = parseFloat($("#persenmanager").val());
+                var potonganmanager = dasarperhitungan * (persenmanager / 100);
+                var manager = rupiah(potonganmanager);
+
+                document.getElementById("pll").value = pll;
+                document.getElementById("totalpotongan").innerHTML = totalpotongan;
+                document.getElementById("dasar").innerHTML = dasar;
+
+                document.getElementById("sales").value = sales;
+                document.getElementById("spv").value = spv;
+                document.getElementById("manager").value = manager;
+            });
+        });
+
+        $(document).ready(function() {
+            $("#persensales").keyup(function() {
+                var harga_jual = parseInt($("#harga_jual").val());
+                var persenpph = parseFloat($("#persenpll").val());
+                var potonganpll = harga_jual * (persenpph / 100);
+                var pph = rupiah(potonganpll);
+
+                var persenpph = parseFloat($("#persenbphtb").val());
+                var potonganbphtb = harga_jual * (persenpph / 100);
+
+                var persenpph = parseFloat($("#persenpph").val());
+                var potonganpph = harga_jual * (persenpph / 100);
+
+                var total = potonganpll + potonganbphtb + potonganpph;
+                var totalpotongan = rupiah(total);
+                var dasarperhitungan = harga_jual - total;
+
+                var persensales = parseFloat($("#persensales").val());
+                var potongansales = dasarperhitungan * (persensales / 100);
+                var sales = rupiah(potongansales);
+
+                document.getElementById("sales").value = sales;
+                document.getElementById("nominal_sales").value = potongansales;
+            });
+        });
+
+        $(document).ready(function() {
+            $("#persenspv").keyup(function() {
+                var harga_jual = parseInt($("#harga_jual").val());
+                var persenpph = parseFloat($("#persenpll").val());
+                var potonganpll = harga_jual * (persenpph / 100);
+                var pph = rupiah(potonganpll);
+
+                var persenpph = parseFloat($("#persenbphtb").val());
+                var potonganbphtb = harga_jual * (persenpph / 100);
+
+                var persenpph = parseFloat($("#persenpph").val());
+                var potonganpph = harga_jual * (persenpph / 100);
+
+                var total = potonganpll + potonganbphtb + potonganpph;
+                var totalpotongan = rupiah(total);
+                var dasarperhitungan = harga_jual - total;
+
+                var persenspv = parseFloat($("#persenspv").val());
+                var potonganspv = dasarperhitungan * (persenspv / 100);
+                var spv = rupiah(potonganspv);
+
+                document.getElementById("spv").value = spv;
+                document.getElementById("nominal_spv").value = potonganspv;
+            });
+        });
+
+        $(document).ready(function() {
+            $("#persenmanager").keyup(function() {
+                var harga_jual = parseInt($("#harga_jual").val());
+                var persenpph = parseFloat($("#persenpll").val());
+                var potonganpll = harga_jual * (persenpph / 100);
+                var pph = rupiah(potonganpll);
+
+                var persenpph = parseFloat($("#persenbphtb").val());
+                var potonganbphtb = harga_jual * (persenpph / 100);
+
+                var persenpph = parseFloat($("#persenpph").val());
+                var potonganpph = harga_jual * (persenpph / 100);
+
+                var total = potonganpll + potonganbphtb + potonganpph;
+                var totalpotongan = rupiah(total);
+                var dasarperhitungan = harga_jual - total;
+
+                var persenmanager = parseFloat($("#persenmanager").val());
+                var potonganmanager = dasarperhitungan * (persenmanager / 100);
+                var manager = rupiah(potonganmanager);
+
+                document.getElementById("manager").value = manager;
+                document.getElementById("nominal_manager").value = potonganmanager;
+            });
+        });
+
+        const rupiah = (number) => {
+            return new Intl.NumberFormat("id-ID", {
+                style: "currency",
+                currency: "IDR"
+            }).format(number);
+        }
+    </script>
 @stop

@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class PembatalanUnit extends Model
 {
     protected $guarded = ['id'];
-    protected $table = 'pembatalan_units';
-
+    protected $table = 'pembatalan_unit';
+    public $timestamps = false;
    public function admin(){
        
        return $this->belongsTo(Users::class,'id_sales');

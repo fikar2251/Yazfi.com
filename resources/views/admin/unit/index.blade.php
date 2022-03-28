@@ -48,11 +48,11 @@
                         <td>{{ $unit->harga_jual }}</td>
                         <td>{{ $unit->status_penjualan }}</td>
                         <td>
-                            @can('product-edit')
-                            <a href="{{ route('admin.unit.edit', $unit->id) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
-                            @endcan
+                        
+                            <a href="{{ route('admin.unit.edit', $unit->id_unit_rumah) }}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
+                   
                             @can('product-delete')
-                            <form action="{{ route('admin.unit.destroy', $unit->id) }}" method="post" style="display: inline;" class="delete-form">
+                            <form action="{{ route('admin.unit.destroy', $unit->id_unit_rumah) }}" method="post" style="display: inline;" class="delete-form">
                                 @method('DELETE')
                                 @csrf
                                 <button type="submit" class="btn btn-sm btn-danger delete"><i class="fa fa-trash"></i></button>

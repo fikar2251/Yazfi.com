@@ -29,19 +29,19 @@ class CustomerController extends Controller
 
         
         if (!empty($request->from)) {
-            $pembatalans = DB:: table('sprs')
-            ->leftjoin('unit_rumahs','sprs.id_unit','=','unit_rumahs.id')
-            ->select('sprs.tanggal_transaksi','sprs.no_transaksi','sprs.nama','sprs.no_hp','sprs.no_ktp','unit_rumahs.no','unit_rumahs.blok','unit_rumahs.type'
-            ,'sprs.id','unit_rumahs.type','sprs.harga_net')
-            ->whereBetween('sprs.tanggal_transaksi', array($request->from, $request->to))
-            ->orderBy('sprs.id','desc')->get();
+            $pembatalans = DB:: table('spr')
+            ->leftjoin('unit_rumah','spr.id_unit','=','unit_rumah.id_unit_rumah')
+            ->select('spr.tanggal_transaksi','spr.no_transaksi','spr.nama','spr.no_hp','spr.no_ktp','unit_rumah.no','unit_rumah.blok','unit_rumah.type'
+            ,'spr.id_transaksi','unit_rumah.type','spr.harga_net')
+            ->whereBetween('spr.tanggal_transaksi', array($request->from, $request->to))
+            ->orderBy('spr.id_transaksi','desc')->get();
          
         } else {
-            $pembatalans = DB:: table('sprs')
-            ->leftjoin('unit_rumahs','sprs.id_unit','=','unit_rumahs.id')
-            ->select('sprs.tanggal_transaksi','sprs.no_transaksi','sprs.nama','sprs.no_hp','sprs.no_ktp','unit_rumahs.no','unit_rumahs.blok','unit_rumahs.type'
-            ,'sprs.id','unit_rumahs.type','sprs.harga_net')
-            ->orderBy('sprs.id','desc')
+            $pembatalans = DB:: table('spr')
+            ->leftjoin('unit_rumah','spr.id_unit','=','unit_rumah.id_unit_rumah')
+            ->select('spr.tanggal_transaksi','spr.no_transaksi','spr.nama','spr.no_hp','spr.no_ktp','unit_rumah.no','unit_rumah.blok','unit_rumah.type'
+            ,'spr.id_transaksi','unit_rumah.type','spr.harga_net')
+            ->orderBy('spr.id_transaksi','desc')
             ->get();
         }
       

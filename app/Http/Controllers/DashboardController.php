@@ -107,10 +107,10 @@ class DashboardController extends Controller
             ]);
         }
 
-        if (auth()->user()->roles()->first()->name == 'marketing') {
-            // $dokter = User::whereHas('roles', function ($role) {
-            //     return $role->where('name', 'dokter');
-            // })->where('cabang_id', auth()->user()->cabang_id)->where('is_active', 1)->get();
+        if (auth()->user()->hasRole('marketing')) {
+            $dokter = User::whereHas('roles', function ($role) {
+                return $role->where('name', 'dokter');
+            })->where('cabang_id', auth()->user()->cabang_id)->where('is_active', 1)->get();
             $startdate = Carbon::parse(Carbon::now()->format('Y-m-d'));
             $enddate = Carbon::parse(Carbon::now()->endOfMonth()->format('Y-m-d'));
             $current = Carbon::now();
@@ -123,12 +123,18 @@ class DashboardController extends Controller
             return view('marketing.dashboard', compact('data'));
             return view('dashboard.index', [
                 'booking' => Booking::get(),
-                // 'dokter' => $dokter,
+                'dokter' => $dokter,
                 'holiday' => $holiday,
                 'count' => $count,
                 'data' => $data,
-                'startdate' => $from->subDays(1)
+                'startdate' => $from->subDays(1),
             ]);
+        }
+
+        if (auth()->user()->hasRole('supervisor')) {
+            $user = User::where('id_roles', 4)->get();
+            return view('supervisor.dashboard', compact('user'));
+
         }
 
         if (auth()->user()->hasRole('hrd')) {
