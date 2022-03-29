@@ -6,7 +6,6 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
-use Illuminate\Database\Eloquent\Model;
 
 class User extends Authenticatable
 {
@@ -14,9 +13,6 @@ class User extends Authenticatable
     use HasRoles;
 
     protected $guarded = ['id'];
-    protected $table = 'users';
-    public $timestamps = false;
-
 
     protected $hidden = [
         'password', 'remember_token',
@@ -45,7 +41,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Booking::class);
     }
-  
+
     public function rincian()
     {
         return $this->hasMany(RincianPembayaran::class, 'kasir_id');
@@ -59,27 +55,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Purchase::class, 'project_id');
     }
-    public function reinburst()
-    {
-        return $this->belongsTo(Reinburst::class, 'id');
-    }
-    public function perusahaan()
-    {
-        return $this->belongsTo(Perusahaan::class, 'id_perusahaan');
-    }
-    public function jabatan()
-    {
-        return $this->belongsTo(Jabatan::class, 'id_jabatans');
-    }
 
-    public function project()
+    public function spr()
     {
-        return $this->belongsTo(Project::class, 'cabang_id');
+        return $this->hasMany(Spr::class, 'id_sales');
     }
-
-    public function sales()
-    {
-        return $this->hasMany(TeamSales::class);
-    }
-
 }

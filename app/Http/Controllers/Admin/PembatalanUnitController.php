@@ -1,53 +1,35 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreBarangRequest;
-use Illuminate\Support\Facades\DB;
-use App\Http\Requests\UpdateBarangRequest;
-use Carbon\Carbon;
 
-use App\PembatalanUnit;
-use App\Penggajian;
-use App\Spr;
-use App\UnitRumah;
+use App\Http\Controllers\Controller;
+use App\Pembatalan;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class PembatalanUnitController extends Controller
 {
     public function index()
     {
-  
+
         return view('admin.pembatalans.index');
     }
 
-
-
-    public function update($id)
+    public function show($id)
     {
-        $post = PembatalanUnit::where('id',$id)->get();
-        // dd($post);
-        foreach ($post as $pur) {
-            $pur->update(['status' => 'Approval']);
-            $unit = Spr::select('id_unit')->where('id_transaksi', $pur->spr_id)->get();
-            // dd($unit);
-            // $unit_rumah = DB::table('unit_rumahs')
-            // ->leftJoin('sprs','unit_rumahs.id','=','sprs.id_unit')
-            // ->select('unit_rumahs.id','sprs.id_unit')
-            // ->where('unit_rumahs.id', $unit)->get();
-            $unit_rumah = UnitRumah::whereIn('id_unit_rumah',$unit)->update([
 
-             'status_penjualan' => 'Available']);
-            // dd($unit_rumah);
-            // $unit_rumah->update([
-            //     'status_penjualan' => 'Available']);
-        }
-        
+        $post = Pembatalan::findOrFail($id);
+        $post->update(['status' => 'Approval']);
+        $idunit = $post->spr->unit->id_unit_rumah;
+        $unit_rumah = DB::table('unit_rumah')
+            ->leftJoin('spr', 'unit_rumah.id_unit_rumah', '=', 'spr.id_unit')
+            ->select('unit_rumah.id_unit_rumah')
+            ->where('unit_rumah.id_unit_rumah', $idunit);
+        $unit_rumah->update(['status_penjualan' => 'Available']);
 
         return redirect()->route('admin.pembatalans.index')->with('success', 'Status has been updated');
     }
 
-    
     // public function destroy(Barang $product)
     // {
     //     // abort_unless(\Gate::allows('product-delete'), 403);
@@ -56,29 +38,17 @@ class PembatalanUnitController extends Controller
     //     return redirect()->route('admin.product.index')->with('success', 'Product has been deleted');
     // }
 
-    public function ajax(Request $request)
+    public function ajax()
     {
-        if(request()->ajax()){
-            if(!empty($request->from)){
+        // $pembatalans = PembatalanUnit::with('no_pembatalan', 'id_spr','alasan_id')->get();
 
-        $pembatalans = DB:: table('pembatalan_unit')
-        ->leftjoin('spr','pembatalan_unit.spr_id','=','spr.id')
-        ->leftjoin('unit_rumahs','spr.id_unit','=','unit_rumahs.id')
-        ->leftjoin('users','spr.id_sales','=','users.id')
-        ->whereBetween('pembatalan_unit.tanggal',array($request->from, $request->to))
-        ->select('pembatalan_unit.tanggal','spr.no_transaksi','users.name','spr.status_approval','spr.id_sales','pembatalan_unit.no_pembatalan','pembatalan_unit.id','pembatalan_unit.diajukan','unit_rumahs.type','spr.no_transaksi','spr.harga_net','spr.status_dp','spr.status_booking','spr.nama','pembatalan_unit.status')
-        ->get();
+        $pembatalans = DB::table('pembatalan_unit')
+            ->leftjoin('spr', 'pembatalan_unit.spr_id', '=', 'spr.id_transaksi')
+            ->leftjoin('unit_rumah', 'spr.id_unit', '=', 'unit_rumah.id_unit_rumah')
+            ->leftjoin('users', 'spr.id_sales', '=', 'users.id')
+            ->select('pembatalan_unit.tanggal', 'spr.no_transaksi', 'users.name', 'spr.status_approval', 'spr.id_sales', 'pembatalan_unit.no_pembatalan', 'pembatalan_unit.id', 'pembatalan_unit.diajukan', 'unit_rumah.type', 'spr.no_transaksi', 'spr.harga_net', 'spr.status_dp', 'spr.status_booking', 'spr.nama', 'pembatalan_unit.status')
+            ->get();
         // dd($pembatalans);
-    }else{
-        $pembatalans = DB:: table('pembatalan_unit')
-        ->leftjoin('spr','pembatalan_unit.spr_id','=','spr.id')
-        ->leftjoin('unit_rumahs','spr.id_unit','=','unit_rumahs.id')
-        ->leftjoin('users','spr.id_sales','=','users.id')
-        ->select('pembatalan_unit.tanggal','spr.no_transaksi','users.name','spr.status_approval','spr.id_sales','pembatalan_unit.no_pembatalan','pembatalan_unit.id','pembatalan_unit.diajukan','unit_rumahs.type','spr.no_transaksi','spr.harga_net','spr.status_dp','spr.status_booking','spr.nama','pembatalan_unit.status')
-        ->get();
-        // dd($pembatalans);
-        
-            }
         return datatables()
             ->of($pembatalans)
             ->editColumn('no_pembatalan', function ($pembatalan) {
@@ -118,30 +88,27 @@ class PembatalanUnitController extends Controller
                 return $pembatalan->status_approval;
             })
             ->editColumn('action', function ($data) {
-                
-                $tindakan = PembatalanUnit::where('id', $data->id)->where('status', 'Pending')->get();
-                if (count($tindakan)==0){
+
+                $tindakan = Pembatalan::where('id', $data->id)->where('status', 'Pending')->get();
+                if (count($tindakan) == 0) {
                     return "Not Found";
-                 
-            }else {
-                
-                $button = '<a href="' . route('admin.pembatalans.update', $data->id) . '"  class="custom-badge status-green"><i class="fa-solid fa-check-to-slot"></i></a>';
-                return $button;
-            
-             
-                } 
-            
+
+                } else {
+
+                    return '<a href="' . route('admin.pembatalans.show', $data->id) . '"><i class="fa fa-pencil m-r-5"></i> Edit</a>';
+
+                }
+
             })
             ->addIndexColumn()
-            ->rawColumns(['no_pembatalan', 'status', 'refund','action'])
+            ->rawColumns(['no_pembatalan', 'status', 'refund', 'action'])
             ->make(true);
-            // ->addColumn('action', function ($row) {
-            //     $html = '<a href="" class="btn btn-xs btn-secondary">Edit</a> ';
-            //     $html .= '<button data-rowid="'.$row->id.'" class="btn btn-xs btn-danger">Del</button>';
-            //     return $html;
-            // })
-            
-            // ->toJson()
-        }
+        // ->addColumn('action', function ($row) {
+        //     $html = '<a href="" class="btn btn-xs btn-secondary">Edit</a> ';
+        //     $html .= '<button data-rowid="'.$row->id.'" class="btn btn-xs btn-danger">Del</button>';
+        //     return $html;
+        // })
+
+        // ->toJson()
     }
 }

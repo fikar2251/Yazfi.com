@@ -23,4 +23,9 @@ class Project extends Model
     {
         return $this->belongsTo(HargaProdukCabang::class, 'project_id');
     }
+
+    public function spr()
+    {
+        return $this->hasMany(Spr::class, 'id_project');
+    }
 }

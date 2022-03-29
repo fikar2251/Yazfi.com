@@ -12,14 +12,14 @@
             <div class="col-md-4 col-sm-4  col-lg-3">
                 <div class="profile-widget">
                     <div class="doctor-img">
-                        <a class="avatar" href="#"><img alt="" src="https://w1.pngwing.com/pngs/386/684/png-transparent-face-icon-user-icon-design-user-profile-share-icon-avatar-black-and-white-silhouette.png"
+                        <a class="avatar" href="#"><img alt="" src=""
                                 style="object-fit: cover; object-position: center;"></a>
                     </div>
                     <h4 class="doctor-name text-ellipsis"><a
-                            href="{{ url('supervisor/komisi/' . $u->user->id) }}">{{ $u->user->name }}</a>
+                            href="{{ url('supervisor/komisi/' . $u->id) }}">{{ $u->name }}</a>
                     </h4>
                     <div class="user-country">
-                        <i class="fa fa-map-marker"></i> {{ $u->user->address }}
+                        <i class="fa fa-map-marker"></i> {{ $u->address }}
                     </div>
                 </div>
             </div>

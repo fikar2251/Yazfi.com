@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Finance;
 
 use App\Http\Controllers\Controller;
 use App\Pembatalan;
-use App\PembatalanUnit;
 use App\Pembayaran;
 use App\Refund;
 use App\Tagihan;
@@ -19,10 +18,10 @@ class RefundController extends Controller
     public function index()
     {
         $getno = request()->get('no_pembatalan');
-        $batal = PembatalanUnit::orderBy('id', 'desc')->get();
+        $batal = Pembatalan::orderBy('id', 'desc')->get();
         if ($getno) {
 
-            $singlebatal = PembatalanUnit::where('no_pembatalan', $getno)->first();
+            $singlebatal = Pembatalan::where('no_pembatalan', $getno)->first();
             $idspr = $singlebatal->spr_id;
 
             $rincianid = Tagihan::where('id_spr', $idspr)->first();
@@ -33,7 +32,7 @@ class RefundController extends Controller
 
             $totalbayar = Pembayaran::whereHas('rincian', function ($r) {
                 $getno = request()->get('no_pembatalan');
-                $singlebatal = PembatalanUnit::where('no_pembatalan', $getno)->first();
+                $singlebatal = Pembatalan::where('no_pembatalan', $getno)->first();
                 $notrs = $singlebatal->spr->no_transaksi;
 
                 $r->where('no_transaksi', $notrs);
@@ -43,8 +42,7 @@ class RefundController extends Controller
             // dd($contoh);
 
             $idbatal = $singlebatal->no_pembatalan;
-            $account = DB::table('chart_of_account')->select('id_chart_of_account', 'nama_bank')->get();
-           
+            $account = DB::table('chart_of_account')->get();
            
             $refund = Refund::where('no_pembatalan', $getno)->first();
             if ($refund) {
@@ -57,7 +55,7 @@ class RefundController extends Controller
             }
 
         } else {
-            $batal = PembatalanUnit::orderBy('id', 'desc')->get();
+            $batal = Pembatalan::orderBy('id', 'desc')->get();
 
             return view('finance.refund.index', compact('batal'));
 
@@ -76,12 +74,10 @@ class RefundController extends Controller
             'diajukan' => $request->diajukan,
             'total_refund' => $request->total_refund,
             'status' => 'unpaid',
-            'sumber_pembayaran' => $request->sumber_pembayaran,
-            'rekening_tujuan' => $request->rekening,
             'pembatalan_id' => $request->pembatalan_id,
         ]);
 
-        return redirect('finance/refund/daftar');
+        return redirect('finance/refund/list');
     }
 
     function list() {
@@ -134,13 +130,13 @@ class RefundController extends Controller
             ]);
             $idbatal = $change->pembatalan_id;
 
-            $batal = PembatalanUnit::where('id', $idbatal)->first();
+            $batal = Pembatalan::where('id', $idbatal)->first();
             $batal->refund = 'paid';
             $batal->save();
 
         }
 
-        return redirect('finance/refund/list');
+        return redirect()->back();
     }
 
     public function updateStatus($id)
@@ -151,7 +147,7 @@ class RefundController extends Controller
 
         $idbatal = $refund->pembatalan_id;
 
-        $batal = PembatalanUnit::where('id', $idbatal)->first();
+        $batal = Pembatalan::where('id', $idbatal)->first();
         $batal->refund = 'paid';
         $batal->save();
 

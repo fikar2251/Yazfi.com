@@ -201,7 +201,7 @@
                                                 <td style="width: 200px">Ditransfer ke rekening</td>
                                                 <td style="width: 20px">:</td>
                                                 <td>
-                                                    <textarea name="rekening" id="rekening" cols="30" rows="5"></textarea>
+                                                    <textarea name="keterangan" id="keterangan" cols="30" rows="5"></textarea>
                                                 </td>
                                             </tr>
                                         </tbody>

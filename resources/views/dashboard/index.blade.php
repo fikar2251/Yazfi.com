@@ -6,27 +6,29 @@
 @include('dashboard._super-admin')
 @endrole
 
-@role('finance')
-<x-resepsionis._resepsionis :bayar="$bayar" :refund="$refund" :komisi="$komisi"></x-resepsionis._resepsionis>
+@role('resepsionis')
+<x-resepsionis._resepsionis :jadwal="$jadwal" :datang="$datang" :pasien="$pasien" :appointments="$appointments" :tindakan="$tindakan" :periksa="$periksa" :bayar="$bayar" :refund="$refund" :komisi="$komisi"></x-resepsionis._resepsionis>
 @endrole
 
-{{-- @role('dokter')
+@role('dokter')
 @include('dokter.dashboard')
-@endrole --}}
+@endrole
 
 @role('marketing')
 @include('marketing.dashboard/index')
 @endrole
 
 @role('supervisor')
-
+@include('supervisor.dashboard')
 @endrole
+
 @role('hrd')
 @include('hrd.dashboard')
 @endrole
 @role('logistik')
 @include('logistik.dashboard')
 @endrole
+
 @role('purchasing')
 @include('purchasing.dashboard')
 @endrole

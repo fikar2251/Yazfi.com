@@ -6,10 +6,10 @@
 
 use App\Marketing;
 use App\Spr;
-use App\PembatalanUnit;
+use App\Pembatalan;
 
 $AWAL = 'PB';
-$noUrutAkhir = PembatalanUnit::max('id');
+$noUrutAkhir = Pembatalan::max('id');
 
 $nourut = $AWAL . '/' . sprintf('%02s', abs(1)) . '/' . sprintf('%05s', abs($noUrutAkhir + 1));
 

@@ -36,7 +36,7 @@
                         <div class="col-sm-2">
                             <input style="text-decoration: none; border-style: none; background-color: #FAFAFA" type="text"
                                 name="tanggal_transaksi" id="tanggal_transaksi"
-                                value="{{ Carbon\Carbon::now()->format('d-m-Y') }}" >
+                                value="{{ Carbon\Carbon::now()->format('d-m-Y') }}">
                         </div>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="name">Nama</label>
-                    <input type="text" name="nama" id="nama" class="form-control" required>
+                    <input type="text" name="nama" id="nama" class="form-control">
 
                     @error('name')
                         <small class="text-danger">{{ $message }}</small>
@@ -61,7 +61,7 @@
                 </div>
                 <div class="form-group">
                     <label for="phone_number">No KTP</label>
-                    <input type="number" name="no_ktp" id="no_ktp" class="form-control" maxlength="16" required
+                    <input type="number" name="no_ktp" id="no_ktp" class="form-control" maxlength="16"
                         oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
 
                     @error('phone_number')
@@ -70,7 +70,7 @@
                 </div>
                 <div class="form-group">
                     <label for="phone_number">NPWP</label>
-                    <input type="number" name="npwp" id="npwp" class="form-control" maxlength="15" required
+                    <input type="number" name="npwp" id="npwp" class="form-control" maxlength="15"
                         oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
 
                     @error('phone_number')
@@ -79,7 +79,7 @@
                 </div>
                 <div class="form-group">
                     <label for="email">Alamat</label>
-                    <textarea name="alamat" id="alamat" required rows="3" class="form-control"></textarea>
+                    <textarea name="alamat" id="alamat"  rows="3" class="form-control"></textarea>
 
                     @error('email')
                         <small class="text-danger">{{ $message }}</small>
@@ -87,7 +87,7 @@
                 </div>
                 <div class="form-group">
                     <label for="address">Provinsi</label>
-                    <select class="form-control provinsi" name="provinsi" id="provinsi" required>
+                    <select class="form-control provinsi" name="provinsi" id="provinsi">
                         <option value="">-- Select Provinsi --</option>
                         @foreach ($provinces as $pv)
                             <option value="{{ $pv->id_prov }}">{{ $pv->name }}</option>
@@ -101,7 +101,7 @@
 
                 <div class="form-group">
                     <label for="phone_number">Kota/Kabupaten</label>
-                    <select name="kota" id="kota" class="form-control kota kota1" data-dependent="lt" required>
+                    <select name="kota" id="kota" class="form-control kota kota1" data-dependent="lt">
                         <option value="">-- Select Kota/Kabupaten --</option>
                     </select>
 
@@ -112,7 +112,7 @@
 
                 <div class="form-group">
                     <label for="phone_number">Kecamatan</label>
-                    <select name="kecamatan" id="kecamatan" class="form-control kecamatan kecamatan1" required data-dependent="lt">
+                    <select name="kecamatan" id="kecamatan" class="form-control kecamatan kecamatan1" data-dependent="lt">
                         <option value="">-- Select Kecamatan --</option>
                     </select>
 
@@ -123,7 +123,7 @@
 
                 <div class="form-group">
                     <label for="phone_number">Desa</label>
-                    <select name="desa" id="desa" class="form-control desa1" data-dependent="lt" required>
+                    <select name="desa" id="desa" class="form-control desa1" data-dependent="lt">
                         <option value="">-- Select Desa --</option>
                     </select>
 
@@ -136,7 +136,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="phone_number">No. Telp</label>
-                    <input type="number" name="no_tlp" id="no_tlp" class="form-control" maxlength="11" required
+                    <input type="number" name="no_tlp" id="no_tlp" class="form-control" maxlength="11"
                         oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
 
                     @error('phone_number')
@@ -145,7 +145,7 @@
                 </div>
                 <div class="form-group">
                     <label for="phone_number">No. HP</label>
-                    <input type="number" name="no_hp" id="no_hp" class="form-control" maxlength="13" required
+                    <input type="number" name="no_hp" id="no_hp" class="form-control" maxlength="13"
                         oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
 
                     @error('phone_number')
@@ -154,7 +154,7 @@
                 </div>
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" name="email" id="email" class="form-control" required>
+                    <input type="email" name="email" id="email" class="form-control">
 
                     @error('email')
                         <small class="text-danger">{{ $message }}</small>
@@ -162,7 +162,7 @@
                 </div>
                 <div class="form-group">
                     <label for="email">Pekerjaan</label>
-                    <input type="text" name="pekerjaan" id="pekerjaan" class="form-control" required>
+                    <input type="text" name="pekerjaan" id="pekerjaan" class="form-control">
 
                     @error('email')
                         <small class="text-danger">{{ $message }}</small>
@@ -170,7 +170,7 @@
                 </div>
                 <div class="form-group">
                     <label for="email">Sumber Informasi</label>
-                    <select name="sumber_informasi" id="sumber_informasi" class="form-control" required>
+                    <select name="sumber_informasi" id="sumber_informasi" class="form-control ">
                         <option value="">-- Select --</option>
                         <option value="iklan">Iklan</option>
                         <option value="media sosial">Media Sosial</option>
@@ -198,7 +198,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="name">Type</label>
-                    <select name="type" id="type" class="form-control dynamic" data-dependent="blok" required>
+                    <select name="type" id="type" class="form-control dynamic" data-dependent="blok">
                         <option value="">-- Select Type --</option>
                         @foreach ($blok as $item)
                             <option value="{{ $item->type }}">{{ $item->type }}</option>
@@ -212,7 +212,7 @@
 
                 <div class="form-group">
                     <label for="phone_number">Blok</label>
-                    <select name="blok" id="blok" class="form-control dinamis root2" data-dependent="no" required>
+                    <select name="blok" id="blok" class="form-control dinamis root2" data-dependent="no">
                         <option value=""></option>
                     </select>
 
@@ -229,7 +229,7 @@
                 </div>
                 <div class="form-group">
                     <label for="phone_number">No.</label>
-                    <select name="no" id="no" class="form-control lt root1" data-dependent="lt" required>
+                    <select name="no" id="no" class="form-control lt root1" data-dependent="lt">
                         <option value=""></option>
                     </select>
 
@@ -315,7 +315,7 @@
                 </div>
                 <div class="form-group">
                     <label for="name">Booking Fee</label>
-                    <input type="number" name="booking_fee" id="booking_fee" class="form-control" maxlength="7" required
+                    <input type="number" name="booking_fee" id="booking_fee" class="form-control" maxlength="7"
                         oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
 
                     @error('name')
@@ -324,7 +324,7 @@
                 </div>
                 <div class="form-group">
                     <label for="name">Downpayment</label>
-                    <input type="number" name="downpayment" id="downpayment" class="form-control" maxlength="7" required
+                    <input type="number" name="downpayment" id="downpayment" class="form-control" maxlength="7"
                         oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
 
                     @error('name')
@@ -333,7 +333,7 @@
                 </div>
                 <div class="form-group">
                     <label for="name">Skema Pembayaran</label>
-                    <select name="skema" id="skema" class="form-control" required>
+                    <select name="skema" id="skema" class="form-control">
                         <option value="">-- Skema Pembayaran --</option>
                         @foreach ($skema as $item)
                             <option value="{{ $item->id_skema }}">{{ $item->nama_skema }}</option>

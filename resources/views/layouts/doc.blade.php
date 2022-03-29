@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="author" content="yoriadiatma">
     <link rel="icon" href="">
-    <title>{{ $title }}</title>
+    <title>Cetak SPR</title>
     <style>
         @page {
             margin: 0

@@ -41,8 +41,7 @@ class SprController extends Controller
 
     public function mrkJson()
     {   
-        $idsales = auth()->user()->id;
-        $spr = Spr::where('id_sales', $idsales)->orderBy('id_transaksi', 'desc')->get();
+        $spr = Spr::orderBy('id_transaksi', 'desc')->get();
         
         return DataTables::of($spr)
                 ->editColumn('no_transaksi', function($spr){
@@ -146,8 +145,7 @@ class SprController extends Controller
     public function create($id)
     {
         $spr = Spr::find($id);
-        $alamatid = $spr->alamat_id;
-        $add = Alamat::where('id', $alamatid)->first();
+        $add = Alamat::find($id);
         
         return view('marketing.spr.show', compact('spr','add'));
     }
@@ -155,9 +153,8 @@ class SprController extends Controller
     public function cetakSPR($id)
     {
         $spr = Spr::find($id);
+        $add = Alamat::find($id);
         $idspr = $spr->no_transaksi;
-        $alamatid = $spr->alamat_id;
-        $add = Alamat::where('id', $alamatid)->first();
       
         $bf = Tagihan::where(['no_transaksi' => $idspr, 'tipe' => 1])->first();
         $dp = Tagihan::where(['no_transaksi' => $idspr, 'tipe' => 2])->first();
@@ -209,18 +206,6 @@ class SprController extends Controller
             'kota_id' => $request->kota,
             'kecamatan_id' => $request->kecamatan,
             'desa_id' => $request->desa,
-        ]);
-
-        $request->validate([
-            'nama' => 'required',
-            'no_ktp' => 'required|unique:spr',
-            'npwp' => 'required|unique:spr',
-            'no_tlp' => 'required|unique:spr',
-            'no_hp' => 'required|unique:spr',
-            'email' => 'required|unique:spr,email',
-            'sumber_informasi' => 'required',
-            'booking_fee' => 'required',
-            'downpayment' => 'required',
         ]);
 
         $spr = Spr::create([
@@ -332,7 +317,7 @@ class SprController extends Controller
             
         $provinces = Provinces::all();
     
-
+      
         return view('marketing.spr.create', compact('blok', 'id', 'skema', 'provinces'));
     }
 

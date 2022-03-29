@@ -33,7 +33,7 @@ class Spr extends Model
 
     public function pembatalan()
     {
-        return $this->hasOne(PembatalanUnit::class, 'spr_id');
+        return $this->hasOne(Pembatalan::class, 'spr_id');
     }
 
     public function project()
@@ -46,5 +46,4 @@ class Spr extends Model
         return $this->belongsTo(Alamat::class);
     }
 }
-
 
