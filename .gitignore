@@ -10,3 +10,13 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+yazficoi_yazfi.sql
+storage/fonts/Times-Bold.afm.php
+storage/fonts/Times-Roman.afm.php
+storage/fonts/Helvetica.afm.php
+storage/fonts/Helvetica-Bold.afm.php
+storage/fonts/DejaVuSans.ufm.php
+public/js/jquery.printPage.js
+database/migrations/2017_05_02_142019_create_districts_tables.php
+database/migrations/2017_05_02_140444_create_regencies_tables.php
+database/migrations/2017_05_02_140432_create_provinces_tables.php
